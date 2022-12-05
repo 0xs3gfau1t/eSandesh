@@ -1,11 +1,11 @@
-const app = require("./app");
-const path = require("path");
+const app = require('./app')
+const path = require('path')
 
-require("dotenv").config({ path: path.resolve(__dirname, ".env") });
+require('dotenv').config({ path: path.resolve(__dirname, '.env') })
 
 // Connect to the database
-require("../db")();
+require('../db')()
 
-const server = require("http").createServer(app);
+const server = require('http').createServer(app)
 
-module.exports = { app, server };
+module.exports = { app, server }
