@@ -1,7 +1,8 @@
 const { app, server } = require("./app");
 const path = require("path");
+
 require("dotenv").config({ path: path.resolve(__dirname, ".env") });
-// Redirect everything other that /api/ to frontend
+
 app.get("*", (req, res) => {
 	res.json({ response: "it works" });
 });

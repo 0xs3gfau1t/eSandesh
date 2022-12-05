@@ -1,4 +1,7 @@
 const mongoose = require("mongoose");
+const path = require("path");
+
+require("dotenv").config({ path: path.resolve(__dirname, "../.env") });
 
 // If connecting to mongoatlas remove authSource, user and pass options
 async function db() {
@@ -11,7 +14,7 @@ async function db() {
 			useUnifiedTopology: true,
 		})
 		.then((r) => {
-			console.log("Connected to the database.\n", r);
+			console.log("Connected to the database.\n");
 			return mongoose;
 		})
 		.catch((e) => {
@@ -19,4 +22,4 @@ async function db() {
 		});
 }
 
-module.exports = db
+module.exports = db;
