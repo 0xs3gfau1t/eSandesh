@@ -1,8 +1,11 @@
+const MongooseAdapter = require('../controllers/adapter')
+
 const CredentialsProvider = require('next-auth/providers/credentials').default
 const GithubProvider = require('next-auth/providers/github').default
 const GoogleProvider = require('next-auth/providers/google').default
 
 const authOptions = {
+    adapter: MongooseAdapter(),
     providers: [
         GithubProvider({
             clientId: process.env.GITHUB_CLIENT_ID,
