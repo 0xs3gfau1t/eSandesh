@@ -6,6 +6,12 @@ require('./config/db')()
 
 const { app, server } = require('./config/app')
 
+////////////
+// Routes //
+////////////
+
+app.use('/api/auth', require('./routes/auth'))
+
 // Redirect everything other that /api/ to frontend
 app.get('*', (_req, res) => {
 	res.json({ response: 'it works' })
