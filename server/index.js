@@ -11,10 +11,12 @@ const { app, server } = require('./config/app')
 ////////////
 
 app.use('/api/auth', require('./routes/auth'))
+app.use('/api/article', require('./routes/article'))
+app.use('/api/comment', require('./routes/comment'))
 
 // Redirect everything other that /api/ to frontend
 app.get('*', (_req, res) => {
-	res.json({ response: 'it works' })
+    res.json({ response: 'it works' })
 })
 
 // Start the server specied in PORT from .env
@@ -22,7 +24,7 @@ let host = process.env.HOST || 'localhost'
 let port = process.env.PORT || 4000
 
 server.listen({ host, port }, () => {
-	console.log(`\nBackend Server\nHost: ${host}\nPort: ${port}\n`)
+    console.log(`\nBackend Server\nHost: ${host}\nPort: ${port}\n`)
 })
 
 module.exports = { app, server }
