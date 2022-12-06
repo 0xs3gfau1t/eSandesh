@@ -7,10 +7,10 @@ import GoldSilver from "./GoldSilver";
 
 export default function Header() {
   return (
-    <div className="header font-primary flex justify-between items-center container p-3">
+    <div className="header flex justify-between items-center container p-3">
       <SiteLogo />
       <div className="flex justify-between items-center">
-        <div className="flex justify-between gap-5">
+        <div className="flex justify-between invisible md:visible text-xs lg:text-sm gap-4">
           <Forex />
           <GoldSilver />
         </div>
