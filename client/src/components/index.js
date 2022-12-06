@@ -1,3 +1,4 @@
 import HeaderLogo from "./common/HeaderLogo"
+import Header from "./Header"
 
-export { HeaderLogo }
+export { HeaderLogo, Header }
