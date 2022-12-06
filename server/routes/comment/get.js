@@ -5,7 +5,7 @@ const express = require('express')
  * @return {void}
  */
 const getComments = (req, res) => {
-    const { articleId: id, page = 0 } = req.query
+    res.json({ message: 'GET /api/article/ works. Yayyy' })
 }
 
 module.exports = getComments
