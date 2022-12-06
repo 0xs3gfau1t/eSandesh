@@ -1,6 +1,8 @@
 const express = require('express')
+const cors = require('cors')
 const app = express()
 
+app.use(cors())
 // Logger
 app.use(function (req, _res, next) {
     console.log(`-> ${req.url}\n`)
