@@ -1,13 +1,15 @@
+import { Provider } from "react-redux"
+
+import { store } from "./redux/store"
 import { Home, Login } from "./pages"
 import Politics from "./pages/Politics"
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom"
 
 import "./App.css"
 
-
 function App() {
 	return (
-		<div className="App">
+		<Provider store={store}>
 			<Router>
 				<Routes>
 					<Route path="/admin" element={<Login />} />
@@ -16,7 +18,7 @@ function App() {
 					</Route>
 				</Routes>
 			</Router>
-		</div>
+		</Provider>
 	)
 }
 
