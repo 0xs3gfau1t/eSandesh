@@ -1,5 +1,6 @@
 import React from 'react'
 import { SiteLogo } from '../components/common'
+import { FaFacebookF, FaTwitter, FaYoutube} from 'react-icons/fa'
 
 function Footer() {
   return (
@@ -9,15 +10,17 @@ function Footer() {
             <h1>About Us</h1>
             <p className='text-slate-700'>smth smth</p>
         </div>
-        <div className='flex-row'>
+        <div>
             <h1>Important Links</h1>
-            <div className='flex-row text-slate-700'>
+            <div className='text-slate-700'>
                 <a href = "advertisement"><p>Advertisement</p></a>
                 <a href='feedback'><p>Feedback</p></a>
                 <a href ='contact'><p>Contact Us</p></a>
             </div>
-            <div>
-                contact pages haru hai maicha
+            <div className='flex-col'>
+                <a><span><FaFacebookF/></span></a>
+                <a><span><FaTwitter/></span></a>
+                <a><span><FaYoutube/></span></a>
             </div>
         </div>
         <div>
