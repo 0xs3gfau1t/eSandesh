@@ -12,6 +12,7 @@ module.exports = {
 				red: "#BB0A21",
 				blue: "#5C80BC",
 				darkblue: "#101935",
+				black1: "rgb(24, 24, 24)",
 			},
 		},
 	},
