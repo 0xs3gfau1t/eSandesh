@@ -5,7 +5,7 @@ function App() {
   return (
     <div className="App">
       <Header />
-      <h1 className=" text-3xl">NEWS PORTAL</h1>
+      <h1 className=" font-primary text-3xl">eSandesh</h1>
     </div>
   );
 }
