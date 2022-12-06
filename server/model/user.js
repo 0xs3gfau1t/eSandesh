@@ -5,6 +5,8 @@ const userSchema = new mongoose.Schema({
     email: { type: String, unique: true },
     emailVerified: { type: Date },
     image: { type: String },
+    articles: { type: [mongoose.Schema.Types.ObjectId], ref: 'Article' },
+    roles: { type: [mongoose.Schema.Types.ObjectId], ref: 'Role' },
 })
 
 const accountSchema = new mongoose.Schema({
