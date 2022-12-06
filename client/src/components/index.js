@@ -1,4 +1,6 @@
-import HeaderLogo from "./common/HeaderLogo"
-import Header from "./Header"
+import Article from "./Article"
+import Header from "./Header/Header"
+import Footer from "./Footer"
+import SideNavBar from "./SideNavBar"
 
-export { HeaderLogo, Header }
+export { Header, Footer, Article, SideNavBar }
