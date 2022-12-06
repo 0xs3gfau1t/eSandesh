@@ -17,6 +17,7 @@ function Footer() {
                 <a href='feedback'><p>Feedback</p></a>
                 <a href ='contact'><p>Contact Us</p></a>
             </div>
+            
             <div className='flex-col'>
                 <a><span><FaFacebookF/></span></a>
                 <a><span><FaTwitter/></span></a>
