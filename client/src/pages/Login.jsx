@@ -1,5 +1,6 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { SiteLogo, FormText } from "../components/common"
+import { signIn, useSession } from "next-auth/react"
 
 const initialState = {
 	username: "",
@@ -9,11 +10,22 @@ const initialState = {
 const Login = () => {
 	const [values, setValues] = useState(initialState)
 
+	const session = useSession()
+	useEffect(()=>{
+		console.log(session)
+		if (session.status == "authenticated"){
+			// TODO: Redirect to /admin/dashboard
+			console.log("Authenticated")
+		}
+	}, [session])
+
 	const handleChange = e => {
 		setValues({ ...values, [e.target.name]: e.target.value })
 	}
+
 	const onSubmit = e => {
 		e.preventDefault()
+		signIn('admin', values)
 	}
 
 	return (

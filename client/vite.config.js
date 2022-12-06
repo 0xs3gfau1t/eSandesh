@@ -6,7 +6,7 @@ export default ({ mode }) => {
 	console.log(env.PORT)
 	return defineConfig({
 		define: {
-			process: process,
+			"process.env": process.env,
 		},
 		plugins: [react()],
 		server: {

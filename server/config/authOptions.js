@@ -16,6 +16,7 @@ const authOptions = {
             clientSecret: process.env.GOOGLE_CLIENT_SECRET,
         }),
         CredentialsProvider({
+            id: 'user',
             name: 'Credentials',
             credentials: {
                 email: {
@@ -33,6 +34,35 @@ const authOptions = {
                 console.log(creds)
                 // check in mongo database and return user details
                 return { id: 1, name: 'Bijan Regmi', password: 'HEHE' }
+            },
+        }),
+        CredentialsProvider({
+            id: 'admin',
+            name: 'Admin',
+            credentials: {
+                username: {
+                    label: 'Username',
+                    type: 'text',
+                    placeholder: 'Your username',
+                },
+                password: {
+                    label: 'Password',
+                    type: 'password',
+                    placeholder: 'Your password',
+                },
+            },
+            async authorize(creds, _req) {
+                console.log(creds)
+                if (
+                    creds.username == process.env.ADMIN_USER &&
+                    creds.password == process.env.ADMIN_PASS
+                )
+                    return {
+                        id: 1,
+                        name: creds.username,
+                        password: creds.password,
+                    }
+                return null
             },
         }),
     ],
