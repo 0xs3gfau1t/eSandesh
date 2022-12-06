@@ -8,6 +8,7 @@ module.exports = {
 				secondary: ["Manrope", "sans-serif"],
 			},
 			colors: {
+				primary: "#D9D9D9",
 				red: "#BB0A21",
 				blue: "#5C80BC",
 				darkblue: "#101935",
