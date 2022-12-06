@@ -1,42 +1,39 @@
-import React from "react"
-import { Link } from "react-router-dom"
-import { HeaderLogo } from "./"
+import React from "react";
 
-export default function Header() {
+export default function sideNavBar() {
   return (
-    <div className="border border-red-700 font-primary flex justify-between items-center">
-      <HeaderLogo />
+    <div>
       <nav>
         <ul className="list-none flex justify-between gap-8">
-          <Link to={""}>
+          <Link to={"/"}>
             <li>Home</li>
           </Link>
-          <Link to={""}>
+          <Link to={"trending"}>
             <li>Trending</li>
           </Link>
-          <Link to={""}>
+          <Link to={"global"}>
             <li>Global</li>
           </Link>
-          <Link to={""}>
+          <Link to={"/business"}>
             <li>Business</li>
           </Link>
           <Link to={"/politics"}>
             <li>Politics</li>
           </Link>
-          <Link to={""}>
+          <Link to={"/finance"}>
             <li>Finance</li>
           </Link>
-          <Link to={""}>
+          {/* <Link to={"/economy"}>
             <li>Economy</li>
-          </Link>
-          <Link to={""}>
+          </Link> */}
+          <Link to={"/sports"}>
             <li>Sports</li>
           </Link>
-          <Link to={""}>
+          <Link to={"/entertainment"}>
             <li>Entertainment</li>
           </Link>
         </ul>
       </nav>
     </div>
-  )
+  );
 }
