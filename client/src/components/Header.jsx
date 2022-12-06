@@ -1,15 +1,11 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import siteLogo from "../images/icons/eSandesh-logo--dark.png";
+import React from "react"
+import { Link } from "react-router-dom"
+import { HeaderLogo } from "./"
 
 export default function Header() {
   return (
     <div className="border border-red-700 font-primary flex justify-between items-center">
-      <img
-        src={siteLogo}
-        className="w-40"
-        alt="logo for eSandesh news portal"
-      ></img>
+      <HeaderLogo />
       <nav>
         <ul className="list-none flex justify-between gap-8">
           <Link to={""}>
@@ -42,5 +38,5 @@ export default function Header() {
         </ul>
       </nav>
     </div>
-  );
+  )
 }
