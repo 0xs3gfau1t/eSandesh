@@ -2,7 +2,7 @@ import React from "react";
 
 export default function Forex() {
   return (
-    <div className="grid grid-cols-3 gap-x-4">
+    <div className="grid grid-cols-3 gap-x-0">
       {/* row 1 */}
       <span>Currency</span>
       <span>U.S. Dollar</span>

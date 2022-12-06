@@ -28,3 +28,13 @@ button {
 	font-weight: 700 !important;
 	cursor: pointer;
 }
+
+.header {
+	border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.container {
+	max-width: 1200px;
+	margin-left: auto;
+	margin-right: auto;
+}

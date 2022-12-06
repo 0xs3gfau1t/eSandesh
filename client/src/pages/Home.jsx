@@ -1,13 +1,14 @@
-import React from "react"
-import { Outlet } from "react-router-dom"
-import Politics from "./Politics"
-import { Header } from "../components"
+import React from "react";
+import { Outlet } from "react-router-dom";
+// import Politics from "./Politics"
+import { Footer, Header } from "../components";
 
 export default function Home(match) {
-	return (
-		<div>
-			<Header />
-			<Outlet />
-		</div>
-	)
+  return (
+    <div className="flex flex-col justify-between h-screen">
+      <Header />
+      <Outlet />
+      <Footer />
+    </div>
+  );
 }
