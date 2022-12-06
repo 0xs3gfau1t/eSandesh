@@ -1,3 +1,4 @@
-import SiteLogo from "./SiteLogo";
+import SiteLogo from "./SiteLogo"
+import FormText from "./FormElement"
 
-export { SiteLogo };
+export { SiteLogo, FormText }
