@@ -1,6 +1,30 @@
-#root {
+/* #root {
 	max-width: 1280px;
 	margin: 0 auto;
 	padding: 2rem;
 	text-align: center;
+} */
+
+.form {
+	@apply mx-auto flex min-w-fit flex-col rounded-lg px-12 py-4;
+	border: 1px solid red;
+	border-top: 7px solid #101935;
+	transition: var(--transition);
+}
+
+h1 {
+	font-size: 2rem !important;
+	text-align: center;
+	margin: 3vh 1vw;
+}
+
+button {
+	height: 51px;
+	font-size: 16px;
+	line-height: 110%;
+	padding: 1px 12px !important;
+	border-radius: 7px;
+	border: 0px;
+	font-weight: 700 !important;
+	cursor: pointer;
 }
