@@ -14,7 +14,7 @@ export default function sideNavBar() {
   ];
   const menuItems = categories.map((eachCat) => (
     <li
-      className="hover:font-bold duration-200 my-2"
+      className="hover:font-bold duration-200 hover:text-darkblue my-2"
       key={eachCat.toLowerCase()}
     >
       <Link to={`/category/${eachCat.toLowerCase()}`}>{eachCat}</Link>
@@ -22,7 +22,7 @@ export default function sideNavBar() {
   ));
   return (
     <div>
-      <nav className="p-4 border-r-4 border-r-slate-500">
+      <nav className="p-4 border-r-4 border-r-darkblue">
         <h2 className="font-primary font-bold text-2xl">Category</h2>
         <ul className="list-none flex flex-col p-4 justify-between">
           {menuItems}
