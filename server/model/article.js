@@ -30,7 +30,7 @@ const articleSchema = mongoose.Schema(
             type: String,
             default: `${
                 new Date().getTime() -
-                new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0)
+                new Date(new Date().getFullYear(), new Date().getMonth(), 0)
             }`,
         },
     },
