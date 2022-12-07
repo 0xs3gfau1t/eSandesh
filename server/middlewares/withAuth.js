@@ -1,15 +1,24 @@
 const express = require('express')
-const { unstable_getServerSession } = require('next-auth')
+const { unstable_getServerSession } = require('next-auth/next')
 const { authOptions } = require('../config/authOptions')
 
-/*
+/**
  * @param {express.Request} req
  * @param {express.Response} res
  */
-const withAuth = (req, res, next) => {
-	const session = unstable_getServerSession(req, res, authOptions)
-	console.log(session)
-	next()
+const withAuth = async (req, res, next) => {
+	// Donot directly pass the authOptions
+	// Doing so will reset the providers
+	// Idk why but it does. Only way to fix
+	// this for now is duplicate the object
+	// and then pass it.
+
+	const session = await unstable_getServerSession(req, res, {
+		...authOptions,
+	})
+
+	if (session) return next()
+	return res.status(401).end()
 }
 
 module.exports = withAuth
