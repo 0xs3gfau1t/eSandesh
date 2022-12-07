@@ -1,19 +1,14 @@
 const MongooseAdapter = require('../controllers/adapter')
 
 const CredentialsProvider = require('next-auth/providers/credentials').default
-const GithubProvider = require('next-auth/providers/github').default
-const GoogleProvider = require('next-auth/providers/google').default
+const FacebookProvider = require('next-auth/providers/facebook').default
 
 const authOptions = {
     adapter: MongooseAdapter(),
     providers: [
-        GithubProvider({
-            clientId: process.env.GITHUB_CLIENT_ID,
-            clientSecret: process.env.GITHUB_CLIENT_SECRET,
-        }),
-        GoogleProvider({
-            clientId: process.env.GOOGLE_CLIENT_ID,
-            clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+        FacebookProvider({
+            clientId: process.env.FACEBOOK_CLIENT_ID,
+            clientSecret: process.env.FACEBOOK_CLIENT_SECRET,
         }),
         CredentialsProvider({
             id: 'user',
