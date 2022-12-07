@@ -1,6 +1,8 @@
 import { Provider } from "react-redux";
-
 import { store } from "./redux/store";
+import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
+
+import "./App.css";
 import {
   Home,
   Login,
@@ -14,9 +16,7 @@ import {
   AdsMan,
   ViewSiteStats,
 } from "./pages";
-import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
-
-import "./App.css";
+import { PrivateRoute } from "./components/common";
 
 function App() {
   return (
@@ -24,7 +24,14 @@ function App() {
       <Router>
         <Routes>
           <Route path="/admin" element={<Login />} />
-          <Route path="/admin/dashboard" element={<AdminDash />}>
+          <Route
+            path="/admin/dashboard"
+            element={
+              <PrivateRoute>
+                <AdminDash />
+              </PrivateRoute>
+            }
+          >
             <Route path="managenews" element={<ManageNews />} />
             <Route path="readers" element={<ReaderArticles />} />
             <Route path="newsedit" element={<EditNews />} />
@@ -33,8 +40,8 @@ function App() {
             <Route path="stats" element={<ViewSiteStats />} />
           </Route>
           <Route path="/" element={<Home />}>
-            <Route path="/global" element={<Global />} />
-            <Route path="/politics" element={<Politics />} />
+            <Route path="global" element={<Global />} />
+            <Route path="politics" element={<Politics />} />
           </Route>
         </Routes>
       </Router>
