@@ -44,7 +44,6 @@ const addComment = async (req, res) => {
                 likes: 0,
             })
             await comment.save()
-            console.log(comment)
             await commentModel.findOneAndUpdate(
                 { _id: commentId },
                 { $push: { subComments: comment._id } }
