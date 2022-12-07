@@ -1,26 +1,27 @@
-import Home from "./Home/Home";
-import { Politics, Global } from "./Categories";
-import Login from "./Login";
+import Home from "./Home/Home"
+import SingleNews from "./Home/SingleNews"
+import Category from "./Category/Category"
+import Login from "./Login"
 import {
-  AdminDash,
-  ManageNews,
-  EditNews,
-  ReaderArticles,
-  Archive,
-  AdsMan,
-  ViewSiteStats,
-} from "./Dashboard";
+	AdminDash,
+	ManageNews,
+	EditNews,
+	ReaderArticles,
+	Archive,
+	AdsMan,
+	ViewSiteStats,
+} from "./Dashboard"
 
 export {
-  Home,
-  Politics,
-  Global,
-  Login,
-  AdminDash,
-  ManageNews,
-  EditNews,
-  ReaderArticles,
-  Archive,
-  AdsMan,
-  ViewSiteStats,
-};
+	Home,
+	Category,
+	Login,
+	AdminDash,
+	ManageNews,
+	EditNews,
+	ReaderArticles,
+	Archive,
+	AdsMan,
+	ViewSiteStats,
+	SingleNews,
+}
