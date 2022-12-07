@@ -6,8 +6,7 @@ import "./App.css";
 import {
   Home,
   Login,
-  Politics,
-  Global,
+  Category,
   AdminDash,
   ManageNews,
   EditNews,
@@ -40,8 +39,10 @@ function App() {
             <Route path="stats" element={<ViewSiteStats />} />
           </Route>
           <Route path="/" element={<Home />}>
-            <Route path="global" element={<Global />} />
-            <Route path="politics" element={<Politics />} />
+            <Route path="/category" element={<Category />}>
+              {/*change this route later*/}
+              <Route path="*" element={<Category />} />{" "}
+            </Route>
           </Route>
         </Routes>
       </Router>

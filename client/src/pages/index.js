@@ -1,5 +1,5 @@
 import Home from "./Home/Home";
-import { Politics, Global } from "./Categories";
+import Category from "./Categories/Category";
 import Login from "./Login";
 import {
   AdminDash,
@@ -13,8 +13,7 @@ import {
 
 export {
   Home,
-  Politics,
-  Global,
+  Category,
   Login,
   AdminDash,
   ManageNews,
