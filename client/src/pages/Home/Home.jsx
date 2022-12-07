@@ -1,12 +1,15 @@
 import React from "react"
 import { Outlet } from "react-router-dom"
-import { Footer, Header } from "../../components"
+import { Footer, Header, SideNavBar } from "../../components"
 
 export default function Home(match) {
 	return (
-		<div className="flex flex-col justify-between h-screen">
+		<div className="flex flex-col h-screen">
 			<Header />
-			<Outlet />
+			<div className="flex">
+				<SideNavBar />
+				<Outlet />
+			</div>
 			<Footer />
 		</div>
 	)

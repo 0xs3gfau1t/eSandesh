@@ -13,7 +13,7 @@ const SingleNews = () => {
 		dispatch(getSingleNews(params))
 	}, [])
 	return (
-		<div className="m-4 w-1/2 mx-auto">
+		<div className="news-content my-2 mx-8 w-3/5">
 			<h1 className="text-xl m-4 font-bold">{news ? news.title : ""}</h1>
 			<div
 				dangerouslySetInnerHTML={{
