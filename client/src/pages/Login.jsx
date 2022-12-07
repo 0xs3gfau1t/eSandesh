@@ -16,7 +16,7 @@ const Login = () => {
 	const navigate = useNavigate()
 
 	useEffect(() => {
-		console.log(session)
+		// console.log(session)
 		if (session.status == "authenticated") {
 			navigate("/admin/dashboard")
 		}

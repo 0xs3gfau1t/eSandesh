@@ -4,7 +4,7 @@ import axios from "axios"
 export const addNews = createAsyncThunk(
 	"dash/addNews",
 	async (data, { dispatch }) => {
-		console.log("data: ", data)
+		// console.log("data: ", data)
 		const response = await axios
 			.post("/api/article", data, {
 				withCredentials: true,
@@ -24,10 +24,9 @@ export const addNews = createAsyncThunk(
 
 export const listNews = createAsyncThunk(
 	"dash/listNews",
-	async (cat, { dispatch }) => {
-		console.log("Idhar ")
+	async (page, { dispatch }) => {
 		const response = await axios
-			.get("/api/article/list?page=0", {
+			.get(`/api/article/list?page=&{page}`, {
 				withCredentials: true,
 			})
 			.then(res => {
@@ -36,9 +35,7 @@ export const listNews = createAsyncThunk(
 			.catch(err => {
 				console.error(err)
 			})
-
 		if (!response) return { success: false }
-
-		return { success: true }
+		return { success: true, data: response, page: page }
 	}
 )
