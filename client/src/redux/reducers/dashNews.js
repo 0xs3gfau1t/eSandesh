@@ -5,7 +5,7 @@ const initialState = {
 	newsList: {},
 }
 
-const miscSlice = createSlice({
+const dashNewsSlice = createSlice({
 	name: "dashNews",
 	initialState,
 	reducers: {},
@@ -19,4 +19,4 @@ const miscSlice = createSlice({
 	},
 })
 
-export default miscSlice.reducer
+export default dashNewsSlice.reducer

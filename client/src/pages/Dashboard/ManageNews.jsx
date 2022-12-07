@@ -17,10 +17,10 @@ const ManageNews = () => {
 		<>
 			<Link
 				to="/admin/dashboard/newsedit"
-				className="flex gap-4 my-4 mx-auto w-2/4 text-2xl bg-green-700 py-2 px-4 rounded justify-center cursor-pointer"
+				className="text-white flex gap-4 my-4 mx-auto w-2/4 text-2xl bg-green-700 py-2 px-4 rounded justify-center cursor-pointer"
 			>
-				<BsFillPlusSquareFill className="ml-4 text-[1.8rem]" />
-				<h2 className="">Create news</h2>
+				<BsFillPlusSquareFill className="ml-4 text-[1.8rem] " />
+				<h2>Create news</h2>
 			</Link>
 			<div className="">
 				<div className="flex flex-col">
@@ -50,7 +50,7 @@ const ManageNews = () => {
 														<td>
 															{parseInt(nws) + 1}
 														</td>
-														<td>
+														<td className="truncate">
 															{khabar.title
 																? khabar.title
 																: ""}
