@@ -18,6 +18,21 @@ const articleSchema = mongoose.Schema(
                 'Invalid priority value. Expected between [0, 10]',
             ],
         },
+        year: {
+            type: String,
+            default: `${new Date().getFullYear()}`,
+        },
+        month: {
+            type: String,
+            default: `${new Date().getMonth()}`,
+        },
+        slug: {
+            type: String,
+            default: `${
+                new Date().getTime() -
+                new Date(new Date().getFullYear(), new Date().getMonth(), 0)
+            }`,
+        },
     },
     { timestamps: true }
 )

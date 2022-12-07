@@ -4,12 +4,16 @@ const articleModel = require('../../model/article')
 /**
  * @param {express.Request} req
  * @param {express.Response} res
- * @return {void}
+ * @return {express.Response}
  */
 const listArticle = async (req, res) => {
     const { category = undefined, page = 0, items = 10 } = req.query
+    const [year, month] = req.url.replace(/\?.*/, '').split('/').slice(2)
 
-    const filter = category ? { category } : {}
+    const filter = {}
+    if (category) filter.category = category
+    if (year) filter.year = year
+    if (month) filter.month = month
 
     try {
         const articles = await articleModel
