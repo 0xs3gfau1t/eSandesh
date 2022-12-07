@@ -11,10 +11,11 @@ const initState = {
 	title: "",
 	category: "",
 	tags: "",
+	priority: 10,
 }
 
 const EditNews = () => {
-	const [news, setNews] = useState("")
+	const [content, setNews] = useState("")
 	const [property, setProp] = useState(initState)
 
 	const dispatch = useDispatch()
@@ -28,7 +29,16 @@ const EditNews = () => {
 		let category = property.category
 			.split(",")
 			.map(category => category.trim())
-		dispatch(addNews({ content: news, tags: tags, category: category }))
+		dispatch(
+			addNews({
+				...property,
+				content: content,
+				tags: tags,
+				category: category,
+			})
+		)
+		setNews("")
+		setProp(initState)
 	}
 	return (
 		<div className="ml-4 flex gap-8">
@@ -43,7 +53,7 @@ const EditNews = () => {
 				<EditorToolbar />
 				<ReactQuill
 					theme="snow"
-					value={news}
+					value={content}
 					onChange={setNews}
 					placeholder={"What's hot?..."}
 					modules={modules}
@@ -69,6 +79,13 @@ const EditNews = () => {
 					name="tags"
 					value={property.tags}
 					labelText="Tags"
+					handleChange={handleChange}
+				/>
+				<FormText
+					type="number"
+					name="priority"
+					value={property.priority}
+					labelText="Priority"
 					handleChange={handleChange}
 				/>
 			</div>

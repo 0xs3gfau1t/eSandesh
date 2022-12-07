@@ -5,18 +5,18 @@ export const addNews = createAsyncThunk(
 	"dash/addNews",
 	async (data, { dispatch }) => {
 		console.log("data: ", data)
-		const response = await axios
-			.post("/api/article", data, {
-				withCredentials: true,
-			})
-			.then(res => {
-				return res.data
-			})
-			.catch(err => {
-				console.error(err)
-			})
+		// const response = await axios
+		// 	.post("/api/article", data, {
+		// 		withCredentials: true,
+		// 	})
+		// 	.then(res => {
+		// 		return res.data
+		// 	})
+		// 	.catch(err => {
+		// 		console.error(err)
+		// 	})
 
-		if (!response) return { success: false }
+		// if (!response) return { success: false }
 
 		return { success: true }
 	}
@@ -25,7 +25,6 @@ export const addNews = createAsyncThunk(
 export const listNews = createAsyncThunk(
 	"dash/listNews",
 	async (page, { dispatch }) => {
-		console.log("Idhar ")
 		const response = await axios
 			.get(`/api/article/list?page=&{page}`, {
 				withCredentials: true,

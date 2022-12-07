@@ -11,15 +11,15 @@ const SingleNews = () => {
 
 	useEffect(() => {
 		dispatch(getSingleNews(id))
-		console.log("News", news)
 	}, [id])
 	return (
-		<div>
-			<h1>{news ? news.title : ""}</h1>
+		<div className="m-4 w-1/2 mx-auto">
+			<h1 className="text-xl m-4 font-bold">{news ? news.title : ""}</h1>
 			<div
 				dangerouslySetInnerHTML={{
 					__html: news ? news.content : "Fetching",
 				}}
+				className=""
 			/>
 		</div>
 	)
