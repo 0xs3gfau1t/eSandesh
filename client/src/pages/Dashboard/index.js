@@ -1,3 +1,5 @@
 import AdminDash from "./Layout"
+import ManageNews from "./ManageNews"
+import EditNews from "./EditNews"
 
-export { AdminDash }
+export { AdminDash, ManageNews, EditNews }

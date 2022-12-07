@@ -17,7 +17,7 @@ const SideNav = () => {
 	return (
 		<ul className="dash-list flex flex-col gap-8 px-1 py-24 bg-darkblue w-1/7 text-white">
 			<NavLink
-				to="/news"
+				to="/admin/dashboard/managenews"
 				className={({ isActive }) =>
 					isActive ? "bg-sky-600 font-bold" : ""
 				}
