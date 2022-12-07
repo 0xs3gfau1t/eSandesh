@@ -14,6 +14,7 @@ const adsSchema = mongoose.Schema(
                 'Invalid priority value. Expected between [0, 10]',
             ],
         },
+        price: { type: Number, required: true },
     },
     { timestamps: true }
 )
