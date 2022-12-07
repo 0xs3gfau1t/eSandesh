@@ -103,7 +103,11 @@ const authOptions = {
     ],
     callbacks: {
         jwt: async ({ token, user, account, profile, isNewUser }) => {
-            if (account) token.provider = account.provider
+            if (account)
+                token.provider =
+                    account.provider == 'register-user'
+                        ? 'user'
+                        : account.provider
             if (user) {
                 token.id = user._id
                 token.roles = user.roles
