@@ -1,4 +1,3 @@
-import Global from "./Global";
-import Politics from "./Politics";
+import Category from "./Category";
 
-export { Global, Politics };
+export { Category };
