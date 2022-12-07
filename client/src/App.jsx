@@ -44,10 +44,10 @@ function App() {
 							path="/news/:year/:month/:slug"
 							element={<SingleNews />}
 						/>
-						{/* <Route path="/category" element={<Category />}> */}
-						{/*change this route later*/}
-						{/* <Route path="*" element={<Category />} />{" "} */}
-						{/* </Route> */}
+						<Route path="/category" element={<Category />}>
+							{/*change this route later*/}
+							<Route path="*" element={<Category />} />{" "}
+						</Route>
 					</Route>
 				</Routes>
 			</Router>
