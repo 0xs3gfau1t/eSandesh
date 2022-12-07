@@ -15,7 +15,7 @@ export default function Header() {
             <Forex />
             <GoldSilver />
           </div>
-          <Link to="/account">
+          <Link to="/admin">
             <FaRegUserCircle className=" text-3xl" />
           </Link>
         </div>
