@@ -6,10 +6,16 @@ const articleModel = require('../../model/article')
  * @param {express.Response} res
  */
 const addArticle = async (req, res) => {
-    const { title, content, category = [], tags = [] } = req.body
+    const { title, content, category = [], tags = [], priority } = req.body
 
     try {
-        const article = new articleModel({ title, content, category, tags })
+        const article = new articleModel({
+            title,
+            content,
+            category,
+            tags,
+            priority,
+        })
         await article.save()
 
         return res.status(200).json(article)

@@ -2,7 +2,6 @@ const mongoose = require('mongoose')
 
 const articleSchema = mongoose.Schema(
     {
-        id: { type: String },
         title: { type: String },
         content: { type: String },
         createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
@@ -11,6 +10,14 @@ const articleSchema = mongoose.Schema(
         publishedAt: { type: Date },
         category: { type: [String] },
         tags: { type: [String] },
+        priority: {
+            type: Number,
+            default: 5,
+            validate: [
+                priority => priority <= 10 && priority >= 0,
+                'Invalid priority value. Expected between [0, 10]',
+            ],
+        },
     },
     { timestamps: true }
 )
