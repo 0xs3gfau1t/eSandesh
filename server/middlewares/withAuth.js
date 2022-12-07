@@ -17,8 +17,12 @@ const withAuth = async (req, res, next) => {
 		...authOptions,
 	})
 
-	if (session) return next()
-	return res.status(401).end()
+    if (session) {
+        req.session = session
+        return next()
+    }
+
+    return res.status(401).json({ message: 'Unauthorized' })
 }
 
 module.exports = withAuth

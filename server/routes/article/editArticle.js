@@ -9,11 +9,18 @@ const articleModel = require('../../model/article')
 const editArticle = async (req, res) => {
     const { id, content, category = undefined, tags = undefined } = req.body
 
+    const filter = { _id: id }
+
+    // If the user is not admin then
+    // they can't delete others article
+    if (user.provider != 'admin') filter.createdBy = user.id
+
+    const data = { content }
+    if (category) data.category = category
+    if (tags) data.tags = tags
+
     try {
-        const article = await articleModel.updateOne(
-            { _id: id },
-            { content, category, tags }
-        )
+        const article = await articleModel.findOneAndUpdate(filter, data)
         return res.status(200).json(article)
     } catch (err) {
         console.error(err)

@@ -87,7 +87,7 @@ const authOptions = {
                     creds.password == process.env.ADMIN_PASS
                 )
                     return {
-                        id: 1,
+                        _id: 1,
                         name: creds.username,
                         password: creds.password,
                     }
@@ -98,7 +98,7 @@ const authOptions = {
     callbacks: {
         jwt: async ({ token, user, account, profile, isNewUser }) => {
             if (account) token.provider = account.provider
-            if (user) token.id = user.id
+            if (user) token.id = user._id
             return token
         },
         session: async ({ session, user, token }) => {
