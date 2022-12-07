@@ -1,22 +1,22 @@
-import { Provider } from "react-redux"
-import { store } from "./redux/store"
-import { Route, BrowserRouter as Router, Routes } from "react-router-dom"
+import { Provider } from "react-redux";
+import { store } from "./redux/store";
+import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 
-import "./App.css"
+import "./App.css";
 import {
-	Home,
-	Login,
-	Category,
-	AdminDash,
-	ManageNews,
-	EditNews,
-	ReaderArticles,
-	Archive,
-	AdsMan,
-	ViewSiteStats,
-	SingleNews,
-} from "./pages"
-import { PrivateRoute } from "./components/common"
+  Home,
+  Login,
+  Category,
+  AdminDash,
+  ManageNews,
+  EditNews,
+  ReaderArticles,
+  Archive,
+  AdsMan,
+  ViewSiteStats,
+  SingleNews,
+} from "./pages";
+import { PrivateRoute } from "./components/common";
 
 function App() {
 	return (
@@ -46,7 +46,7 @@ function App() {
 						/>
 						<Route path="/category" element={<Category />}>
 							{/*change this route later*/}
-							<Route path="*" element={<Category />} />{" "}
+							<Route path=":categoryName" element={<Category />} />
 						</Route>
 					</Route>
 				</Routes>
@@ -55,4 +55,4 @@ function App() {
 	)
 }
 
-export default App
+export default App;

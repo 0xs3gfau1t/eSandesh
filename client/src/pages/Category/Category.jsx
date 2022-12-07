@@ -1,5 +1,4 @@
 import React from "react"
-
 import { SideNavBar } from "../../components"
 import Content from "./Content"
 
