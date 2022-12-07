@@ -40,7 +40,10 @@ function App() {
 						<Route path="stats" element={<ViewSiteStats />} />
 					</Route>
 					<Route path="/" element={<Home />}>
-						<Route path="/news/:id" element={<SingleNews />} />
+						<Route
+							path="/news/:year/:month/:slug"
+							element={<SingleNews />}
+						/>
 						{/* <Route path="/category" element={<Category />}> */}
 						{/*change this route later*/}
 						{/* <Route path="*" element={<Category />} />{" "} */}

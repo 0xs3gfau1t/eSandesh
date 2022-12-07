@@ -4,7 +4,7 @@ import axios from "axios"
 export const addNews = createAsyncThunk(
 	"dash/addNews",
 	async (data, { dispatch }) => {
-		console.log("data: ", data)
+		// console.log("data: ", data)
 		const response = await axios
 			.post("/api/article", data, {
 				withCredentials: true,
@@ -25,7 +25,6 @@ export const addNews = createAsyncThunk(
 export const listNews = createAsyncThunk(
 	"dash/listNews",
 	async (page, { dispatch }) => {
-		console.log("Idhar ")
 		const response = await axios
 			.get(`/api/article/list?page=&{page}`, {
 				withCredentials: true,

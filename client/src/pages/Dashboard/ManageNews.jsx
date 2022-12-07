@@ -51,9 +51,14 @@ const ManageNews = () => {
 															{parseInt(nws) + 1}
 														</td>
 														<td className="truncate">
-															{khabar.title
-																? khabar.title
-																: ""}
+															<Link
+																to={`/news/${khabar.year}/${khabar.month}/${khabar.slug}`}
+																target="_blank"
+															>
+																{khabar.title
+																	? khabar.title
+																	: ""}
+															</Link>
 														</td>
 														<td>
 															{new Date(

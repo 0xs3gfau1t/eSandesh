@@ -10,7 +10,7 @@ app.use(function (req, _res, next) {
 })
 
 // Url and body parsing
-app.use(express.json())
+app.use(express.json({ limit: '10mb' }))
 app.use(
     express.urlencoded({
         extended: true,
