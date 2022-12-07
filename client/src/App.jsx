@@ -1,28 +1,45 @@
-import { Provider } from "react-redux"
+import { Provider } from "react-redux";
 
-import { store } from "./redux/store"
-import { Home, Login, Politics, AdminDash, ManageNews, EditNews } from "./pages"
-import { Route, BrowserRouter as Router, Routes } from "react-router-dom"
+import { store } from "./redux/store";
+import {
+  Home,
+  Login,
+  Politics,
+  Global,
+  AdminDash,
+  ManageNews,
+  EditNews,
+  ReaderArticles,
+  Archive,
+  AdsMan,
+  ViewSiteStats,
+} from "./pages";
+import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 
-import "./App.css"
+import "./App.css";
 
 function App() {
-	return (
-		<Provider store={store}>
-			<Router>
-				<Routes>
-					<Route path="/admin" element={<Login />} />
-					<Route path="/admin/dashboard" element={<AdminDash />}>
-						<Route path="managenews" element={<ManageNews />} />
-						<Route path="newsedit" element={<EditNews />} />
-					</Route>
-					<Route path="/" element={<Home />}>
-						<Route path="/politics" element={<Politics />} />
-					</Route>
-				</Routes>
-			</Router>
-		</Provider>
-	)
+  return (
+    <Provider store={store}>
+      <Router>
+        <Routes>
+          <Route path="/admin" element={<Login />} />
+          <Route path="/admin/dashboard" element={<AdminDash />}>
+            <Route path="managenews" element={<ManageNews />} />
+            <Route path="readers" element={<ReaderArticles />} />
+            <Route path="newsedit" element={<EditNews />} />
+            <Route path="archive" element={<Archive />} />
+            <Route path="ads" element={<AdsMan />} />
+            <Route path="stats" element={<ViewSiteStats />} />
+          </Route>
+          <Route path="/" element={<Home />}>
+            <Route path="/global" element={<Global />} />
+            <Route path="/politics" element={<Politics />} />
+          </Route>
+        </Routes>
+      </Router>
+    </Provider>
+  );
 }
 
-export default App
+export default App;
