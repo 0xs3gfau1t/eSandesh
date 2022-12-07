@@ -37,8 +37,8 @@ const EditNews = () => {
 				category: category,
 			})
 		)
-		setNews("")
-		setProp(initState)
+		// setNews("")
+		// setProp(initState)
 	}
 	return (
 		<div className="ml-4 flex gap-8">
