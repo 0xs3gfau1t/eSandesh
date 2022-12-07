@@ -1,5 +1,6 @@
 import { useState } from "react"
 import { useDispatch } from "react-redux"
+import { useNavigate } from "react-router-dom"
 import ReactQuill from "react-quill"
 import "react-quill/dist/quill.snow.css"
 
@@ -17,8 +18,8 @@ const initState = {
 const EditNews = () => {
 	const [content, setNews] = useState("")
 	const [property, setProp] = useState(initState)
-
 	const dispatch = useDispatch()
+	const navigate = useNavigate()
 
 	const handleChange = e => {
 		setProp({ ...property, [e.target.name]: e.target.value })
@@ -37,8 +38,9 @@ const EditNews = () => {
 				category: category,
 			})
 		)
-		// setNews("")
-		// setProp(initState)
+		setNews("")
+		setProp(initState)
+		navigate("/admin/dashboard/managenews")
 	}
 	return (
 		<div className="ml-4 flex gap-8">

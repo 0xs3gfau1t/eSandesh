@@ -3,9 +3,9 @@ import axios from "axios"
 
 export const getSingleNews = createAsyncThunk(
 	"public/getSingleNews",
-	async (id, { dispatch }) => {
+	async ({ year, month, slug }, { dispatch }) => {
 		const response = await axios
-			.get(`/api/article?id=${id}`, {})
+			.get(`/api/article/${year}/${month}/${slug}`, {})
 			.then(res => {
 				return res.data
 			})
