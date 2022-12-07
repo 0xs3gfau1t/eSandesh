@@ -38,24 +38,16 @@ function Footer() {
             <h3 className="text-lg font-bold">Explore</h3>
             <ul className="text-slate-700 text-sm">
               <li>
-                <Link to="/category/trending">
-                  <a>Trending</a>
-                </Link>
+                <Link to="/category/trending">Trending</Link>
               </li>
               <li>
-                <Link to="/category/global">
-                  <a>Global</a>
-                </Link>
+                <Link to="/category/global">Global</Link>
               </li>
               <li>
-                <Link to="/category/politics">
-                  <a>Politics</a>
-                </Link>
+                <Link to="/category/politics">Politics</Link>
               </li>
               <li>
-                <Link to="/category/finance">
-                  <a>Finance</a>
-                </Link>
+                <Link to="/category/finance">Finance</Link>
               </li>
             </ul>
           </div>
@@ -66,24 +58,16 @@ function Footer() {
             <h3 className="text-lg font-bold">Important Links</h3>
             <div className="text-sm text-slate-700">
               <Link to="/advertisement">
-                <a>
-                  <p>Advertise With Us</p>
-                </a>
+                <p>Advertise With Us</p>
               </Link>
               <Link to="/feedback">
-                <a>
-                  <p>Feedback</p>
-                </a>
+                <p>Feedback</p>
               </Link>
               <Link to="/about">
-                <a>
-                  <p>About Us</p>
-                </a>
+                <p>About Us</p>
               </Link>
               <Link to="/contact">
-                <a>
-                  <p>Contact Us</p>
-                </a>
+                <p>Contact Us</p>
               </Link>
             </div>
           </div>

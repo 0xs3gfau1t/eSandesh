@@ -13,10 +13,11 @@ export default function sideNavBar() {
     "Entertainment",
   ];
   const menuItems = categories.map((eachCat) => (
-    <li className="hover:font-bold duration-200 my-2">
-      <Link to={`/category/${eachCat.toLowerCase()}`}>
-        <a>{eachCat}</a>
-      </Link>
+    <li
+      className="hover:font-bold duration-200 my-2"
+      key={eachCat.toLowerCase()}
+    >
+      <Link to={`/category/${eachCat.toLowerCase()}`}>{eachCat}</Link>
     </li>
   ));
   return (
