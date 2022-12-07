@@ -7,13 +7,15 @@ const articleModel = require('../../model/article')
  * @return {void}
  */
 const listArticle = async (req, res) => {
-    const { category, page = 0 } = req.query
+    const { category = undefined, page = 0, items = 10 } = req.query
+
+    const filter = category ? { category } : {}
 
     try {
         const articles = await articleModel
-            .find({ category })
-            .skip(page * 10)
-            .limit(10)
+            .find(filter)
+            .skip(page * items)
+            .limit(items)
 
         return res.status(200).json(articles)
     } catch (err) {
