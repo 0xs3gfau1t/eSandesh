@@ -7,10 +7,10 @@ const articleModel = require('../../model/article')
  * @return {void}
  */
 const getArticle = async (req, res) => {
-    const { id } = req.query
+    const { year, month, slug } = req.params
 
     try {
-        const article = await articleModel.findOne({ _id: id })
+        const article = await articleModel.findOne({ year, month, slug })
         return res.status(200).json(article)
     } catch (err) {
         console.error(err)

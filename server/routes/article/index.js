@@ -9,7 +9,7 @@ const editArticle = require('./editArticle')
 const getArticle = require('./getArticle')
 const listArticle = require('./listArticle')
 
-router.get('/', getArticle)
+router.get('/:year/:month/:slug', getArticle)
 router.post('/', withAuth, addArticle)
 router.delete('/', withAuth, delArticle)
 router.patch('/', withAuth, editArticle)
