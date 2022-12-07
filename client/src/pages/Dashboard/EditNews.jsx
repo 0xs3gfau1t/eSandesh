@@ -9,8 +9,8 @@ import { addNews } from "../../redux/actions/dashNews"
 
 const initState = {
 	title: "",
-	category: [],
-	tags: [],
+	category: "",
+	tags: "",
 }
 
 const EditNews = () => {
@@ -24,11 +24,15 @@ const EditNews = () => {
 	}
 
 	const onPublish = e => {
-		dispatch(addNews({ content: news, ...property }))
+		let tags = property.tags.split(",").map(tag => tag.trim())
+		let category = property.category
+			.split(",")
+			.map(category => category.trim())
+		dispatch(addNews({ content: news, tags: tags, category: category }))
 	}
 	return (
-		<div className="ml-4 w-4/5 flex gap-4">
-			<div>
+		<div className="ml-4 flex gap-8">
+			<div className="">
 				<FormText
 					type="text"
 					name="title"
@@ -46,10 +50,27 @@ const EditNews = () => {
 					formats={formats}
 				/>
 			</div>
-			<div>
-				<button className="" onClick={onPublish}>
+			<div className="mt-4">
+				<button
+					onClick={onPublish}
+					className="bg-darkblue text-white mb-2"
+				>
 					Publish
 				</button>
+				<FormText
+					type="text"
+					name="category"
+					value={property.category}
+					labelText="Categories"
+					handleChange={handleChange}
+				/>
+				<FormText
+					type="text"
+					name="tags"
+					value={property.tags}
+					labelText="Tags"
+					handleChange={handleChange}
+				/>
 			</div>
 		</div>
 	)

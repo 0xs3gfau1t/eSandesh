@@ -1,7 +1,18 @@
+import { useEffect } from "react"
+import { useDispatch, useSelector } from "react-redux"
 import { BsFillPlusSquareFill } from "react-icons/bs"
 import { Link } from "react-router-dom"
+import { listNews } from "../../redux/actions/dashNews"
 
 const ManageNews = () => {
+	const news = useSelector(state => state.dashNews)
+	const dispatch = useDispatch()
+
+	useEffect(() => {
+		console.log("Hemlo")
+		dispatch(listNews(1))
+	}, [])
+
 	return (
 		<>
 			<Link
@@ -11,6 +22,7 @@ const ManageNews = () => {
 				<BsFillPlusSquareFill className="ml-4 text-[1.8rem]" />
 				<h2 className="">Create news</h2>
 			</Link>
+			<div className=""></div>
 		</>
 	)
 }
