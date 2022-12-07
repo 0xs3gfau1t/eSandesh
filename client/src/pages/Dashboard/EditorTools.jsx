@@ -1,9 +1,7 @@
 import React from "react"
 import { Quill } from "react-quill"
 
-// Custom Undo button icon component for Quill editor. You can import it directly
-// from 'quill/assets/icons/undo.svg' but I found that a number of loaders do not
-// handle them correctly
+//custom buttons
 const CustomUndo = () => (
 	<svg viewBox="0 0 18 18">
 		<polygon className="ql-fill ql-stroke" points="6 10 4 12 2 10 6 10" />
@@ -43,14 +41,7 @@ Quill.register(Size, true)
 
 // Add fonts to whitelist and register them
 const Font = Quill.import("formats/font")
-Font.whitelist = [
-	"arial",
-	"comic-sans",
-	"courier-new",
-	"georgia",
-	"helvetica",
-	"lucida",
-]
+Font.whitelist = ["arial", "courier-new", "helvetica"]
 Quill.register(Font, true)
 
 // Modules object for setting up the Quill editor

@@ -1,6 +1,26 @@
-import Home from "./Home"
-import Politics from "./Politics"
-import Login from "./Login"
-import { AdminDash, ManageNews, EditNews } from "./Dashboard"
+import Home from "./Home/Home";
+import { Politics, Global } from "./Categories";
+import Login from "./Login";
+import {
+  AdminDash,
+  ManageNews,
+  EditNews,
+  ReaderArticles,
+  Archive,
+  AdsMan,
+  ViewSiteStats,
+} from "./Dashboard";
 
-export { Home, Politics, Login, AdminDash, ManageNews, EditNews }
+export {
+  Home,
+  Politics,
+  Global,
+  Login,
+  AdminDash,
+  ManageNews,
+  EditNews,
+  ReaderArticles,
+  Archive,
+  AdsMan,
+  ViewSiteStats,
+};
