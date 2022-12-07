@@ -14,7 +14,7 @@ const getComments = async (req, res) => {
         try {
             const comments = await commentModel
                 .find({ article: articleId })
-                .skip(page || 0)
+                .skip(page * 10 || 0)
                 .limit(items || 10)
 
             res.json({ message: 'success', comments: comments })
@@ -28,7 +28,7 @@ const getComments = async (req, res) => {
         try {
             const comments = await commentModel
                 .find({ user: userId })
-                .skip(page || 0)
+                .skip(page * 10 || 0)
                 .limit(items || 10)
             res.json({ message: 'success', comments: comments })
         } catch (e) {
