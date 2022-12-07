@@ -5,7 +5,6 @@ const router = express.Router()
 router.use('/auth', require('./auth'))
 router.use('/article', require('./article'))
 router.use('/comment', require('./comment'))
-router.use('/secret', withAuth, require('./secret'))
 
 router.get('*', (_req, res) => {
     res.json({ message: 'yamete kudasai!' })
