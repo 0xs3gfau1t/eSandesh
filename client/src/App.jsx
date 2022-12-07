@@ -1,9 +1,9 @@
 import { Provider } from "react-redux"
-
 import { store } from "./redux/store"
-import { Home, Login, Politics, AdminDash, ManageNews, EditNews } from "./pages"
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom"
 
+import { Home, Login, Politics, AdminDash, ManageNews, EditNews } from "./pages"
+import { PrivateRoute } from "./components/common"
 import "./App.css"
 
 function App() {
@@ -12,7 +12,14 @@ function App() {
 			<Router>
 				<Routes>
 					<Route path="/admin" element={<Login />} />
-					<Route path="/admin/dashboard" element={<AdminDash />}>
+					<Route
+						path="/admin/dashboard"
+						element={
+							<PrivateRoute>
+								<AdminDash />
+							</PrivateRoute>
+						}
+					>
 						<Route path="managenews" element={<ManageNews />} />
 						<Route path="newsedit" element={<EditNews />} />
 					</Route>
