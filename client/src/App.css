@@ -12,11 +12,11 @@
 	transition: var(--transition);
 }
 
-h1 {
+/* h1 {
 	font-size: 2rem !important;
 	text-align: center;
 	margin: 3vh 1vw;
-}
+} */
 
 button {
 	height: 51px;
