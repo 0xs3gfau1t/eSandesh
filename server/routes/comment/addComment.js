@@ -10,13 +10,12 @@ const articleModel = require('../../model/article')
  */
 const addComment = async (req, res) => {
     const { articleId, content, commentId } = req.body
-    // const { userId } = req.auth
-    const userId = '6390122a8138df349bab6188'
+    const { user } = req.session
     // This creates a comment on article
     if (articleId) {
         try {
             const comment = new commentModel({
-                user: userId,
+                user: user.id,
                 content: content,
                 article: articleId,
             })
@@ -39,7 +38,7 @@ const addComment = async (req, res) => {
     if (commentId) {
         try {
             const comment = new commentModel({
-                user: userId,
+                user: user.id,
                 content: content,
                 likes: 0,
             })
