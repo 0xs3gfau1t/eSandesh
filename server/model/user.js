@@ -4,9 +4,15 @@ const userSchema = new mongoose.Schema({
     name: { type: String },
     email: { type: String, unique: true },
     emailVerified: { type: Date },
+    password: { type: String },
     image: { type: String },
     articles: { type: [mongoose.Schema.Types.ObjectId], ref: 'Article' },
-    roles: { type: [mongoose.Schema.Types.ObjectId], ref: 'Role' },
+    roles: {
+        isRoot: { type: Boolean, default: false },
+        canPublish: { type: Boolean, default: false },
+        canCreate: { type: Boolean, default: true },
+        isReporter: { type: Boolean, default: false },
+    },
 })
 
 const accountSchema = new mongoose.Schema({
