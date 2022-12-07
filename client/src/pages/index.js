@@ -1,5 +1,5 @@
 import Home from "./Home/Home";
-import { Category } from "./Categories";
+import Category from "./Categories/Category";
 import Login from "./Login";
 import {
   AdminDash,
