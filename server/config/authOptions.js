@@ -1,4 +1,5 @@
 const MongooseAdapter = require('../controllers/adapter')
+const { userModel } = require('../model/user')
 
 const CredentialsProvider = require('next-auth/providers/credentials').default
 const FacebookProvider = require('next-auth/providers/facebook').default
@@ -9,6 +10,37 @@ const authOptions = {
         FacebookProvider({
             clientId: process.env.FACEBOOK_CLIENT_ID,
             clientSecret: process.env.FACEBOOK_CLIENT_SECRET,
+        }),
+        CredentialsProvider({
+            id: 'register-user',
+            name: 'Register',
+            credentials: {
+                name: {
+                    label: 'Username',
+                    type: 'text',
+                    placeholder: 'Your username',
+                },
+                email: {
+                    label: 'Email',
+                    type: 'email',
+                    placeholder: 'Your email address',
+                },
+                password: {
+                    label: 'Password',
+                    type: 'password',
+                    placeholder: 'Your password',
+                },
+            },
+            async authorize(creds, _req) {
+                const user = new userModel({
+                    name: creds.name,
+                    email: creds.email,
+                    password: creds.password,
+                })
+                console.log(user)
+                await user.save()
+                return user ? user.toObject() : null
+            },
         }),
         CredentialsProvider({
             id: 'user',
@@ -26,9 +58,11 @@ const authOptions = {
                 },
             },
             async authorize(creds, _req) {
-                console.log(creds)
-                // check in mongo database and return user details
-                return { id: 1, name: 'Bijan Regmi', password: 'HEHE' }
+                const user = await userModel.findOne({
+                    email: creds.email,
+                    password: creds.password,
+                })
+                return user ? user.toObject() : null
             },
         }),
         CredentialsProvider({
