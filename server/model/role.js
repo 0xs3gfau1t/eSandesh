@@ -6,6 +6,7 @@ const roleSchema = mongoose.Schema({
     canPublish: { type: Boolean, default: false },
     canCreate: { type: Boolean, default: false },
     isReporter: { type: Boolean, default: false },
+    idAdOwner: { type: Boolean, default: false },
 })
 
 module.exports = mongoose.model('Role', roleSchema)
