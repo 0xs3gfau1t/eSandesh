@@ -1,12 +1,13 @@
 import { createSlice } from "@reduxjs/toolkit"
 import { listNews } from "../actions/dashNews"
+import { getSingleNews } from "../actions/publicNews"
 
 const initialState = {
 	newsList: {},
 }
 
-const dashNewsSlice = createSlice({
-	name: "dashNews",
+const newsSlice = createSlice({
+	name: "news",
 	initialState,
 	reducers: {},
 
@@ -16,7 +17,12 @@ const dashNewsSlice = createSlice({
 				state.newsList[payload.page] = payload.data
 			}
 		})
+		builder.addCase(getSingleNews.fulfilled, (state, { payload }) => {
+			if (payload.success && payload.data) {
+				state.singleNews = payload.data
+			}
+		})
 	},
 })
 
-export default dashNewsSlice.reducer
+export default newsSlice.reducer

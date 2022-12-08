@@ -7,7 +7,9 @@ import { RiAdvertisementFill } from "react-icons/ri"
 const TopNav = () => {
 	return (
 		<div className="text-white h-12 bg-darkblue flex">
-			<h1 className="ml-8 text-3xl">eSandesh</h1>
+			<h1 className="ml-8 my-2 text-3xl">
+				<a href="/">eSandesh</a>
+			</h1>
 			<h1 className="mx-auto my-2 text-2xl align-center">
 				Admin Dashboard
 			</h1>

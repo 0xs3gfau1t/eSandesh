@@ -6,7 +6,7 @@ import { getSingleNews } from "../../redux/actions/publicNews"
 
 const SingleNews = () => {
 	const params = useParams()
-	const news = useSelector(state => state.publicNews.singleNews)
+	const news = useSelector(state => state.news.singleNews)
 	const dispatch = useDispatch()
 
 	useEffect(() => {

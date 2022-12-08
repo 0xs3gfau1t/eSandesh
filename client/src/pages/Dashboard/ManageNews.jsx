@@ -6,7 +6,7 @@ import { listNews } from "../../redux/actions/dashNews"
 import { useState } from "react"
 
 const ManageNews = () => {
-	const news = useSelector(state => state.dashNews.newsList)
+	const news = useSelector(state => state.news.newsList)
 	const dispatch = useDispatch()
 	let [page, setPage] = useState(0)
 	useEffect(() => {
