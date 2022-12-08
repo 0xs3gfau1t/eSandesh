@@ -12,19 +12,21 @@ module.exports = (req, res) => {
     const { name, publisher, embedUrl, priority, price, size, id } = req.body
     const { user } = req.session
 
-    if (!req.session.roles.isRoot)
+    if (!user?.roles?.isRoot)
         return res.json({ error: 'Not enough permission to edit ads' })
 
-    // Currently only the creator of ads can remove ads and noone else
-    // Not even root
-    adsModel.findOneAndUpdate(
-        { publisher: user.id, _id: id },
-        { name, embedUrl, priority, price, size },
-        (e, d) => {
-            if (e)
-                return res.status(500).json({ error: 'Something went wrong.' })
+    const data = {}
+    if (name) data.name = name
+    if (embedUrl) data.embedUrl = embedUrl
+    if (priority) data.priority = priority
+    if (price) data.price = price
+    if (size) data.size = size
 
-            res.json({ message: 'success' })
-        }
-    )
+    // Currently only the creator of ads can edit ads and noone else
+    // Not even root
+    adsModel.findOneAndUpdate({ publisher: user.id, _id: id }, data, (e, d) => {
+        if (e) return res.status(500).json({ error: 'Something went wrong.' })
+
+        res.json({ message: 'success' })
+    })
 }

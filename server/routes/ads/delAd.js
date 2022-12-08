@@ -12,7 +12,7 @@ module.exports = (req, res) => {
     const { id } = req.body
     const { user } = req.session
 
-    if (!req.session.roles.isRoot && !req.session.roles.idAdmin)
+    if (!user?.roles?.isRoot)
         return res.json({ error: 'Not enough permission to remove ads' })
 
     // Currently only the creator of ads can remove ads and noone else
