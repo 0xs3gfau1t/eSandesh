@@ -5,7 +5,7 @@ import { LikeSaveShare } from "../../components/common";
 
 export default function HomeHero() {
   return (
-    <div className="mb-10 border border-red px-4 pb-4">
+    <div className="mb-10 pb-4">
       <h1 className="text-4xl font-primary font-bold leading-loose">
         Today's News
       </h1>
@@ -15,15 +15,22 @@ export default function HomeHero() {
           src="https://developers.elementor.com/docs/assets/img/elementor-placeholder-image.png"
         />
       </p>
-      <div className="">
+      {/* below cover img */}
+      <div>
         <h1 className="text-3xl font-semibold my-2">
           <Link to={""} className="hover:text-rose-600 duration-300">
+            {/* article title */}
             Title is here
           </Link>
         </h1>
         <div className="flex justify-between">
-          <div>Summary short</div>
-          <LikeSaveShare />
+          <div>
+            {/* short summary of article */}
+            Summary short
+          </div>
+          <LikeSaveShare
+          // articleId = {someArticleId}
+          />
         </div>
       </div>
     </div>

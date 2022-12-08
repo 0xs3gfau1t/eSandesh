@@ -7,7 +7,7 @@ export default function LikeSaveShare() {
       <span className=" cursor-pointer text-lg transition-all duration-200 hover:text-green-600">
         <BiLike />
       </span>
-      <span className=" cursor-pointer text-lg transition-all duration-200 hover:text-yellow-500">
+      <span className=" cursor-pointer text-lg transition-all duration-200 hover:text-orange-500">
         <BiAddToQueue />
       </span>
       <span className=" cursor-pointer text-lg transition-all duration-200 hover:text-sky-600 ">

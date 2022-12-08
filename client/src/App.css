@@ -5,7 +5,7 @@
   transition: var(--transition);
 }
 
-body{
+body {
   @apply text-sm;
 }
 button {
@@ -68,15 +68,12 @@ h6 {
 }
 h1 {
   @apply font-bold;
-  @apply text-3xl;
 }
 h2 {
   @apply font-semibold;
-  @apply text-2xl;
 }
 h3 {
   @apply font-semibold;
-  @apply text-xl;
 }
 
 .newsListTable td {
