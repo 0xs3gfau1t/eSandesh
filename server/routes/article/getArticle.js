@@ -11,7 +11,15 @@ const getArticle = async (req, res) => {
 
     try {
         const article = await articleModel.findOne({ year, month, slug })
-        return res.status(200).json(article)
+
+        if (!article)
+            return res.status(400).json({ message: 'Article not found.' })
+
+        res.status(200).json(article)
+
+        // Update article count
+        article.hits += 1
+        await article.save()
     } catch (err) {
         console.error(err)
         return res.status(500).json({ error: 'Something went wrong.' })
