@@ -47,13 +47,7 @@ function App() {
 							path="/news/:year/:month/:slug"
 							element={<SingleNews />}
 						/>
-						<Route path="/category" element={<Category />}>
-							{/*change this route later*/}
-							<Route
-								path=":categoryName"
-								element={<Category />}
-							/>
-						</Route>
+						<Route path="/category/:cat" element={<Category />} />
 					</Route>
 				</Routes>
 			</Router>

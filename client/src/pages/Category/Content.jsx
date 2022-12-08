@@ -1,12 +1,24 @@
+import { useState, useEffect } from "react"
 import { useSelector, useDispatch } from "react-redux"
+import { useParams } from "react-router-dom"
 
 import { ArticlePreviewMd } from "../../components/common"
 import HeroSection from "./HeroSection"
+import { listNewsCat } from "../../redux/actions/publicNews"
 
 export default function Content() {
+	const list = useSelector(state => state.news.newsListCat)
+	const [page, setPage] = useState(0)
+	const { cat } = useParams()
+	const dispatch = useDispatch()
+
+	useEffect(() => {
+		dispatch(listNewsCat({ page: page, cat: cat.toUpperCase() }))
+	}, [page])
+
 	return (
 		<div className="flex flex-col w-11/12 mx-auto px-4">
-			<HeroSection />
+			<HeroSection cat={cat} data={list ? list[0] : []} />
 			<div className="flex gap-4">
 				{/* articles */}
 				<div className="">

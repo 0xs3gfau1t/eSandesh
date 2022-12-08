@@ -1,9 +1,9 @@
-import { useEffect } from "react"
+import { useState, useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { BsFillPlusSquareFill } from "react-icons/bs"
 import { Link } from "react-router-dom"
+
 import { listNews } from "../../redux/actions/dashNews"
-import { useState } from "react"
 
 const ManageNews = () => {
 	const news = useSelector(state => state.news.newsList)
