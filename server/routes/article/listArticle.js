@@ -1,5 +1,6 @@
 const express = require('express')
 const articleModel = require('../../model/article')
+const { userModel } = require('../../model/user')
 
 /**
  * @param {express.Request} req
@@ -31,6 +32,26 @@ const listArticle = async (req, res) => {
             { $limit: items },
             { $sort: sortParameters },
         ])
+
+        // If user is logged in sort the list based on their history
+        // Maybe i could've used aggregations but this seemed way easier
+        if (req.session?.user) {
+            const user = await userModel.findOne(
+                { _id: req.session.user.id },
+                { history: true }
+            )
+            articles.sort((a, b) => {
+                var scoreA = a.category.reduce((accum, value) => {
+                    return accum + (user.history?.get(value) || 0)
+                }, 0)
+
+                var scoreB = b.category.reduce((accum, value) => {
+                    return accum + (user.history?.get(value) || 0)
+                }, 0)
+
+                return scoreB - scoreA
+            })
+        }
 
         return res.status(200).json(articles)
     } catch (err) {
