@@ -5,7 +5,8 @@ const adSchema = mongoose.Schema(
         name: { type: String },
         hits: { type: String, default: 0 },
         publisher: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
-        embedUrl: { type: [String] },
+        imageEmbedUrl: { type: String },
+        redirectUrl: { type: String },
         priority: {
             type: Number,
             default: 5,
@@ -24,6 +25,7 @@ const adSchema = mongoose.Schema(
             ],
         },
         category: { type: [String] },
+        expiry: { type: Date, required: true },
     },
     { timestamps: true }
 )
