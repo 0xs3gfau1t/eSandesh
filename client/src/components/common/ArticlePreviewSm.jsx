@@ -1,7 +1,5 @@
-import React from 'react'
+import React from "react";
 
 export default function ArticlePreviewSm() {
-  return (
-    <div>ArticlePreviewSm</div>
-  )
+  return <div>ArticlePreviewSm</div>;
 }

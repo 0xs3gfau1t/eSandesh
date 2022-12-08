@@ -5,6 +5,9 @@
   transition: var(--transition);
 }
 
+body{
+  @apply text-sm;
+}
 button {
   height: 51px;
   font-size: 16px;

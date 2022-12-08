@@ -1,9 +1,11 @@
 import React from "react";
+
 import { Link } from "react-router-dom";
+import { LikeSaveShare } from "../../components/common";
 
 export default function HomeHero() {
   return (
-    <div className="mb-10 border border-red px-4">
+    <div className="mb-10 border border-red px-4 pb-4">
       <h1 className="text-4xl font-primary font-bold leading-loose">
         Today's News
       </h1>
@@ -19,7 +21,10 @@ export default function HomeHero() {
             Title is here
           </Link>
         </h1>
-        <div>Summary shot</div>
+        <div className="flex justify-between">
+          <div>Summary short</div>
+          <LikeSaveShare />
+        </div>
       </div>
     </div>
   );
