@@ -82,22 +82,19 @@ const authOptions = {
             },
             async authorize(creds, _req) {
                 console.log(creds)
-                if (
-                    creds.username == process.env.ADMIN_USER &&
-                    creds.password == process.env.ADMIN_PASS
-                )
-                    return {
-                        _id: 1,
-                        name: creds.username,
+                try {
+                    const user = await userModel.findOne({
+                        email: creds.username,
                         password: creds.password,
-                        roles: {
-                            isRoot: true,
-                            canPublish: true,
-                            canCreate: true,
-                            isReporter: true,
-                        },
-                    }
-                return null
+                        'roles.isRoot': true,
+                    })
+                    console.log(user)
+                    if (!user) return null
+                    return user.toObject()
+                } catch (err) {
+                    console.error(err)
+                    return null
+                }
             },
         }),
     ],
