@@ -10,7 +10,7 @@ const { app, server } = require('./config/app')
 // Routes //
 ////////////
 
-app.use('/api', require('./routes'))
+app.use('/api', require('./middlewares/withSession'), require('./routes'))
 
 // Redirect everything other that /api/ to frontend
 app.all('*', (_req, res) => {
