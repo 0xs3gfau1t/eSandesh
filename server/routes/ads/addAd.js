@@ -13,7 +13,7 @@ module.exports = (req, res) => {
 
     const { user } = req.session
 
-    if (!req.session.roles.idRoot)
+    if (!user?.roles?.idRoot)
         return res.json({ error: 'Not enough permission to create ads' })
 
     adsModel.create(

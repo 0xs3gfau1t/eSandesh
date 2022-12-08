@@ -14,8 +14,7 @@ module.exports = (req, res) => {
 
     const filters = { category: category }
 
-    if (user.session.roles.isRoot || user.session.roles.isAdmin)
-        filters['publisher'] = publisher
+    if (user.roles.isRoot) filters['publisher'] = publisher
     else filters['publisher'] = user.id
 
     adsModel.find(filters, (e, d) => {

@@ -15,17 +15,17 @@ function Footer() {
 					</div>
 					{/* social icons*/}
 					<div className="flex gap-3 items-center">
-						<a>
+						<a href="https://www.facebook.com" target={"_blank"}>
 							<span>
 								<FaFacebookF className="text-2xl" />
 							</span>
 						</a>
-						<a>
+						<a href="https://www.twitter.com" target={"_blank"}>
 							<span>
 								<FaTwitter className="text-2xl" />
 							</span>
 						</a>
-						<a>
+						<a href="https://www.youtube.com" target={"_blank"}>
 							<span>
 								<FaYoutube className="text-2xl" />
 							</span>
@@ -47,7 +47,7 @@ function Footer() {
 								<Link to="/category/politics">Politics</Link>
 							</li>
 							<li>
-								<Link to="/category/finance">Finance</Link>
+								<Link to="/category/sports">Sports</Link>
 							</li>
 						</ul>
 					</div>

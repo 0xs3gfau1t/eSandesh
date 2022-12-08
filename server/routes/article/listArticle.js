@@ -1,5 +1,6 @@
 const express = require('express')
 const articleModel = require('../../model/article')
+const { userModel } = require('../../model/user')
 
 /**
  * @param {express.Request} req
@@ -15,9 +16,9 @@ const listArticle = async (req, res) => {
     } = req.query
     const [year, month] = req.url.replace(/\?.*/, '').split('/').slice(2)
 
-    const sortParameters = []
-    if (priority) sortParameters.push(['priority', -1])
-    else sortParameters.push(['slug', -1])
+    const sortParameters = {}
+    if (priority) sortParameters.priority = -1
+    else sortParameters.slug = -1
 
     const filter = {}
     if (category) filter.category = category
@@ -25,11 +26,36 @@ const listArticle = async (req, res) => {
     if (month) filter.month = month
 
     try {
-        const articles = await articleModel
-            .find(filter)
-            .skip(page * items)
-            .limit(items)
-            .sort(sortParameters)
+        const articles = await articleModel.aggregate([
+            { $match: filter },
+            { $skip: page * items },
+            { $limit: items },
+            { $sort: sortParameters },
+        ])
+
+        // If user is logged in sort the list based on their history
+        // Maybe i could've used aggregations but this seemed way easier
+        if (req.session?.user && !req.session.user?.roles?.isRoot) {
+            const user = await userModel.findOne(
+                { _id: req.session.user.id },
+                { history: true }
+            )
+            articles.sort((a, b) => {
+                var scoreA = a.category.reduce((accum, value) => {
+                    return accum + (user.history?.get(value) || 0)
+                }, 0)
+
+                var scoreB = b.category.reduce((accum, value) => {
+                    return accum + (user.history?.get(value) || 0)
+                }, 0)
+
+                const diff = scoreB - scoreA
+                if (diff) return diff
+
+                // If both scored same points then sort based on hits
+                return b.hits - a.hits
+            })
+        }
 
         return res.status(200).json(articles)
     } catch (err) {

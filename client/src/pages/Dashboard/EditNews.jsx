@@ -26,10 +26,18 @@ const EditNews = () => {
 	}
 
 	const onPublish = e => {
-		let tags = property.tags.split(",").map(tag => tag.trim())
+		if (!property.title || !property.content) {
+			console.log("Title and content required")
+			return
+		}
+		let tags = property.tags
+			.split(",")
+			.map(tag => tag.trim())
+			.map(tag => tag.toUpperCase())
 		let category = property.category
 			.split(",")
 			.map(category => category.trim())
+			.map(cat => cat.toUpperCase())
 		dispatch(
 			addNews({
 				...property,
