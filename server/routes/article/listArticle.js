@@ -15,9 +15,9 @@ const listArticle = async (req, res) => {
     } = req.query
     const [year, month] = req.url.replace(/\?.*/, '').split('/').slice(2)
 
-    const sortParameters = []
-    if (priority) sortParameters.push(['priority', -1])
-    else sortParameters.push(['slug', -1])
+    const sortParameters = {}
+    if (priority) sortParameters.priority = -1
+    else sortParameters.slug = -1
 
     const filter = {}
     if (category) filter.category = category
@@ -25,11 +25,12 @@ const listArticle = async (req, res) => {
     if (month) filter.month = month
 
     try {
-        const articles = await articleModel
-            .find(filter)
-            .skip(page * items)
-            .limit(items)
-            .sort(sortParameters)
+        const articles = await articleModel.aggregate([
+            { $match: filter },
+            { $skip: page * items },
+            { $limit: items },
+            { $sort: sortParameters },
+        ])
 
         return res.status(200).json(articles)
     } catch (err) {
