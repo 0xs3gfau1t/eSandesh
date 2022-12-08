@@ -35,7 +35,7 @@ const listArticle = async (req, res) => {
 
         // If user is logged in sort the list based on their history
         // Maybe i could've used aggregations but this seemed way easier
-        if (req.session?.user) {
+        if (req.session?.user && !req.session.user?.roles?.isRoot) {
             const user = await userModel.findOne(
                 { _id: req.session.user.id },
                 { history: true }
@@ -49,7 +49,11 @@ const listArticle = async (req, res) => {
                     return accum + (user.history?.get(value) || 0)
                 }, 0)
 
-                return scoreB - scoreA
+                const diff = scoreB - scoreA
+                if (diff) return diff
+
+                // If both scored same points then sort based on hits
+                return b.hits - a.hits
             })
         }
 
