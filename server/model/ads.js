@@ -1,9 +1,9 @@
 const mongoose = require('mongoose')
 
-const adsSchema = mongoose.Schema(
+const adSchema = mongoose.Schema(
     {
         name: { type: String },
-        hits: { type: String },
+        hits: { type: String, default: 0 },
         publisher: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
         embedUrl: { type: [String] },
         priority: {
@@ -15,8 +15,17 @@ const adsSchema = mongoose.Schema(
             ],
         },
         price: { type: Number, required: true },
+        size: {
+            type: String,
+            default: 'rectX',
+            validate: [
+                size => ['rectX', 'rectY', 'square'].includes(size),
+                'Invalid size.',
+            ],
+        },
+        category: { type: [String] },
     },
     { timestamps: true }
 )
 
-module.exports = mongoose.model('Article', articleSchema)
+module.exports = mongoose.model('Ad', adSchema)

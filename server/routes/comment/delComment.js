@@ -7,7 +7,6 @@ const commentModel = require('../../model/comment')
  * @return {void}
  */
 const deleteChildren = arr => {
-    console.log('Deleting children of ', arr)
     for (i of arr) {
         commentModel.findOne({ _id: i._id.toString() }, (e, d) => {
             if (e)
@@ -21,13 +20,12 @@ const deleteChildren = arr => {
 }
 const delComment = (req, res) => {
     const { commentId } = req.body
-    //const { userId } = req.auth
-    userId = '6390122a8138df349bab6188'
+    const { user } = req.session
 
     commentModel.findOneAndDelete(
         {
             _id: commentId,
-            user: userId,
+            user: user.id,
         },
         (e, d) => {
             if (e || !d) return res.json({ error: 'Comment Not Found' })
