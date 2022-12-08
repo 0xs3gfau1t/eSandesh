@@ -32,7 +32,10 @@ function App() {
 							</PrivateRoute>
 						}
 					>
-						<Route path="managenews" element={<ManageNews />} />
+						<Route
+							path="/admin/dashboard"
+							element={<ManageNews />}
+						/>
 						<Route path="readers" element={<ReaderArticles />} />
 						<Route path="newsedit" element={<EditNews />} />
 						<Route path="archive" element={<Archive />} />
@@ -44,10 +47,7 @@ function App() {
 							path="/news/:year/:month/:slug"
 							element={<SingleNews />}
 						/>
-						{/* <Route path="/category" element={<Category />}> */}
-						{/*change this route later*/}
-						{/* <Route path="*" element={<Category />} />{" "} */}
-						{/* </Route> */}
+						<Route path="/category/:cat" element={<Category />} />
 					</Route>
 				</Routes>
 			</Router>

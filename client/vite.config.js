@@ -10,6 +10,7 @@ export default ({ mode }) => {
 		},
 		plugins: [react()],
 		server: {
+			host: "localhost",	
 			open: true,
 			port: env.PORT || 8000,
 			proxy: {

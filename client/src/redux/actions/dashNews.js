@@ -23,7 +23,7 @@ export const addNews = createAsyncThunk(
 )
 
 export const listNews = createAsyncThunk(
-	"dash/listNews",
+	"common/listNews",
 	async (page, { dispatch }) => {
 		const response = await axios
 			.get(`/api/article/list?page=&{page}`, {

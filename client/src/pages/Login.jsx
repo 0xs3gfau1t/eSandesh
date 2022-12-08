@@ -29,7 +29,6 @@ const Login = () => {
 	const onSubmit = e => {
 		e.preventDefault()
 		signIn("admin", { ...values, redirect: false })
-		console.log("Here")
 	}
 
 	return (
