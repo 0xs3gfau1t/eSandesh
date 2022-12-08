@@ -14,7 +14,7 @@ export default function Content() {
 
 	useEffect(() => {
 		dispatch(listNewsCat({ page: page, cat: cat.toUpperCase() }))
-	}, [page])
+	}, [page, cat])
 
 	return (
 		<div className="flex flex-col w-11/12 mx-auto px-4">
@@ -22,30 +22,21 @@ export default function Content() {
 			<div className="flex gap-4">
 				{/* articles */}
 				<div className="">
-					<ArticlePreviewMd
-						title={
-							"सुकुम्बासी समस्यामा सधैं राजनीति, समाधानमा बेवास्ता"
-						}
-						summary={
-							"२१ मंसिर, काठमाडौ । ‘के-के न बहादुरी ! शत्रु देशसँगको लडाइँजस्तो भाषाशैली, तरिका ।..."
-						}
-						imgUrl={
-							"https://warnaturbo.b-cdn.net/tutorial/wp-content/uploads/2020/07/01-Add-Change-Picture-in-Image-Placeholder-in-PowerPoint-Template-WarnaSlides.com_.jpg"
-						}
-						articleUrl={""}
-					/>
-					<ArticlePreviewMd
-						title={
-							"नेप्सेमा दोहोरो अंकको गिरावट, डेढ अर्ब माथिको कारोबार"
-						}
-						summary={
-							"२१ मंसिर, काठमाडौं । सेयर बजार परिसूचमा दोहोरो अंकको गिरावट भएको छ । ..."
-						}
-						imgUrl={
-							"https://warnaturbo.b-cdn.net/tutorial/wp-content/uploads/2020/07/01-Add-Change-Picture-in-Image-Placeholder-in-PowerPoint-Template-WarnaSlides.com_.jpg"
-						}
-						articleUrl={""}
-					/>
+					{list &&
+						Object.keys(list.slice(1)).map(key => {
+							const div = document.createElement("div")
+							div.innerHTML = list[parseInt(key) + 1].content
+							const img = div.querySelector("img")
+							return (
+								<ArticlePreviewMd
+									key={key}
+									title={list[parseInt(key) + 1].title}
+									summary={"Tuchha description here..."}
+									imgUrl={img ? img.src : ""}
+									articleUrl={""}
+								/>
+							)
+						})}
 				</div>
 				{/* ads */}
 				<div className="my-4 hidden lg:block">

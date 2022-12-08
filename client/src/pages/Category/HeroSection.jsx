@@ -17,7 +17,7 @@ export default function HeroSection({ cat, data }) {
 			<div className="">
 				<h1 className="text-3xl font-semibold my-2">
 					<Link
-						to="/category/*/*"
+						to={`/news/${data.year}/${data.month}/${data.slug}`}
 						className="hover:text-rose-600 duration-300"
 					>
 						{data.title}

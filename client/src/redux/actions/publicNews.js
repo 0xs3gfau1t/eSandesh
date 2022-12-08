@@ -32,7 +32,6 @@ export const listNewsCat = createAsyncThunk(
 				console.error(err)
 			})
 		if (!response) return { success: false }
-		console.log(response)
 		return { success: true, data: response, page: page }
 	}
 )
