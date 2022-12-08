@@ -6,8 +6,13 @@ import { RiAdvertisementFill } from "react-icons/ri"
 
 const TopNav = () => {
 	return (
-		<div className="text-white h-12 bg-darkblue">
-			<h1>eSandesh</h1>
+		<div className="text-white h-12 bg-darkblue flex">
+			<h1 className="ml-8 my-2 text-3xl">
+				<a href="/">eSandesh</a>
+			</h1>
+			<h1 className="mx-auto my-2 text-2xl align-center">
+				Admin Dashboard
+			</h1>
 		</div>
 	)
 }
@@ -16,7 +21,7 @@ const SideNav = () => {
 	return (
 		<ul className="dash-list flex flex-col gap-8 px-1 py-24 bg-darkblue w-1/7 text-white">
 			<NavLink
-				to="/admin/dashboard/managenews"
+				to="/admin/dashboard/"
 				className={({ isActive }) =>
 					isActive ? "bg-sky-600 font-bold" : ""
 				}

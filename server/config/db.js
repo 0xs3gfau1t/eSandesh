@@ -17,6 +17,7 @@ async function dbConnect() {
             pass: process.env.MONGO_PASS,
             useNewUrlParser: true,
             useUnifiedTopology: true,
+            dbName: 'portal',
         })
     }
 

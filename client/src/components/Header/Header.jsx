@@ -7,7 +7,7 @@ import GoldSilver from "./GoldSilver";
 
 export default function Header() {
   return (
-    <div className="header">
+    <div className="header mb-5">
       <div className="flex justify-between items-center container p-3">
         <SiteLogo />
         <div className="flex justify-between items-center">
@@ -15,7 +15,7 @@ export default function Header() {
             <Forex />
             <GoldSilver />
           </div>
-          <Link to="/account">
+          <Link to="/admin">
             <FaRegUserCircle className=" text-3xl" />
           </Link>
         </div>
