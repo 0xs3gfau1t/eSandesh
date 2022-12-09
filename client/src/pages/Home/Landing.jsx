@@ -1,3 +1,10 @@
+import HomeHero from "./HomeHero"
+import RecentNews from "./RecentNews"
+import SideScrollNewsSection from "./SideScrollNewsSection"
+import { RectAds } from "../../components/common"
+import EachCategoryPreview from "./EachCategoryPreview"
+import SportsHighlights from "./SportsHighlights"
+
 const Landing = () => {
 	return (
 		<div>
