@@ -9,9 +9,7 @@ export default function SiteIdentity() {
     <div className="flex flex-col items-center sm:items-start gap-4">
       <div className="flex flex-col items-center sm:items-start">
         {/* site title and tagline */}
-        <Link to="/">
-          <SiteLogo />
-        </Link>
+        <SiteLogo />
         <p>Khabar naya yug ko</p>
       </div>
       {/* social icons*/}

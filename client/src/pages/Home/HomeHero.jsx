@@ -7,9 +7,11 @@ export default function HomeHero() {
   return (
     <div className="mb-10 pb-4">
       <h1 className="text-5xl font-primary font-bold leading-loose">
+      {/* heading */}
         Today's News
       </h1>
       <p className="w-full">
+      {/* cover Img */}
         <img
           className="w-full"
           src="https://developers.elementor.com/docs/assets/img/elementor-placeholder-image.png"
@@ -29,8 +31,8 @@ export default function HomeHero() {
             Summary short
           </div>
           <LikeSaveShare
-          // articleId = {someArticleId}
-          likes={"1.2k"}
+            // articleId = {someArticleId}
+            likes={"1.2k"}
           />
         </div>
       </div>
