@@ -40,6 +40,7 @@ export const listAds = createAsyncThunk(
 				console.error(err)
 			})
 		if (!response) return { success: false }
-		return { success: true, data: response, page: page }
+
+		return { success: true, data: response.ad }
 	}
 )

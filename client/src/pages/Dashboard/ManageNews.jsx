@@ -9,6 +9,7 @@ const ManageNews = () => {
 	const news = useSelector(state => state.news.newsList)
 	const dispatch = useDispatch()
 	let [page, setPage] = useState(0)
+
 	useEffect(() => {
 		dispatch(listNews(page))
 	}, [page])
