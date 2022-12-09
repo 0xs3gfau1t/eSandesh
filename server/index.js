@@ -10,11 +10,11 @@ const { app, server } = require('./config/app')
 // Routes //
 ////////////
 
-app.use('/api', require('./routes'))
+app.use('/api', require('./middlewares/withSession'), require('./routes'))
 
 // Redirect everything other that /api/ to frontend
-app.get('*', (_req, res) => {
-    res.json({ response: 'What are you doing onii-chaan?' })
+app.all('*', (_req, res) => {
+    return res.json({ response: 'What are you doing onii-chaan?' })
 })
 
 // Start the server specied in PORT from .env

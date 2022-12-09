@@ -26,7 +26,7 @@ export const listNews = createAsyncThunk(
 	"common/listNews",
 	async (page, { dispatch }) => {
 		const response = await axios
-			.get(`/api/article/list?page=&{page}`, {
+			.get(`/api/article/list?page=${page}`, {
 				withCredentials: true,
 			})
 			.then(res => {

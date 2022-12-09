@@ -15,6 +15,7 @@ import {
 	AdsMan,
 	ViewSiteStats,
 	SingleNews,
+	Landing,
 } from "./pages"
 import { PrivateRoute } from "./components/common"
 
@@ -43,6 +44,7 @@ function App() {
 						<Route path="stats" element={<ViewSiteStats />} />
 					</Route>
 					<Route path="/" element={<Home />}>
+						<Route path="" element={<Landing />} />
 						<Route
 							path="/news/:year/:month/:slug"
 							element={<SingleNews />}
