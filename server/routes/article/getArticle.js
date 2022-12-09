@@ -24,8 +24,14 @@ const getArticle = async (req, res) => {
             else user = { history: {} }
 
             article.category.forEach(category => {
-                let val = user.history[category] || 0
-                user.history[category] = val + 1
+                if (user.history[category]) user.history[category].hits++
+                else
+                    user.history[category] = {
+                        hits: 0,
+                        comments: 0,
+                        likes: 0,
+                        watchtime: 0,
+                    }
             })
 
             res.cookie('user', JSON.stringify(user), {
@@ -48,8 +54,15 @@ const getArticle = async (req, res) => {
     if (!req.session || req.session?.user?.roles?.isRoot) return
     user = await userModel.findOne({ _id: req.session.user.id })
     article.category.forEach(category => {
-        let val = user?.history?.get(category) || 0
-        user.history.set(category, val + 1)
+        let cat = user?.history?.get(category) || {
+            category: {
+                hits: 0,
+                comments: 0,
+                watchtime: 0,
+                likes: 0,
+            },
+        }
+        user.history.category.set('hits', cat.category.hits + 1)
     })
     await user.save()
 }
