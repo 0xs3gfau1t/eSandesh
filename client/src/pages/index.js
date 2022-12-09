@@ -1,7 +1,6 @@
 import Home from "./Home/Home"
 import SingleNews from "./Home/SingleNews"
 import Category from "./Category/Category"
-import Login from "./Login"
 import Landing from "./Home/Landing"
 import {
 	AdminDash,
@@ -11,6 +10,7 @@ import {
 	Archive,
 	AdsMan,
 	ViewSiteStats,
+	Login,
 } from "./Dashboard"
 
 export {
