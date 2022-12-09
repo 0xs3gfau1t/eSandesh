@@ -33,8 +33,7 @@ const listArticle = async (req, res) => {
             { $sort: sortParameters },
         ])
 
-        var user = req.cookies?.user,
-            isMap = false
+        var user = req.cookies?.user
         if (user) {
             // if previous cookie exists then parse it
             user = JSON.parse(user)
@@ -42,13 +41,11 @@ const listArticle = async (req, res) => {
             // if no previous cookie exists
             if (req.session) {
                 // if the user is logged in fetch from db
-                user = await userModel
-                    .findOne(
-                        { id: req.session.user.id },
-                        { history: true, _id: false }
-                    )
-                    .then(u => u.toObject())
-                isMap = true
+                user = await userModel.findOne(
+                    { _id: req.session.user.id },
+                    { history: true, _id: false }
+                )
+                user = { history: Object.fromEntries(user.history) }
             } else {
                 // if not logged in create empty history
                 user = { history: {} }
@@ -64,15 +61,11 @@ const listArticle = async (req, res) => {
         // sort the articles based on user's history
         articles.sort((a, b) => {
             var scoreA = a.category.reduce((accum, value) => {
-                return accum + isMap
-                    ? user.history?.get(value) || 0
-                    : user.history[value] || 0
+                return accum + user.history[value]?.hits || 0
             }, 0)
 
             var scoreB = b.category.reduce((accum, value) => {
-                return accum + isMap
-                    ? user.history?.get(value) || 0
-                    : user.history[value] || 0
+                return accum + user.history[value]?.hits || 0
             }, 0)
 
             const diff = scoreB - scoreA
