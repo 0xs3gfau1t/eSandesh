@@ -14,7 +14,7 @@ const initState = {
 	priority: 10,
 	size: "",
 	redirectUrl: "",
-	expiry: 0,
+	expiry: 1,
 }
 
 export default function AdsMan() {
@@ -26,8 +26,11 @@ export default function AdsMan() {
 		setProp({ ...prop, [e.target.name]: e.target.value })
 	}
 	const onSubmit = e => {
-		e.preventDefault()
 		dispatch(createAd(prop))
+		setProp(initState)
+		setTimeout(() => {
+			setShow(false)
+		}, 3000)
 	}
 	return (
 		<div className="mx-8">
