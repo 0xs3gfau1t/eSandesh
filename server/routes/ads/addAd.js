@@ -9,15 +9,33 @@ const adsModel = require('../../model/ads')
  */
 
 module.exports = (req, res) => {
-    const { name, publisher, embedUrl, priority, price, size } = req.body
+    const {
+        name,
+        publisher,
+        imageEmbedUrl,
+        redirectUrl,
+        priority,
+        price,
+        size,
+        expiry,
+    } = req.body
 
     const { user } = req.session
 
-    if (!user?.roles?.idRoot)
+    if (!user?.roles?.isRoot)
         return res.json({ error: 'Not enough permission to create ads' })
 
     adsModel.create(
-        { name, publisher, embedUrl, priority, price, size },
+        {
+            name,
+            publisher,
+            imageEmbedUrl,
+            redirectUrl,
+            priority,
+            price,
+            size,
+            expiry,
+        },
         (e, d) => {
             if (e)
                 return res.status(500).json({ error: 'Something went wrong.' })

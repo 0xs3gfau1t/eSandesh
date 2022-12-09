@@ -12,12 +12,11 @@ module.exports = (req, res) => {
     const { id } = req.body
     const { user } = req.session
 
-    if (!user?.roles?.isRoot)
-        return res.json({ error: 'Not enough permission to remove ads' })
+    const query = { _id: id }
 
-    // Currently only the creator of ads can remove ads and noone else
-    // Not even root
-    adsModel.findOneAndDelete({ publisher: user.id, _id: id }, (e, d) => {
+    if (!user?.roles?.isRoot) query.publisher = user.id
+
+    adsModel.deleteOne(query, (e, d) => {
         if (e) return res.status(500).json({ error: 'Something went wrong.' })
 
         res.json({ message: 'success' })
