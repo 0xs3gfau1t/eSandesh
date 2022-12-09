@@ -9,18 +9,87 @@ const adsModel = require('../../model/ads')
  */
 
 // First filter non expired ads
+const strength = {
+    hits: 0.1,
+    likes: 0.2,
+    comments: 0.4,
+    watchtime: 0.3,
+}
 
-module.exports = (req, res) => {
+const categoryStrength = {}
+
+module.exports = async (req, res) => {
     const { page = 0, limit = 10 } = req.query
 
-    ads = adsModel
-        .find()
-        .skip(page * limit)
-        .limit(limit)
-        .sort({})
-        .exec((e, d) => {
-            if (e)
-                return res.status(500).json({ error: 'Something went wrong.' })
-            res.json({ message: 'success', ad: d })
-        })
+    const history = req.cookies?.user?.history || {
+        science: { hits: 100, comments: 10, likes: 20, watchtime: 30 },
+        trtyety: { hits: 10, comments: 100, likes: 20, watchtime: 30 },
+    }
+
+    Object.keys(history).forEach(category => {
+        const catStrength =
+            strength.hits * history[category].hits +
+            strength.likes * history[category].likes +
+            strength.comments * history[category].comments +
+            strength.watchtime +
+            history[category].watchtime
+
+        categoryStrength[category] = catStrength
+    })
+
+    const totalStrength = Object.values(categoryStrength).reduce(
+        (a, v) => a + v,
+        0
+    )
+
+    Object.entries(categoryStrength).forEach(async val => {
+        categoryStrength[val[0]] = val[1] / totalStrength
+    })
+    console.log(categoryStrength)
+    const categoryAds = await adsModel.aggregate([
+        {
+            $match: {
+                category: {
+                    $in: Object.keys(categoryStrength),
+                },
+            },
+        },
+        {
+            $sort: {
+                priority: -1,
+            },
+        },
+        {
+            $skip: page * limit,
+        },
+        {
+            $group: {
+                _id: '$category',
+                final: {
+                    $push: {
+                        _id: '$_id',
+                        imageEmbedUrl: '$imageEmbedUrl',
+                        redirectUrl: '$redirectUrl',
+                        size: '$size',
+                        category: '$category',
+                    },
+                },
+            },
+        },
+        {
+            $project: {
+                final: {
+                    $slice: ['$final', limit],
+                },
+            },
+        },
+    ])
+
+    console.log(categoryAds)
+
+    res.json({
+        message: 'success',
+        ads: categoryAds,
+        strength: categoryStrength,
+    })
 }
