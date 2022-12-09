@@ -1,5 +1,5 @@
 import Header from "./Header/Header";
-import Footer from "./Footer";
+import Footer from "./Footer/Footer";
 import SideNavBar from "./SideNavBar";
 import { TopNav, SideNav } from "./DashNavs";
 
