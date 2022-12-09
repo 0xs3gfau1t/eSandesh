@@ -33,30 +33,44 @@ const listArticle = async (req, res) => {
             { $sort: sortParameters },
         ])
 
-        // If user is logged in sort the list based on their history
-        // Maybe i could've used aggregations but this seemed way easier
-        var user, isLoggedIn
-        if (req.session?.user && !req.session.user?.roles?.isRoot) {
-            user = await userModel.findOne(
-                { _id: req.session.user.id },
-                { history: true }
-            )
-            isLoggedIn = true
+        var user = req.cookies?.user,
+            isMap = false
+        if (user) {
+            // if previous cookie exists then parse it
+            user = JSON.parse(user)
         } else {
-            user = req.cookies?.user
-            if (user) user = JSON.parse(user)
-            else user = { history: {} }
-            isLoggedIn = false
+            // if no previous cookie exists
+            if (req.session) {
+                // if the user is logged in fetch from db
+                user = await userModel
+                    .findOne(
+                        { id: req.session.user.id },
+                        { history: true, _id: false }
+                    )
+                    .then(u => u.toObject())
+                isMap = true
+            } else {
+                // if not logged in create empty history
+                user = { history: {} }
+            }
+
+            // set the new cookie
+            res.cookie('user', JSON.stringify(user), {
+                httpOnly: true,
+                sameSite: 'lax',
+            })
         }
+
+        // sort the articles based on user's history
         articles.sort((a, b) => {
             var scoreA = a.category.reduce((accum, value) => {
-                return accum + isLoggedIn
+                return accum + isMap
                     ? user.history?.get(value) || 0
                     : user.history[value] || 0
             }, 0)
 
             var scoreB = b.category.reduce((accum, value) => {
-                return accum + isLoggedIn
+                return accum + isMap
                     ? user.history?.get(value) || 0
                     : user.history[value] || 0
             }, 0)
