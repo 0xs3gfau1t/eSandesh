@@ -9,45 +9,45 @@ const adsModel = require('../../model/ads')
  */
 
 module.exports = (req, res) => {
-	const {
-		name,
-		publisher,
-		imageEmbedUrl,
-		redirectUrl,
-		priority,
-		price,
-		size,
-		expiry,
-		category,
-	} = req.body
+    const { user } = req.session
 
-	const { user } = req.session
+    const {
+        name,
+        publisher = user.id,
+        imageEmbedUrl,
+        redirectUrl,
+        priority,
+        price,
+        size,
+        expiry,
+        category,
+    } = req.body
 
-	if (!user?.roles?.isRoot)
-		return res.json({ error: 'Not enough permission to create ads' })
+    if (!user?.roles?.isRoot)
+        return res.json({ error: 'Not enough permission to create ads' })
 
-	const categoryArray = category
-		.split(',')
-		.map(i => i.trim())
-		.filter(i => i !== '')
+    const categoryArray = category
+        .split(',')
+        .map(i => i.trim())
+        .filter(i => i !== '')
 
-	adsModel.create(
-		{
-			name,
-			publisher,
-			imageEmbedUrl,
-			redirectUrl,
-			priority,
-			price,
-			size,
-			expiry,
-			category: categoryArray,
-		},
-		(e, d) => {
-			if (e)
-				return res.status(500).json({ error: 'Something went wrong.' })
+    adsModel.create(
+        {
+            name,
+            publisher,
+            imageEmbedUrl,
+            redirectUrl,
+            priority,
+            price,
+            size,
+            expiry,
+            category: categoryArray,
+        },
+        (e, d) => {
+            if (e)
+                return res.status(500).json({ error: 'Something went wrong.' })
 
-			res.json({ message: 'success' })
-		}
-	)
+            res.json({ message: 'success' })
+        }
+    )
 }
