@@ -1,7 +1,13 @@
 import React from "react";
+import { FaHandPointRight } from "react-icons/fa";
 import { Outlet } from "react-router-dom";
 import { Footer, Header, SideNavBar } from "../../components";
-import { ArticlePreviewSm, RectAds } from "../../components/common";
+import {
+  ArticlePreviewMd,
+  ArticlePreviewSm,
+  LikeSaveShare,
+  RectAds,
+} from "../../components/common";
 import HomeHero from "./HomeHero";
 import RecentNews from "./RecentNews";
 import SportsHighlights from "./SportsHighlights";
@@ -95,14 +101,51 @@ export default function Home(match) {
               "ma X category sita relevent ad ho, Life Insurance garnuhos Y life insurance"
             }
           />
+
+          <div>
+            {/* middle scrolling news under the hero section */}
+            <h1 className="text-4xl font-bold">Trending in Health</h1>I think
+            other category previews should be placed here ok
+            <div className="flex">
+              <div className="w-2/3">
+                <img src="https://developers.elementor.com/docs/assets/img/elementor-placeholder-image.png" />
+                <div className="flex items-end justify-between">
+                  <h1 className="text-3xl">Scientists have found Covid- 19</h1>
+                  <span>2020, March- 12</span>
+                  <LikeSaveShare
+                    // articleId={}
+                    likes={"100k"}
+                  />
+                </div>
+              </div>
+              <div className="px-4 py-2">
+                <h2 className="text-xl font-semibold leading-loose">
+                  Top articles in Health
+                </h2>
+                <ul className="py-2">
+                  <li className="flex">
+                    <FaHandPointRight className="mt-1 mr-2" />{" "}
+                    <span className="hover:text-rose-700 font-semibold transition-colors">
+                      Walter White gets Cancer, from Staying in the sun
+                    </span>
+                  </li>
+                  <li className="flex">
+                    <FaHandPointRight className="mt-1 mr-2" />
+                    <span className="hover:text-rose-700 font-semibold transition-colors">
+                      Drink Warm Water
+                    </span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
         </div>
+
         {/* end of middle news/ scrolling section */}
         <div className="w-2/5 sm:w-1/5">
           <SportsHighlights />
         </div>
       </div>
-      {/* other top articles */}
-      <div></div>
       <Footer />
     </div>
   );
