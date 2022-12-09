@@ -27,7 +27,7 @@ export default function AdsMan() {
 	}
 	const onSubmit = e => {
 		e.preventDefault()
-		dispatch(createAd())
+		dispatch(createAd(prop))
 	}
 	return (
 		<div className="mx-8">
@@ -58,6 +58,7 @@ export default function AdsMan() {
 						labelText="Target URL for Ad"
 						handleChange={handleChange}
 					/>
+
 					<FormSelect
 						name="size"
 						labelText="Ad size"
@@ -71,21 +72,28 @@ export default function AdsMan() {
 						labelText="Category"
 						handleChange={handleChange}
 					/>
-					<FormText
-						type="number"
-						name="priority"
-						value={prop.priority}
-						labelText="Priority"
-						handleChange={handleChange}
-					/>
-					<FormText
-						type="number"
-						name="expiry"
-						value={prop.expiry}
-						labelText="Expire after ? days"
-						handleChange={handleChange}
-					/>
-					<button className="bg-darkblue text-white">Save</button>
+					<div className="flex gap-4">
+						<FormText
+							type="number"
+							name="priority"
+							value={prop.priority}
+							labelText="Priority"
+							handleChange={handleChange}
+						/>
+						<FormText
+							type="number"
+							name="expiry"
+							value={prop.expiry}
+							labelText="Expire after ? days"
+							handleChange={handleChange}
+						/>
+					</div>
+					<button
+						className="bg-darkblue text-white"
+						onClick={onSubmit}
+					>
+						Save
+					</button>
 				</Popup>
 			)}
 		</div>
