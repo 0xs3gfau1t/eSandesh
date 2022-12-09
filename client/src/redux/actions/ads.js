@@ -25,3 +25,22 @@ export const createAd = createAsyncThunk(
 			})
 	}
 )
+
+export const listAds = createAsyncThunk(
+	"ads/listAd",
+	async (page, { dispatch }) => {
+		const response = await axios
+			.get(`/api/ads/list`, {
+				withCredentials: true,
+			})
+			.then(res => {
+				return res.data
+			})
+			.catch(err => {
+				console.error(err)
+			})
+		if (!response) return { success: false }
+
+		return { success: true, data: response.ad }
+	}
+)
