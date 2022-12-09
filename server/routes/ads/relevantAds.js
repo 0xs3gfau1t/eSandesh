@@ -21,10 +21,7 @@ const categoryStrength = {}
 module.exports = async (req, res) => {
     const { page = 0, limit = 10 } = req.query
 
-    const history = req.cookies?.user?.history || {
-        science: { hits: 100, comments: 10, likes: 20, watchtime: 30 },
-        trtyety: { hits: 10, comments: 100, likes: 20, watchtime: 30 },
-    }
+    const history = req.cookies?.user?.history || {}
 
     Object.keys(history).forEach(category => {
         const catStrength =
