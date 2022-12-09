@@ -65,14 +65,14 @@ const listArticle = async (req, res) => {
         articles.sort((a, b) => {
             var scoreA = a.category.reduce((accum, value) => {
                 return accum + isMap
-                    ? user.history?.get(value) || 0
-                    : user.history[value] || 0
+                    ? user.history?.get(value)?.hits || 0
+                    : user.history[value]?.hits || 0
             }, 0)
 
             var scoreB = b.category.reduce((accum, value) => {
                 return accum + isMap
-                    ? user.history?.get(value) || 0
-                    : user.history[value] || 0
+                    ? user.history?.get(value)?.hits || 0
+                    : user.history[value]?.hits || 0
             }, 0)
 
             const diff = scoreB - scoreA
