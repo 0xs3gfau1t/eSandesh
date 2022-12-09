@@ -9,9 +9,21 @@ const adsModel = require('../../model/ads')
  */
 
 module.exports = (req, res) => {
-    const { category = [], priority = 1, page = 0, limit = 10 } = req.body
+    const { category, priority = 1, page = 0, limit = 10 } = req.body
+
+    filter = undefined
+    if (category)
+        filter = {
+            category: {
+                $all: category
+                    .split(',')
+                    .map(i => i.trim())
+                    .filter(i => i !== ''),
+            },
+        }
+
     ads = adsModel
-        .find({ category })
+        .find(filter)
         .skip(page * limit)
         .limit(limit)
         .sort({ priority: priority })
