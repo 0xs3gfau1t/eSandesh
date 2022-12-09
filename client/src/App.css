@@ -65,15 +65,7 @@ h5,
 h6 {
 	@apply font-primary leading-loose;
 }
-/* h1 {
-  @apply font-bold;
-}
-h2 {
-  @apply font-semibold;
-}
-h3 {
-  @apply font-semibold;
-} */
+
 .newsListTable td {
 	@apply text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap;
 }
