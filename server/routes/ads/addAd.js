@@ -9,21 +9,27 @@ const adsModel = require('../../model/ads')
  */
 
 module.exports = (req, res) => {
+    const { user } = req.session
+
     const {
         name,
-        publisher,
+        publisher = user.id,
         imageEmbedUrl,
         redirectUrl,
         priority,
         price,
         size,
         expiry,
+        category,
     } = req.body
-
-    const { user } = req.session
 
     if (!user?.roles?.isRoot)
         return res.json({ error: 'Not enough permission to create ads' })
+
+    const categoryArray = category
+        .split(',')
+        .map(i => i.trim())
+        .filter(i => i !== '')
 
     adsModel.create(
         {
@@ -35,6 +41,7 @@ module.exports = (req, res) => {
             price,
             size,
             expiry,
+            category: categoryArray,
         },
         (e, d) => {
             if (e)

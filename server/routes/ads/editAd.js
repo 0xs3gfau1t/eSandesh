@@ -9,7 +9,8 @@ const adsModel = require('../../model/ads')
  */
 
 module.exports = (req, res) => {
-    const { name, publisher, embedUrl, priority, price, size, id } = req.body
+    const { name, publisher, category, embedUrl, priority, price, size, id } =
+        req.body
     const { user } = req.session
 
     if (!user?.roles?.isRoot)
@@ -21,11 +22,16 @@ module.exports = (req, res) => {
     if (priority) data.priority = priority
     if (price) data.price = price
     if (size) data.size = size
+    if (publisher) data.publisher = publisher
+    if (category)
+        data.category = category
+            .split(',')
+            .map(i => i.trim())
+            .filter(i => i !== '')
 
-    // Currently only the creator of ads can edit ads and noone else
-    // Not even root
-    adsModel.findOneAndUpdate({ publisher: user.id, _id: id }, data, (e, d) => {
-        if (e) return res.status(500).json({ error: 'Something went wrong.' })
+    adsModel.findOneAndUpdate({ _id: id }, data, (e, d) => {
+        if (d === null)
+            return res.status(500).json({ error: 'No such ad exists.' })
 
         res.json({ message: 'success' })
     })
