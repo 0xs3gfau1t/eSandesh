@@ -94,6 +94,10 @@ function UserAuth() {
             <button onClick={toggle}>SignIn</button>
           </span>
         )}
+
+        <button onClick={() => signIn("facebook", { redirect: false })}>
+          {isLogin ? "Login" : "Register"} with Facebook.
+        </button>
       </form>
     </div>
   );
