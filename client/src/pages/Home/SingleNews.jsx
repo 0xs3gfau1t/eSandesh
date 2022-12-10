@@ -1,4 +1,6 @@
 import { useEffect } from "react";
+import { FaPause, FaPlay } from "react-icons/fa";
+import { ImVolumeDecrease, ImVolumeIncrease } from "react-icons/Im";
 import { useSelector, useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 
@@ -21,16 +23,47 @@ const SingleNews = () => {
         <h1 className="text-xl m-4 font-bold">{news ? news.title : ""}</h1>
         <div className="my-4 w-min mx-auto">
           {audio ? (
-            <audio controls>
+            <audio controls id="audioPlayer" className="bg-gray-100 rounded-md">
               <source
                 src={news ? `data:audio;base64,${audio}` : "#"}
                 type="audio/mpeg"
+                className=" bg-blue"
               />
               Your browser does not support the audio element.
             </audio>
           ) : (
             <h1>Loading news audio...</h1>
           )}
+          {/* <div className="flex items-center">
+            <button
+              onClick={() => {
+                document.getElementById("audioPlayer").play();
+              }}
+            >
+              <FaPlay />
+            </button>
+            <button
+              onClick={() => {
+                document.getElementById("audioPlayer").pause();
+              }}
+            >
+              <FaPause />
+            </button>
+            <button
+              onClick={() => {
+                document.getElementById("audioPlayer").volume -= 0.2;
+              }}
+            >
+              <ImVolumeDecrease />
+            </button>
+            <button
+              onClick={() => {
+                document.getElementById("audioPlayer").volume += 0.2;
+              }}
+            >
+              <ImVolumeIncrease />
+            </button>
+          </div> */}
         </div>
         <div
           dangerouslySetInnerHTML={{
