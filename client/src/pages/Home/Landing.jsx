@@ -6,7 +6,6 @@ import RecentNews from "./RecentNews";
 import SideScrollNewsSection from "./SideScrollNewsSection";
 import { RectAds } from "../../components/common";
 import EachCategoryPreview from "./EachCategoryPreview";
-import SportsHighlights from "./SportsHighlights";
 import { getHotNews } from "../../redux/actions/publicNews";
 
 const Landing = () => {
@@ -58,13 +57,9 @@ const Landing = () => {
             }
           />
         </div>
-        {/* other category previews go here */}I think other category previews
-        should be placed here ok
+        {/* other category previews go here */}
+        {/* I think other category previews should be placed here ok */}
         {/* end of categories preview / middle scrolling section ends here */}
-      </div>
-      {/* end of outlet */}
-      <div className="sm:w-1/5 sm:block hidden">
-        <SportsHighlights />
       </div>
     </>
   );

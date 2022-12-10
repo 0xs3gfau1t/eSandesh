@@ -2,10 +2,10 @@ import React from "react";
 
 import { Outlet } from "react-router-dom";
 import { Footer, Header, LeftSideBar } from "../../components";
+import SportsHighlights from "./SportsHighlights";
 // import { RectAds } from "../../components/common";
 // import HomeHero from "./HomeHero";
 // import RecentNews from "./RecentNews";
-import SportsHighlights from "./SportsHighlights";
 // import SideScrollNewsSection from "./SideScrollNewsSection";
 // import EachCategoryPreview from "./EachCategoryPreview";
 
@@ -15,6 +15,7 @@ export default function Home(match) {
       <Header />
 
       <div className="flex justify-between container">
+        {/* left side */}
         <div className="sm:block hidden w-1/5">
           <LeftSideBar />
         </div>
@@ -23,7 +24,8 @@ export default function Home(match) {
         <div className="w-3/5">
           <Outlet />
         </div>
-        <div className="1/5">
+        {/* right side */}
+        <div className="sm:w-1/5 sm:block hidden">
           <SportsHighlights />
         </div>
       </div>
