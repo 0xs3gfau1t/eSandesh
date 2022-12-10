@@ -14,6 +14,7 @@ const listArticle = async (req, res) => {
         items = 10,
         priority = false,
         preference = false,
+        hits = false,
     } = req.query
     const [year, month] = req.url.replace(/\?.*/, '').split('/').slice(2)
 
@@ -79,7 +80,12 @@ const listArticle = async (req, res) => {
                 let d = b.priority - a.priority
                 if (d) return d
             }
-						return 0;
+
+            if (hits) {
+                let d = b.hits - a.hits
+                if (d) return d
+            }
+            return 0
         })
 
         return res.status(200).json(articles)
