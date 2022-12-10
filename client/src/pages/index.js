@@ -2,6 +2,7 @@ import Home from "./Home/Home";
 import SingleNews from "./Home/SingleNews";
 import Category from "./Category/Category";
 import Login from "./Login";
+import UserAuth from "./UserAuth";
 import {
   AdminDash,
   ManageNews,
@@ -16,6 +17,7 @@ export {
   Home,
   Category,
   Login,
+  UserAuth,
   AdminDash,
   ManageNews,
   EditNews,
