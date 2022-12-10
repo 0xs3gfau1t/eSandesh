@@ -33,9 +33,7 @@ module.exports = (req, res) => {
         .map(i => i.trim())
         .filter(i => i !== '')
 
-    const minutesLeft =
-        (new Date(new Date(expiry).toUTCString() + '+0545') - Date.now()) /
-        60000
+    const minutesLeft = (new Date(expiry) - new Date()) / (1000 * 60)
 
     // We can do better here by analyzing which category the ad falls
     // Then check performance of this category in db
