@@ -88,3 +88,7 @@ h6 {
 .activeSideNav {
 	@apply text-darkblue font-semibold hover:font-semibold hover:text-darkblue hover:indent-4 hover:border-l-4 border-l-transparent hover:border-l-rose-700 transition-all duration-300 leading-loose;
 }
+
+.social-share {
+	width: 2.4rem;
+}
