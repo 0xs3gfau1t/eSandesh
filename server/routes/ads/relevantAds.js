@@ -49,6 +49,9 @@ module.exports = async (req, res) => {
                 category: {
                     $in: Object.keys(categoryStrength),
                 },
+                expiry: {
+                    $gt: new Date(),
+                },
             },
         },
         {

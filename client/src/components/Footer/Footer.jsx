@@ -8,8 +8,8 @@ import SiteIdentity from "./SiteIdentity";
 
 function Footer() {
   return (
-    <footer>
-      <div className="mt-auto bg-[#D9D9D9] text-black p-4">
+    <footer className="mt-auto">
+      <div className="mt-10 bg-[#D9D9D9] text-black p-4">
         <div className="container mx-auto grid grid-cols-1 sm:grid-cols-2 gap-4 md:grid-cols-4">
           {/* 1st column */}
           <div className="flex items-center justify-center">

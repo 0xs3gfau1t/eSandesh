@@ -13,7 +13,14 @@ export default function HeroSection({ cat, data }) {
 					What's hot in {cat}?
 				</h1>
 				<p className="w-full">
-					<img className="w-full" src={img ? img.src : ""} />
+					<img
+						className="w-full"
+						src={
+							img
+								? img.src
+								: "https://developers.elementor.com/docs/assets/img/elementor-placeholder-image.png"
+						}
+					/>
 				</p>
 				<div className="">
 					<h1 className="text-3xl font-semibold my-2">

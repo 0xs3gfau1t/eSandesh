@@ -2,7 +2,7 @@ import { useEffect } from "react"
 import { useSelector, useDispatch } from "react-redux"
 import { useParams } from "react-router-dom"
 
-import { SqAds } from "../../components/common"
+import { SocialShare, SqAds } from "../../components/common"
 import { getSingleNews, getNewsAudio } from "../../redux/actions/publicNews"
 
 const SingleNews = () => {
@@ -39,6 +39,9 @@ const SingleNews = () => {
 						<h1 className="w-max">Loading news audio...</h1>
 					)}
 				</div>
+				<SocialShare
+					title={news ? news.title : "eSandesh, Khabat Naya Yug ko"}
+				/>
 				<div
 					dangerouslySetInnerHTML={{
 						__html: news ? news.content : "Fetching",

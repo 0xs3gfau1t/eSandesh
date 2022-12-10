@@ -32,7 +32,7 @@ const listArticle = async (req, res) => {
             { $match: filter },
             { $sort: sortParameters },
             { $skip: page * items },
-            { $limit: items },
+            { $limit: parseInt(items) },
         ])
 
         var user = req.cookies?.user

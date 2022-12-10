@@ -6,7 +6,7 @@ import "./App.css"
 import {
 	Home,
 	Login,
-  UserAuth,
+	UserAuth,
 	Category,
 	AdminDash,
 	ManageNews,
@@ -25,7 +25,7 @@ function App() {
 		<Provider store={store}>
 			<Router>
 				<Routes>
-				  <Route path="/userauth" element={<UserAuth />} />
+					<Route path="/userauth" element={<UserAuth />} />
 					<Route path="/admin" element={<Login />} />
 					<Route
 						path="/admin/dashboard"
