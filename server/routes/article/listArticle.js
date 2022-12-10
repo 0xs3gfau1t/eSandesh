@@ -31,7 +31,7 @@ const listArticle = async (req, res) => {
             { $match: filter },
             { $sort: sortParameters },
             { $skip: page * items },
-            { $limit: items },
+            { $limit: parseInt(items) },
         ])
 
         var user = req.cookies?.user
@@ -79,7 +79,7 @@ const listArticle = async (req, res) => {
                 let d = b.priority - a.priority
                 if (d) return d
             }
-						return 0;
+            return 0
         })
 
         return res.status(200).json(articles)
