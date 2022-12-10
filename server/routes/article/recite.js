@@ -2,6 +2,8 @@ const articleModel = require('../../model/article')
 const path = require('path')
 const audioAdFolder = path.resolve(__dirname, '../../assets/')
 const fs = require('fs')
+const { JSDOM } = require('jsdom')
+const express = require('express')
 
 /**
  * @param {express.Request} req
@@ -16,11 +18,18 @@ module.exports = async (req, res) => {
         const article = await articleModel.findOne({ _id: id })
         if (!article) return res.json({ error: 'No such article found' })
 
+        const dom = new JSDOM(article.content)
+        const content = dom.window.document.querySelector('body').textContent
+
         const body = new FormData()
         body.append('locale', 'ne-NP')
         body.append(
             'content',
-            '<voice name="ne-NP-SagarNeural">' + article.title + '</voice>'
+            '<voice name="ne-NP-SagarNeural">' +
+                article.title +
+                '\n' +
+                content +
+                '</voice>'
         )
         body.append('ip', '194.74.255.198')
 
