@@ -1,13 +1,13 @@
 import React from "react";
 
 import { Outlet } from "react-router-dom";
-import { Footer, Header, SideNavBar } from "../../components";
-import { RectAds } from "../../components/common";
-import HomeHero from "./HomeHero";
-import RecentNews from "./RecentNews";
-import SportsHighlights from "./SportsHighlights";
-import SideScrollNewsSection from "./SideScrollNewsSection";
-import EachCategoryPreview from "./EachCategoryPreview";
+import { Footer, Header, LeftSideBar } from "../../components";
+// import { RectAds } from "../../components/common";
+// import HomeHero from "./HomeHero";
+// import RecentNews from "./RecentNews";
+// import SportsHighlights from "./SportsHighlights";
+// import SideScrollNewsSection from "./SideScrollNewsSection";
+// import EachCategoryPreview from "./EachCategoryPreview";
 
 export default function Home(match) {
   return (
@@ -15,12 +15,14 @@ export default function Home(match) {
       <Header />
 
       <div className="flex justify-between container">
-        <div className="sm:block hidden">
-          <SideNavBar />
+        <div className="sm:block hidden w-1/5">
+          <LeftSideBar />
         </div>
 
         {/* if some category is active, it is rendered on outlet */}
-        <Outlet />
+        <div className="w-3/5">
+          <Outlet />
+        </div>
 
         {/* start of outlet */}
       </div>
