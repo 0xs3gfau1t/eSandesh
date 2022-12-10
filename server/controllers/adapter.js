@@ -1,16 +1,30 @@
 const { accountModel, userModel } = require('../model/user')
 
+const sanitize = object => {
+    const newObject = {}
+    for (const key in object) {
+        const value = object[key]
+        if (key === '_id') {
+            newObject.id = value.toHexString()
+        } else if (key === 'userId') {
+            newObject[key] = value.toHexString()
+        } else if (key !== '__v') {
+            newObject[key] = value
+        }
+    }
+    return newObject
+}
 const MongooseAdapter = () => {
     return {
         async createUser(data) {
             const user = await userModel.create(data)
-            return user.toObject()
+            return sanitize(user)
         },
         async getUser(id) {
             try {
                 const user = await userModel.findById(id).lean()
                 if (!user) return null
-                return user.toObject()
+                return sanitize(user)
             } catch (err) {
                 return null
             }
@@ -18,14 +32,14 @@ const MongooseAdapter = () => {
         async getUserByEmail(email) {
             const user = await userModel.findOne({ email: email }).lean()
             if (!user) return null
-            return user.toObject()
+            return sanitize(user)
         },
         async getUserByAccount(data) {
             const account = await accountModel.findOne(data)
             if (!account) return null
             const user = await userModel.findById(account.userId).lean()
             if (!user) return null
-            return user.toObject()
+            return sanitize(user)
         },
         async updateUser(data) {
             const user = await userModel
@@ -37,7 +51,7 @@ const MongooseAdapter = () => {
                     emailVerified: null,
                 }
             }
-            return user.toObject()
+            return sanitize(user)
         },
         async deleteUser(id) {
             await Promise.all([
@@ -47,14 +61,14 @@ const MongooseAdapter = () => {
         },
         async linkAccount(data) {
             const account = await accountModel.create(data)
-            return account.toObject()
+            return sanitize(account)
         },
         async unlinkAccount(data) {
             const account = await accountModel.findOneAndDelete(data)
             if (account === null) {
                 return
             }
-            return account.toObject()
+            return sanitize(account)
         },
         // Chaiye ma implement garamla
         async getSessionAndUser(_sessionToken) {
