@@ -28,9 +28,9 @@ const listArticle = async (req, res) => {
     try {
         const articles = await articleModel.aggregate([
             { $match: filter },
+						{ $sort: sortParameters },
             { $skip: page * items },
             { $limit: items },
-            { $sort: sortParameters },
         ])
 
         var user = req.cookies?.user
@@ -71,7 +71,12 @@ const listArticle = async (req, res) => {
             const diff = scoreB - scoreA
             if (diff) return diff
 
-            // If both scored same points then sort based on hits
+            // if priority is true then sort
+            if (priority) {
+                let d = b.priority - a.priority
+                if (d) return d
+            }
+            // If priority is same then sort by hits
             return b.hits - a.hits
         })
 
