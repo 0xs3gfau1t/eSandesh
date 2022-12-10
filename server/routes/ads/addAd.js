@@ -17,7 +17,7 @@ module.exports = (req, res) => {
         imageEmbedUrl,
         redirectUrl,
         priority,
-        price,
+        price = 1200,
         size,
         expiry,
         category,
@@ -30,7 +30,6 @@ module.exports = (req, res) => {
         .split(',')
         .map(i => i.trim())
         .filter(i => i !== '')
-
     adsModel.create(
         {
             name,

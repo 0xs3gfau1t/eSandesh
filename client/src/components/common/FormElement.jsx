@@ -18,7 +18,14 @@ const FormText = ({ type, name, value, handleChange, labelText }) => {
 		</div>
 	)
 }
-const FormSelect = ({ name, options = [], defaultV, hint, labelText }) => {
+const FormSelect = ({
+	name,
+	options = [],
+	defaultV,
+	hint,
+	labelText,
+	handleChange,
+}) => {
 	return (
 		<div className="mb-4">
 			<label
@@ -29,7 +36,7 @@ const FormSelect = ({ name, options = [], defaultV, hint, labelText }) => {
 			</label>
 			<select
 				name={name}
-				onChange={onchange}
+				onChange={handleChange}
 				className="form-input w-full py-1 px-2 rounded-md border-[1px] border-[#FFBD03]"
 			>
 				<option value="" hidden={!defaultV} className="bg-blue-500">

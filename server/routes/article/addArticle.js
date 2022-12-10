@@ -13,7 +13,11 @@ const addArticle = async (req, res) => {
 
     // If the user is an admin then publish the article
     // also set the priority
+<<<<<<< HEAD
     if (user.roles.isRoot) {
+=======
+    if (user.roles.idAdmin || user.roles.isRoot) {
+>>>>>>> origin/main
         data.publishedAt = new Date()
         data.priority = priority
     } else {

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 import { signIn, useSession } from "next-auth/react"
 import { useNavigate } from "react-router-dom"
 
-import { SiteLogo, FormText } from "../components/common"
+import { SiteLogo, FormText } from "../../components/common"
 
 const initialState = {
 	username: "",

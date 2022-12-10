@@ -1,5 +1,5 @@
 import { NavLink } from "react-router-dom"
-
+import { signOut } from "next-auth/react"
 import { BiArchiveOut, BiStats } from "react-icons/bi"
 import { AiFillFileAdd, AiOutlinePullRequest } from "react-icons/ai"
 import { RiAdvertisementFill } from "react-icons/ri"
@@ -13,6 +13,12 @@ const TopNav = () => {
 			<h1 className="mx-auto my-2 text-2xl align-center">
 				Admin Dashboard
 			</h1>
+			<h2
+				onClick={() => signOut({ redirect: false })}
+				className="flex mr-12 text-lg my-auto py-1 px-2 rounded-md bg-zinc-500 cursor-pointer"
+			>
+				Logout
+			</h2>
 		</div>
 	)
 }

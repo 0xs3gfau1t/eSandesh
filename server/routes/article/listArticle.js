@@ -29,7 +29,7 @@ const listArticle = async (req, res) => {
         const articles = await articleModel.aggregate([
             { $match: filter },
             { $skip: page * items },
-            { $limit: items },
+            { $limit: parseInt(items) },
             { $sort: sortParameters },
         ])
 

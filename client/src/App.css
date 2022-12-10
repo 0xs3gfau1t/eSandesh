@@ -63,18 +63,9 @@ h3,
 h4,
 h5,
 h6 {
-	@apply font-primary;
-	@apply leading-loose;
+	@apply font-primary leading-loose;
 }
-h1 {
-	@apply font-bold;
-}
-h2 {
-	@apply font-semibold text-2xl;
-}
-h3 {
-	@apply font-semibold font-bold text-3xl;
-}
+
 .newsListTable td {
 	@apply text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap;
 }
@@ -89,4 +80,7 @@ h3 {
 
 .addNew {
 	@apply text-white flex gap-4 my-4 mx-auto w-2/4 text-2xl bg-green-700 py-2 px-4 rounded justify-center cursor-pointer;
+}
+.addNew svg {
+	@apply mt-[8px];
 }
