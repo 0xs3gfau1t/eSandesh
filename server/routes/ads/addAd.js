@@ -8,6 +8,9 @@ const adsModel = require('../../model/ads')
  * @return {void}
  */
 
+const normalPricePerMinute = 1000
+const midPriority = 5
+
 module.exports = (req, res) => {
     const { user } = req.session
 
@@ -17,7 +20,6 @@ module.exports = (req, res) => {
         imageEmbedUrl,
         redirectUrl,
         priority,
-        price = 1200,
         size,
         expiry,
         category,
@@ -30,6 +32,19 @@ module.exports = (req, res) => {
         .split(',')
         .map(i => i.trim())
         .filter(i => i !== '')
+
+    const minutesLeft =
+        (new Date(new Date(expiry).toUTCString() + '+0545') - Date.now()) /
+        60000
+
+    // We can do better here by analyzing which category the ad falls
+    // Then check performance of this category in db
+    // Then adjust the formula to adjust price by
+    // considering how much users click the ad
+    const price = Math.round(
+        (minutesLeft * normalPricePerMinute * priority) / midPriority
+    )
+
     adsModel.create(
         {
             name,
