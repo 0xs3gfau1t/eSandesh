@@ -12,15 +12,9 @@ export const getSingleNews = createAsyncThunk(
 			.catch(err => {
 				console.error(err)
 			})
-		const audio = await axios
-			.get(`/api/article/${year}/${month}/${slug}`)
-			.then(res => {
-				return res.data
-			})
-			.catch(err => {
-				console.error(err)
-			})
+
 		if (!response) return { success: false }
+
 		return { success: true, data: response }
 	}
 )
@@ -40,5 +34,21 @@ export const listNewsCat = createAsyncThunk(
 			})
 		if (!response) return { success: false }
 		return { success: true, data: response, page: page }
+	}
+)
+
+export const getNewsAudio = createAsyncThunk(
+	"public/getNewsAudio",
+	async ({ year, month, slug }, { dispatch }) => {
+		const audio = await axios
+			.get(`/api/article/recite?year=${year}&month=${month}&slug=${slug}`)
+			.then(res => {
+				return res.data
+			})
+			.catch(err => {
+				console.error(err)
+			})
+		if (!response) return { success: false }
+		return { success: true, audio: audio }
 	}
 )
