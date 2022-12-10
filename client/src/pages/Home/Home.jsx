@@ -20,7 +20,9 @@ export default function Home(match) {
         </div>
 
         {/* if some category is active, it is rendered on outlet */}
-        <Outlet />
+        <div className="w-full">
+          <Outlet />
+        </div>
 
         {/* start of outlet */}
       </div>
