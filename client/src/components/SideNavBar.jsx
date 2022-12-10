@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 
 export default function SideNavBar(activeCategory) {
   const categories = [
-    // ["Admin", , "admin"], //remove admin from this list and add other category
     ["राजनीति", "politics"],
     ["विश्व", "global"],
     ["विजनेस", "business"],
@@ -34,7 +33,7 @@ export default function SideNavBar(activeCategory) {
     // }
   });
   return (
-    <nav className="px-4 border-r-4 border-r-darkblue">
+    <nav className=" pr-10 border-r-4 border-r-darkblue">
       <h2 className="font-primary font-bold text-2xl">Category</h2>
       <ul className="list-none flex flex-col justify-between gap-2 mt-4 indent-2">
         {menuItems}
