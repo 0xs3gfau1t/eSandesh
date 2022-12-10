@@ -9,10 +9,8 @@ export default function SideScrollNewsSection({ category }) {
     <div className="flex items-start justify-between gap-4 overflow-x-scroll">
       <ArticlePreviewSm
         //   category={"politics"}
-        title={"Maanis harayeko suchana"}
-        summary={
-          "26/ F, Suntali Pandey, Call: 9812347599, Last seen at WRC gate"
-        }
+        title={"UML selects 34 HoR members under PR, politics, Nepal, 2079"}
+        summary={"HoR - House of Representatives"}
         imgUrl={"http://kunjanaghimire.com/storage/images/kunjana-hero-2.png"}
         articleUrl={"yo artikle ko link hai ta ya"}
       />

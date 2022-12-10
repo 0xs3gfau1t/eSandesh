@@ -1,6 +1,7 @@
 import React from "react";
 // import { SideNavBar } from "../../components";
 import { SqAds } from "../../components/common";
+import RecentNews from "../Home/RecentNews";
 import Content from "./Content";
 
 export default function Category() {

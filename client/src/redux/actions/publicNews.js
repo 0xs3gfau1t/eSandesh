@@ -53,3 +53,21 @@ export const getSingleNews = createAsyncThunk(
 		return { success: true, data: response }
 	}
 )
+
+export const getHotNews = createAsyncThunk(
+	"news/getHotNews",
+	async ({}, { dispatch }) => {
+		const response = await axios
+			.get(`/api/article/list?items=7`, {
+				withCredentials: true,
+			})
+			.then(res => {
+				return res.data
+			})
+			.catch(err => {
+				console.error(err)
+			})
+		if (!response) return { success: false }
+		return { success: true, data: response }
+	}
+)
