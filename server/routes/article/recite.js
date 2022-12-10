@@ -4,16 +4,17 @@ const audioAdFolder = path.resolve(__dirname, '../../assets/')
 const fs = require('fs')
 
 /**
- * @param {express.Request} req
- * @param {express.Response} res
+ * @param {Express.Request} req
+ * @param {Express.Response} res
  * @return {void}
  */
 
 module.exports = async (req, res) => {
-    const { id } = req.query
+    const { year, month, slug } = req.query
 
     try {
-        const article = await articleModel.findOne({ _id: id })
+        const article = await articleModel.findOne({ year, month, slug })
+
         if (!article) return res.json({ error: 'No such article found' })
 
         const body = new FormData()
@@ -22,7 +23,7 @@ module.exports = async (req, res) => {
             'content',
             '<voice name="ne-NP-SagarNeural">' + article.title + '</voice>'
         )
-        body.append('ip', '194.74.255.198')
+        body.append('ip', req.ip)
 
         const sound = await fetch('https://app.micmonster.com/restapi/create', {
             method: 'POST',
@@ -34,7 +35,10 @@ module.exports = async (req, res) => {
         const ad = fs.readFileSync(audioAdFolder + '/ad.mp3')
         const concatenated = Buffer.concat([ad, sound])
 
-        return res.send(concatenated)
+        return res.send({
+            message: 'success',
+            audio: concatenated.toString('base64'),
+        })
     } catch (err) {
         console.error(err)
         return res.status(500).json({ error: 'Something went wrong.' })
