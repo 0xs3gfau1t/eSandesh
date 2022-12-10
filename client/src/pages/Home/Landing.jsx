@@ -17,8 +17,8 @@ const Landing = () => {
   }, []);
 
   return (
-    <>
-      <div className=" w-full sm:w-3/5 px-4">
+    <div>
+      <div className="w-full px-4">
         {hot && (
           <div className="flex gap-6">
             <div className="w-full sm:w-2/3">
@@ -61,7 +61,7 @@ const Landing = () => {
         {/* I think other category previews should be placed here ok */}
         {/* end of categories preview / middle scrolling section ends here */}
       </div>
-    </>
+    </div>
   );
 };
 

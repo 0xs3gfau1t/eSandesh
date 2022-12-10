@@ -26,6 +26,7 @@ export default function Home(match) {
         <div className="w-3/5">
           <Outlet />
         </div>
+
         {/* right side */}
         <div className="sm:w-1/5 sm:block hidden">
           <div className="flex justify-between items-end my-2">
