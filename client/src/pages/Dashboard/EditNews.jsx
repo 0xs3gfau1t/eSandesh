@@ -26,7 +26,7 @@ const EditNews = () => {
 	}
 
 	const onPublish = e => {
-		if (!property.title || !property.content) {
+		if (!property.title || !content) {
 			console.log("Title and content required")
 			return
 		}

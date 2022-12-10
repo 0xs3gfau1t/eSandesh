@@ -28,13 +28,14 @@ export default function Content() {
               const div = document.createElement("div");
               div.innerHTML = list[parseInt(key) + 1].content;
               const img = div.querySelector("img");
+              const data = list[parseInt(key) + 1];
               return (
                 <ArticlePreviewMd
                   key={key}
-                  title={list[parseInt(key) + 1].title}
+                  title={data.title}
                   summary={"Tuchha description here..."}
                   imgUrl={img ? img.src : ""}
-                  articleUrl={""}
+                  articleUrl={`/news/${data.year}/${data.month}/${data.slug}`}
                 />
               );
             })}
