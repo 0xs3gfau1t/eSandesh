@@ -13,10 +13,11 @@ const listArticle = async (req, res) => {
         page = 0,
         items = 10,
         priority = false,
+        preference = false,
     } = req.query
     const [year, month] = req.url.replace(/\?.*/, '').split('/').slice(2)
 
-    const sortParameters = {}
+    const sortParameters = { publishedAt: -1 }
     if (priority) sortParameters.priority = -1
     else sortParameters.slug = -1
 
@@ -28,7 +29,7 @@ const listArticle = async (req, res) => {
     try {
         const articles = await articleModel.aggregate([
             { $match: filter },
-						{ $sort: sortParameters },
+            { $sort: sortParameters },
             { $skip: page * items },
             { $limit: items },
         ])
@@ -60,24 +61,25 @@ const listArticle = async (req, res) => {
 
         // sort the articles based on user's history
         articles.sort((a, b) => {
-            var scoreA = a.category.reduce((accum, value) => {
-                return accum + user.history[value]?.hits || 0
-            }, 0)
+            if (preference) {
+                var scoreA = a.category.reduce((accum, value) => {
+                    return accum + user.history[value]?.hits || 0
+                }, 0)
 
-            var scoreB = b.category.reduce((accum, value) => {
-                return accum + user.history[value]?.hits || 0
-            }, 0)
+                var scoreB = b.category.reduce((accum, value) => {
+                    return accum + user.history[value]?.hits || 0
+                }, 0)
 
-            const diff = scoreB - scoreA
-            if (diff) return diff
+                const diff = scoreB - scoreA
+                if (diff) return diff
+            }
 
             // if priority is true then sort
             if (priority) {
                 let d = b.priority - a.priority
                 if (d) return d
             }
-            // If priority is same then sort by hits
-            return b.hits - a.hits
+						return 0;
         })
 
         return res.status(200).json(articles)
