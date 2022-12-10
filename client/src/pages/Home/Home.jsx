@@ -5,7 +5,7 @@ import { Footer, Header, LeftSideBar } from "../../components";
 // import { RectAds } from "../../components/common";
 // import HomeHero from "./HomeHero";
 // import RecentNews from "./RecentNews";
-// import SportsHighlights from "./SportsHighlights";
+import SportsHighlights from "./SportsHighlights";
 // import SideScrollNewsSection from "./SideScrollNewsSection";
 // import EachCategoryPreview from "./EachCategoryPreview";
 
@@ -23,8 +23,9 @@ export default function Home(match) {
         <div className="w-3/5">
           <Outlet />
         </div>
-
-        {/* start of outlet */}
+        <div className="1/5">
+          <SportsHighlights />
+        </div>
       </div>
       <Footer />
     </div>
