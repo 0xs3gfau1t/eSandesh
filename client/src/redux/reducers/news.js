@@ -20,11 +20,11 @@ const newsSlice = createSlice({
 		builder.addCase(getSingleNews.fulfilled, (state, { payload }) => {
 			if (payload.success && payload.data) {
 				state.singleNews = payload.data
+				if (state.audio) delete state.audio
 			}
 		})
 		builder.addCase(getNewsAudio.fulfilled, (state, { payload }) => {
 			if (payload.success && payload.audio) {
-				// console.log("Loaded and here", console.log(payload))
 				state.audio = payload.audio
 			}
 		})

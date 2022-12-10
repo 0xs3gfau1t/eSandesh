@@ -22,7 +22,6 @@ export const listNewsCat = createAsyncThunk(
 export const getNewsAudio = createAsyncThunk(
 	"public/getNewsAudio",
 	async ({ year, month, slug }, { dispatch }) => {
-		console.log("Lojfjading audio")
 		const audio = await axios
 			.get(`/api/article/recite?year=${year}&month=${month}&slug=${slug}`)
 			.then(res => {
