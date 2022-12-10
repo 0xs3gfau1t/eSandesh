@@ -6,29 +6,25 @@ export default function SideNavBar(activeCategory) {
     ["राजनीति", "politics"],
     ["विश्व", "global"],
     ["विजनेस", "business"],
-    ["अर्थ/वाणिज्य", "finance"],
+    ["अर्थ / वाणिज्य", "finance"],
     ["खेलकुद", "sports"],
     ["मनोरञ्जन", "entertainment"],
   ];
+  // {/* <Link to={`/category/${eachCat[1]}`}>{eachCat[0]}</Link> */}
   const menuItems = categories.map((eachCat) => {
-    // if (eachCat[1] === activeCategory) {
-    // return (
-    //   <li
-    //     className="hover:font-bold duration-200 text-darkblue hover:text-darkblue my-2"
-    //     key={eachCat[0]}
-    //   >
-    //     <Link to={`/category/${eachCat[1]}`}>{eachCat[0]}</Link>
-    //   </li>
-    // );
-    // } else {
     return (
+      // <>
       <li
-        className="hover:font-semibold hover:text-darkblue hover:indent-4 hover:border-l-4 border-l-transparent hover:border-l-rose-700 transition-all duration-300 leading-loose"
+        className={({ isActive }) => {
+          return isActive
+            ? "text-darkblue font-semibold hover:font-semibold hover:text-darkblue hover:indent-4 hover:border-l-4 border-l-transparent hover:border-l-rose-700 transition-all duration-300 leading-loose"
+            : "hover:font-semibold hover:text-darkblue hover:indent-4 hover:border-l-4 border-l-transparent hover:border-l-rose-700 transition-all duration-300 leading-loose";
+        }}
         key={eachCat[1]}
       >
-        {/* <Link to={`/category/${eachCat[1]}`}>{eachCat[0]}</Link> */}
         <Link to={`/category/${eachCat[1]}`}>{eachCat[0]}</Link>
       </li>
+      // </>
     );
     // }
   });
