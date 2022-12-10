@@ -40,14 +40,14 @@ const getArticle = async (req, res) => {
 
         // update category counter in cookie
         article.category.forEach(category => {
-            if (user.history[category]) user.history[category].hits++
-            else
-                user.history[category] = {
-                    likes: 0,
-                    comments: 0,
-                    watchtime: 0,
-                    hits: 1,
-                }
+            let val = user.history[category] || {
+                hits: 0,
+                likes: 0,
+                comments: 0,
+                watchtime: 0,
+            }
+            val.hits += 1
+            user.history[category] = val
         })
 
         // set cookie
@@ -75,19 +75,16 @@ const getArticle = async (req, res) => {
                 { history: true }
             )
 
-        // update history count
+        // update category hits count
         article.category.forEach(category => {
-            let val
-            if (!userMod.history?.get(category))
-                userMod.history.set(category, {
-                    likes: 0,
-                    comments: 0,
-                    watchtime: 0,
-                    hits: 0,
-                })
-            val = userMod.history.get(category).hits
-
-            userMod.history[category].set(hits, val + 1)
+            let val = userMod.history.get(category) || {
+                hits: 0,
+                likes: 0,
+                comments: 0,
+                watchtime: 0,
+            }
+            val.hits += 1
+            userMod.history.set(category, val)
         })
 
         await userMod.save()

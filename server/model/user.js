@@ -13,7 +13,16 @@ const userSchema = new mongoose.Schema({
         canCreate: { type: Boolean, default: true },
         isReporter: { type: Boolean, default: false },
     },
-    history: { type: Object, default: {} },
+    history: {
+        type: Map,
+        of: new mongoose.Schema({
+            hits: Number,
+            likes: Number,
+            comments: Number,
+            watchtime: Number,
+        }),
+        default: {},
+    },
 })
 
 const accountSchema = new mongoose.Schema({
