@@ -9,11 +9,14 @@ const Landing = () => {
   return (
     <>
       <div className=" w-full sm:w-3/5 px-4">
-        <div className="flex">
+        <div className="flex gap-6">
           <div className="w-full sm:w-2/3">
             <HomeHero />
           </div>
           <div className="w-1/3 sm:block hidden">
+            <h2 className=" text-2xl font-semibold leading-loose">
+              Recent News
+            </h2>
             <RecentNews />
           </div>
         </div>
