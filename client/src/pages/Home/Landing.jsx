@@ -1,20 +1,20 @@
-import { useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useEffect } from "react"
+import { useSelector, useDispatch } from "react-redux"
 
-import HomeHero from "./HomeHero";
-import RecentNews from "./RecentNews";
-import SideScrollNewsSection from "./SideScrollNewsSection";
-import { RectAds } from "../../components/common";
-import EachCategoryPreview from "./EachCategoryPreview";
-import { getHotNews } from "../../redux/actions/publicNews";
+import HomeHero from "./HomeHero"
+import RecentNews from "./RecentNews"
+import SideScrollNewsSection from "./SideScrollNewsSection"
+import { RectAds } from "../../components/common"
+import EachCategoryPreview from "./EachCategoryPreview"
+import { getHotNews } from "../../redux/actions/publicNews"
 
 const Landing = () => {
-  const hot = useSelector((state) => state.news.hotNews);
-  const dispatch = useDispatch();
+	const hot = useSelector(state => state.news.hotNews)
+	const dispatch = useDispatch()
 
-  useEffect(() => {
-    dispatch(getHotNews(0));
-  }, []);
+	useEffect(() => {
+		dispatch(getHotNews(0))
+	}, [])
 
   return (
     <div>
@@ -65,4 +65,4 @@ const Landing = () => {
   );
 };
 
-export default Landing;
+export default Landing
