@@ -57,8 +57,8 @@ export const getSingleNews = createAsyncThunk(
 	}
 )
 
-export const getHotNews = createAsyncThunk(
-	"news/getHotNews",
+export const getRecentNews = createAsyncThunk(
+	"news/getRecentNews",
 	async ({}, { dispatch }) => {
 		const response = await axios
 			.get(`/api/article/list?items=7`, {
