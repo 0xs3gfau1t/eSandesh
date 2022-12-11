@@ -1,6 +1,6 @@
 import React from "react"
 import NavBar from "./NavBar"
-import TopCritics from "../Critics/TopCritics"
+import TopCritics from "./Critics/TopCritics"
 
 function LeftSideBar() {
 	return (
