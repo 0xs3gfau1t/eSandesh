@@ -19,8 +19,7 @@ export default function Home(match) {
             <LeftSideBar />
           </div>
         )}
-
-        {/* if some category is active, it is rendered on outlet */}
+         {/* if some category is active, it is rendered on outlet */}
         <div className={focus ? "" : "w-3/5"}>
           <Outlet />
         </div>
