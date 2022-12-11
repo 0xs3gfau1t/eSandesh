@@ -44,7 +44,7 @@ export default function EachCategoryPreview({ category }) {
           <h1 className="font-semibold text-2xl leading-loose">
             More from {category}
           </h1>
-          <SeeAllBtn url={`/${category}`} />
+          <SeeAllBtn url={`/category/${category}`} />
         </div>
         <SideScrollNewsSection category={"health"} />
       </div>

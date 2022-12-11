@@ -30,14 +30,15 @@ const Landing = () => {
             </div>
             <div className="w-1/3 sm:block hidden">
               <h2 className="text-2xl flex items-baseline justify-between font-semibold leading-loose">
-                ताजा खबर <SeeAllBtn url={"/hot"} />
+                ताजा खबर <SeeAllBtn url={"category/recent"} />{" "}
+                {/*recent hunxa ki "hot" hunxa, hot ta tala pani xa*/}
               </h2>
               <RecentNews data={recent.slice(1)} />
             </div>
           </div>
         )}
         <h1 className="flex items-baseline justify-between font-semibold text-2xl">
-          Hottest Topics <SeeAllBtn url={``} />
+          Hottest Topics <SeeAllBtn url={`/category/hot`} />
         </h1>
         <SideScrollNewsSection category={"hot"} data={hot} />
         <RectAds
