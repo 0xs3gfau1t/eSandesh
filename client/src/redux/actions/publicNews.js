@@ -3,11 +3,14 @@ import axios from "axios"
 
 export const listNewsCat = createAsyncThunk(
 	"news/listNewsCat",
-	async ({ page, cat }, { dispatch }) => {
+	async ({ page, cat, items = 3 }, { dispatch }) => {
 		const response = await axios
-			.get(`/api/article/list?category=${cat}&page=${page}&items=3`, {
-				withCredentials: true,
-			})
+			.get(
+				`/api/article/list?category=${cat}&page=${page}&items=${items}`,
+				{
+					withCredentials: true,
+				}
+			)
 			.then(res => {
 				return res.data
 			})
@@ -15,7 +18,7 @@ export const listNewsCat = createAsyncThunk(
 				console.error(err)
 			})
 		if (!response) return { success: false }
-		return { success: true, data: response, page: page }
+		return { success: true, data: response, page: page, cat: cat }
 	}
 )
 
@@ -67,26 +70,7 @@ export const getHotNews = createAsyncThunk(
 			.catch(err => {
 				console.error(err)
 			})
-		dispatch(getPrefNews(0))
-		if (!response) return { success: false }
-		return { success: true, data: response }
-	}
-)
-
-export const getPrefNews = createAsyncThunk(
-	"news/getPrefNews",
-	async ({}, { dispatch }) => {
-		// console.log("Fetching pref news")
-		const response = await axios
-			.get(`/api/article/list?items=4&category=preference`, {
-				withCredentials: true,
-			})
-			.then(res => {
-				return res.data
-			})
-			.catch(err => {
-				console.error(err)
-			})
+		dispatch(listNewsCat({ page: 0, cat: "preference" }))
 		if (!response) return { success: false }
 		return { success: true, data: response }
 	}

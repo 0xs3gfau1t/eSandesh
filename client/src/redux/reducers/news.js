@@ -5,7 +5,6 @@ import {
 	getNewsAudio,
 	getSingleNews,
 	listNewsCat,
-	getPrefNews,
 } from "../actions/publicNews"
 
 const initialState = {
@@ -36,17 +35,13 @@ const newsSlice = createSlice({
 		})
 		builder.addCase(listNewsCat.fulfilled, (state, { payload }) => {
 			if (payload.success && payload.data) {
+				if (payload.cat == "preference") state.prefNews = payload.data
 				state.newsListCat = payload.data
 			}
 		})
 		builder.addCase(getHotNews.fulfilled, (state, { payload }) => {
 			if (payload.success && payload.data) {
 				state.hotNews = payload.data
-			}
-		})
-		builder.addCase(getPrefNews.fulfilled, (state, { payload }) => {
-			if (payload.success && payload.data) {
-				state.prefNews = payload.data
 			}
 		})
 	},
