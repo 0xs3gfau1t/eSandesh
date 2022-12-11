@@ -30,7 +30,7 @@ export default function NavBar(activeCategory) {
     );
   });
   return (
-    <nav className=" pr-10">
+    <nav className="pr-8">
       <h2 className="font-bold text-2xl leading-loose">Category</h2>
       <ul className="list-none flex flex-col justify-between gap-2 mt-4 border-r-4 border-r-darkblue ">
         {menuItems}

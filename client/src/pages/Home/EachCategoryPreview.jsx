@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-import { LikeSaveShare } from "../../components/common";
+import { LikeSaveShare, SeeAllBtn } from "../../components/common";
 import SideNewsList from "./SideNewsList";
 import SideScrollNewsSection from "./SideScrollNewsSection";
 
@@ -40,9 +40,12 @@ export default function EachCategoryPreview({ category }) {
         </div>
       </div>
       <div>
-        <h1 className="font-semibold text-2xl leading-loose">
-          More from {category}
-        </h1>
+        <div className="flex items-baseline justify-between">
+          <h1 className="font-semibold text-2xl leading-loose">
+            More from {category}
+          </h1>
+          <SeeAllBtn url={`/${category}`} />
+        </div>
         <SideScrollNewsSection category={"health"} />
       </div>
     </>

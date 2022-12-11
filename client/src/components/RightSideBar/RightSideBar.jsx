@@ -7,7 +7,7 @@ import { SeeAllBtn } from "../common";
 function RightSideBar() {
   return (
     <>
-      <div className="flex justify-between items-end my-2">
+      <div className="flex justify-between items-baseline my-2">
         <h3 className="text-xl font-primary font-semibold">ताजा परिणामहरु</h3>
         <SeeAllBtn url={"/category/sports"} />
       </div>
