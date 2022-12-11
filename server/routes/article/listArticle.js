@@ -21,7 +21,7 @@ const listArticle = async (req, res) => {
     if (priority) sortParameters.priority = -1
     else sortParameters.slug = -1
 
-    const preference = false
+    let preference = false
     const filter = {}
     if (category) {
         if (category == 'preference') preference = true
