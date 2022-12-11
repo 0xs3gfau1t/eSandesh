@@ -1,4 +1,3 @@
-import React from "react"
 import { HiArrowNarrowRight } from "react-icons/hi"
 import { Link } from "react-router-dom"
 import { useSelector } from "react-redux"
@@ -7,7 +6,7 @@ import { Outlet } from "react-router-dom"
 import { Footer, Header, LeftSideBar } from "../../components"
 import QuickUpdates from "./QuickUpdates"
 
-export default function Home(match) {
+export default function Home() {
 	const focus = useSelector(state => state.misc.focus)
 
 	return (

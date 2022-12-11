@@ -7,6 +7,7 @@ import SideScrollNewsSection from "./SideScrollNewsSection"
 import { RectAds } from "../../components/common"
 import EachCategoryPreview from "./EachCategoryPreview"
 import { getHotNews } from "../../redux/actions/publicNews"
+import { setFocus } from "../../redux/reducers/misc"
 
 const Landing = () => {
 	const hot = useSelector(state => state.news.hotNews)
@@ -14,6 +15,7 @@ const Landing = () => {
 
 	useEffect(() => {
 		dispatch(getHotNews(0))
+		dispatch(setFocus(false))
 	}, [])
 
 	return (

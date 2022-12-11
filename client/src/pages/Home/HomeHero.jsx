@@ -28,7 +28,10 @@ export default function HomeHero({ data }) {
 			{/* below cover img */}
 			<div>
 				<h1 className="text-3xl my-2">
-					<Link to={""} className="hover:text-rose-600 duration-300">
+					<Link
+						to={`/news/${data.year}/${data.month}/${data.slug}`}
+						className="hover:text-rose-600 duration-300"
+					>
 						{/* article title */}
 						{data.title}
 					</Link>
