@@ -58,4 +58,3 @@ const addComment = async (req, res) => {
 }
 
 module.exports = addComment
-module.exports = addComment
