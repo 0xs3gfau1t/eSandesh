@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
 import { GiBrazilFlag } from "react-icons/gi";
 import { GrFlagFill } from "react-icons/gr";
 
@@ -9,6 +9,7 @@ export default function QuickUpdates() {
     <div className="flex flex-col gap-4 flex-wrap bg-white rounded-lg p-6 shadow-sm">
       <h3 className="text-base underline-offset-4 underline text-center font-semibold">
         फिफा विश्वकप
+        {/*this title changes according to current context/events */}
       </h3>
       <div className="flex items-center justify-between">
         <div className="flex items-center justify-center">
