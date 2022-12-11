@@ -1,6 +1,8 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
 
+import LocationNews from "./LocationNews";
+
 export default function NavBar(activeCategory) {
   const categories = [
     ["राजनीति", "politics"],
@@ -9,6 +11,7 @@ export default function NavBar(activeCategory) {
     ["अर्थ / वाणिज्य", "finance"],
     ["खेलकुद", "sports"],
     ["मनोरञ्जन", "entertainment"],
+    // ["स्थान", "Location"],
   ];
   const menuItems = categories.map((eachCat) => {
     return (
@@ -31,6 +34,9 @@ export default function NavBar(activeCategory) {
       <h2 className="font-bold text-2xl leading-loose">Category</h2>
       <ul className="list-none flex flex-col justify-between gap-2 mt-4 border-r-4 border-r-darkblue ">
         {menuItems}
+        <li>
+          <LocationNews />
+        </li>
       </ul>
     </nav>
   );
