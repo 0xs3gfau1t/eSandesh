@@ -8,7 +8,7 @@ export default function LocationNews() {
       <span className="cursor-pointer flex items-center gap-1 bg-inherit relative ">
         स्थान <FaAngleDown />
       </span>
-      <ul className="group-hover:visible absolute ml-12 w-56 -mt-10 group-hover:-mt-4 bg-white p-2 leading-loose invisible opacity-0 group-hover:opacity-100 duration-300">
+      <ul className="group-hover:visible absolute ml-12 w-48 -mt-10 group-hover:-mt-4 bg-white p-2 leading-loose invisible opacity-0 group-hover:opacity-100 duration-300">
         <li className="hover:font-bold duration-300 pl-2 hover:pl-5 hover:border-rose-700 border-l-4 border-transparent hover:text-rose-700">
           <Link to={"/category/location/province-{}"}>प्रदेश १</Link>
         </li>
