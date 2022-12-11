@@ -29,8 +29,8 @@ const Landing = () => {
               <HomeHero data={recent[0]} />
             </div>
             <div className="w-1/3 sm:block hidden">
-              <h2 className="text-2xl font-semibold leading-loose">
-                Recent News
+              <h2 className="text-2xl flex items-baseline justify-between font-semibold leading-loose">
+                ताजा खबर <SeeAllBtn url={"/hot"} />
               </h2>
               <RecentNews data={recent.slice(1)} />
             </div>
