@@ -7,7 +7,7 @@ export default function ArticlePreviewMd({
   articleUrl,
 }) {
   return (
-    <div className="flex items-center lg:items-start justify-between gap-4 my-6">
+    <div className="flex w-full items-center lg:items-start justify-between gap-4 my-6">
       <Link to={articleUrl} className="w-1/3">
         <img src={imgUrl} />
       </Link>
