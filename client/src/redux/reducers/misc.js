@@ -9,7 +9,7 @@ const miscSlice = createSlice({
 	initialState,
 	reducers: {
 		setFocus: (state, { payload }) => {
-			state.focus = !state.focus
+			state.focus = payload
 		},
 	},
 })

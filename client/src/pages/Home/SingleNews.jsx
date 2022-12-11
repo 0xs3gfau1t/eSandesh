@@ -30,7 +30,7 @@ const SingleNews = () => {
 					</h3>
 					<MdCenterFocusStrong
 						className="text-2xl cursor-pointer"
-						onClick={e => dispatch(setFocus())}
+						onClick={e => dispatch(setFocus(!focus))}
 					/>
 				</div>
 				<h1 className="text-xl m-4 font-bold">

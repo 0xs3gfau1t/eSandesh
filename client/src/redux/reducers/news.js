@@ -35,6 +35,7 @@ const newsSlice = createSlice({
 		})
 		builder.addCase(listNewsCat.fulfilled, (state, { payload }) => {
 			if (payload.success && payload.data) {
+				if (payload.cat == "preference") state.prefNews = payload.data
 				state.newsListCat = payload.data
 			}
 		})
