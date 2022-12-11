@@ -8,6 +8,7 @@ import RectAds from "./RectAds"
 import LikeSaveShare from "./LikeSaveShare"
 import Popup from "./Popup"
 import SocialShare from "./SocialShare"
+import DashActions from "./DashActions"
 
 export {
 	SiteLogo,
@@ -21,4 +22,5 @@ export {
 	LikeSaveShare,
 	Popup,
 	SocialShare,
+	DashActions,
 }
