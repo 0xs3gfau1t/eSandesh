@@ -67,6 +67,26 @@ export const getHotNews = createAsyncThunk(
 			.catch(err => {
 				console.error(err)
 			})
+		dispatch(getPrefNews(0))
+		if (!response) return { success: false }
+		return { success: true, data: response }
+	}
+)
+
+export const getPrefNews = createAsyncThunk(
+	"news/getPrefNews",
+	async ({}, { dispatch }) => {
+		// console.log("Fetching pref news")
+		const response = await axios
+			.get(`/api/article/list?items=4&category=preference`, {
+				withCredentials: true,
+			})
+			.then(res => {
+				return res.data
+			})
+			.catch(err => {
+				console.error(err)
+			})
 		if (!response) return { success: false }
 		return { success: true, data: response }
 	}
