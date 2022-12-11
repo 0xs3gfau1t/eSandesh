@@ -8,9 +8,9 @@ import { listNewsCat } from "../../redux/actions/publicNews"
 import { setFocus } from "../../redux/reducers/misc"
 
 export default function Content() {
-	const list = useSelector(state => state.news.newsListCat)
 	const [page, setPage] = useState(0)
 	const { cat } = useParams()
+	const list = useSelector(state => state.news[cat])
 	const dispatch = useDispatch()
 
 	useEffect(() => {

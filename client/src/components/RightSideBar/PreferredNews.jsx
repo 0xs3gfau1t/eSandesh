@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from "react-redux"
 import { ArticlePreviewSm } from "../common"
 
 function PreferredNews() {
-	const prefNews = useSelector(state => state.news.prefNews)
+	const prefNews = useSelector(state => state.news.preference)
 
 	return (
 		<div className="flex flex-col flex-wrap bg-white rounded-lg px-4 shadow-sm">
