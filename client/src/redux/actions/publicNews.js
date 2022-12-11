@@ -70,7 +70,8 @@ export const getRecentNews = createAsyncThunk(
 			.catch(err => {
 				console.error(err)
 			})
-		dispatch(listNewsCat({ page: 0, cat: "preference" }))
+		await dispatch(listNewsCat({ page: 0, cat: "preference" }))
+		dispatch(listNewsCat({ page: 0, cat: "hot", items: 7 }))
 		if (!response) return { success: false }
 		return { success: true, data: response }
 	}

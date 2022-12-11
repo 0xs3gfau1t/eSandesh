@@ -41,7 +41,7 @@ const newsSlice = createSlice({
 		})
 		builder.addCase(getRecentNews.fulfilled, (state, { payload }) => {
 			if (payload.success && payload.data) {
-				state.hotNews = payload.data
+				state.recentNews = payload.data
 			}
 		})
 	},

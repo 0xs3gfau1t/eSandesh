@@ -10,33 +10,34 @@ import { getRecentNews, listNewsCat } from "../../redux/actions/publicNews"
 import { setFocus } from "../../redux/reducers/misc"
 
 const Landing = () => {
-	const hot = useSelector(state => state.news.hotNews)
+	const recent = useSelector(state => state.news.recentNews)
+	const hot = useSelector(state => state.news.hot)
+
 	const dispatch = useDispatch()
 
 	useEffect(() => {
 		dispatch(getRecentNews(0))
-		dispatch(listNewsCat())
 		dispatch(setFocus(false))
 	}, [])
 
 	return (
 		<div>
 			<div className="w-full px-4">
-				{hot && (
+				{recent && (
 					<div className="flex gap-6">
 						<div className="w-full sm:w-2/3">
-							<HomeHero data={hot[0]} />
+							<HomeHero data={recent[0]} />
 						</div>
 						<div className="w-1/3 sm:block hidden">
 							<h2 className=" text-2xl font-semibold leading-loose">
 								Recent News
 							</h2>
-							<RecentNews data={hot.slice(1)} />
+							<RecentNews data={recent.slice(1)} />
 						</div>
 					</div>
 				)}
 				<h1 className="font-semibold text-2xl">Hottest Topics</h1>
-				<SideScrollNewsSection category={"hot"} />
+				<SideScrollNewsSection category={"hot"} data={hot} />
 				<RectAds
 					type={
 						"ma X category sita relevent ad ho, Life Insurance garnuhos Y life insurance"
