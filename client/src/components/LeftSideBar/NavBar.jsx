@@ -13,7 +13,6 @@ export default function NavBar(activeCategory) {
     ["मनोरञ्जन", "entertainment"],
     ["स्वास्थ्य", "health"],
     ["प्रविधि", "technology"],
-    // ["स्थान", "Location"],
   ];
   const menuItems = categories.map((eachCat) => {
     return (
