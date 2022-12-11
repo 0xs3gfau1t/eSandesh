@@ -71,7 +71,11 @@ const ManageNews = () => {
 															: ""}
 													</td>
 													<td>
-														<DashActions />
+														<DashActions
+															year={khabar.year}
+															month={khabar.month}
+															slug={khabar.slug}
+														/>
 													</td>
 												</tr>
 											)

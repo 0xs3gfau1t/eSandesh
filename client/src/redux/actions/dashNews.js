@@ -3,11 +3,19 @@ import axios from "axios"
 
 export const addNews = createAsyncThunk(
 	"dash/addNews",
-	async (data, { dispatch }) => {
+	async ({ data, isEdit, id }, { dispatch }) => {
 		// console.log("data: ", data)
+		let payload = JSON.parse(JSON.stringify(data))
+		if (isEdit) payload.id = id
+
 		const response = await axios
-			.post("/api/article", data, {
-				withCredentials: true,
+			.request({
+				url: "/api/article",
+				method: isEdit ? "patch" : "post",
+				data: payload,
+				options: {
+					withCredentials: true,
+				},
 			})
 			.then(res => {
 				return res.data

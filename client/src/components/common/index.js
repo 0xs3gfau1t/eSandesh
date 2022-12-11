@@ -9,7 +9,7 @@ import LikeSaveShare from "./LikeSaveShare"
 import Popup from "./Popup"
 import SocialShare from "./SocialShare"
 import DashActions from "./DashActions"
-
+import SeeAllBtn from "./SeeAllBtn"
 export {
 	SiteLogo,
 	FormText,
