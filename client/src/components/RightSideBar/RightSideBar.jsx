@@ -22,8 +22,14 @@ function RightSideBar() {
       {/* end of a section */}
       <div className="flex justify-between items-end mt-8 mb-2">
         <h3 className="text-xl font-primary font-semibold">
-          तपाईंले पढेको सम्बन्धित
+          तपाईंको प्राथमिकता
         </h3>
+        <Link to="***link to category/preferred***">
+          <p className="font-semibold text-xs flex items-center group">
+            सबै हेर्नुहोस्
+            <HiArrowNarrowRight className="ml-1 opacity-0 group-hover:opacity-100 transition-all duration-200 ease-in-out" />
+          </p>
+        </Link>
       </div>
       <PreferredNews />
       {/* end of a section */}
