@@ -5,6 +5,7 @@ router.use('/auth', require('./auth'))
 router.use('/article', require('./article'))
 router.use('/comment', require('./comment'))
 router.use('/ads', require('./ads'))
+router.use('/poll', require('./polls'))
 
 router.get('*', (_req, res) => {
     res.json({ message: 'yamete kudasai!' })
