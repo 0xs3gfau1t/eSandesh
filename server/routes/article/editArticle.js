@@ -7,8 +7,14 @@ const articleModel = require('../../model/article')
  * @return {void}
  */
 const editArticle = async (req, res) => {
-    const { id, content, category = undefined, tags = undefined } = req.body
-
+    const {
+        id,
+        content,
+        title,
+        category = undefined,
+        tags = undefined,
+    } = req.body
+    const { user } = req.session
     const filter = { _id: id }
 
     // If the user is not admin then
@@ -16,9 +22,9 @@ const editArticle = async (req, res) => {
     if (user.provider != 'admin') filter.createdBy = user.id
 
     const data = { content }
+    if (title) data.title = title
     if (category) data.category = category
     if (tags) data.tags = tags
-
     try {
         const article = await articleModel.findOneAndUpdate(filter, data)
         return res.status(200).json(article)
