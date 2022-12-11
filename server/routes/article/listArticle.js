@@ -13,7 +13,6 @@ const listArticle = async (req, res) => {
         page = 0,
         items = 10,
         priority = false,
-        hits = false,
     } = req.query
     const [year, month] = req.url.replace(/\?.*/, '').split('/').slice(2)
 
@@ -22,9 +21,11 @@ const listArticle = async (req, res) => {
     else sortParameters.slug = -1
 
     let preference = false
+    let hits = false
     const filter = {}
     if (category) {
         if (category == 'preference') preference = true
+        else if (category == 'hot') hits = true
         else filter.category = category
     }
     if (year) filter.year = year
