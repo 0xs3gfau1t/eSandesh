@@ -8,10 +8,17 @@ import { FaUserCircle } from "react-icons/fa";
 
 import { SocialShare, SqAds } from "../../components/common"
 import { getSingleNews, getNewsAudio } from "../../redux/actions/publicNews"
-import { listCommentsByArticle, addComments } from "../../redux/actions/comments";
+import { listCommentsByArticle, addComments, dltComments, editComments } from "../../redux/actions/comments"
 import { setFocus } from "../../redux/reducers/misc"
 
 
+const initialValue= {
+	txtvalue: "",
+	a: 1,
+	i: 1,
+	editting: false,
+	comId: ""
+}
 
 
 
@@ -22,8 +29,7 @@ const SingleNews = () => {
 	const focus = useSelector(state => state.misc.focus)
 	const comments = useSelector(state => state.comments.comments)
 	const dispatch = useDispatch()
-	const [value, setValue] = useState("");
-	const [a, setA] = useState(1);
+	const [value, setValue] = useState({initialValue});
 
 	
 	useEffect(() => {
@@ -32,25 +38,37 @@ const SingleNews = () => {
 
 
 	useEffect(() => {
-		dispatch(listCommentsByArticle("6395e60c4de537fe44ee7713", 0, 10))
-	}, [a])
+		dispatch(listCommentsByArticle("6395e60c4de537fe44ee7713", 0, 30))
+	}, [value.a])
 
 
 	const handleSubmit = (e) => {
-		dispatch(addComments({articleId: "6395e60c4de537fe44ee7713", content: value}))
-		setA(a+1)
 		e.preventDefault();
+		if(value.editting){
+			dispatch(editComments({commentId: value.comId, content: value.txtvalue}))
+			setValue({...value, txtvalue: "", a: value.a + 1, editting: false});
+			return;
+		}
+		dispatch(addComments({articleId: "6395e60c4de537fe44ee7713", content: value.txtvalue}))
+		setValue({...value, txtvalue: "", a: value.a + 1});
+	}
+
+	const handleDltCmnt = (cmnt) =>{
+		dispatch(dltComments({commentId: cmnt._id }));
+		setValue({...value, a: value.a+1});
 	}
 	
 
 	const handleChange = (e)=>{
-		setValue(e.target.value);
+		// dispatch(addComments({articleId: "6395e60c4de537fe44ee7713", content: value}))
+		setValue({...value, txtvalue: e.target.value});
 	}
 
 
-	const handleEditComment =(value)=>{
-		console.log(value)
-		setValue(value);
+	const handleEditComment =(cmnt)=>{
+		// console.log(value.content)
+		// dispatch(editComments({commentId: value.id, content: value})) yo backend ma implement garnai baki jasto lao
+		setValue({...value, txtvalue: cmnt.content, editting: true, comId: cmnt._id});
 	}
 
 
@@ -106,11 +124,9 @@ const SingleNews = () => {
 				<div>
 					{comments && comments.comments.map(comment=>{
 						return(
-							// <div>{comment.content}</div>
-							<div className="flex flex-row">
+							<div className="flex flex-row p-4 box-border border-4">
 								<div className="">
 									<Link to="userProfie">
-										{/*use user image instead of icon*/}
 										<FaUserCircle className="text-5xl" />
 									</Link>
 								</div>
@@ -118,7 +134,8 @@ const SingleNews = () => {
 									<div className="flex justify-between">
 										<h1>{comment.user.slice(0,10)}</h1>
 										<span>{comment.createdAt.slice(0,4)}</span>
-										<span onClick = {()=> handleEditComment(comment.content)}>Edit Comment</span>
+										<span onClick = {()=> handleEditComment(comment)}>Edit Comment</span>
+										<span onClick = {()=> handleDltCmnt(comment)}>Delete Comment</span>
 									</div>
 									<div>
 										<p>{comment.content}</p>
@@ -134,7 +151,7 @@ const SingleNews = () => {
 					})}
 					<div>
 						<form onSubmit={handleSubmit}>
-							<input type = "text" value = {value} onChange = {handleChange} placeholder = "Type your Comment"/>
+							<input type = "text" value = {value.txtvalue} onChange = {handleChange} placeholder = "Type your Comment"/>
 							<input type="submit" value="Submit" />
 						</form>
 					</div>
