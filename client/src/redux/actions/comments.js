@@ -53,7 +53,6 @@ export const editComments = createAsyncThunk(
 		const response = await axios
 			.patch("/api/comment",comment, {
 				withCredentials: true,
-				data: { commentId: comment.commentId, content: comment.content }
 			})
 			.then(res => {
 				return res.data
