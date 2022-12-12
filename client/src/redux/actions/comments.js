@@ -47,6 +47,28 @@ export const addComments = createAsyncThunk(
 	}
 )
 
+
+export const addLikes = createAsyncThunk(
+	"news/addLikes",
+	async (like, { dispatch }) => {
+		const response = await axios
+			.post("/api/comment/like", like, {
+				withCredentials: true,
+			})
+			.then(res => {
+				return res.data
+			})
+			.catch(err => {
+				console.error(err)
+			})
+
+		if (!response) return { success: false }
+
+		return { success: true }
+	}
+)
+
+
 export const editComments = createAsyncThunk(
 	"news/editComments",
 	async (comment, { dispatch }) => {
@@ -66,9 +88,6 @@ export const editComments = createAsyncThunk(
 		return { success: true }
 	}
 )  
-
-
-
 
 
 
