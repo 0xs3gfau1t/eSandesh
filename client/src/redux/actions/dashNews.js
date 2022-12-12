@@ -6,7 +6,10 @@ export const addNews = createAsyncThunk(
 	async ({ data, isEdit, id }, { dispatch }) => {
 		// console.log("data: ", data)
 		let payload = JSON.parse(JSON.stringify(data))
-		if (isEdit) payload.id = id
+		if (isEdit) {
+			payload.id = id
+			delete payload.socials
+		}
 
 		const response = await axios
 			.request({

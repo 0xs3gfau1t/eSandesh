@@ -1,5 +1,7 @@
 import Home from "./Home/Home"
 import SingleNews from "./Home/SingleNews"
+import DashBoard from "./Home/Dashboard"
+import Polls from "./Home/Polls"
 import Category from "./Category/Category"
 import Landing from "./Home/Landing"
 import UserAuth from "./UserAuth"
@@ -12,7 +14,8 @@ import {
 	AdsMan,
 	ViewSiteStats,
 	Login,
-  PollsMan,
+	ManageCritics,
+	PollsMan,
 } from "./Dashboard"
 
 export {
@@ -29,5 +32,8 @@ export {
 	ViewSiteStats,
 	SingleNews,
 	Landing,
-  PollsMan
+	ManageCritics,
+	PollsMan,
+	DashBoard,
+	Polls,
 }
