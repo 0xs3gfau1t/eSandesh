@@ -22,23 +22,35 @@ const SingleNews = () => {
 	const focus = useSelector(state => state.misc.focus)
 	const comments = useSelector(state => state.comments.comments)
 	const dispatch = useDispatch()
-
 	const [value, setValue] = useState("");
+	const [a, setA] = useState(1);
 
+	
 	useEffect(() => {
 		dispatch(getSingleNews(params))
-		dispatch(listCommentsByArticle("6395e60c4de537fe44ee7713", 0, 10))
 	}, [])
 
 
+	useEffect(() => {
+		dispatch(listCommentsByArticle("6395e60c4de537fe44ee7713", 0, 10))
+	}, [a])
+
+
 	const handleSubmit = (e) => {
-		// alert("Submitted")
 		dispatch(addComments({articleId: "6395e60c4de537fe44ee7713", content: value}))
+		setA(a+1)
 		e.preventDefault();
 	}
 	
+
 	const handleChange = (e)=>{
-		setValue(e.target.value)
+		setValue(e.target.value);
+	}
+
+
+	const handleEditComment =(value)=>{
+		console.log(value)
+		setValue(value);
 	}
 
 
@@ -106,6 +118,7 @@ const SingleNews = () => {
 									<div className="flex justify-between">
 										<h1>{comment.user.slice(0,10)}</h1>
 										<span>{comment.createdAt.slice(0,4)}</span>
+										<span onClick = {()=> handleEditComment(comment.content)}>Edit Comment</span>
 									</div>
 									<div>
 										<p>{comment.content}</p>
