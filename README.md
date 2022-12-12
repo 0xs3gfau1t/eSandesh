@@ -3,7 +3,7 @@
 ## How to run
 
 ### Using docker
-1. Make your `.env` has all necessary secrets
+1. Make sure your `.env` on both `client` and `server` has all necessary secrets
 2. Run `docker-compose up` from project root directory
 3. Backend and Client now availabe on port 4000 and 8000 respectively
 
