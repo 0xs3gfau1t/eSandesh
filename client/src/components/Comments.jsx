@@ -11,16 +11,19 @@ const initialValue= {
 	a: 1,
 	editting: false,
 	comId: "",
-    sub: false
+    sub: false,
+    page: 0,
+    items: 10
 }
 
 function Comments(props) {
     const comments = useSelector(state => state.comments.comments)
 	const dispatch = useDispatch()
-	const [value, setValue] = useState({initialValue});
+	const [value, setValue] = useState(initialValue);
+
 
     useEffect(() => {
-		dispatch(listCommentsByArticle(props.articleId, 0, 30))
+		dispatch(listCommentsByArticle({articleId: props.articleId, page: value.page, items: value.items}))
 	}, [value.a])
 
 
