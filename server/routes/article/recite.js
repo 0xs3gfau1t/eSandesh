@@ -6,8 +6,8 @@ const { JSDOM } = require('jsdom')
 const express = require('express')
 
 /**
- * @param {Express.Request} req
- * @param {Express.Response} res
+ * @param {express.Request} req
+ * @param {express.Response} res
  * @return {void}
  */
 
