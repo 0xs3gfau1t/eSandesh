@@ -10,7 +10,9 @@ export default function RecentNews({ data }) {
 						key={index}
 						className="text-sm leading-loose hover:pl-4 font-semibold hover:text-rose-700 transition-all duration-300 hover:border-l-4 hover:border-rose-600 border-l-2 border-transparent"
 					>
-						<Link to=""> {hot.title}</Link>
+						<Link to={`/news/${hot.year}/${hot.month}/${hot.slug}`}>
+							{hot.title}
+						</Link>
 					</li>
 				)
 			})}

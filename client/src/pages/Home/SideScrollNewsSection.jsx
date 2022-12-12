@@ -1,61 +1,27 @@
-import React from "react";
+import React from "react"
 
-import { ArticlePreviewSm } from "../../components/common";
+import { ArticlePreviewSm } from "../../components/common"
 
-export default function SideScrollNewsSection({ category }) {
-  // if category="hot" or "home" show top news
-  // if category="politics" show news from politics category
-  return (
-    <div className="flex items-start justify-between gap-4 overflow-x-scroll">
-      <ArticlePreviewSm
-        //   category={"politics"}
-        title={"Maanis harayeko suchana"}
-        summary={
-          "26/ F, Suntali Pandey, Call: 9812347599, Last seen at WRC gate"
-        }
-        imgUrl={"http://kunjanaghimire.com/storage/images/kunjana-hero-2.png"}
-        articleUrl={"yo artikle ko link hai ta ya"}
-      />
-      <ArticlePreviewSm
-        title={"Maanis harayeko suchana"}
-        summary={
-          "26/ F, Suntali Pandey, Call: 9812347599, Last seen at WRC gate"
-        }
-        imgUrl={"http://kunjanaghimire.com/storage/images/kunjana-hero-2.png"}
-        articleUrl={"yo artikle ko link hai ta ya"}
-      />
-      <ArticlePreviewSm
-        title={"Maanis harayeko suchana"}
-        summary={
-          "26/ F, Suntali Pandey, Call: 9812347599, Last seen at WRC gate"
-        }
-        imgUrl={"http://kunjanaghimire.com/storage/images/kunjana-hero-2.png"}
-        articleUrl={"yo artikle ko link hai ta ya"}
-      />
-      <ArticlePreviewSm
-        title={"Maanis harayeko suchana"}
-        summary={
-          "26/ F, Suntali Pandey, Call: 9812347599, Last seen at WRC gate"
-        }
-        imgUrl={"http://kunjanaghimire.com/storage/images/kunjana-hero-2.png"}
-        articleUrl={"yo artikle ko link hai ta ya"}
-      />
-      <ArticlePreviewSm
-        title={"Maanis harayeko suchana"}
-        summary={
-          "26/ F, Suntali Pandey, Call: 9812347599, Last seen at WRC gate"
-        }
-        imgUrl={"http://kunjanaghimire.com/storage/images/kunjana-hero-2.png"}
-        articleUrl={"yo artikle ko link hai ta ya"}
-      />
-      <ArticlePreviewSm
-        title={"Maanis harayeko suchana"}
-        summary={
-          "26/ F, Suntali Pandey, Call: 9812347599, Last seen at WRC gate"
-        }
-        imgUrl={"http://kunjanaghimire.com/storage/images/kunjana-hero-2.png"}
-        articleUrl={"yo artikle ko link hai ta ya"}
-      />
-    </div>
-  );
+export default function SideScrollNewsSection({ category, data }) {
+	// if category="hot" or "home" show top news
+	// if category="politics" show news from politics category
+	return (
+		<div className="flex items-start justify-between gap-4 overflow-x-scroll">
+			{data &&
+				data.map((news, index) => {
+					return (
+						<ArticlePreviewSm
+							key={index}
+							title={news.title}
+							articleUrl={`/news/${news.year}/${news.month}/${news.slug}`}
+							imgUrl={
+								news.image
+									? news.image
+									: "https://developers.elementor.com/docs/assets/img/elementor-placeholder-image.png"
+							}
+						/>
+					)
+				})}
+		</div>
+	)
 }

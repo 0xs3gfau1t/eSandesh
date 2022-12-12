@@ -4,37 +4,43 @@ import { useSelector, useDispatch } from "react-redux";
 import HomeHero from "./HomeHero";
 import RecentNews from "./RecentNews";
 import SideScrollNewsSection from "./SideScrollNewsSection";
-import { RectAds } from "../../components/common";
+import { RectAds, SeeAllBtn } from "../../components/common";
 import EachCategoryPreview from "./EachCategoryPreview";
-import SportsHighlights from "./SportsHighlights";
-import { getHotNews } from "../../redux/actions/publicNews";
+import { getRecentNews, listNewsCat } from "../../redux/actions/publicNews";
+import { setFocus } from "../../redux/reducers/misc";
 
 const Landing = () => {
-  const hot = useSelector((state) => state.news.hotNews);
+  const recent = useSelector((state) => state.news.recentNews);
+  const hot = useSelector((state) => state.news.hot);
+
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getHotNews(0));
+    dispatch(getRecentNews(0));
+    dispatch(setFocus(false));
   }, []);
 
   return (
-    <>
-      <div className=" w-full sm:w-3/5 px-4">
-        {hot && (
+    <div>
+      <div className="w-full">
+        {recent && (
           <div className="flex gap-6">
             <div className="w-full sm:w-2/3">
-              <HomeHero data={hot[0]} />
+              <HomeHero data={recent[0]} />
             </div>
             <div className="w-1/3 sm:block hidden">
-              <h2 className=" text-2xl font-semibold leading-loose">
-                Recent News
+              <h2 className="text-2xl flex items-baseline justify-between font-semibold leading-loose">
+                ताजा खबर <SeeAllBtn url={"category/recent"} />{" "}
+                {/*recent hunxa ki "hot" hunxa, hot ta tala pani xa*/}
               </h2>
-              <RecentNews data={hot.slice(1)} />
+              <RecentNews data={recent.slice(1)} />
             </div>
           </div>
         )}
-        <h1 className="font-semibold text-2xl">Hottest Topics</h1>
-        <SideScrollNewsSection category={"hot"} />
+        <h1 className="flex items-baseline justify-between font-semibold text-2xl">
+          Hottest Topics <SeeAllBtn url={`/category/hot`} />
+        </h1>
+        <SideScrollNewsSection category={"hot"} data={hot} />
         <RectAds
           type={
             "ma X category sita relevent ad ho, Life Insurance garnuhos Y life insurance"
@@ -58,15 +64,11 @@ const Landing = () => {
             }
           />
         </div>
-        {/* other category previews go here */}I think other category previews
-        should be placed here ok
+        {/* other category previews go here */}
+        {/* I think other category previews should be placed here ok */}
         {/* end of categories preview / middle scrolling section ends here */}
       </div>
-      {/* end of outlet */}
-      <div className="sm:w-1/5 sm:block hidden">
-        <SportsHighlights />
-      </div>
-    </>
+    </div>
   );
 };
 

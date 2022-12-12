@@ -1,15 +1,17 @@
 import { useEffect } from "react"
 import { useSelector, useDispatch } from "react-redux"
 import { useParams } from "react-router-dom"
+import { MdCenterFocusStrong } from "react-icons/md"
 
 import { SocialShare, SqAds } from "../../components/common"
 import { getSingleNews, getNewsAudio } from "../../redux/actions/publicNews"
+import { setFocus } from "../../redux/reducers/misc"
 
 const SingleNews = () => {
 	const params = useParams()
 	const news = useSelector(state => state.news.singleNews)
 	const audio = useSelector(state => state.news.audio)
-
+	const focus = useSelector(state => state.misc.focus)
 	const dispatch = useDispatch()
 
 	useEffect(() => {
@@ -18,6 +20,19 @@ const SingleNews = () => {
 	return (
 		<div className="flex justify-between container gap-4">
 			<div className="news-content ml-4 mb-10 w-full">
+				<div className="flex">
+					<h3
+						className={`font-bold px-2 ${
+							!focus ? "text-green-600" : "text-red"
+						}`}
+					>
+						{focus ? "Exit" : "Enter"} Focus Mode
+					</h3>
+					<MdCenterFocusStrong
+						className="text-2xl cursor-pointer"
+						onClick={e => dispatch(setFocus(!focus))}
+					/>
+				</div>
 				<h1 className="text-xl m-4 font-bold">
 					{news ? news.title : ""}
 				</h1>
