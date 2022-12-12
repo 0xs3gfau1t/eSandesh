@@ -6,7 +6,12 @@ import Archive from "./Archive"
 import AdsMan from "./AdsMan"
 import ViewSiteStats from "./ViewSiteStats"
 import Login from "./Login"
+<<<<<<< HEAD
 import ManageCritics from "./ManageCritics"
+=======
+import PollsMan from "./PollsMan"
+
+>>>>>>> auth
 export {
 	Login,
 	AdminDash,
@@ -16,5 +21,9 @@ export {
 	Archive,
 	AdsMan,
 	ViewSiteStats,
+<<<<<<< HEAD
 	ManageCritics,
+=======
+  PollsMan
+>>>>>>> auth
 }

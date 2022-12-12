@@ -12,7 +12,11 @@ import {
 	AdsMan,
 	ViewSiteStats,
 	Login,
+<<<<<<< HEAD
 	ManageCritics,
+=======
+  PollsMan,
+>>>>>>> auth
 } from "./Dashboard"
 
 export {
@@ -29,5 +33,9 @@ export {
 	ViewSiteStats,
 	SingleNews,
 	Landing,
+<<<<<<< HEAD
 	ManageCritics,
+=======
+  PollsMan
+>>>>>>> auth
 }
