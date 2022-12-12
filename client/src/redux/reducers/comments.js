@@ -1,5 +1,4 @@
 import { createSlice } from "@reduxjs/toolkit"
-// import { listCommentsByArticle } from "../actions/comments";
 import {
     listCommentsByArticle
 } from "../actions/comments"
