@@ -101,7 +101,7 @@ const listArticle = async (req, res) => {
             return article
         })
 
-        return res.status(200).json({ articles: new_articles })
+        return res.status(200).json(new_articles)
     } catch (err) {
         console.error(err)
         return res.status(500).json({ error: 'Something went wrong.' })
