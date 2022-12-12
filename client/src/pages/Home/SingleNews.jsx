@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom"
 import { MdCenterFocusStrong } from "react-icons/md"
 
 import { SocialShare, SqAds } from "../../components/common"
-import { getSingleNews, getNewsAudio } from "../../redux/actions/publicNews"
+import { getSingleNews } from "../../redux/actions/publicNews"
 import { setFocus } from "../../redux/reducers/misc"
 import Comments from "../../components/Comments";
 
@@ -19,7 +19,7 @@ const SingleNews = () => {
 
 	
 	useEffect(() => {
-		dispatch(getSingleNews(params))
+		dispatch(getSingleNews({ params: params, noAudio: false }))
 	}, [])
 
 
@@ -38,7 +38,7 @@ const SingleNews = () => {
 					</h3>
 					<MdCenterFocusStrong
 						className="text-2xl cursor-pointer"
-						onClick={e => dispatch(setFocus())}
+						onClick={e => dispatch(setFocus(!focus))}
 					/>
 				</div>
 				<h1 className="text-xl m-4 font-bold">

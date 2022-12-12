@@ -9,9 +9,18 @@ const adsModel = require('../../model/ads')
  */
 
 module.exports = (req, res) => {
-    const { category, priority = 1, page = 0, limit = 10 } = req.body
+    const {
+        category,
+        priority = 1,
+        page = 0,
+        limit = 10,
+        popup = false,
+        filterExpiry = 1,
+    } = req.body
 
-    filter = { expiry: { $gt: new Date() } }
+    filter = { popup: { $eq: popup } }
+
+    if (Number(filterExpiry)) filter.expiry = { $gt: new Date() }
 
     if (category)
         filter[category] = {

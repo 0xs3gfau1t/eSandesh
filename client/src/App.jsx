@@ -40,7 +40,11 @@ function App() {
 							element={<ManageNews />}
 						/>
 						<Route path="readers" element={<ReaderArticles />} />
-						<Route path="newsedit" element={<EditNews />} />
+						<Route path="addnews" element={<EditNews />} />
+						<Route
+							path="editnews/:year/:month/:slug"
+							element={<EditNews isEdit={true} />}
+						/>
 						<Route path="archive" element={<Archive />} />
 						<Route path="ads" element={<AdsMan />} />
 						<Route path="stats" element={<ViewSiteStats />} />

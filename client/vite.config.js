@@ -5,7 +5,6 @@ import { resolve } from "path";
 
 export default ({ mode }) => {
 	const env = loadEnv(mode, process.cwd(), "");
-	console.log(env.PORT);
 	config({ path: resolve(__dirname, ".env") });
 	return defineConfig({
 		define: {
@@ -13,12 +12,11 @@ export default ({ mode }) => {
 		},
 		plugins: [react()],
 		server: {
-			host: "localhost",
-			open: true,
+                    host: process.env.HOST || "localhost",
 			port: env.PORT || 8000,
 			proxy: {
 				"/api": {
-					target: "http://localhost:4000",
+					target: `http://${process.env.BACKEND_HOST || "localhost"}:${process.env.BACKEND_PORT||4000}`,
 				},
 			},
 		},

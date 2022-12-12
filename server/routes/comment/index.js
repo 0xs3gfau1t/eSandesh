@@ -7,9 +7,11 @@ const addComment = require('./addComment')
 const delComment = require('./delComment')
 const editComment = require('./editComment')
 const getComments = require('./getComments')
+const likeComment = require('./likeComment')
 
 router.get('/', getComments)
 router.post('/', withAuth, addComment)
+router.post('/like', withAuth, likeComment)
 router.delete('/', withAuth, delComment)
 router.patch('/', withAuth, editComment)
 

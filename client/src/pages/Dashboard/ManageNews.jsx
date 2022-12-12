@@ -4,6 +4,7 @@ import { BsFillPlusSquareFill } from "react-icons/bs"
 import { Link } from "react-router-dom"
 
 import { listNews } from "../../redux/actions/dashNews"
+import { DashActions } from "../../components/common"
 
 const ManageNews = () => {
 	const news = useSelector(state => state.news.newsList)
@@ -16,7 +17,7 @@ const ManageNews = () => {
 
 	return (
 		<>
-			<Link to="/admin/dashboard/newsedit" className="addNew">
+			<Link to="/admin/dashboard/addNews" className="addNew">
 				<BsFillPlusSquareFill className="ml-4 text-[1.8rem] " />
 				<h2>Create news</h2>
 			</Link>
@@ -68,6 +69,13 @@ const ManageNews = () => {
 																	","
 															  )
 															: ""}
+													</td>
+													<td>
+														<DashActions
+															year={khabar.year}
+															month={khabar.month}
+															slug={khabar.slug}
+														/>
 													</td>
 												</tr>
 											)
