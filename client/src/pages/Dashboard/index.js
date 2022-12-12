@@ -7,6 +7,8 @@ import AdsMan from "./AdsMan"
 import ViewSiteStats from "./ViewSiteStats"
 import Login from "./Login"
 import ManageCritics from "./ManageCritics"
+import PollsMan from "./PollsMan"
+
 export {
 	Login,
 	AdminDash,
@@ -17,4 +19,5 @@ export {
 	AdsMan,
 	ViewSiteStats,
 	ManageCritics,
+	PollsMan,
 }

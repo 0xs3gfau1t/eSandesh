@@ -13,6 +13,7 @@ import {
 	ViewSiteStats,
 	Login,
 	ManageCritics,
+	PollsMan,
 } from "./Dashboard"
 
 export {
@@ -30,4 +31,5 @@ export {
 	SingleNews,
 	Landing,
 	ManageCritics,
+	PollsMan,
 }

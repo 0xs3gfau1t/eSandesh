@@ -34,16 +34,13 @@ export default function Content() {
 				<div className="w-full">
 					{list &&
 						Object.keys(list.slice(1)).map(key => {
-							const div = document.createElement("div")
-							div.innerHTML = list[parseInt(key) + 1].content
-							const img = div.querySelector("img")
 							const data = list[parseInt(key) + 1]
 							return (
 								<ArticlePreviewMd
 									key={key}
 									title={data.title}
 									summary={"Tuchha description here..."}
-									imgUrl={img ? img.src : ""}
+									imgUrl={data.img ? data.img : ""}
 									articleUrl={`/news/${data.year}/${data.month}/${data.slug}`}
 								/>
 							)

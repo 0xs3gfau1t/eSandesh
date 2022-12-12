@@ -1,6 +1,7 @@
 const express = require('express')
 const articleModel = require('../../model/article')
 const { userModel } = require('../../model/user')
+const { JSDOM } = require('jsdom')
 
 /**
  * @param {express.Request} req
@@ -92,7 +93,15 @@ const listArticle = async (req, res) => {
             return 0
         })
 
-        return res.status(200).json(articles)
+        const new_articles = articles.map(article => {
+            const dom = new JSDOM(article.content)
+            const img = dom.window.document.querySelector('img')
+            if (img) article.img = img.src
+            delete article.content
+            return article
+        })
+
+        return res.status(200).json(new_articles)
     } catch (err) {
         console.error(err)
         return res.status(500).json({ error: 'Something went wrong.' })
