@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom"
 import { MdCenterFocusStrong } from "react-icons/md"
 
 import { SocialShare, SqAds } from "../../components/common"
-import { getSingleNews, getNewsAudio } from "../../redux/actions/publicNews"
+import { getSingleNews } from "../../redux/actions/publicNews"
 import { setFocus } from "../../redux/reducers/misc"
 
 const SingleNews = () => {
@@ -15,7 +15,7 @@ const SingleNews = () => {
 	const dispatch = useDispatch()
 
 	useEffect(() => {
-		dispatch(getSingleNews(params))
+		dispatch(getSingleNews({ params: params, noAudio: false }))
 	}, [])
 	return (
 		<div className="flex justify-between container gap-4">
