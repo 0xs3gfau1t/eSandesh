@@ -47,26 +47,26 @@ export const addComments = createAsyncThunk(
 	}
 )
 
-// export const editComments = createAsyncThunk(
-// 	"news/editComments",
-// 	async (comment, { dispatch }) => {
-// 		const response = await axios
-// 			.patch("/api/comment",comment, {
-// 				withCredentials: true,
-// 				data: { commentId: comment.commentId, content: comment.content }
-// 			})
-// 			.then(res => {
-// 				return res.data
-// 			})
-// 			.catch(err => {
-// 				console.error(err)
-// 			})
+export const editComments = createAsyncThunk(
+	"news/editComments",
+	async (comment, { dispatch }) => {
+		const response = await axios
+			.patch("/api/comment",comment, {
+				withCredentials: true,
+				data: { commentId: comment.commentId, content: comment.content }
+			})
+			.then(res => {
+				return res.data
+			})
+			.catch(err => {
+				console.error(err)
+			})
 
-// 		if (!response) return { success: false }
+		if (!response) return { success: false }
 
-// 		return { success: true }
-// 	}
-// )  
+		return { success: true }
+	}
+)  
 
 
 
