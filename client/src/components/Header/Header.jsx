@@ -34,8 +34,8 @@ export default function Header() {
 						<div className="absolute z-99 right-0 mt-32 px-1 w-24 text-center rounded-lg bg-blue text-white">
 							<button className="bg-blue-500" onClick={action}>
 								{session.status == "authenticated"
-									? "SignOut"
-									: "Login"}
+									? "Log Out"
+									: "Log In"}
 							</button>
 						</div>
 					)}
