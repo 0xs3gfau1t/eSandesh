@@ -27,7 +27,7 @@ const editArticle = async (req, res) => {
     if (tags) data.tags = tags
     try {
         const article = await articleModel.findOneAndUpdate(filter, data)
-        return res.status(200).json({success: true})
+        return res.status(200).json({ success: true })
     } catch (err) {
         console.error(err)
         return res.status(500).json({ error: 'Something went wrong.' })
