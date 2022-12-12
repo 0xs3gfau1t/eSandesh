@@ -17,6 +17,7 @@ import {
 	ViewSiteStats,
 	SingleNews,
 	Landing,
+  PollsMan,
 } from "./pages"
 import { PrivateRoute } from "./components/common"
 
@@ -47,6 +48,7 @@ function App() {
 						/>
 						<Route path="archive" element={<Archive />} />
 						<Route path="ads" element={<AdsMan />} />
+						<Route path="polls" element={<PollsMan />} />
 						<Route path="stats" element={<ViewSiteStats />} />
 					</Route>
 					<Route path="/" element={<Home />}>

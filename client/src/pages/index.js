@@ -12,6 +12,7 @@ import {
 	AdsMan,
 	ViewSiteStats,
 	Login,
+  PollsMan,
 } from "./Dashboard"
 
 export {
@@ -28,4 +29,5 @@ export {
 	ViewSiteStats,
 	SingleNews,
 	Landing,
+  PollsMan
 }
