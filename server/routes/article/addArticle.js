@@ -32,10 +32,11 @@ const addArticle = async (req, res) => {
         data.createdBy = user.id
     }
 
-    const providedSocialsToUpdateOn = socials
-        .split(',')
-        .map(i => i.trim())
-        .filter(i => i !== '')
+    const providedSocialsToUpdateOn =
+        socials
+            ?.split(',')
+            .map(i => i.trim())
+            .filter(i => i !== '') || []
 
     try {
         const article = new articleModel(data)
