@@ -1,6 +1,6 @@
 import {useEffect, useState} from 'react'
 import { useSelector, useDispatch } from "react-redux"
-import { listCommentsByArticle, dltComments, addComments, editComments, addSubComments } from "../redux/actions/comments"
+import { listCommentsByArticle, dltComments, addComments, editComments, addSubComments, addLikes } from "../redux/actions/comments"
 import { Link } from "react-router-dom";
 import { FaUserCircle } from "react-icons/fa";
 import { MdModeEditOutline, MdDelete } from "react-icons/md"
@@ -58,6 +58,12 @@ function Comments(props) {
 	const handleEditComment =(cmnt)=>{
 		setValue({...value, txtvalue: cmnt.content, editting: true, comId: cmnt._id});
 	}
+
+    const handleLikeCmnt = (cmnt) =>{
+        dispatch(addLikes({id: cmnt._id}))
+    }
+
+
     return (
         <div>
             {comments && comments.comments?.map(comment=>{
@@ -73,26 +79,25 @@ function Comments(props) {
                                 <div className="flex justify-between">
                                     <h1 className=' justify-start text-base font-medium'>{comment.user.slice(0,10)}</h1>
                                     <div className='flex justify-end w-full space-x-2'>
-                                        <span>{comment.createdAt.slice(0,4)}</span>
-                                        <span onClick = {()=> handleEditComment(comment)}><MdModeEditOutline/></span>
-                                        <span onClick = {()=> handleDltCmnt(comment)}><MdDelete/></span>
+                                        <span>{comment.createdAt.slice(0,10)}</span>
+                                        <span onClick = {()=> handleEditComment(comment)} className="cursor-pointer transition-all duration-200 hover:text-orange-500"><MdModeEditOutline/></span>
+                                        <span onClick = {()=> handleDltCmnt(comment)} className ="cursor-pointer transition-all duration-200 hover:text-rose-500 "><MdDelete/></span>
                                     </div>
                                     
                                 </div>
                                 <div>
                                     <p>{comment.content}</p>
                                     <div className="flex justify-between w-full gap-2">
-                                    <span onClick = {()=> handleSubCmnt(comment)} className="flex items-end cursor-pointer  transition-all duration-200 hover:text-orange-500">
-                                            <BiReply />
-                                        </span>
                                         <span onClick = {() => handleLikeCmnt(comment)} className="flex items-end content-center cursor-pointer transition-all duration-200 hover:text-green-500">
                                             <BiLike />
-                                        <span className="text-xs">{comment.likes}</span>
+                                            <span className="text-xs">{comment.likes}</span>
                                         </span>
-                                        
+                                        <span onClick = {()=> handleSubCmnt(comment)} className="flex items-end cursor-pointer  transition-all duration-200 hover:text-orange-500">
+                                                <BiReply />
+                                        </span>
                                         <span className="flex items-end cursor-pointer transition-all duration-200 hover:text-sky-500 ">
                                             <BiChat />
-                                            <span className="text-xs">10</span>
+                                            <span className="text-xs">{comment.subComments.length}</span>
                                         </span>
                                     </div>
                                 </div>
@@ -108,8 +113,8 @@ function Comments(props) {
             })}
             <div>
                 <form onSubmit={handleSubmit}>
-                    <input type = "text" value = {value.txtvalue} onChange = {handleChange} placeholder = "Type your Comment"/>
-                    <input type="submit" value="Submit" />
+                    <input className="placeholder:italic placeholder:text-slate-400 bg-white w-64 border border-slate-300 rounded-md py-2  px-3 shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm" type = "text" value = {value.txtvalue} onChange = {handleChange} placeholder = "Type your Comment"/>
+                    <input className="w-32 text-sm cursor-pointer text-slate-900  py-2 px-2 rounded-full border-0 font-semibold transition-all duration-200 hover:bg-orange-500" type="submit" value="Submit" />
                 </form>
             </div>
         </div>
