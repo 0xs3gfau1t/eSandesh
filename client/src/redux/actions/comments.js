@@ -115,10 +115,10 @@ export const addSubComments = createAsyncThunk(
 
 export const listCommentsByArticle = createAsyncThunk(
 	"news/listCommentsByArticle",
-	async (params, { dispatch }) => {
-        const page = 0, items = 40;
+	async ({articleId, page, items}, { dispatch }) => {
+		console.log(`/api/comment?articleId=${articleId}&page=${page}&items=${items}`)
 		const response = await axios
-			.get(`/api/comment?articleId=${params}&page=${page}&items=${items}`, {
+			.get(`/api/comment?articleId=${articleId}&page=${page}&items=${items}`, {
 				withCredentials: true,
 			})
 			.then(res => {
