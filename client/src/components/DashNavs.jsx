@@ -2,6 +2,7 @@ import { NavLink } from "react-router-dom"
 import { signOut } from "next-auth/react"
 import { BiArchiveOut, BiStats } from "react-icons/bi"
 import { AiFillFileAdd, AiOutlinePullRequest } from "react-icons/ai"
+import { IoIosPeople } from "react-icons/io"
 import { RiAdvertisementFill } from "react-icons/ri"
 import { SiteLogo } from "./common"
 
@@ -47,6 +48,17 @@ const SideNav = () => {
 				<li>
 					<AiOutlinePullRequest />
 					Readers articles
+				</li>
+			</NavLink>
+			<NavLink
+				to="critics"
+				className={({ isActive }) =>
+					isActive ? "bg-sky-600 font-bold" : ""
+				}
+			>
+				<li>
+					<IoIosPeople />
+					Manage Critics
 				</li>
 			</NavLink>
 			<NavLink

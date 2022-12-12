@@ -6,7 +6,7 @@ import Archive from "./Archive"
 import AdsMan from "./AdsMan"
 import ViewSiteStats from "./ViewSiteStats"
 import Login from "./Login"
-
+import ManageCritics from "./ManageCritics"
 export {
 	Login,
 	AdminDash,
@@ -16,4 +16,5 @@ export {
 	Archive,
 	AdsMan,
 	ViewSiteStats,
+	ManageCritics,
 }

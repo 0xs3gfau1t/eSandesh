@@ -1,5 +1,5 @@
 import SiteLogo from "./SiteLogo"
-import { FormText, FormSelect } from "./FormElement"
+import { FormText, FormSelect, FormTextArea } from "./FormElement"
 import PrivateRoute from "./PrivateRoute"
 import ArticlePreviewMd from "./ArticlePreviewMd"
 import ArticlePreviewSm from "./ArticlePreviewSm"
@@ -14,6 +14,7 @@ export {
 	SiteLogo,
 	FormText,
 	FormSelect,
+	FormTextArea,
 	PrivateRoute,
 	ArticlePreviewMd,
 	ArticlePreviewSm,

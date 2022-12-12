@@ -17,6 +17,7 @@ import {
 	ViewSiteStats,
 	SingleNews,
 	Landing,
+	ManageCritics,
 } from "./pages"
 import { PrivateRoute } from "./components/common"
 
@@ -41,6 +42,7 @@ function App() {
 						/>
 						<Route path="readers" element={<ReaderArticles />} />
 						<Route path="addnews" element={<EditNews />} />
+						<Route path="critics" element={<ManageCritics />} />
 						<Route
 							path="editnews/:year/:month/:slug"
 							element={<EditNews isEdit={true} />}
