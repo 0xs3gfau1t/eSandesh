@@ -3,7 +3,9 @@ import axios from "axios"
 
 export const listNewsCat = createAsyncThunk(
 	"news/listNewsCat",
-	async ({ page, cat, items = 6 }, { dispatch }) => {
+	async ({ page, cat, items = 6 }, { getState, dispatch }) => {
+		const state = getState()
+		if (state.news.cat) return
 		const response = await axios
 			.get(
 				`/api/article/list?category=${cat}&page=${page}&items=${items}`,

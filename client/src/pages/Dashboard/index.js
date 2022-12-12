@@ -10,14 +10,14 @@ import ManageCritics from "./ManageCritics";
 import PollsMan from "./PollsMan";
 
 export {
-    Login,
-    AdminDash,
-    ManageNews,
-    EditNews,
-    ReaderArticles,
-    Archive,
-    AdsMan,
-    ViewSiteStats,
-    ManageCritics,
-    PollsMan,
+  Login,
+  AdminDash,
+  ManageNews,
+  EditNews,
+  ReaderArticles,
+  Archive,
+  AdsMan,
+  ViewSiteStats,
+  ManageCritics,
+  PollsMan,
 };

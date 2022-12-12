@@ -3,10 +3,6 @@ import { Link } from "react-router-dom"
 
 export default function HeroSection({ cat, data }) {
 	if (data) {
-		const div = document.createElement("div")
-		div.innerHTML = data ? data.content : ""
-		const img = div.querySelector("img")
-
 		return (
 			<div className="w-full mb-10">
 				<h1 className="text-4xl font-primary font-bold my-2">
@@ -16,8 +12,8 @@ export default function HeroSection({ cat, data }) {
 					<img
 						className="w-full"
 						src={
-							img
-								? img.src
+							data.img
+								? data.img
 								: "https://developers.elementor.com/docs/assets/img/elementor-placeholder-image.png"
 						}
 					/>

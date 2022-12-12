@@ -15,8 +15,8 @@ export default function SideScrollNewsSection({ category, data }) {
 							title={news.title}
 							articleUrl={`/news/${news.year}/${news.month}/${news.slug}`}
 							imgUrl={
-								news.image
-									? news.image
+								news.img
+									? news.img
 									: "https://developers.elementor.com/docs/assets/img/elementor-placeholder-image.png"
 							}
 						/>

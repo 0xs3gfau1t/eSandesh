@@ -17,8 +17,10 @@ import {
   ViewSiteStats,
   SingleNews,
   Landing,
-  ManageCritics,
   PollsMan,
+  ManageCritics,
+  DashBoard,
+  Polls,
 } from "./pages";
 import { PrivateRoute } from "./components/common";
 
@@ -51,6 +53,8 @@ function App() {
             <Route path="stats" element={<ViewSiteStats />} />
           </Route>
           <Route path="/" element={<Home />}>
+            <Route path="/dashboard" element={<DashBoard />} />
+            <Route path="/polls" element={<Polls />} />
             <Route path="" element={<Landing />} />
             <Route path="/news/:year/:month/:slug" element={<SingleNews />} />
             <Route path="/category/:cat" element={<Category />} />
