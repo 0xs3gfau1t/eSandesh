@@ -41,7 +41,6 @@ const listArticle = async (req, res) => {
             { $sort: sortParameters },
             { $skip: page * items },
             { $limit: parseInt(items) },
-            { $project: { content: 0 } },
         ])
 
         var user = req.cookies?.user
