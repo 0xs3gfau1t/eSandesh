@@ -1,29 +1,23 @@
-import AdminDash from "./Layout"
-import ManageNews from "./ManageNews"
-import EditNews from "./EditNews"
-import ReaderArticles from "./ReaderArticles"
-import Archive from "./Archive"
-import AdsMan from "./AdsMan"
-import ViewSiteStats from "./ViewSiteStats"
-import Login from "./Login"
-<<<<<<< HEAD
-import ManageCritics from "./ManageCritics"
-=======
-import PollsMan from "./PollsMan"
+import AdminDash from "./Layout";
+import ManageNews from "./ManageNews";
+import EditNews from "./EditNews";
+import ReaderArticles from "./ReaderArticles";
+import Archive from "./Archive";
+import AdsMan from "./AdsMan";
+import ViewSiteStats from "./ViewSiteStats";
+import Login from "./Login";
+import ManageCritics from "./ManageCritics";
+import PollsMan from "./PollsMan";
 
->>>>>>> auth
 export {
-	Login,
-	AdminDash,
-	ManageNews,
-	EditNews,
-	ReaderArticles,
-	Archive,
-	AdsMan,
-	ViewSiteStats,
-<<<<<<< HEAD
-	ManageCritics,
-=======
-  PollsMan
->>>>>>> auth
-}
+    Login,
+    AdminDash,
+    ManageNews,
+    EditNews,
+    ReaderArticles,
+    Archive,
+    AdsMan,
+    ViewSiteStats,
+    ManageCritics,
+    PollsMan,
+};

@@ -1,41 +1,35 @@
-import Home from "./Home/Home"
-import SingleNews from "./Home/SingleNews"
-import Category from "./Category/Category"
-import Landing from "./Home/Landing"
-import UserAuth from "./UserAuth"
+import Home from "./Home/Home";
+import SingleNews from "./Home/SingleNews";
+import Category from "./Category/Category";
+import Landing from "./Home/Landing";
+import UserAuth from "./UserAuth";
 import {
-	AdminDash,
-	ManageNews,
-	EditNews,
-	ReaderArticles,
-	Archive,
-	AdsMan,
-	ViewSiteStats,
-	Login,
-<<<<<<< HEAD
-	ManageCritics,
-=======
-  PollsMan,
->>>>>>> auth
-} from "./Dashboard"
+    AdminDash,
+    ManageNews,
+    EditNews,
+    ReaderArticles,
+    Archive,
+    AdsMan,
+    ViewSiteStats,
+    Login,
+    ManageCritics,
+    PollsMan,
+} from "./Dashboard";
 
 export {
-	Home,
-	Category,
-	Login,
-	UserAuth,
-	AdminDash,
-	ManageNews,
-	EditNews,
-	ReaderArticles,
-	Archive,
-	AdsMan,
-	ViewSiteStats,
-	SingleNews,
-	Landing,
-<<<<<<< HEAD
-	ManageCritics,
-=======
-  PollsMan
->>>>>>> auth
-}
+    Home,
+    Category,
+    Login,
+    UserAuth,
+    AdminDash,
+    ManageNews,
+    EditNews,
+    ReaderArticles,
+    Archive,
+    AdsMan,
+    ViewSiteStats,
+    SingleNews,
+    Landing,
+    ManageCritics,
+    PollsMan,
+};
