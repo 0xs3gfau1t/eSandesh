@@ -1,6 +1,7 @@
 const express = require('express')
 const articleModel = require('../../model/article')
 const { userModel } = require('../../model/user')
+const { JSDOM } = require('jsdom')
 
 /**
  * @param {express.Request} req
@@ -16,21 +17,30 @@ const listArticle = async (req, res) => {
     } = req.query
     const [year, month] = req.url.replace(/\?.*/, '').split('/').slice(2)
 
-    const sortParameters = {}
+    const sortParameters = { publishedAt: -1 }
     if (priority) sortParameters.priority = -1
     else sortParameters.slug = -1
 
-    const filter = {}
-    if (category) filter.category = category
+    let preference = false
+    let hits = false
+    const filter = { category: { $nin: ['STORY'] } }
+    if (category) {
+        if (category == 'preference') preference = true
+        else if (category == 'hot') hits = true
+        else if (category == 'STORY') {
+            filter.category['$in'] = [category]
+            filter.category['$nin'] = []
+        } else filter.category['$in'] = [category]
+    }
     if (year) filter.year = year
     if (month) filter.month = month
 
     try {
         const articles = await articleModel.aggregate([
             { $match: filter },
+            { $sort: sortParameters },
             { $skip: page * items },
             { $limit: parseInt(items) },
-            { $sort: sortParameters },
         ])
 
         var user = req.cookies?.user
@@ -60,22 +70,41 @@ const listArticle = async (req, res) => {
 
         // sort the articles based on user's history
         articles.sort((a, b) => {
-            var scoreA = a.category.reduce((accum, value) => {
-                return accum + user.history[value]?.hits || 0
-            }, 0)
+            if (preference) {
+                var scoreA = a.category.reduce((accum, value) => {
+                    return accum + user.history[value]?.hits || 0
+                }, 0)
 
-            var scoreB = b.category.reduce((accum, value) => {
-                return accum + user.history[value]?.hits || 0
-            }, 0)
+                var scoreB = b.category.reduce((accum, value) => {
+                    return accum + user.history[value]?.hits || 0
+                }, 0)
 
-            const diff = scoreB - scoreA
-            if (diff) return diff
+                const diff = scoreB - scoreA
+                if (diff) return diff
+            }
 
-            // If both scored same points then sort based on hits
-            return b.hits - a.hits
+            // if priority is true then sort
+            if (priority) {
+                let d = b.priority - a.priority
+                if (d) return d
+            }
+
+            if (hits) {
+                let d = b.hits - a.hits
+                if (d) return d
+            }
+            return 0
         })
 
-        return res.status(200).json(articles)
+        const new_articles = articles.map(article => {
+            const dom = new JSDOM(article.content)
+            const img = dom.window.document.querySelector('img')
+            if (img) article.img = img.src
+            delete article.content
+            return article
+        })
+
+        return res.status(200).json(new_articles)
     } catch (err) {
         console.error(err)
         return res.status(500).json({ error: 'Something went wrong.' })

@@ -6,6 +6,7 @@ import "./App.css"
 import {
 	Home,
 	Login,
+	UserAuth,
 	Category,
 	AdminDash,
 	ManageNews,
@@ -16,6 +17,7 @@ import {
 	ViewSiteStats,
 	SingleNews,
 	Landing,
+  PollsMan,
 } from "./pages"
 import { PrivateRoute } from "./components/common"
 
@@ -24,6 +26,7 @@ function App() {
 		<Provider store={store}>
 			<Router>
 				<Routes>
+					<Route path="/userauth" element={<UserAuth />} />
 					<Route path="/admin" element={<Login />} />
 					<Route
 						path="/admin/dashboard"
@@ -38,9 +41,14 @@ function App() {
 							element={<ManageNews />}
 						/>
 						<Route path="readers" element={<ReaderArticles />} />
-						<Route path="newsedit" element={<EditNews />} />
+						<Route path="addnews" element={<EditNews />} />
+						<Route
+							path="editnews/:year/:month/:slug"
+							element={<EditNews isEdit={true} />}
+						/>
 						<Route path="archive" element={<Archive />} />
 						<Route path="ads" element={<AdsMan />} />
+						<Route path="polls" element={<PollsMan />} />
 						<Route path="stats" element={<ViewSiteStats />} />
 					</Route>
 					<Route path="/" element={<Home />}>

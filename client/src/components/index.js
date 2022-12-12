@@ -1,6 +1,7 @@
 import Header from "./Header/Header";
 import Footer from "./Footer/Footer";
-import SideNavBar from "./SideNavBar";
+import LeftSideBar from "./LeftSideBar/LeftSideBar";
+import RightSideBar from "./RightSideBar/RightSideBar";
 import { TopNav, SideNav } from "./DashNavs";
 
-export { Header, Footer, SideNavBar, TopNav, SideNav };
+export { Header, Footer, LeftSideBar, RightSideBar, TopNav, SideNav };

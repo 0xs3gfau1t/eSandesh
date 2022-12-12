@@ -1,6 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit"
 import { listNews } from "../actions/dashNews"
-import { getNewsAudio, getSingleNews, listNewsCat } from "../actions/publicNews"
+import {
+	getRecentNews,
+	getNewsAudio,
+	getSingleNews,
+	listNewsCat,
+} from "../actions/publicNews"
 
 const initialState = {
 	newsList: {},
@@ -30,7 +35,13 @@ const newsSlice = createSlice({
 		})
 		builder.addCase(listNewsCat.fulfilled, (state, { payload }) => {
 			if (payload.success && payload.data) {
-				state.newsListCat = payload.data
+				// if (payload.cat == "preference") state.prefNews = payload.data
+				state[payload.cat.toLowerCase()] = payload.data
+			}
+		})
+		builder.addCase(getRecentNews.fulfilled, (state, { payload }) => {
+			if (payload.success && payload.data) {
+				state.recentNews = payload.data
 			}
 		})
 	},

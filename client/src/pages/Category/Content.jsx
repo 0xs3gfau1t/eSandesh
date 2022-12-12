@@ -5,24 +5,28 @@ import { useParams } from "react-router-dom";
 import { ArticlePreviewMd, SqAds } from "../../components/common";
 import HeroSection from "./HeroSection";
 import { listNewsCat } from "../../redux/actions/publicNews";
+import { setFocus } from "../../redux/reducers/misc";
 
 export default function Content() {
-  const list = useSelector((state) => state.news.newsListCat);
   const [page, setPage] = useState(0);
   const { cat } = useParams();
+  const list = useSelector((state) => state.news[cat]);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    // console.log(cat)
     dispatch(listNewsCat({ page: page, cat: cat.toUpperCase() }));
   }, [page, cat]);
 
+  useEffect(() => {
+    dispatch(setFocus(false));
+  });
+
   return (
-    <div className="flex flex-col w-11/12 mx-auto px-4">
+    <div className="flex flex-col w-full mx-auto px-4">
       <HeroSection cat={cat} data={list ? list[0] : []} />
       <div className="flex gap-4">
         {/* articles */}
-        <div className="">
+        <div className="w-full">
           {list &&
             Object.keys(list.slice(1)).map((key) => {
               const div = document.createElement("div");
@@ -40,8 +44,6 @@ export default function Content() {
               );
             })}
         </div>
-        {/* ads */}
-        <SqAds />
       </div>
     </div>
   );
