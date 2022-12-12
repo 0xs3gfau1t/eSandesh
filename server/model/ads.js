@@ -26,6 +26,7 @@ const adSchema = mongoose.Schema(
         },
         category: { type: [String] },
         expiry: { type: Date, required: true },
+        popup: { type: Boolean, default: false },
     },
     { timestamps: true }
 )

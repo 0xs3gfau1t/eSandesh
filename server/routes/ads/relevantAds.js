@@ -16,7 +16,10 @@ const strength = {
     watchtime: 0.3,
 }
 
-const categoryStrength = {}
+const categoryStrength = {
+    test: 0.6,
+    duplicate: 0.4,
+}
 
 module.exports = async (req, res) => {
     const { page = 0, limit = 10 } = req.query
@@ -39,18 +42,20 @@ module.exports = async (req, res) => {
         0
     )
 
-    Object.entries(categoryStrength).forEach(async val => {
+    let maxStrength = 0
+
+    Object.entries(categoryStrength).forEach(val => {
         categoryStrength[val[0]] = val[1] / totalStrength
+        if (maxStrength < val[1] / totalStrength)
+            maxStrength = val[1] / totalStrength
     })
     console.log(categoryStrength)
+
     const categoryAds = await adsModel.aggregate([
         {
             $match: {
                 category: {
-                    $in: Object.keys(categoryStrength),
-                },
-                expiry: {
-                    $gt: new Date(),
+                    $in: ['test', 'duplicate'],
                 },
             },
         },
@@ -68,10 +73,42 @@ module.exports = async (req, res) => {
                 final: {
                     $push: {
                         _id: '$_id',
-                        imageEmbedUrl: '$imageEmbedUrl',
-                        redirectUrl: '$redirectUrl',
-                        size: '$size',
-                        category: '$category',
+                        name: '$name',
+                        priority: '$priority',
+                    },
+                },
+            },
+        },
+        {
+            $unwind: {
+                path: '$_id',
+            },
+        },
+        {
+            $unwind: {
+                path: '$final',
+            },
+        },
+        {
+            $group: {
+                _id: '$final._id',
+                final: {
+                    $first: {
+                        name: '$final.name',
+                        category: '$_id',
+                        priority: '$final.priority',
+                    },
+                },
+            },
+        },
+        {
+            $group: {
+                _id: '$final.category',
+                final: {
+                    $addToSet: {
+                        name: '$final.name',
+                        _id: '$_id',
+                        priority: '$final.priority',
                     },
                 },
             },
@@ -79,17 +116,34 @@ module.exports = async (req, res) => {
         {
             $project: {
                 final: {
-                    $slice: ['$final', limit],
+                    $slice: ['$final', 10],
                 },
             },
         },
     ])
 
+    // Pass through all category
+    // Filter only those category + limit respective numbers
+
+    Object.entries(categoryAds).forEach(val => {
+        // Set strength for response
+        categoryAds[val[0]].strength = categoryStrength[val[1]._id]
+
+        // Find max index to slice to
+        let sliceMax = Math.floor(categoryStrength[val[1]._id] * limit)
+
+        if (categoryStrength[val[1]._id] === maxStrength) sliceMax++
+
+        // Slice ads number according to strength
+        categoryAds[val[0]].final = categoryAds[val[0]].final
+            .sort((a, b) => b.priority - a.priority)
+            .slice(0, sliceMax)
+    })
+
     console.log(categoryAds)
 
     res.json({
         message: 'success',
-        ads: categoryAds,
-        strength: categoryStrength,
+        ads: categoryAds.map(i => i.final).flat(2),
     })
 }
