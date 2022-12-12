@@ -1,21 +1,15 @@
 import React from "react";
-import { Link } from "react-router-dom";
-import { HiArrowNarrowRight } from "react-icons/hi";
 
 import PreferredNews from "./PreferredNews";
 import QuickUpdates from "./QuickUpdates";
+import { SeeAllBtn } from "../common";
 
 function RightSideBar() {
   return (
     <>
-      <div className="flex justify-between items-end my-2">
+      <div className="flex justify-between items-baseline my-2">
         <h3 className="text-xl font-primary font-semibold">ताजा परिणामहरु</h3>
-        <Link to="***link this to sports section or particular match news***">
-          <p className="font-semibold text-xs flex items-center group">
-            सबै हेर्नुहोस्
-            <HiArrowNarrowRight className="ml-1 opacity-0 group-hover:opacity-100 transition-all duration-200 ease-in-out" />
-          </p>
-        </Link>
+        <SeeAllBtn url={"/category/sports"} />
       </div>
       <QuickUpdates />
 
@@ -24,12 +18,7 @@ function RightSideBar() {
         <h3 className="text-xl font-primary font-semibold">
           तपाईंको प्राथमिकता
         </h3>
-        <Link to="***link to category/preferred***">
-          <p className="font-semibold text-xs flex items-center group">
-            सबै हेर्नुहोस्
-            <HiArrowNarrowRight className="ml-1 opacity-0 group-hover:opacity-100 transition-all duration-200 ease-in-out" />
-          </p>
-        </Link>
+        <SeeAllBtn url={"/category/preferences"} />
       </div>
       <PreferredNews />
       {/* end of a section */}

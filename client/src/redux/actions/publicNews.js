@@ -40,7 +40,7 @@ export const getNewsAudio = createAsyncThunk(
 
 export const getSingleNews = createAsyncThunk(
 	"public/getSingleNews",
-	async (params, { dispatch }) => {
+	async ({ params, noAudio }, { dispatch }) => {
 		const { year, month, slug } = params
 		const response = await axios
 			.get(`/api/article/${year}/${month}/${slug}`)
@@ -50,7 +50,7 @@ export const getSingleNews = createAsyncThunk(
 			.catch(err => {
 				console.error(err)
 			})
-		dispatch(getNewsAudio(params))
+		if (!noAudio) dispatch(getNewsAudio(params))
 		if (!response) return { success: false }
 
 		return { success: true, data: response }

@@ -1,12 +1,15 @@
-import { useState } from "react"
-import { useDispatch } from "react-redux"
+import { useState, useEffect } from "react"
+import { useDispatch, useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom"
 import ReactQuill from "react-quill"
 import "react-quill/dist/quill.snow.css"
+import { useParams } from "react-router-dom"
 
 import EditorToolbar, { modules, formats } from "./EditorTools"
 import { FormText } from "../../components/common"
 import { addNews } from "../../redux/actions/dashNews"
+import { getSingleNews } from "../../redux/actions/publicNews"
+import SingleNews from "../Home/SingleNews"
 
 const initState = {
 	title: "",
@@ -15,11 +18,31 @@ const initState = {
 	priority: 10,
 }
 
-const EditNews = () => {
+const EditNews = ({ isEdit }) => {
+	const params = useParams()
 	const [content, setNews] = useState("")
 	const [property, setProp] = useState(initState)
+	const singleNews = useSelector(state => state.news.singleNews)
 	const dispatch = useDispatch()
 	const navigate = useNavigate()
+
+	useEffect(() => {
+		dispatch(getSingleNews({ params: params, noAudio: true }))
+	}, [])
+
+	useEffect(() => {
+		if (singleNews) {
+			setNews(singleNews.content)
+
+			setProp({
+				...property,
+				title: singleNews.title,
+				priority: singleNews.priority,
+				tags: singleNews.tags.join(","),
+				category: singleNews.category.join(","),
+			})
+		}
+	}, [singleNews])
 
 	const handleChange = e => {
 		setProp({ ...property, [e.target.name]: e.target.value })
@@ -40,15 +63,19 @@ const EditNews = () => {
 			.map(cat => cat.toUpperCase())
 		dispatch(
 			addNews({
-				...property,
-				content: content,
-				tags: tags,
-				category: category,
+				data: {
+					...property,
+					content: content,
+					tags: tags,
+					category: category,
+				},
+				isEdit: isEdit,
+				id: singleNews ? singleNews._id : false,
 			})
 		)
 		setNews("")
 		setProp(initState)
-		navigate("/admin/dashboard/managenews")
+		navigate("/admin/dashboard")
 	}
 	return (
 		<div className="ml-4 flex gap-8">
