@@ -9,7 +9,7 @@ const commentModel = require('../../model/comment')
  */
 const editComment = async (req, res) => {
     const { commentId, content } = req.body
-    const { user } = req.auth
+    const { user } = req.session
     // Find a way to find-and-update with previous content on hand during wuery exection
     try {
         const comment = await commentModel.findOne({
