@@ -29,7 +29,7 @@ export default function HomeHero({ data }) {
 			</p>
 			{/* below cover img */}
 			<div>
-				<h1 className="text-3xl my-2">
+				<h1 className="text-3xl my-2 leading-loose">
 					<Link
 						to={`/news/${data.year}/${data.month}/${data.slug}`}
 						className="hover:text-rose-600 duration-300"
@@ -41,11 +41,11 @@ export default function HomeHero({ data }) {
 				<div className="flex justify-between">
 					<div>
 						{/* short summary of article */}
-						Summary short
+						संक्षिप्त सारांश
 					</div>
 					<LikeSaveShare
 						// articleId = {someArticleId}
-						likes={"1.2k"}
+						likes={"१.२"}
 					/>
 				</div>
 			</div>
