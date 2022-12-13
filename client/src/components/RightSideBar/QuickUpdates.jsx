@@ -18,14 +18,14 @@ export default function QuickUpdates() {
               src="https://thumbs.dreamstime.com/b/placeholder-icon-vector-isolated-white-background-your-web-mobile-app-design-placeholder-logo-concept-placeholder-icon-134071364.jpg"
             /> */}
           {/* remove span and use img above me */}
-          <span className="w-8 h-8 mx-2 flex justify-center items-center">
+          <span className="w-8 h-8 mr-2 flex justify-center items-center">
             <GiBrazilFlag />
           </span>
           <span>Brazil</span>&nbsp;
         </div>
         <span className="font-semibold">1</span>
       </div>
-      <div className="flex w-full gap-4 px-4 items-center">
+      <div className="flex w-full gap-4 pl-2 items-center">
         <span>vs</span>
         <span>Full time</span>
       </div>
@@ -35,7 +35,7 @@ export default function QuickUpdates() {
               className="w-8 h-8 mr-4"
               src="https://thumbs.dreamstime.com/b/placeholder-icon-vector-isolated-white-background-your-web-mobile-app-design-placeholder-logo-concept-placeholder-icon-134071364.jpg"
             /> */}
-          <span className="w-8 h-8 mx-2 flex justify-center items-center">
+          <span className="w-8 h-8 mr-2 flex justify-center items-center">
             <GrFlagFill />
           </span>
           <span>Croatia</span>&nbsp;
