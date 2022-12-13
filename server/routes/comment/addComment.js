@@ -40,7 +40,7 @@ const addComment = async (req, res) => {
             const comment = new commentModel({
                 user: user.id,
                 content: content,
-                likes: 0,
+                likes: [],
             })
             await comment.save()
             await commentModel.findOneAndUpdate(

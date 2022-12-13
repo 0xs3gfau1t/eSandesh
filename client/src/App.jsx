@@ -1,8 +1,8 @@
-import { Provider } from "react-redux"
-import { store } from "./redux/store"
-import { Route, BrowserRouter as Router, Routes } from "react-router-dom"
+import { Provider } from "react-redux";
+import { store } from "./redux/store";
+import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 
-import "./App.css"
+import "./App.css";
 import {
 	Home,
 	Login,
@@ -73,4 +73,4 @@ function App() {
 	)
 }
 
-export default App
+export default App;

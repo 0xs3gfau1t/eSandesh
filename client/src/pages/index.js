@@ -7,17 +7,17 @@ import Category from "./Category/Category"
 import Landing from "./Home/Landing"
 import UserAuth from "./UserAuth"
 import {
-	AdminDash,
-	ManageNews,
-	EditNews,
-	ReaderArticles,
-	Archive,
-	AdsMan,
-	ViewSiteStats,
-	Login,
-	ManageCritics,
-	PollsMan,
-} from "./Dashboard"
+  AdminDash,
+  ManageNews,
+  EditNews,
+  ReaderArticles,
+  Archive,
+  AdsMan,
+  ViewSiteStats,
+  Login,
+  ManageCritics,
+  PollsMan,
+} from "./Dashboard";
 
 export {
 	Home,
