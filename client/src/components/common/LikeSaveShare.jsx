@@ -3,10 +3,10 @@ import { BiAddToQueue, BiLike, BiShareAlt } from "react-icons/bi";
 
 export default function LikeSaveShare({ likes }) {
   return (
-    <div className="flex items-center gap-2">
+    <div className="flex w-36 justify-between items-center gap-2">
       <span className="flex items-end cursor-pointer text-xl transition-all duration-200 hover:text-green-600">
         <BiLike />
-        {<span className="text-xs">{likes}</span>}
+        {<span className="text-xs">{likes} हजार</span>}
       </span>
       <span className=" cursor-pointer text-xl transition-all duration-200 hover:text-orange-500">
         <BiAddToQueue />

@@ -38,23 +38,17 @@ const Landing = () => {
 					</div>
 				)}
 				<h1 className="flex items-baseline justify-between font-semibold text-2xl">
-					Hottest Topics <SeeAllBtn url={`/category/hot`} />
+					अन्य चर्चित विषयहरू <SeeAllBtn url={`/category/hot`} />
 				</h1>
 				<SideScrollNewsSection category={"hot"} data={hot} />
 				<hr className=" w-11/12 my-10 border-neutral-300" />
-				<RectAds
-					type={
-						"ma X category sita relevent ad ho, Life Insurance garnuhos Y life insurance"
-					}
-				/>
+				<RectAds type={"म X वर्गको विज्ञापन हुँ। कृपया जीवन बीमा गर्नुहोस्।"} />
 
 				<div className="mb-10 pb-4">
 					{/* middle scrolling news under the hero section */}
 					<EachCategoryPreview category="story" />
 					<RectAds
-						type={
-							"ma X category sita relevent ad ho, Life Insurance garnuhos Y life insurance"
-						}
+						type={"म X वर्गको विज्ञापन हुँ। कृपया जीवन बीमा गर्नुहोस्।"}
 					/>
 				</div>
 				<hr className=" w-11/12 my-10 border-neutral-300" />
@@ -63,9 +57,7 @@ const Landing = () => {
 					{/* middle scrolling news under the hero section */}
 					<EachCategoryPreview category="politics" />
 					<RectAds
-						type={
-							"ma X category sita relevent ad ho, Life Insurance garnuhos Y life insurance"
-						}
+						type={"म X वर्गको विज्ञापन हुँ। कृपया जीवन बीमा गर्नुहोस्।"}
 					/>
 				</div>
 				{/* other category previews go here */}
