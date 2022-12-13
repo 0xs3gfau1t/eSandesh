@@ -31,11 +31,14 @@ export default function Header() {
 						onClick={(e) => setShow(!show)}
 					/>
 					{show && (
-						<div className="absolute z-99 right-0 mt-32 w-36 text-center rounded-lg bg-blue text-white">
-							<button className="bg-blue-500" onClick={action}>
+						<ul className="header-drop absolute z-99 right-0 mt-32 p-2 w-28 text-center rounded-lg">
+							<Link to="/profile">
+								<li>Profile</li>
+							</Link>
+							<li onClick={action}>
 								{session.status == "authenticated" ? "लग आउट" : "लग इन"}
-							</button>
-						</div>
+							</li>
+						</ul>
 					)}
 				</div>
 			</div>

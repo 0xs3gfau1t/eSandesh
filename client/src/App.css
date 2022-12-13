@@ -110,3 +110,29 @@ h6 {
 		background-position: 0% 50%;
 	}
 }
+
+.header-drop {
+	@apply bg-gray-200;
+	opacity: 1;
+	animation: bistarai 0.8s;
+}
+
+.header-drop {
+	@apply bg-gray-200;
+	opacity: 1;
+	top: -75px;
+	animation: bistarai 0.3s;
+}
+.header-drop li {
+	@apply cursor-pointer my-1 hover:bg-rose-500 rounded-md py-2;
+}
+@keyframes bistarai {
+	0% {
+		opacity: 0;
+		top: -100px;
+	}
+	100% {
+		opacity: 1;
+		top: -75px;
+	}
+}

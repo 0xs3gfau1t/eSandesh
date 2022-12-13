@@ -17,7 +17,10 @@ const Login = () => {
 
 	useEffect(() => {
 		// console.log(session)
-		if (session.status == "authenticated") {
+		if (
+			session.status == "authenticated" &&
+			session?.data?.user?.roles.isRoot
+		) {
 			navigate("/admin/dashboard")
 		}
 	}, [session])
