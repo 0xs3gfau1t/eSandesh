@@ -17,7 +17,11 @@ import {
 	ViewSiteStats,
 	SingleNews,
 	Landing,
-  PollsMan,
+	PollsMan,
+	ManageCritics,
+	DashBoard,
+	Polls,
+	ArchiveNews,
 } from "./pages"
 import { PrivateRoute } from "./components/common"
 
@@ -42,6 +46,7 @@ function App() {
 						/>
 						<Route path="readers" element={<ReaderArticles />} />
 						<Route path="addnews" element={<EditNews />} />
+						<Route path="critics" element={<ManageCritics />} />
 						<Route
 							path="editnews/:year/:month/:slug"
 							element={<EditNews isEdit={true} />}
@@ -52,6 +57,9 @@ function App() {
 						<Route path="stats" element={<ViewSiteStats />} />
 					</Route>
 					<Route path="/" element={<Home />}>
+						<Route path="/dashboard" element={<DashBoard />} />
+						<Route path = "/archive" element={<ArchiveNews/>}/>
+						<Route path="/polls" element={<Polls />} />
 						<Route path="" element={<Landing />} />
 						<Route
 							path="/news/:year/:month/:slug"

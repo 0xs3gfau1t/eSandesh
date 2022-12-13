@@ -1,10 +1,19 @@
 import React from "react"
 import NavBar from "./NavBar"
 import TopCritics from "./Critics/TopCritics"
+import { Link } from "react-router-dom"
 
 function LeftSideBar() {
 	return (
 		<div className="flex flex-col">
+			<div>
+				<Link
+					className="poll-button w-28  text-lg text-white px-4 py-2 rounded-md"
+					to={"/polls"}
+				>
+					हजुरको मत
+				</Link>
+			</div>
 			<NavBar />
 			<TopCritics />
 		</div>

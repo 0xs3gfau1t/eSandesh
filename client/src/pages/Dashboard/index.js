@@ -6,6 +6,7 @@ import Archive from "./Archive"
 import AdsMan from "./AdsMan"
 import ViewSiteStats from "./ViewSiteStats"
 import Login from "./Login"
+import ManageCritics from "./ManageCritics"
 import PollsMan from "./PollsMan"
 
 export {
@@ -17,5 +18,6 @@ export {
 	Archive,
 	AdsMan,
 	ViewSiteStats,
-  PollsMan
+	ManageCritics,
+	PollsMan,
 }

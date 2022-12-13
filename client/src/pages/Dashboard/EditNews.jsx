@@ -15,6 +15,7 @@ const initState = {
 	title: "",
 	category: "",
 	tags: "",
+	socials: "",
 	priority: 10,
 }
 
@@ -27,7 +28,8 @@ const EditNews = ({ isEdit }) => {
 	const navigate = useNavigate()
 
 	useEffect(() => {
-		dispatch(getSingleNews({ params: params, noAudio: true }))
+		if (params.year)
+			dispatch(getSingleNews({ params: params, noAudio: true }))
 	}, [])
 
 	useEffect(() => {
@@ -118,6 +120,15 @@ const EditNews = ({ isEdit }) => {
 					labelText="Tags"
 					handleChange={handleChange}
 				/>
+				{!params.year && (
+					<FormText
+						type="text"
+						name="socials"
+						value={property.socials}
+						labelText="Share to socials"
+						handleChange={handleChange}
+					/>
+				)}
 				<FormText
 					type="number"
 					name="priority"

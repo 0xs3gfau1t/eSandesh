@@ -20,6 +20,7 @@ function PreferredNews() {
 								<ArticlePreviewSm
 									title={news.title}
 									articleUrl={`/news/${news.year}/${news.month}/${news.slug}`}
+									imgUrl={news.img}
 								/>
 							</li>
 						)
