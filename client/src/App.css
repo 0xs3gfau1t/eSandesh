@@ -6,7 +6,7 @@
 }
 
 body {
-	@apply text-sm;
+	@apply text-lg;
 }
 button {
 	height: 51px;
