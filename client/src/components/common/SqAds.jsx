@@ -7,8 +7,8 @@ export default function SqAds() {
         href={"https://media.tenor.com/IRcIGzwz7IQAAAAC/money-wallet.gif"}
         target="_blank"
       >
-        <div className=" h-64 bg-darkblue w-52 text-white flex justify-center items-center ">
-          Click here for $100
+        <div className=" h-64 bg-darkblue w-52 text-center text-white flex justify-center items-center ">
+          $100 को लागि यहाँ क्लिक गर्नुहोस्।
         </div>
       </a>
     </div>
