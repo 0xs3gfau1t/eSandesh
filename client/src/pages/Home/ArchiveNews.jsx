@@ -6,7 +6,6 @@ import ArchiveCard from '../../components/common/ArchiveCard';
 function ArchiveNews() {
   return (
     <div>
-      {/* <input type="dropdown" onClick><FaFilter/></input> */}
       <div className='flex gap-2 items-center'>
         <FaFilter/>
         <select id="cars" name="cars">
