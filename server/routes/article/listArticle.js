@@ -23,11 +23,14 @@ const listArticle = async (req, res) => {
 
     let preference = false
     let hits = false
-    const filter = {}
+    const filter = { category: { $nin: ['STORY'] } }
     if (category) {
         if (category == 'preference') preference = true
         else if (category == 'hot') hits = true
-        else filter.category = category
+        else if (category == 'STORY') {
+            filter.category['$in'] = [category]
+            filter.category['$nin'] = []
+        } else filter.category['$in'] = [category]
     }
     if (year) filter.year = year
     if (month) filter.month = month

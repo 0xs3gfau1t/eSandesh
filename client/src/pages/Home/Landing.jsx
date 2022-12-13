@@ -57,7 +57,7 @@ const Landing = () => {
 				</div>
 				<div className="mb-10 pb-4">
 					{/* middle scrolling news under the hero section */}
-					<EachCategoryPreview category="technology" />
+					<EachCategoryPreview category="politics" />
 					<RectAds
 						type={
 							"ma X category sita relevent ad ho, Life Insurance garnuhos Y life insurance"

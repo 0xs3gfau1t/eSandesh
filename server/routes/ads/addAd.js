@@ -23,6 +23,7 @@ module.exports = (req, res) => {
         size,
         expiry,
         category,
+        popup = false,
     } = req.body
 
     if (!user?.roles?.isRoot)
@@ -54,6 +55,7 @@ module.exports = (req, res) => {
             size,
             expiry,
             category: categoryArray,
+            popup,
         },
         (e, d) => {
             if (e)

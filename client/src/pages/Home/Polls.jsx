@@ -1,7 +1,22 @@
+import { use, useEffect } from "react"
+import { useSelector, useDispatch } from "react-redux"
 import { useSession } from "next-auth/react"
+import { listPolls, votePoll } from "../../redux/actions/polls"
 
 const Polls = () => {
 	const { data: session, status } = useSession()
+	const polls = useSelector(state => state.polls.pollsList)
+
+	const dispatch = useDispatch()
+
+	useEffect(() => {
+		dispatch(listPolls())
+	}, [])
+
+	const castVote = (e, poll, opt, index) => {
+		if (!polls[index].casted)
+			dispatch(votePoll({ poll: poll, option: opt }))
+	}
 
 	if (status == "unauthenticated") {
 		return <h1>You must login to view this page</h1>
@@ -12,8 +27,40 @@ const Polls = () => {
 			<h1 className="text-3xl font-bold underline-offset-8 underline">
 				आजको प्रश्न
 			</h1>
-			<div className="m-6">
-				<h1 className="text-2xl">विश्वकप कसले जित्ला त ? </h1>
+			<div className="m-6 flex flex-col">
+				{polls &&
+					polls.map((poll, index) => {
+						return (
+							<ul
+								key={index}
+								className="flex flex-col gap-4 w-max"
+							>
+								<h1 className="text-2xl">{poll.question}</h1>
+								{poll.options.map((opt, indexx) => {
+									return (
+										<li
+											key={indexx}
+											className={`${
+												opt.voted
+													? "bg-green-700"
+													: "bg-sky-500"
+											} py-2 pl-4 rounded-md cursor-pointer`}
+											onClick={e =>
+												castVote(
+													e,
+													poll._id,
+													opt._id,
+													index
+												)
+											}
+										>
+											{opt.text}{" "}
+										</li>
+									)
+								})}
+							</ul>
+						)
+					})}
 			</div>
 		</div>
 	)
