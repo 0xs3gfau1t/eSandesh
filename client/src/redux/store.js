@@ -5,6 +5,7 @@ import news from "./reducers/news"
 import auth from "./reducers/auth"
 import ads from "./reducers/ads"
 import comments from "./reducers/comments"
+import polls from "./reducers/polls"
 
 export const store = configureStore({
 	reducer: {
@@ -13,5 +14,6 @@ export const store = configureStore({
 		auth: auth,
 		ads: ads,
 		comments: comments,
+		polls: polls
 	},
 })
