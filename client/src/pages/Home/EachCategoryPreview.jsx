@@ -36,7 +36,11 @@ export default function EachCategoryPreview({ category }) {
 							</Link>
 							<div className="flex items-end justify-between">
 								<h1 className="text-3xl w-3/5 mt-2">
-									<Link to={""}>{khabar[0].title}</Link>
+									<Link
+										to={`/news/${khabar[0].year}/${khabar[0].month}/${khabar[0].slug}`}
+									>
+										{khabar[0].title}
+									</Link>
 								</h1>
 								<div className="flex items-center w-2/5">
 									<span className="text-xs text-slate-400 w-1/2">
