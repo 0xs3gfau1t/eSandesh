@@ -1,9 +1,9 @@
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import { useSelector, useDispatch } from "react-redux"
 import { useParams } from "react-router-dom"
 import { MdCenterFocusStrong } from "react-icons/md"
 
-import { SocialShare, SqAds } from "../../components/common"
+import { SocialShare, SqAds, RectAds, Popup } from "../../components/common"
 import { getSingleNews } from "../../redux/actions/publicNews"
 import { setFocus } from "../../redux/reducers/misc"
 
@@ -12,14 +12,26 @@ const SingleNews = () => {
 	const news = useSelector(state => state.news.singleNews)
 	const audio = useSelector(state => state.news.audio)
 	const focus = useSelector(state => state.misc.focus)
+	const [show, setShow] = useState(true)
+
 	const dispatch = useDispatch()
 
 	useEffect(() => {
 		dispatch(getSingleNews({ params: params, noAudio: false }))
-	}, [])
+	}, [params])
 	return (
 		<div className="flex justify-between container gap-4">
+			{news && news.category[0] == "STORY" && show && (
+				<Popup setShow={setShow} title={"Ad"}>
+					<div className="flex flex-row w-full">
+						<SqAds />
+						<button onClick={e => setShow(false)}>X</button>
+					</div>
+				</Popup>
+			)}
 			<div className="news-content ml-4 mb-10 w-full">
+				{focus && <RectAds />}
+
 				<div className="flex">
 					<h3
 						className={`font-bold px-2 ${
@@ -63,13 +75,16 @@ const SingleNews = () => {
 					}}
 					// className="flex items-center justify-center w-full"
 				/>
+				{focus && <RectAds />}
 			</div>
 			{/* right column */}
-			<div className="hidden sm:block px-4">
-				{/* ads go here */}
-				<SqAds />
-				<SqAds />
-			</div>
+			{!focus && (
+				<div className="hidden sm:block px-4">
+					{/* ads go here */}
+					<SqAds />
+					<SqAds />
+				</div>
+			)}
 		</div>
 	)
 }

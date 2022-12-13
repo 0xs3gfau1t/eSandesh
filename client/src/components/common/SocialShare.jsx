@@ -11,10 +11,13 @@ import {
 	WhatsappShareButton,
 } from "react-share"
 import { FacebookIcon, TwitterIcon, RedditIcon } from "react-share"
+import { BsFillSaveFill } from "react-icons/bs"
 
 const SocialShare = ({ title }) => {
 	const url = document.location.href
-
+	const saveNews = e => {
+		console.log("Saved")
+	}
 	return (
 		<div className="flex ">
 			<h1 className="font-bold py-3">Share this news</h1>
@@ -43,6 +46,11 @@ const SocialShare = ({ title }) => {
 			<LineShareButton title={title} className="social-share">
 				<LinkedinIcon size={28} />
 			</LineShareButton>
+
+			<BsFillSaveFill
+				className="text-3xl my-auto ml-4 text-darkblue"
+				onClick={saveNews}
+			/>
 		</div>
 	)
 }

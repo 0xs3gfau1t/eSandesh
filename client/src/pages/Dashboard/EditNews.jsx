@@ -77,7 +77,9 @@ const EditNews = ({ isEdit }) => {
 		)
 		setNews("")
 		setProp(initState)
-		navigate("/admin/dashboard")
+		setTimeout(() => {
+			navigate("/admin/dashboard")
+		}, 3000)
 	}
 	return (
 		<div className="ml-4 flex gap-8">
