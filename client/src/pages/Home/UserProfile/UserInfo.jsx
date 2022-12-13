@@ -15,7 +15,7 @@ export default function UserInfo() {
             <input
               type="text"
               name="userName"
-              className="w-48 p-2 text-xs bg-white rounded-sm text-neutral-600"
+              className="w-48 p-2 text-xs bg-white rounded-md text-neutral-600"
               placeholder="Enter new name"
             />
           </label>
@@ -25,7 +25,7 @@ export default function UserInfo() {
             <input
               type="email"
               name="userEmail"
-              className="w-48 p-2 text-xs bg-white rounded-sm text-neutral-600"
+              className="w-48 p-2 text-xs bg-white rounded-md text-neutral-600"
               placeholder="Enter new email address"
             />
           </label>
