@@ -1,4 +1,5 @@
 const express = require('express')
+const { default: mongoose } = require('mongoose')
 const pollsModel = require('../../model/polls')
 
 /**
@@ -23,6 +24,14 @@ const listPoll = async (req, res) => {
                                 _id: '$$options._id',
                                 text: '$$options.text',
                                 users: { $size: '$$options.users' },
+                                voted: {
+                                    $in: [
+                                        mongoose.Types.ObjectId(
+                                            req.session?.user?.id
+                                        ),
+                                        '$$options.users',
+                                    ],
+                                },
                             },
                         },
                     },
