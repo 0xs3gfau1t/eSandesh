@@ -8,9 +8,18 @@ import SideScrollNewsSection from "./SideScrollNewsSection"
 import { listNewsCat } from "../../redux/actions/publicNews"
 
 export default function EachCategoryPreview({ category }) {
-	const khabar = useSelector((state) => state.news[category])
+	const khabar = useSelector(state => state.news[category])
 	const dispatch = useDispatch()
-
+	const cats = {
+		politics: "राजनीति",
+		global: "विश्व",
+		business: "विजनेस",
+		sports: "खेलकुद",
+		entertainment: "मनोरञ्जन",
+		technology: "प्रविधि",
+		health: "स्वास्थ्य",
+		story: "विचार/रचना ",
+	}
 	useEffect(() => {
 		dispatch(listNewsCat({ page: 0, cat: category.toUpperCase() }))
 	}, [])
@@ -19,7 +28,7 @@ export default function EachCategoryPreview({ category }) {
 			{khabar && khabar.length > 0 && (
 				<>
 					<h1 className="text-4xl font-bold leading-loose">
-						{category} मा ट्रेन्डिङ
+						{cats[category]} मा ट्रेन्डिङ
 					</h1>
 					<div className="flex mb-10 pb-4 gap-4 ">
 						<div className="w-3/5  bg-white shadow-sm p-6 rounded-xl">
@@ -57,9 +66,12 @@ export default function EachCategoryPreview({ category }) {
 						</div>
 						<div className="p-4 w-2/5 bg-white shadow-sm rounded-xl">
 							<h2 className="text-2xl font-bold leading-loose">
-								{category} मा शीर्ष लेखहरू
+								{cats[category]} मा शीर्ष लेखहरू
 							</h2>
-							<SideNewsList category={category} data={khabar.slice(1)} />
+							<SideNewsList
+								category={category}
+								data={khabar.slice(1)}
+							/>
 						</div>
 					</div>
 					{/* <div>
