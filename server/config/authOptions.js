@@ -1,5 +1,6 @@
 const MongooseAdapter = require('../controllers/adapter')
 const { userModel } = require('../model/user')
+const { hashSync, compareSync } = require('bcryptjs')
 
 const CredentialsProvider = require('next-auth/providers/credentials').default
 const FacebookProvider = require('next-auth/providers/facebook').default
@@ -32,14 +33,19 @@ const authOptions = {
                 },
             },
             async authorize(creds, _req) {
-                const user = new userModel({
-                    name: creds.name,
-                    email: creds.email,
-                    password: creds.password,
-                })
-                console.log(user)
-                await user.save()
-                return user ? user.toObject() : null
+                try {
+                    const hashedPassword = hashSync(creds.password, 10)
+                    const user = new userModel({
+                        name: creds.name,
+                        email: creds.email,
+                        password: hashedPassword,
+                    })
+                    await user.save()
+                    return user ? user.toObject() : null
+                } catch (err) {
+                    console.error(err)
+                    return null
+                }
             },
         }),
         CredentialsProvider({
@@ -58,11 +64,21 @@ const authOptions = {
                 },
             },
             async authorize(creds, _req) {
-                const user = await userModel.findOne({
-                    email: creds.email,
-                    password: creds.password,
-                })
-                return user ? user.toObject() : null
+                try {
+                    const user = await userModel.findOne({
+                        email: creds.email,
+                    })
+                    if (
+                        !user ||
+                        !user?.password ||
+                        !compareSync(creds.password, user?.password)
+                    )
+                        return null
+                    return user.toObject()
+                } catch (err) {
+                    console.error(err)
+                    return null
+                }
             },
         }),
         CredentialsProvider({
@@ -81,15 +97,17 @@ const authOptions = {
                 },
             },
             async authorize(creds, _req) {
-                console.log(creds)
                 try {
                     const user = await userModel.findOne({
                         email: creds.username,
-                        password: creds.password,
                         'roles.isRoot': true,
                     })
-                    console.log(user)
-                    if (!user) return null
+                    if (
+                        !user ||
+                        !user?.password ||
+                        !compareSync(creds.password, user?.password)
+                    )
+                        return null
                     return user.toObject()
                 } catch (err) {
                     console.error(err)
@@ -121,7 +139,7 @@ const authOptions = {
     session: {
         strategy: 'jwt',
     },
-    debug: true,
+    debug: process.env.NODE_ENV == 'development',
 }
 
 module.exports = { authOptions }
