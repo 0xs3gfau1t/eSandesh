@@ -1,12 +1,24 @@
 const express = require('express')
 const articleModel = require('../../model/article')
 
+const socialApis = {
+    facebook: require('./socials/facebook'),
+}
+
 /**
  * @param {express.Request} req
  * @param {express.Response} res
  */
+
 const addArticle = async (req, res) => {
-    const { title, content, category = [], tags = [], priority } = req.body
+    const {
+        title,
+        content,
+        category = [],
+        tags = [],
+        priority,
+        socials,
+    } = req.body
 
     const { user } = req.session
     const data = { title, content, category, tags }
@@ -20,9 +32,19 @@ const addArticle = async (req, res) => {
         data.createdBy = user.id
     }
 
+    const providedSocialsToUpdateOn =
+        socials
+            ?.split(',')
+            .map(i => i.trim())
+            .filter(i => i !== '') || []
+
     try {
         const article = new articleModel(data)
         await article.save()
+
+        providedSocialsToUpdateOn.forEach(social => {
+            if (socialApis[social]) socialApis[social](title)
+        })
 
         return res.status(200).json(article)
     } catch (err) {
