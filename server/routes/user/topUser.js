@@ -1,5 +1,5 @@
 const express = require('express')
-const commentModel = require('../model/comment')
+const commentModel = require('../../model/comment')
 
 /**
  * @param {express.Request} req
