@@ -10,8 +10,8 @@ import { getRecentNews } from "../../redux/actions/publicNews"
 import { setFocus } from "../../redux/reducers/misc"
 
 const Landing = () => {
-	const recent = useSelector(state => state.news.recentNews)
-	const hot = useSelector(state => state.news.hot)
+	const recent = useSelector((state) => state.news.recentNews)
+	const hot = useSelector((state) => state.news.hot)
 
 	const dispatch = useDispatch()
 
@@ -24,11 +24,11 @@ const Landing = () => {
 		<div>
 			<div className="w-full">
 				{recent && (
-					<div className="flex gap-6">
+					<div className="flex gap-6 mb-10">
 						<div className="w-full sm:w-2/3">
 							<HomeHero data={recent[0]} />
 						</div>
-						<div className="w-1/3 sm:block hidden">
+						<div className="w-1/3 sm:block hidden bg-white shadow-sm p-4 rounded-xl">
 							<h2 className="text-2xl flex items-baseline justify-between font-semibold leading-loose">
 								ताजा खबर <SeeAllBtn url={"category/recent"} />{" "}
 								{/*recent hunxa ki "hot" hunxa, hot ta tala pani xa*/}
@@ -41,11 +41,13 @@ const Landing = () => {
 					Hottest Topics <SeeAllBtn url={`/category/hot`} />
 				</h1>
 				<SideScrollNewsSection category={"hot"} data={hot} />
+				<hr className=" w-11/12 my-10 border-neutral-300" />
 				<RectAds
 					type={
 						"ma X category sita relevent ad ho, Life Insurance garnuhos Y life insurance"
 					}
 				/>
+
 				<div className="mb-10 pb-4">
 					{/* middle scrolling news under the hero section */}
 					<EachCategoryPreview category="story" />
@@ -55,6 +57,8 @@ const Landing = () => {
 						}
 					/>
 				</div>
+				<hr className=" w-11/12 my-10 border-neutral-300" />
+
 				<div className="mb-10 pb-4">
 					{/* middle scrolling news under the hero section */}
 					<EachCategoryPreview category="politics" />

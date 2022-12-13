@@ -8,7 +8,7 @@ import SideScrollNewsSection from "./SideScrollNewsSection"
 import { listNewsCat } from "../../redux/actions/publicNews"
 
 export default function EachCategoryPreview({ category }) {
-	const khabar = useSelector(state => state.news[category])
+	const khabar = useSelector((state) => state.news[category])
 	const dispatch = useDispatch()
 
 	useEffect(() => {
@@ -21,12 +21,13 @@ export default function EachCategoryPreview({ category }) {
 					<h1 className="text-4xl font-bold leading-loose">
 						Trending in {category}
 					</h1>
-					<div className="flex mb-10 pb-4">
-						<div className="w-2/3">
+					<div className="flex mb-10 pb-4 gap-4 ">
+						<div className="w-3/5  bg-white shadow-sm p-6 rounded-xl">
 							<Link
 								to={`/news/${khabar[0].year}/${khabar[0].month}/${khabar[0].slug}`}
 							>
 								<img
+									className="rounded-lg"
 									src={
 										khabar[0].img
 											? khabar[0].img
@@ -35,44 +36,41 @@ export default function EachCategoryPreview({ category }) {
 								/>
 							</Link>
 							<div className="flex items-end justify-between">
-								<h1 className="text-3xl w-3/5 mt-2">
+								<h1 className="text-3xl w-4/5 mt-4 hover:text-red duration-200 ease-in-out">
 									<Link
 										to={`/news/${khabar[0].year}/${khabar[0].month}/${khabar[0].slug}`}
 									>
 										{khabar[0].title}
 									</Link>
 								</h1>
-								<div className="flex items-center w-2/5">
-									<span className="text-xs text-slate-400 w-1/2">
+								{/* <div className="flex items-center w-2/5"> */}
+								{/* <span className="text-xs text-slate-400 w-1/2">
 										2020 March- 12
-									</span>
-									<LikeSaveShare
-										// articleId={}
-										likes={"100k"}
-										className="w-1/2"
-									/>
-								</div>
+									</span> */}
+								<LikeSaveShare
+									// articleId={}
+									likes={"100k"}
+									className="w-1/5"
+								/>
+								{/* </div> */}
 							</div>
 						</div>
-						<div className="px-4 py-2">
+						<div className="p-4 w-2/5 bg-white shadow-sm rounded-xl">
 							<h2 className="text-xl font-semibold leading-loose">
 								Top articles in {category}
 							</h2>
-							<SideNewsList
-								category={category}
-								data={khabar.slice(1)}
-							/>
+							<SideNewsList category={category} data={khabar.slice(1)} />
 						</div>
 					</div>
-					<div>
+					{/* <div>
 						<div className="flex items-baseline justify-between">
 							<h1 className="font-semibold text-2xl leading-loose">
 								More from {category}
 							</h1>
 							<SeeAllBtn url={`/category/${category}`} />
 						</div>
-						<SideScrollNewsSection category={"health"} />
-					</div>
+						{/* <SideScrollNewsSection category={"health"} />
+					</div> */}
 				</>
 			)}
 		</>
