@@ -111,11 +111,11 @@ h6 {
 	}
 }
 
-.header-drop {
+/* .header-drop {
 	@apply bg-gray-400;
 	opacity: 1;
 	animation: bistarai 0.8s;
-}
+} */
 
 .header-drop {
 	/* @apply bg-gray-100; */

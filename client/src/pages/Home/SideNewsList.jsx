@@ -13,7 +13,7 @@ export default function SideNewsList({ category, data }) {
 						return (
 							<li key={index} className="flex items-start">
 								<FaAngleDoubleRight className="mr-2 mt-1" />
-								<span className="hover:text-rose-700 font-semibold transition-colors">
+								<span className="hover:text-rose-700 duration-200 text-xl transition-all">
 									<Link to={`news/${news.year}/${news.month}/${news.slug}`}>
 										{news.title}
 									</Link>
