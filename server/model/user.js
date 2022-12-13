@@ -23,6 +23,13 @@ const userSchema = new mongoose.Schema({
         }),
         default: {},
     },
+    subscriptions: {
+        type: Map,
+        of: new mongoose.Schema({
+            category: { priority: { type: Number, default: 5 } },
+        }),
+    },
+    visited: { type: [mongoose.Schema.Types.ObjectId] },
 })
 
 const accountSchema = new mongoose.Schema({

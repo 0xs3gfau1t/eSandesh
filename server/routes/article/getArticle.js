@@ -72,7 +72,7 @@ const getArticle = async (req, res) => {
         if (!userMod)
             userMod = await userModel.findOne(
                 { _id: req.session.user.id },
-                { history: true }
+                { history: true, visited: true }
             )
 
         // update category hits count
@@ -85,6 +85,7 @@ const getArticle = async (req, res) => {
             }
             val.hits += 1
             userMod.history.set(category, val)
+            userMod.visited.push(article._id)
         })
 
         await userMod.save()
