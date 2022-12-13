@@ -18,7 +18,7 @@ const SingleNews = () => {
 
 	useEffect(() => {
 		dispatch(getSingleNews({ params: params, noAudio: false }))
-	}, [])
+	}, [params])
 	return (
 		<div className="flex justify-between container gap-4">
 			{news && news.category[0] == "STORY" && show && (
