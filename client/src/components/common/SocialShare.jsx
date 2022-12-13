@@ -12,12 +12,19 @@ import {
 } from "react-share"
 import { FacebookIcon, TwitterIcon, RedditIcon } from "react-share"
 import { BsFillSaveFill } from "react-icons/bs"
+import { useDispatch } from "react-redux"
 
-const SocialShare = ({ title }) => {
+import { saveNews } from "../../redux/actions/publicNews"
+
+const SocialShare = ({ title, id }) => {
 	const url = document.location.href
-	const saveNews = e => {
-		console.log("Saved")
+	const dispatch = useDispatch()
+
+	const saveSave = e => {
+		// console.log(id)
+		dispatch(saveNews({ id: id }))
 	}
+
 	return (
 		<div className="flex ">
 			<h1 className="font-bold py-3">Share this news</h1>
@@ -48,8 +55,8 @@ const SocialShare = ({ title }) => {
 			</LineShareButton>
 
 			<BsFillSaveFill
-				className="text-3xl my-auto ml-4 text-darkblue"
-				onClick={saveNews}
+				className="social-share text-3xl ml-4 my-3 text-darkblue cursor-pointer"
+				onClick={saveSave}
 			/>
 		</div>
 	)

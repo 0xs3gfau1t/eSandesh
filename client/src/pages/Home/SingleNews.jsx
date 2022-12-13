@@ -68,6 +68,7 @@ const SingleNews = () => {
 				</div>
 				<SocialShare
 					title={news ? news.title : "eSandesh, Khabat Naya Yug ko"}
+					id={news ? news._id : ""}
 				/>
 				<div
 					dangerouslySetInnerHTML={{
