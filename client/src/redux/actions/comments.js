@@ -133,3 +133,24 @@ export const listCommentsByArticle = createAsyncThunk(
 	}
 )
 
+
+export const listCommentsByUser = createAsyncThunk(
+	"news/listCommentsByUser",
+	async ({page, items, userId}, { dispatch }) => {
+		console.log(`/api/comment?page=${articleId}&items=${page}&userId=${items}`)
+		const response = await axios
+			.get(`/api/comment?page=${articleId}&items=${page}&userId=${items}`, {
+				withCredentials: true,
+			})
+			.then(res => {
+                console.log(res.data)
+				return res.data
+			})
+			.catch(err => {
+				console.error(err)
+			})
+		if (!response) return { success: false }
+		return { success: true, data: response, page: page }
+	}
+)
+

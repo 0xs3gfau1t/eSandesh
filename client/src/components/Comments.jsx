@@ -35,6 +35,7 @@ function Comments(props) {
 			return;
 		}
         if(value.sub){
+            console.log(value.comId)
             dispatch(addSubComments({ content: value.txtvalue, commentId: value.comId}))
             setValue({...value, txtvalue: "", a: value.a + 1, sub: false})
             return;
@@ -45,7 +46,7 @@ function Comments(props) {
 
 	const handleDltCmnt = (cmnt) =>{
 		dispatch(dltComments({commentId: cmnt._id }));
-		setValue({...value, a: value.a+1});
+		setValue({...value, a: value.a + 1});
 	}
 	
 
