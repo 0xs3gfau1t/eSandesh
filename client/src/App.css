@@ -94,9 +94,9 @@ h6 {
 }
 
 .poll-button {
-	background: linear-gradient(-45deg, #dd4010, #e73c7e, #0aafeb, #23d5ab);
+	background: linear-gradient(-45deg, #d31818e7, #d31818e7, #1d3557, #1d3557);
 	background-size: 900% 900%;
-	animation: jhilimili 0.5s infinite;
+	animation: jhilimili 0.8s infinite;
 }
 
 @keyframes jhilimili {
