@@ -32,7 +32,9 @@ const userSchema = new mongoose.Schema({
             { _id: false }
         ),
     },
-    visited: { type: [mongoose.Schema.Types.ObjectId] },
+    saved: {
+        type: [mongoose.Schema.Types.ObjectId],
+    },
 })
 
 const accountSchema = new mongoose.Schema({

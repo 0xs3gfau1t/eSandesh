@@ -43,6 +43,11 @@ module.exports = (req, res) => {
             { category: true }
         )
 
+        if (!parentArticleCategories)
+            return res
+                .status(500)
+                .json({ error: 'Something went wrong on database' })
+
         parentArticleCategories.category.forEach(category => {
             if (parsedCookies[category]) parsedCookies[category].likes += 1
             else {
