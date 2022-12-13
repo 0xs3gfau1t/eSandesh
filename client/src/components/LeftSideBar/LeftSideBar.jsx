@@ -5,10 +5,10 @@ import { Link } from "react-router-dom"
 
 function LeftSideBar() {
 	return (
-		<div className="flex flex-col">
-			<div>
+		<div className="flex flex-col gap-4">
+			<div className="my-4">
 				<Link
-					className="poll-button w-28  text-lg text-white px-4 py-2 rounded-md"
+					className="poll-button w-28 text-lg text-white px-4 py-2 rounded-md flex items-center justify-center"
 					to={"/polls"}
 				>
 					हजुरको मत
