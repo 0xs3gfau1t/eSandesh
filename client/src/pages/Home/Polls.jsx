@@ -41,7 +41,7 @@ const Polls = () => {
 										<li
 											key={indexx}
 											className={`${
-												opt.sel
+												opt.voted
 													? "bg-green-700"
 													: "bg-sky-500"
 											} py-2 pl-4 rounded-md cursor-pointer`}
@@ -54,7 +54,7 @@ const Polls = () => {
 												)
 											}
 										>
-											{opt.text}
+											{opt.text}{" "}
 										</li>
 									)
 								})}

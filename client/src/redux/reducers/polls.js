@@ -11,9 +11,6 @@ const pollsSlice = createSlice({
 	extraReducers: builder => {
 		builder.addCase(listPolls.fulfilled, (state, { payload }) => {
 			if (payload.success && payload.data) {
-				payload.data.map(function (entry) {
-					entry.casted = false
-				})
 				state.pollsList = payload.data
 			}
 		})
