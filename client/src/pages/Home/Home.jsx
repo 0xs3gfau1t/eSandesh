@@ -14,11 +14,13 @@ export default function Home(match) {
 
 			<div className="flex justify-between gap-10 container">
 				{/* left side */}
-				<div className="sm:block hidden w-1/5">
-					{!focus && <LeftSideBar />}
-				</div>
+				{!focus && (
+					<div className="sm:block hidden w-1/5">
+						<LeftSideBar />
+					</div>
+				)}
 				{/* if some category is active, it is rendered on outlet */}
-				<div className={focus ? "w-4/5" : "w-3/5"}>
+				<div className={focus ? "w-3/5 mx-auto" : "w-3/5"}>
 					<Outlet />
 				</div>
 				{/* right side */}
