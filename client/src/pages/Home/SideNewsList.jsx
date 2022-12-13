@@ -9,7 +9,7 @@ export default function SideNewsList({ category, data }) {
 			<ul className="py-2">
 				{data.map((news, index) => {
 					return (
-						<li className="flex items-start">
+						<li key={index} className="flex items-start">
 							<FaAngleDoubleRight className="mr-2 mt-1" />
 							<span className="hover:text-rose-700 font-semibold transition-colors">
 								<Link
