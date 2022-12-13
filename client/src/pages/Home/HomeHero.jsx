@@ -5,7 +5,7 @@ import { LikeSaveShare } from "../../components/common"
 
 export default function HomeHero({ data }) {
 	return (
-		<div className="mb-10 pb-4">
+		<div className="p-6 pt-0 rounded-xl bg-white shadow-sm">
 			<h1 className="text-5xl font-primary font-bold leading-loose">
 				{/* heading */}
 				आजको समाचार
@@ -13,14 +13,19 @@ export default function HomeHero({ data }) {
 			</h1>
 			<p className="w-full">
 				{/* cover Img */}
-				<img
-					className="w-full"
-					src={
-						data.img
-							? data.img
-							: "https://developers.elementor.com/docs/assets/img/elementor-placeholder-image.png"
-					}
-				/>
+				<Link
+					to={`/news/${data.year}/${data.month}/${data.slug}`}
+					className="hover:text-rose-600 duration-300"
+				>
+					<img
+						className="w-full rounded-lg"
+						src={
+							data.img
+								? data.img
+								: "https://developers.elementor.com/docs/assets/img/elementor-placeholder-image.png"
+						}
+					/>
+				</Link>
 			</p>
 			{/* below cover img */}
 			<div>
