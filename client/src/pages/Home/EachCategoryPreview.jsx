@@ -49,7 +49,7 @@ export default function EachCategoryPreview({ category }) {
 									</span> */}
 								<LikeSaveShare
 									// articleId={}
-									likes={"100k"}
+									likes={"९११"}
 									className="w-1/5"
 								/>
 								{/* </div> */}

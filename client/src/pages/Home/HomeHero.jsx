@@ -45,7 +45,7 @@ export default function HomeHero({ data }) {
 					</div>
 					<LikeSaveShare
 						// articleId = {someArticleId}
-						likes={"१.२"}
+						likes={"१०१"}
 					/>
 				</div>
 			</div>
