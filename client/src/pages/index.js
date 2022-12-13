@@ -1,6 +1,6 @@
 import Home from "./Home/Home"
 import SingleNews from "./Home/SingleNews"
-import DashBoard from "./Home/Dashboard"
+import UserProfile from "./Home/UserProfile/UserProfile"
 import Polls from "./Home/Polls"
 import Category from "./Category/Category"
 import Landing from "./Home/Landing"
@@ -34,6 +34,6 @@ export {
 	Landing,
 	ManageCritics,
 	PollsMan,
-	DashBoard,
+	UserProfile,
 	Polls,
 }

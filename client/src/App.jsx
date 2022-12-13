@@ -19,7 +19,7 @@ import {
 	Landing,
 	PollsMan,
 	ManageCritics,
-	DashBoard,
+	UserProfile,
 	Polls,
 } from "./pages"
 import { PrivateRoute } from "./components/common"
@@ -56,7 +56,7 @@ function App() {
 						<Route path="stats" element={<ViewSiteStats />} />
 					</Route>
 					<Route path="/" element={<Home />}>
-						<Route path="/dashboard" element={<DashBoard />} />
+						<Route path="/profile" element={<UserProfile />} />
 						<Route path="/polls" element={<Polls />} />
 						<Route path="" element={<Landing />} />
 						<Route
