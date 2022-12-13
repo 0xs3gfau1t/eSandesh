@@ -25,9 +25,12 @@ const userSchema = new mongoose.Schema({
     },
     subscriptions: {
         type: Map,
-        of: new mongoose.Schema({
-            category: { priority: { type: Number, default: 5 } },
-        }),
+        of: new mongoose.Schema(
+            {
+                priority: { type: Number, default: 5 },
+            },
+            { _id: false }
+        ),
     },
     visited: { type: [mongoose.Schema.Types.ObjectId] },
 })
