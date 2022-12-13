@@ -10,7 +10,7 @@ export default function UserInfo() {
       <form className="grid grid-cols-2 w-full">
         {/* user section */}
         <div className="w-full">
-          <label for="userName" className="flex flex-col my-3">
+          <label htmlFor="userName" className="flex flex-col my-3">
             <span className=" leading-relaxed">Full Name:</span>
             <input
               type="text"
@@ -20,7 +20,7 @@ export default function UserInfo() {
             />
           </label>
 
-          <label for="userEmail" className="flex flex-col my-2">
+          <label htmlFor="userEmail" className="flex flex-col my-2">
             <span className=" leading-relaxed">Email address:</span>
             <input
               type="email"
