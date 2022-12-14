@@ -15,7 +15,7 @@ module.exports = async (req, res) => {
     const articles = await userModel.aggregate([
         {
             $match: {
-                _id: user.id,
+                _id: mongoose.Types.ObjectId(user.id),
             },
         },
         {
@@ -24,11 +24,15 @@ module.exports = async (req, res) => {
                 _id: false,
             },
         },
+        { $unwind: { path: '$saved' } },
         {
             $lookup: {
-                from: 'Article',
-                localField: 'saved',
-                foreignField: '_id',
+                from: 'articles',
+                let: { saved: '$saved' },
+                pipeline: [
+                    { $match: { $expr: { $eq: ['$_id', '$$saved'] } } },
+                    { $project: { title: 1, year: 1, month: 1, slug: 1 } },
+                ],
                 as: 'articles',
             },
         },
@@ -44,11 +48,11 @@ module.exports = async (req, res) => {
         },
         {
             $project: {
-                'articles._id': true,
-                'articles.year': true,
-                'articles.month': true,
-                'articles.slug': true,
-                'articles.title': true,
+                _id: '$articles._id',
+                year: '$articles.year',
+                month: '$articles.month',
+                slug: '$articles.slug',
+                title: '$articles.title',
             },
         },
     ])
