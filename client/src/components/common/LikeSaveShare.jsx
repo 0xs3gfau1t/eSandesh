@@ -5,7 +5,6 @@ import { saveNews } from "../../redux/actions/publicNews"
 
 export default function LikeSaveShare({ likes, id }) {
 	const saveSave = e => {
-		// console.log(id)
 		dispatch(saveNews({ id: id }))
 	}
 

@@ -6,17 +6,13 @@ import {
 	TwitterShareButton,
 } from "react-share"
 import { FacebookIcon, TwitterIcon, RedditIcon } from "react-share"
-import { AiFillSave } from "react-icons/ai"
 import { FaLink } from "react-icons/fa"
-import { useDispatch } from "react-redux"
 
 const SocialShare = ({ title, id }) => {
 	const url = document.location.href
-	const dispatch = useDispatch()
 
-	const saveSave = e => {
-		// console.log(id)
-		dispatch(saveNews({ id: id }))
+	const copyLink = () => {
+		navigator.clipboard.writeText(url)
 	}
 
 	return (
@@ -58,12 +54,8 @@ const SocialShare = ({ title, id }) => {
 			<FaLink
 				className="my-auto w-6 h-6 cursor-pointer hover:text-blue duration-200"
 				title="Copy Link"
+				onClick={copyLink}
 			/>
-			{/* <AiFillSave
-				className="my-auto w-6 h-6 cursor-pointer hover:text-blue duration-200"
-				title="Save this article"
-				onClick={saveSave}
-			/> */}
 		</div>
 	)
 }
