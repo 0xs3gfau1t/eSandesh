@@ -8,7 +8,7 @@ export default function SqAds() {
         target="_blank"
       >
         <div className=" h-64 bg-darkblue w-52 text-center text-white flex justify-center items-center ">
-          $100 को लागि यहाँ क्लिक गर्नुहोस्।
+          $१०० को लागि यहाँ क्लिक गर्नुहोस्।
         </div>
       </a>
     </div>
