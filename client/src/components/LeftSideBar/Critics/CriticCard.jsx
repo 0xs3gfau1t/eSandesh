@@ -11,17 +11,17 @@ export default function CriticCard({ articleRef, name, body }) {
           <FaUserCircle className="text-4xl" />
         </Link>
         <div className="flex flex-col">
-          <h4 className="text-sm font-secondary font-medium">{name}</h4>
-          <span className="text-xs font-thin">पुष १, २०७९</span>
+          <h4 className="text-base font-secondary font-medium">{name}</h4>
+          <span className="text-sm font-thin">पुष १, २०७९</span>
         </div>
       </div>
       <h5
-        className="text-xs font-secondary font-bold my-2 text-start w-full hover:text-rose-700 duration-300"
+        className="text-base font-secondary font-bold my-2 text-start w-full hover:text-rose-700 duration-300"
         title="पूरा लेख पढ्न क्लिक गर्नुहोस्"
       >
         {articleRef}
       </h5>
-      <p className="text-xs text-justify">"{body}"</p>
+      <p className="text-base text-justify">"{body}"</p>
     </div>
   );
 }
