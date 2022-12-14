@@ -8,9 +8,7 @@ function RightSideBar() {
 	return (
 		<>
 			<div className="flex justify-between items-baseline my-2">
-				<h3 className="text-xl font-primary font-semibold">
-					ताजा परिणामहरु
-				</h3>
+				<h3 className="text-xl font-primary font-semibold">ताजा परिणामहरु</h3>
 				<SeeAllBtn url={"/category/sports"} />
 			</div>
 			<QuickUpdates />
@@ -23,7 +21,9 @@ function RightSideBar() {
 				<SeeAllBtn url={"/category/preference"} />
 			</div>
 			<PreferredNews />
-			<SqAds />
+			<div className="">
+				<SqAds />
+			</div>
 			{/* end of a section */}
 		</>
 	)
