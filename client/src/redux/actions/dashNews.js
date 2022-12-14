@@ -50,3 +50,22 @@ export const listNews = createAsyncThunk(
 		return { success: true, data: response, page: page }
 	}
 )
+
+export const deleteNews = createAsyncThunk(
+	"common/deleteNews",
+	async (id, { dispatch }) => {
+		console.log("Here")
+		const response = await axios
+			.delete(`/api/article/?id=${id}`, {
+				withCredentials: true,
+			})
+			.then(res => {
+				return res.data
+			})
+			.catch(err => {
+				console.error(err)
+			})
+		if (!response) return { success: false }
+		return { success: true, data: response }
+	}
+)
