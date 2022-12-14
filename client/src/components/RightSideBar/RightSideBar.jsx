@@ -2,7 +2,7 @@ import React from "react"
 
 import PreferredNews from "./PreferredNews"
 import QuickUpdates from "./QuickUpdates"
-import { SeeAllBtn } from "../common"
+import { SeeAllBtn, SqAds } from "../common"
 
 function RightSideBar() {
 	return (
@@ -23,6 +23,7 @@ function RightSideBar() {
 				<SeeAllBtn url={"/category/preference"} />
 			</div>
 			<PreferredNews />
+			<SqAds />
 			{/* end of a section */}
 		</>
 	)

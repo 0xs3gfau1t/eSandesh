@@ -7,7 +7,7 @@ const commentSchema = mongoose.Schema(
         article: { type: mongoose.Schema.Types.ObjectId, ref: 'Article' },
         revisions: { type: [{ content: String, timestamp: Date }] },
         subComments: { type: [mongoose.Schema.Types.ObjectId], ref: 'Comment' },
-        likes: { type: Number, default: 0 },
+        likes: { type: [mongoose.Schema.Types.ObjectId], ref: 'User' },
     },
     { timestamps: true }
 )

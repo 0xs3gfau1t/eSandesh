@@ -19,7 +19,7 @@ import {
 	Landing,
 	PollsMan,
 	ManageCritics,
-	DashBoard,
+	UserProfile,
 	Polls,
 	ArchiveNews,
 } from "./pages"
@@ -57,8 +57,8 @@ function App() {
 						<Route path="stats" element={<ViewSiteStats />} />
 					</Route>
 					<Route path="/" element={<Home />}>
-						<Route path="/dashboard" element={<DashBoard />} />
-						<Route path = "/archive" element={<ArchiveNews/>}/>
+						<Route path="/profile" element={<UserProfile />} />
+						<Route path="/archive" element={<ArchiveNews />} />
 						<Route path="/polls" element={<Polls />} />
 						<Route path="" element={<Landing />} />
 						<Route

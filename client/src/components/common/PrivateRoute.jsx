@@ -2,9 +2,12 @@ import { Navigate } from "react-router-dom"
 import { useSession } from "next-auth/react"
 
 const PrivateRoute = ({ children }) => {
-	const { data: session, status } = useSession()
+	const session = useSession()
 
-	if (status == "unauthenticated") {
+	if (
+		session.status == "unauthenticated" ||
+		!session?.data?.user?.roles.isRoot
+	) {
 		return <Navigate to="/admin" />
 	}
 

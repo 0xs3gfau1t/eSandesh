@@ -28,16 +28,18 @@ export default function Header() {
 					</div>
 					<FaRegUserCircle
 						className="text-3xl cursor-pointer"
-						onClick={e => setShow(!show)}
+						onClick={(e) => setShow(!show)}
 					/>
 					{show && (
-						<div className="absolute z-99 right-0 mt-32 px-1 w-24 text-center rounded-lg bg-blue text-white">
-							<button className="bg-blue-500" onClick={action}>
-								{session.status == "authenticated"
-									? "Log Out"
-									: "Log In"}
-							</button>
-						</div>
+						<ul className="header-drop absolute z-99 right-0 mt-32 p-2 w-36 text-center border-blue border-2 rounded-md font-bold text-xl">
+							<Link to="/profile">
+								<li>प्रोफाइल</li>
+							</Link>
+							<hr className="w-11/12 border-neutral-300"/>
+							<li onClick={action}>
+								{session.status == "authenticated" ? "लग आउट" : "लग इन"}
+							</li>
+						</ul>
 					)}
 				</div>
 			</div>
