@@ -13,6 +13,9 @@ import {
 } from "../../components/common"
 import { getSingleNews } from "../../redux/actions/publicNews"
 import { setFocus } from "../../redux/reducers/misc"
+import Comments from "../../components/Comments";
+
+
 
 const SingleNews = () => {
 	const params = useParams()
@@ -23,6 +26,7 @@ const SingleNews = () => {
 
 	const dispatch = useDispatch()
 
+	
 	useEffect(() => {
 		dispatch(getSingleNews({ params: params, noAudio: false }))
 	}, [params])
@@ -86,6 +90,8 @@ const SingleNews = () => {
 					title={news ? news.title : "eSandesh, Khabar Naya Yug ko"}
 					id={news ? news._id : ""}
 				/>
+				<Comments articleId="6395e60c4de537fe44ee7713"/>
+				{/* font-bold text-2xl leading-loose */}
 			</div>
 			{/* right column */}
 			{!focus && (
