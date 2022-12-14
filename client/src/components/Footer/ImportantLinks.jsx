@@ -3,7 +3,7 @@ import { Link } from "react-router-dom"
 
 export default function ImportantLinks() {
 	return (
-		<ul className="text-sm text-slate-700">
+		<ul className="text-base text-slate-700">
 			<li className="hover:text-rose-700">
 				<Link to="/advertisement">हामीसँग विज्ञापन गर्नुहोस्</Link>
 			</li>

@@ -4,7 +4,7 @@ import CriticCard from "./CriticCard"
 
 export default function TopCritics() {
 	return (
-		<div className="mt-2 mb-4">
+		<div className="mt-2 mb-4 w-full">
 			<h2 className="font-bold text-2xl leading-loose">शीर्ष आलोचकहरू</h2>
 			<div>
 				{/* list of critics */}

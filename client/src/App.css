@@ -87,7 +87,7 @@ h6 {
 }
 
 .activeSideNav {
-	@apply text-darkblue font-semibold pl-4 border-l-4 border-l-rose-700 transition-all duration-300 leading-loose;
+	@apply text-darkblue font-bold text-xl pl-4 border-l-4 border-l-rose-700 transition-all duration-300;
 }
 
 .social-share {

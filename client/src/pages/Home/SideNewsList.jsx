@@ -11,8 +11,10 @@ export default function SideNewsList({ category, data }) {
 				<ul className="py-2">
 					{data.map((news, index) => {
 						return (
-							<li key={index} className="flex items-start">
-								<FaAngleDoubleRight className="mr-2 mt-1" />
+							<li key={index} className="flex items-start my-1">
+								<span className="w-4 h-6 mr-2 font-medium py-1">
+									<FaAngleDoubleRight />
+								</span>
 								<span className="hover:text-rose-700 duration-200 text-xl transition-all">
 									<Link to={`news/${news.year}/${news.month}/${news.slug}`}>
 										{news.title}
@@ -23,7 +25,7 @@ export default function SideNewsList({ category, data }) {
 					})}
 				</ul>
 				<div className="w-full flex justify-end">
-					<SeeAllBtn url={`/category/${category}`}/>
+					<SeeAllBtn url={`/category/${category}`} />
 				</div>
 			</>
 		)
