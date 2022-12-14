@@ -5,7 +5,7 @@ import { FiEdit, FiTrash } from "react-icons/fi";
 export default function UserPosts() {
   return (
     <div>
-      <h2 className="font-bold text-base font-secondary leading-loose">
+      <h2 className="font-bold text-base font-english leading-loose">
         My Posts
       </h2>
       <ul>
