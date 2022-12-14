@@ -12,7 +12,7 @@ export default function Home(match) {
 		<div className="flex flex-col h-screen">
 			<Header />
 
-			<div className="flex justify-between gap-10 container px-6">
+			<div className="flex justify-between w-full gap-10 container px-6">
 				{/* left side */}
 				{!focus && (
 					<div className="sm:block hidden w-1/5">
@@ -25,7 +25,7 @@ export default function Home(match) {
 				</div>
 				{/* right side */}
 				{!focus && (
-					<div className="sm:w-1/5 sm:block hidden">
+					<div className="sm:w-1/5 pr-1 sm:block hidden">
 						<RightSideBar />
 					</div>
 				)}
