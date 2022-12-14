@@ -8,7 +8,6 @@ router.use('/ads', require('./ads'))
 router.use('/poll', require('./polls'))
 router.use('/critics', require('./critics'))
 router.use('/subscriptions', require('./subscriptions'))
-router.use('/chakre', require('./chakre'))
 router.use('/user', require('./user'))
 
 router.get('*', (_req, res) => {
