@@ -1,27 +1,20 @@
 import {
-	EmailShareButton,
 	FacebookShareButton,
-	LineShareButton,
 	LinkedinIcon,
 	LinkedinShareButton,
 	RedditShareButton,
-	TelegramShareButton,
 	TwitterShareButton,
-	ViberShareButton,
-	WhatsappShareButton,
 } from "react-share"
 import { FacebookIcon, TwitterIcon, RedditIcon } from "react-share"
-import { BsFillSaveFill } from "react-icons/bs"
-import { useDispatch } from "react-redux"
-
-import { saveNews } from "../../redux/actions/publicNews"
+import { AiFillSave } from "react-icons/ai"
 import { FaLink } from "react-icons/fa"
+import { useDispatch } from "react-redux"
 
 const SocialShare = ({ title, id }) => {
 	const url = document.location.href
 	const dispatch = useDispatch()
 
-	const saveSave = (e) => {
+	const saveSave = e => {
 		// console.log(id)
 		dispatch(saveNews({ id: id }))
 	}
@@ -56,9 +49,9 @@ const SocialShare = ({ title, id }) => {
 					</RedditShareButton>
 				</div>
 				<div title="Share to LinkedIn">
-					<LineShareButton className="social-share">
+					<LinkedinShareButton className="social-share">
 						<LinkedinIcon size={28} />
-					</LineShareButton>
+					</LinkedinShareButton>
 				</div>
 			</div>
 			{/* share by link */}
@@ -66,6 +59,11 @@ const SocialShare = ({ title, id }) => {
 				className="my-auto w-6 h-6 cursor-pointer hover:text-blue duration-200"
 				title="Copy Link"
 			/>
+			{/* <AiFillSave
+				className="my-auto w-6 h-6 cursor-pointer hover:text-blue duration-200"
+				title="Save this article"
+				onClick={saveSave}
+			/> */}
 		</div>
 	)
 }

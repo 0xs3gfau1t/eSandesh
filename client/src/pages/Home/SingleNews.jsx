@@ -74,10 +74,6 @@ const SingleNews = () => {
 						<h1 className="w-max">Loading news audio...</h1>
 					)}
 				</div>
-				{/* <SocialShare
-					title={news ? news.title : "eSandesh, Khabar Naya Yug ko"}
-					id={news ? news._id : ""}
-				/> */}
 				<div
 					dangerouslySetInnerHTML={{
 						__html: news ? news.content : "Fetching",
@@ -87,7 +83,7 @@ const SingleNews = () => {
 				{/* {focus && <RectAds />} */}
 				<RectAds />
 				<div className="w-full flex justify-end">
-					<LikeSaveShare likes={"१.२"} />
+					<LikeSaveShare likes={"१.२"} id={news ? news._id : ""} />
 				</div>
 				<SocialShare
 					title={news ? news.title : "eSandesh, Khabar Naya Yug ko"}
