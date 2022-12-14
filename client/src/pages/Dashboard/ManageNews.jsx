@@ -75,6 +75,7 @@ const ManageNews = () => {
 															year={khabar.year}
 															month={khabar.month}
 															slug={khabar.slug}
+															id={khabar._id}
 														/>
 													</td>
 												</tr>
