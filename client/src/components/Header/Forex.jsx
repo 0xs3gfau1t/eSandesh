@@ -5,8 +5,8 @@ export default function Forex() {
 		<div className="grid grid-cols-3 gap-x-2">
 			{/* row 1 (heading) */}
 			<span className="text-right font-bold">मुद्रा:</span>
-			<span className=" font-bold">U.S. डलर</span>
-			<span className=" font-bold">U.K. पाउन्ड स्टर्लिङ</span>
+			<span className=" font-bold"><span className="font-english">U.S.</span> डलर</span>
+			<span className=" font-bold"><span className="font-english">U.K.</span> पाउन्ड स्टर्लिङ</span>
 			{/* row 2 */}
 			<span className=" text-right font-bold">खरिद:</span>
 			<span>१३०.५७</span>

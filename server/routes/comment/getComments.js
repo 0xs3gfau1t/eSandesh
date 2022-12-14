@@ -1,11 +1,11 @@
+const express = require('express')
+const commentModel = require('../../model/comment')
+
 /**
  * @param {express.Request} req
  * @param {express.Response} res
  * @return {void}
  */
-
-const express = require('express')
-const commentModel = require('../../model/comment')
 
 const getComments = async (req, res) => {
     const { articleId, userId, page, items } = req.query

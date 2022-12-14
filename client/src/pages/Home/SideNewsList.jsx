@@ -23,7 +23,7 @@ export default function SideNewsList({ category, data }) {
 					})}
 				</ul>
 				<div className="w-full flex justify-end">
-					<SeeAllBtn />
+					<SeeAllBtn url={`/category/${category}`}/>
 				</div>
 			</>
 		)
