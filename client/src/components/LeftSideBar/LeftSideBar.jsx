@@ -2,6 +2,7 @@ import React from "react"
 import NavBar from "./NavBar"
 import TopCritics from "./Critics/TopCritics"
 import { Link } from "react-router-dom"
+import { SqAds } from "../common"
 
 function LeftSideBar() {
 	return (
@@ -16,6 +17,7 @@ function LeftSideBar() {
 			</div>
 			<NavBar />
 			<TopCritics />
+			<SqAds />
 		</div>
 	)
 }

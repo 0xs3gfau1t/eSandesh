@@ -1,17 +1,24 @@
 import { useEffect, useState } from "react"
 import { useSelector, useDispatch } from "react-redux"
 import { useParams } from "react-router-dom"
-import { MdCenterFocusStrong } from "react-icons/md"
+// import { MdCenterFocusStrong } from "react-icons/md"
+import { BiBookReader } from "react-icons/bi"
 
-import { SocialShare, SqAds, RectAds, Popup } from "../../components/common"
+import {
+	SocialShare,
+	SqAds,
+	RectAds,
+	Popup,
+	LikeSaveShare,
+} from "../../components/common"
 import { getSingleNews } from "../../redux/actions/publicNews"
 import { setFocus } from "../../redux/reducers/misc"
 
 const SingleNews = () => {
 	const params = useParams()
-	const news = useSelector(state => state.news.singleNews)
-	const audio = useSelector(state => state.news.audio)
-	const focus = useSelector(state => state.misc.focus)
+	const news = useSelector((state) => state.news.singleNews)
+	const audio = useSelector((state) => state.news.audio)
+	const focus = useSelector((state) => state.misc.focus)
 	const [show, setShow] = useState(true)
 
 	const dispatch = useDispatch()
@@ -25,7 +32,7 @@ const SingleNews = () => {
 				<Popup setShow={setShow} title={"Ad"}>
 					<div className="flex flex-row w-full">
 						<SqAds />
-						<button onClick={e => setShow(false)}>X</button>
+						<button onClick={(e) => setShow(false)}>X</button>
 					</div>
 				</Popup>
 			)}
@@ -40,21 +47,15 @@ const SingleNews = () => {
 					>
 						{focus ? "Exit" : "Enter"} Focus Mode
 					</h3>
-					<MdCenterFocusStrong
-						className="text-2xl cursor-pointer"
-						onClick={e => dispatch(setFocus(!focus))}
+					<BiBookReader
+						className="text-2xl my-1 cursor-pointer"
+						onClick={(e) => dispatch(setFocus(!focus))}
 					/>
 				</div>
-				<h1 className="text-xl m-4 font-bold">
-					{news ? news.title : ""}
-				</h1>
+				<h1 className="text-xl m-4 font-bold">{news ? news.title : ""}</h1>
 				<div className="my-4 w-min mx-auto">
 					{audio ? (
-						<audio
-							controls
-							id="audioPlayer"
-							className="bg-gray-100 rounded-md"
-						>
+						<audio controls id="audioPlayer" className="bg-gray-100 rounded-md">
 							<source
 								src={news ? `data:audio;base64,${audio}` : "#"}
 								type="audio/mpeg"
@@ -66,16 +67,25 @@ const SingleNews = () => {
 						<h1 className="w-max">Loading news audio...</h1>
 					)}
 				</div>
-				<SocialShare
-					title={news ? news.title : "eSandesh, Khabat Naya Yug ko"}
-				/>
+				{/* <SocialShare
+					title={news ? news.title : "eSandesh, Khabar Naya Yug ko"}
+					id={news ? news._id : ""}
+				/> */}
 				<div
 					dangerouslySetInnerHTML={{
 						__html: news ? news.content : "Fetching",
 					}}
 					// className="flex items-center justify-center w-full"
 				/>
-				{focus && <RectAds />}
+				{/* {focus && <RectAds />} */}
+				<RectAds />
+				<div className="w-full flex justify-end">
+					<LikeSaveShare likes={"१.२"} />
+				</div>
+				<SocialShare
+					title={news ? news.title : "eSandesh, Khabar Naya Yug ko"}
+					id={news ? news._id : ""}
+				/>
 			</div>
 			{/* right column */}
 			{!focus && (

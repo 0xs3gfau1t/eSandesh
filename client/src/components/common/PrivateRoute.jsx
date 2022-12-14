@@ -3,7 +3,7 @@ import { useSession } from "next-auth/react"
 
 const PrivateRoute = ({ children }) => {
 	const session = useSession()
-	console.log("jdghj", session?.data?.user?.roles.isRoot)
+
 	if (
 		session.status == "unauthenticated" ||
 		!session?.data?.user?.roles.isRoot

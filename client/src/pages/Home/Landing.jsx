@@ -10,8 +10,8 @@ import { getRecentNews } from "../../redux/actions/publicNews"
 import { setFocus } from "../../redux/reducers/misc"
 
 const Landing = () => {
-	const recent = useSelector((state) => state.news.recentNews)
-	const hot = useSelector((state) => state.news.hot)
+	const recent = useSelector(state => state.news.recentNews)
+	const hot = useSelector(state => state.news.hot)
 
 	const dispatch = useDispatch()
 
@@ -42,13 +42,17 @@ const Landing = () => {
 				</h1>
 				<SideScrollNewsSection category={"hot"} data={hot} />
 				<hr className=" w-11/12 my-10 border-neutral-300" />
-				<RectAds type={"म X वर्गको विज्ञापन हुँ। कृपया जीवन बीमा गर्नुहोस्।"} />
+				<RectAds
+					type={"म X वर्गको विज्ञापन हुँ। कृपया जीवन बीमा गर्नुहोस्।"}
+				/>
 
 				<div className="mb-10 pb-4">
 					{/* middle scrolling news under the hero section */}
 					<EachCategoryPreview category="story" />
 					<RectAds
-						type={"म X वर्गको विज्ञापन हुँ। कृपया जीवन बीमा गर्नुहोस्।"}
+						type={
+							"म X वर्गको विज्ञापन हुँ। कृपया जीवन बीमा गर्नुहोस्।"
+						}
 					/>
 				</div>
 				<hr className=" w-11/12 my-10 border-neutral-300" />
@@ -57,7 +61,15 @@ const Landing = () => {
 					{/* middle scrolling news under the hero section */}
 					<EachCategoryPreview category="politics" />
 					<RectAds
-						type={"म X वर्गको विज्ञापन हुँ। कृपया जीवन बीमा गर्नुहोस्।"}
+						type={
+							"म X वर्गको विज्ञापन हुँ। कृपया जीवन बीमा गर्नुहोस्।"
+						}
+					/>
+					<EachCategoryPreview category="sports" />
+					<RectAds
+						type={
+							"म X वर्गको विज्ञापन हुँ। कृपया जीवन बीमा गर्नुहोस्।"
+						}
 					/>
 				</div>
 				{/* other category previews go here */}

@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 export default function Subscription() {
   return (
     <div>
-      <h2 className="font-bold text-base font-secondary leading-loose">
+      <h2 className="font-bold text-base font-english leading-loose">
         Subscriptions
       </h2>
       <p>

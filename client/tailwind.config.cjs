@@ -4,9 +4,10 @@ module.exports = {
 	theme: {
 		extend: {
 			fontFamily: {
-				// if english language, use these two
+				// for english language, use these two
 				// primary: ["Playfair Display", "serif"],
 				// secondary: ["Manrope", "sans-serif"],
+				english: ["Manrope", "sans-serif"],
 				primary: ["Vesper Libre", "serif"],
 				secondary: ["Vesper Libre", "serif"],
 			},

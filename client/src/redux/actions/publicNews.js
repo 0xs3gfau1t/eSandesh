@@ -78,3 +78,21 @@ export const getRecentNews = createAsyncThunk(
 		return { success: true, data: response }
 	}
 )
+
+export const saveNews = createAsyncThunk(
+	"news/saveNews",
+	async (data, { dispatch }) => {
+		const response = await axios
+			.post(`/api/user/article`, data, {
+				withCredentials: true,
+			})
+			.then(res => {
+				return res.data
+			})
+			.catch(err => {
+				console.error(err)
+			})
+		if (!response) return { success: false }
+		return { success: true, data: response }
+	}
+)

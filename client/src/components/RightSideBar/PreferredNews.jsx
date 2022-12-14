@@ -8,7 +8,7 @@ function PreferredNews() {
 	const prefNews = useSelector(state => state.news.preference)
 	const dispatch = useDispatch()
 	useEffect(() => {
-		dispatch(listNewsCat({ page: 0, cat: "preference" }))
+		dispatch(listNewsCat({ page: 0, cat: "preference", items: 3 }))
 	}, [])
 	return (
 		<div className="flex flex-col flex-wrap bg-white rounded-lg px-4 shadow-sm">
