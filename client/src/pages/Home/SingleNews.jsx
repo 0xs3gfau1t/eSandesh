@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react"
 import { useSelector, useDispatch } from "react-redux"
 import { useParams } from "react-router-dom"
-import { MdCenterFocusStrong } from "react-icons/md"
+// import { MdCenterFocusStrong } from "react-icons/md"
+import { BiBookReader } from "react-icons/bi"
 
 import {
 	SocialShare,
@@ -46,8 +47,8 @@ const SingleNews = () => {
 					>
 						{focus ? "Exit" : "Enter"} Focus Mode
 					</h3>
-					<MdCenterFocusStrong
-						className="text-2xl cursor-pointer"
+					<BiBookReader
+						className="text-2xl my-1 cursor-pointer"
 						onClick={(e) => dispatch(setFocus(!focus))}
 					/>
 				</div>
