@@ -24,11 +24,11 @@ const Landing = () => {
 		<div>
 			<div className="w-full">
 				{recent && (
-					<div className="flex gap-6 mb-10">
-						<div className="w-full sm:w-2/3">
+					<div className="flex gap-2 mb-10">
+						<div className="w-full sm:w-3/5">
 							<HomeHero data={recent[0]} />
 						</div>
-						<div className="w-1/3 sm:block hidden bg-white shadow-sm p-4 rounded-xl">
+						<div className="w-2/5 sm:block hidden bg-white shadow-sm p-4 rounded-xl">
 							<h2 className="text-2xl flex items-baseline justify-between font-semibold leading-loose">
 								ताजा खबर <SeeAllBtn url={"category/recent"} />{" "}
 								{/*recent hunxa ki "hot" hunxa, hot ta tala pani xa*/}
