@@ -89,7 +89,7 @@ const SingleNews = () => {
 			</div>
 			{/* right column */}
 			{!focus && (
-				<div className="hidden sm:block px-4">
+				<div className="hidden xl:block px-4">
 					{/* ads go here */}
 					<SqAds />
 					<SqAds />
