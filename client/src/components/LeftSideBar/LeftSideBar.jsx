@@ -14,6 +14,12 @@ function LeftSideBar() {
 				>
 					हजुरको मत
 				</Link>
+				<Link
+					className=" w-28 text-lg mt-2  px-4 py-2 rounded-md flex items-center justify-center"
+					to={"/polls"}
+				>
+					अभिलेख
+				</Link>
 			</div>
 			<NavBar />
 			<TopCritics />
