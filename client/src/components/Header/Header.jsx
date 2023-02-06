@@ -22,7 +22,7 @@ export default function Header() {
 	return (
 		<div className="header mb-5">
 			<div className="flex justify-between items-center container p-3">
-				<SiteLogo />
+				<SiteLogo/>
 				<div className="relative flex justify-between items-center">
 					<div className="flex justify-between invisible md:visible text-xs lg:text-sm gap-4">
 						<Forex />
