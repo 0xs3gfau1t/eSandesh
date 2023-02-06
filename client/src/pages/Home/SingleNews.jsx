@@ -13,12 +13,13 @@ import {
 } from "../../components/common"
 import { getSingleNews } from "../../redux/actions/publicNews"
 import { setFocus } from "../../redux/reducers/misc"
+import Comments from "../../components/Comments"
 
 const SingleNews = () => {
 	const params = useParams()
-	const news = useSelector((state) => state.news.singleNews)
-	const audio = useSelector((state) => state.news.audio)
-	const focus = useSelector((state) => state.misc.focus)
+	const news = useSelector(state => state.news.singleNews)
+	const audio = useSelector(state => state.news.audio)
+	const focus = useSelector(state => state.misc.focus)
 	const [show, setShow] = useState(true)
 
 	const dispatch = useDispatch()
@@ -32,7 +33,7 @@ const SingleNews = () => {
 				<Popup setShow={setShow} title={"Ad"}>
 					<div className="flex flex-row w-full">
 						<SqAds />
-						<button onClick={(e) => setShow(false)}>X</button>
+						<button onClick={e => setShow(false)}>X</button>
 					</div>
 				</Popup>
 			)}
@@ -49,13 +50,19 @@ const SingleNews = () => {
 					</h3>
 					<BiBookReader
 						className="text-2xl my-1 cursor-pointer"
-						onClick={(e) => dispatch(setFocus(!focus))}
+						onClick={e => dispatch(setFocus(!focus))}
 					/>
 				</div>
-				<h1 className="text-xl m-4 font-bold">{news ? news.title : ""}</h1>
+				<h1 className="text-xl m-4 font-bold">
+					{news ? news.title : ""}
+				</h1>
 				<div className="my-4 w-min mx-auto">
 					{audio ? (
-						<audio controls id="audioPlayer" className="bg-gray-100 rounded-md">
+						<audio
+							controls
+							id="audioPlayer"
+							className="bg-gray-100 rounded-md"
+						>
 							<source
 								src={news ? `data:audio;base64,${audio}` : "#"}
 								type="audio/mpeg"
@@ -67,10 +74,6 @@ const SingleNews = () => {
 						<h1 className="w-max">Loading news audio...</h1>
 					)}
 				</div>
-				{/* <SocialShare
-					title={news ? news.title : "eSandesh, Khabar Naya Yug ko"}
-					id={news ? news._id : ""}
-				/> */}
 				<div
 					dangerouslySetInnerHTML={{
 						__html: news ? news.content : "Fetching",
@@ -80,12 +83,14 @@ const SingleNews = () => {
 				{/* {focus && <RectAds />} */}
 				<RectAds />
 				<div className="w-full flex justify-end">
-					<LikeSaveShare likes={"१.२"} />
+					<LikeSaveShare likes={"१.२"} id={news ? news._id : ""} />
 				</div>
 				<SocialShare
 					title={news ? news.title : "eSandesh, Khabar Naya Yug ko"}
 					id={news ? news._id : ""}
 				/>
+				<Comments articleId={news ? news._id : ""} />
+				{/* font-bold text-2xl leading-loose */}
 			</div>
 			{/* right column */}
 			{!focus && (

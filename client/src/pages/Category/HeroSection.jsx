@@ -6,7 +6,7 @@ export default function HeroSection({ cat, data }) {
 		return (
 			<div className="w-full mb-10">
 				<h1 className="text-4xl font-primary font-bold my-2">
-					What's hot in {cat}?
+					{cat} मा जल्दो बल्दो के छ?
 				</h1>
 				<p className="w-full">
 					<img
@@ -19,7 +19,7 @@ export default function HeroSection({ cat, data }) {
 					/>
 				</p>
 				<div className="">
-					<h1 className="text-3xl font-semibold my-2">
+					<h1 className="text-3xl font-semibold mt-4 mb-2">
 						<Link
 							to={`/news/${data.year}/${data.month}/${data.slug}`}
 							className="hover:text-rose-600 duration-300"
@@ -27,7 +27,7 @@ export default function HeroSection({ cat, data }) {
 							{data.title}
 						</Link>
 					</h1>
-					<div>First few words goes here</div>
+					<div>पहिलो केहि शब्दहरू यहाँ जान्छ...</div>
 				</div>
 			</div>
 		)

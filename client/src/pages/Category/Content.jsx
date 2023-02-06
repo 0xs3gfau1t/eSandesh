@@ -39,7 +39,7 @@ export default function Content() {
 								<ArticlePreviewMd
 									key={key}
 									title={data.title}
-									summary={"Tuchha description here..."}
+									summary={"छोटो वर्णन यहाँ..."}
 									imgUrl={data.img ? data.img : ""}
 									articleUrl={`/news/${data.year}/${data.month}/${data.slug}`}
 								/>

@@ -20,7 +20,11 @@ function PreferredNews() {
 								<ArticlePreviewSm
 									title={news.title}
 									articleUrl={`/news/${news.year}/${news.month}/${news.slug}`}
-									imgUrl={news.img}
+									imgUrl={
+										news?.img
+											? news.img
+											: "https://developers.elementor.com/docs/assets/img/elementor-placeholder-image.png"
+									}
 								/>
 							</li>
 						)

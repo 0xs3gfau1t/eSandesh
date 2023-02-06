@@ -21,7 +21,6 @@ const deleteChildren = arr => {
 const delComment = (req, res) => {
     const { commentId } = req.body
     const { user } = req.session
-
     commentModel.findOneAndDelete(
         {
             _id: commentId,

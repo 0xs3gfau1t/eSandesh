@@ -21,7 +21,21 @@ const addArticle = async (req, res) => {
     } = req.body
 
     const { user } = req.session
-    const data = { title, content, category, tags }
+    const data = {
+        title,
+        content,
+        category,
+        tags,
+        year: new Date().getFullYear(),
+        month: new Date().getMonth(),
+        slug:
+            new Date().getTime() -
+            new Date(
+                new Date().getFullYear(),
+                new Date().getMonth(),
+                0
+            ).getTime(),
+    }
 
     // If the user is an admin then publish the article
     // also set the priority

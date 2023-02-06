@@ -3,7 +3,7 @@ import { Link } from "react-router-dom"
 
 export default function ExploreMenu() {
 	return (
-		<ul className="text-slate-700 text-sm">
+		<ul className="text-slate-700 text-base">
 			<li className="hover:text-rose-700">
 				<Link to="/category/trending">ट्रेन्डिङ</Link>
 			</li>

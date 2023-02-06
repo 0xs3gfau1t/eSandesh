@@ -4,6 +4,7 @@ import misc from "./reducers/misc"
 import news from "./reducers/news"
 import auth from "./reducers/auth"
 import ads from "./reducers/ads"
+import comments from "./reducers/comments"
 import polls from "./reducers/polls"
 
 export const store = configureStore({
@@ -12,6 +13,7 @@ export const store = configureStore({
 		news: news,
 		auth: auth,
 		ads: ads,
+		comments: comments,
 		polls: polls
 	},
 })

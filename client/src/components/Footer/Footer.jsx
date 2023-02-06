@@ -12,20 +12,20 @@ function Footer() {
 			<div className="mt-10 bg-[#D9D9D9] text-black p-4">
 				<div className="container mx-auto grid grid-cols-1 sm:grid-cols-2 gap-4 md:grid-cols-4">
 					{/* 1st column */}
-					<div className="flex items-center justify-center">
+					<div className="flex items-center text-lg justify-center">
 						<SiteIdentity />
 					</div>
 					{/* 2nd column */}
 					<div className="flex flex-col md:items-center">
 						<div>
-							<h3 className="text-lg font-bold">समाचार</h3>
+							<h3 className="text-xl font-bold">समाचार</h3>
 							<ExploreMenu />
 						</div>
 					</div>
 					{/* 3rd column */}
 					<div className="flex flex-col md:items-center">
 						<div>
-							<h3 className="text-lg font-bold">महत्त्वपूर्ण लिङ्कहरू</h3>
+							<h3 className="text-xl font-bold">महत्त्वपूर्ण लिङ्कहरू</h3>
 							<ImportantLinks />
 						</div>
 					</div>
