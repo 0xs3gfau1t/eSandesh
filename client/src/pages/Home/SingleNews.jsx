@@ -21,7 +21,7 @@ const SingleNews = () => {
 	const audio = useSelector(state => state.news.audio)
 	const focus = useSelector(state => state.misc.focus)
 	const [show, setShow] = useState(true)
-
+	const [fontSize, setFontSize] = useState(1)
 	const dispatch = useDispatch()
 
 	useEffect(() => {
@@ -52,6 +52,21 @@ const SingleNews = () => {
 						className="text-2xl my-1 cursor-pointer"
 						onClick={e => dispatch(setFocus(!focus))}
 					/>
+					{focus && (
+						<div className="flex gap-2">
+							<span className="text-sm ml-4 py-2">
+								Font Size:
+							</span>
+							<input
+								type="range"
+								min="1"
+								max="5"
+								value={fontSize}
+								className="bg-transparent w-20 "
+								onChange={e => setFontSize(e.target.value)}
+							/>
+						</div>
+					)}
 				</div>
 				<h1 className="text-xl m-4 font-bold">
 					{news ? news.title : ""}
@@ -75,6 +90,7 @@ const SingleNews = () => {
 					)}
 				</div>
 				<div
+					className={`text-${fontSize}xl`}
 					dangerouslySetInnerHTML={{
 						__html: news ? news.content : "Fetching",
 					}}
