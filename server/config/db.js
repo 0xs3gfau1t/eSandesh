@@ -12,12 +12,12 @@ async function dbConnect() {
     if (!cached.promise) {
         // If connecting to mongoatlas remove authSource, user and pass options
         cached.promise = mongoose.connect(process.env.MONGO_URI, {
-            authSource: 'admin',
+            authSource: process.env.DB_AUTH_SOURCE,
             user: process.env.MONGO_USER,
             pass: process.env.MONGO_PASS,
             useNewUrlParser: true,
             useUnifiedTopology: true,
-            dbName: 'portal',
+            dbName: process.env.DB_NAME,
         })
     }
 
