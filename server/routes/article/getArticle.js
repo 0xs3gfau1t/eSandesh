@@ -49,7 +49,10 @@ const getArticle = async (req, res) => {
         res.status(200).json(article[0])
 
         // Update article count in db
-        await articleModel.updateOne({ year, month, slug }, { $inc: { hits: 1 } })
+        await articleModel.updateOne(
+            { year, month, slug },
+            { $inc: { hits: 1 } }
+        )
     } catch (err) {
         console.error(err)
         return res.status(500).json({ error: 'Something went wrong.' })

@@ -15,12 +15,15 @@ const userSchema = new mongoose.Schema({
     },
     history: {
         type: Map,
-        of: new mongoose.Schema({
-            hits: Number,
-            likes: Number,
-            comments: Number,
-            watchtime: Number,
-        }),
+        of: new mongoose.Schema(
+            {
+                hits: Number,
+                likes: Number,
+                comments: Number,
+                watchtime: Number,
+            },
+            { _id: false }
+        ),
         default: {},
     },
     subscriptions: {

@@ -13,7 +13,7 @@ const toPublish = require('./toPublish')
 const publish = require('./publish')
 const recite = require('./recite')
 
-router.get('/list*', listArticle)
+router.get('/list*', fetchHistory, listArticle)
 router.get('/:year/:month/:slug', fetchHistory, getArticle)
 router.get('/recite', recite)
 router.get('/topublish', toPublish)
