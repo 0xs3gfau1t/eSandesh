@@ -12,7 +12,21 @@ const getArticle = async (req, res) => {
 
     var article
     try {
-        article = await articleModel.findOne({ year, month, slug })
+        article = await articleModel.aggregate([
+            { $match: { year, month, slug } },
+            {
+                $lookup: {
+                    from: 'users',
+                    let: { id: '$createdBy' },
+                    pipeline: [
+                        { $match: { $expr: { $eq: ['$_id', '$$id'] } } },
+                        { $project: { name: 1, _id: 0 } },
+                    ],
+                    as: 'author',
+                },
+            },
+            { $unwind: { path: '$author' } },
+        ])
 
         if (!article)
             return res.status(400).json({ message: 'Article not found.' })
@@ -38,17 +52,8 @@ const getArticle = async (req, res) => {
             }
         }
 
-        // update category counter in cookie
-        article.category.forEach(category => {
-            let val = user.history[category] || {
-                hits: 0,
-                likes: 0,
-                comments: 0,
-                watchtime: 0,
-            }
-            val.hits += 1
-            user.history[category] = val
-        })
+        // NOTE: if user is logged in then use database as source of truth for history and no need to update cookie
+        // if not logged in then use cookie
 
         // set cookie
         res.cookie('user', JSON.stringify(user), {
@@ -63,8 +68,7 @@ const getArticle = async (req, res) => {
     }
 
     // Update article count
-    article.hits += 1
-    await article.save()
+    await articleModel.updateOne({ year, month, slug }, { $inc: { hits: 1 } })
 
     // if user is logged in then update history counter in db as well
     if (req.session) {
