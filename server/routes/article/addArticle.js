@@ -26,6 +26,7 @@ const addArticle = async (req, res) => {
         content,
         category,
         tags,
+        createdBy: user.id,
         year: new Date().getFullYear(),
         month: new Date().getMonth(),
         slug:
@@ -42,8 +43,6 @@ const addArticle = async (req, res) => {
     if (user.roles.isRoot) {
         data.publishedAt = new Date()
         data.priority = priority
-    } else {
-        data.createdBy = user.id
     }
 
     const providedSocialsToUpdateOn =
