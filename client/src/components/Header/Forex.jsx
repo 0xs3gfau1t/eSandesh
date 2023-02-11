@@ -5,8 +5,7 @@ import { updateForexData } from "../../redux/reducers/misc";
 
 export default function Forex() {
 	// const [forexData, setForexData] = useState([]);
-	const forexData = useSelector(state =>state.misc.data)
-	// const focus = useSelector((state) => state.misc.focus)
+	const forexData = useSelector(state =>state.misc.data).slice(10)
 	const dispatch = useDispatch();
 
 	// useEffect(() => {
@@ -35,9 +34,9 @@ export default function Forex() {
 			<table className="">
 			  <thead>
 				<tr>
-				  <th className="px-4 py-2">Currency</th>{console.log(forexData)}
+				  <th className="px-2 py-1">मुद्रा:</th>
 				  {forexData.map(value => (
-					<th key={value.currency.iso3} className="px-4 py-2">
+					<th key={value.currency.iso3} className="px-2 py-1">
 					  {value.currency.iso3}
 					</th>
 				  ))}
@@ -45,17 +44,17 @@ export default function Forex() {
 			  </thead>
 			  <tbody>
 				<tr>
-				  <td className="px-4 py-2 font-bold">Buy</td>
+				  <td className="px-2 py-1 font-bold">खरिद:</td>
 				  {forexData.map(value => (
-					<td key={value.currency.iso3} className="px-4 py-2">
+					<td key={value.currency.iso3} className="px-2 py-1">
 					  {value.buy}
 					</td>
 				  ))}
 				</tr>
 				<tr>
-				  <td className="px-4 py-2 font-bold">Sell</td>
+				  <td className="px-2 py-1 font-bold">बिक्री:</td>
 				  {forexData.map(value => (
-					<td key={value.currency.iso3} className="px-4 py-2">
+					<td key={value.currency.iso3} className="px-2 py-1">
 					  {value.sell}
 					</td>
 				  ))}
