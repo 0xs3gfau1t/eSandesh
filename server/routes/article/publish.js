@@ -10,7 +10,7 @@ const Publish = async (req, res) => {
     const { id } = req.body
     try {
         const now = new Date()
-        await articleModel.findOneAndUpdate({ _id: id }, { publishedAt: now })
+        await articleModel.updateOne({ _id: id }, { publishedAt: now })
         return res.json({ success: true })
     } catch (err) {
         console.error(err)

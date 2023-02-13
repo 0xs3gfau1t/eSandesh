@@ -10,7 +10,6 @@ const articleSchema = mongoose.Schema(
             required: true,
         },
         hits: { type: Number, default: 0 },
-        comments: { type: [mongoose.Schema.Types.ObjectId], ref: 'Comment' },
         publishedAt: { type: Date },
         category: { type: [String] },
         tags: { type: [String] },
