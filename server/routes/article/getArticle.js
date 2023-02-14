@@ -11,21 +11,29 @@ const getArticle = async (req, res) => {
     const { year, month, slug } = req.params
 
     try {
-        const article = await articleModel.aggregate([
-            { $match: { year, month, slug } },
-            {
-                $lookup: {
-                    from: 'users',
-                    let: { id: '$createdBy' },
-                    pipeline: [
-                        { $match: { $expr: { $eq: ['$_id', '$$id'] } } },
-                        { $project: { name: 1, _id: 0 } },
-                    ],
-                    as: 'author',
-                },
-            },
-            { $unwind: { path: '$author' } },
-        ])
+        const article = await getCache(
+            `${year}/${month}/${slug}`,
+            async () =>
+                await articleModel.aggregate([
+                    { $match: { year, month, slug } },
+                    {
+                        $lookup: {
+                            from: 'users',
+                            let: { id: '$createdBy' },
+                            pipeline: [
+                                {
+                                    $match: {
+                                        $expr: { $eq: ['$_id', '$$id'] },
+                                    },
+                                },
+                                { $project: { name: 1, _id: 0 } },
+                            ],
+                            as: 'author',
+                        },
+                    },
+                    { $unwind: { path: '$author' } },
+                ])
+        )
 
         if (!article || article?.length == 0)
             return res.status(400).json({ message: 'Article not found.' })

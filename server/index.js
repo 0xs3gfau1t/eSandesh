@@ -2,8 +2,14 @@ require('module-alias/register')
 const path = require('path')
 require('dotenv').config({ path: path.resolve(__dirname, '.env') })
 
+const { redisClient } = require('@/config/redis')
+
 // Connect to the database
-require('./config/db')()
+require('@/config/db')()
+redisClient
+    .connect()
+    .then(() => console.log('Connected to redis server'))
+    .catch(console.error)
 
 const { app, server } = require('./config/app')
 
