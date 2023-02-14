@@ -1,11 +1,18 @@
 const mongoose = require('mongoose')
 
+const adImageSchema = mongoose.Schema({
+    rectX /* Link to image */: { type: String, default: null },
+    rectY: { type: String, default: null },
+    square: { type: String, default: null },
+})
+
 const adSchema = mongoose.Schema(
     {
-        name: { type: String },
+        name: { type: String, required: true },
         hits: { type: String, default: 0 },
         publisher: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
-        imageEmbedUrl: { type: String },
+        image: adImageSchema,
+        audio: { type: String },
         redirectUrl: { type: String },
         priority: {
             type: Number,
@@ -16,15 +23,7 @@ const adSchema = mongoose.Schema(
             ],
         },
         price: { type: Number, required: true },
-        size: {
-            type: String,
-            default: 'rectX',
-            validate: [
-                size => ['rectX', 'rectY', 'square'].includes(size),
-                'Invalid size.',
-            ],
-        },
-        category: { type: [String] },
+        category: { type: [String], required: true },
         expiry: { type: Date, required: true },
         popup: { type: Boolean, default: false },
     },

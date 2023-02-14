@@ -12,19 +12,19 @@ const normalPricePerMinute = 1000
 const midPriority = 5
 
 module.exports = (req, res) => {
-    const { user } = req.session
-
     const {
         name,
-        publisher = user.id,
-        imageEmbedUrl,
+        publisher /*= user.id*/,
+        image, //{type: url}
         redirectUrl,
         priority,
-        size,
         expiry,
         category,
         popup = false,
+        audio,
     } = req.body
+
+    const { user } = req.session
 
     if (!user?.roles?.isRoot)
         return res.json({ error: 'Not enough permission to create ads' })
@@ -40,22 +40,24 @@ module.exports = (req, res) => {
     // Then check performance of this category in db
     // Then adjust the formula to adjust price by
     // considering how much users click the ad
+    const audioPriceAdjustmentFactor = audio ? 1.5 : 1
     const price = Math.round(
-        (minutesLeft * normalPricePerMinute * priority) / midPriority
+        ((minutesLeft * normalPricePerMinute * priority) / midPriority) *
+            audioPriceAdjustmentFactor
     )
 
     adsModel.create(
         {
             name,
             publisher,
-            imageEmbedUrl,
+            image,
             redirectUrl,
             priority,
             price,
-            size,
             expiry,
             category: categoryArray,
             popup,
+            audio,
         },
         (e, d) => {
             if (e)

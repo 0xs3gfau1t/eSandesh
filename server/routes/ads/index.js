@@ -16,7 +16,7 @@ router.get('/listbypublisher', withAuth, getAds)
 router.get('/list', listAds)
 router.get('/relevant', fetchHistory, relevantAds)
 router.get('/', withAuth, getAd)
-router.post('/', withAuth, addAd)
+router.post('/', /*withAuth,*/ addAd)
 router.delete('/', withAuth, delAd)
 router.patch('/', withAuth, editAd)
 

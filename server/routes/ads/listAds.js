@@ -29,7 +29,7 @@ module.exports = (req, res) => {
                 .map(i => i.trim())
                 .filter(i => i !== ''),
         }
-    ads = adsModel
+    adsModel
         .find(filter)
         .skip(page * limit)
         .limit(limit)
