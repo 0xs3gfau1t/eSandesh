@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit"
 
 const initialState = {
 	focus: false,
+	data: []
 }
 
 const miscSlice = createSlice({
@@ -11,8 +12,11 @@ const miscSlice = createSlice({
 		setFocus: (state, { payload }) => {
 			state.focus = payload
 		},
+		updateForexData: (state, action)=>{
+			state.data = action.payload
+		}
 	},
 })
 
-export const { setFocus } = miscSlice.actions
+export const { setFocus, updateForexData } = miscSlice.actions
 export default miscSlice.reducer
