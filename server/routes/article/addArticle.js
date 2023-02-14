@@ -1,3 +1,4 @@
+const sendNewsLetter = require('@/controllers/sendNewsLetter')
 const express = require('express')
 const articleModel = require('../../model/article')
 
@@ -55,11 +56,14 @@ const addArticle = async (req, res) => {
         const article = new articleModel(data)
         await article.save()
 
+        res.status(200).json(data)
+
         providedSocialsToUpdateOn.forEach(social => {
             if (socialApis[social]) socialApis[social](title)
         })
 
-        return res.status(200).json(article)
+        const mailStatus = await sendNewsLetter({ user, data })
+        console.log({ mailStatus })
     } catch (err) {
         console.error(err)
         return res.status(500).json({ error: 'Something went wrong.' })
