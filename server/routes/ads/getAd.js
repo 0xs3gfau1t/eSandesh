@@ -17,7 +17,7 @@ module.exports = async (req, res) => {
         await adsModel.findOne({ publisher: user.id, _id: id })
 
     try {
-        const ad = await Cache(req.originalUrl, fetchAd)
+        const ad = await Cache(req.originalUrl, fetchAd, { 'EX': 60 * 60 })
         return res.status(200).json({ message: 'success', ad })
     } catch (err) {
         console.error(err)

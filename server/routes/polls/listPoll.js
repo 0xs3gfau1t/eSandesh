@@ -41,7 +41,7 @@ const listPoll = async (req, res) => {
             },
         ])
     try {
-        const polls = await Cache(req.originalUrl, getPolls)
+        const polls = await Cache(req.originalUrl, getPolls, { 'EX': 15 * 60 })
         return res.json(polls)
     } catch (err) {
         console.error(err)

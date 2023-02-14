@@ -51,7 +51,9 @@ const topUser = async (req, res) => {
             { $project: { _id: 0, user: '$user.name', score: 1 } },
         ])
     try {
-        const users = await Cache(req.originalUrl, getTop)
+        const users = await Cache(req.originalUrl, getTop, {
+            'EX': 24 * 60 * 60,
+        })
         return res.json(users)
     } catch (err) {
         consol.error(err)

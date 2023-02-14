@@ -33,7 +33,9 @@ const getArticle = async (req, res) => {
         ])
 
     try {
-        const article = await Cache(req.originalUrl, getArticle)
+        const article = await Cache(req.originalUrl, getArticle, {
+            'EX': 24 * 60 * 60,
+        })
 
         if (!article || article?.length == 0)
             return res.status(400).json({ message: 'Article not found.' })

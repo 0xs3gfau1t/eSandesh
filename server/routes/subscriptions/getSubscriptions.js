@@ -1,7 +1,7 @@
 const express = require('express')
 const mongoose = require('mongoose')
 const { userModel } = require('@/model/user')
-const Cache = require("@/controllers/Cache")
+const Cache = require('@/controllers/Cache')
 
 /**
  * @param {express.Request} req
@@ -51,7 +51,9 @@ module.exports = async (req, res) => {
             },
         ])
     try {
-        const userSubs = await Cache(req.originalUrl, getUserSubs)
+        const userSubs = await Cache(req.originalUrl, getUserSubs, {
+            'EX': 60,
+        })
         return res.json({ subs: userSubs.at(0)?.subs || [] })
     } catch (e) {
         console.error(e)

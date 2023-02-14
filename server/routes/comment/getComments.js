@@ -19,7 +19,8 @@ const getComments = async (req, res) => {
                     await commentModel
                         .find({ article: articleId })
                         .skip(page * 10 || 0)
-                        .limit(items || 10)
+                        .limit(items || 10),
+                { 'EX': 15 * 60 }
             )
 
             res.json({ message: 'success', comments: comments })
@@ -37,7 +38,8 @@ const getComments = async (req, res) => {
                     await commentModel
                         .find({ user: userId })
                         .skip(page * 10 || 0)
-                        .limit(items || 10)
+                        .limit(items || 10),
+                { 'EX': 15 * 60 }
             )
             res.json({ message: 'success', comments: comments })
         } catch (e) {

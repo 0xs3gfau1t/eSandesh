@@ -61,7 +61,7 @@ module.exports = async (req, res) => {
             },
         ])
     try {
-        const articles = await Cache(req.originalUrl, getSaved)
+        const articles = await Cache(req.originalUrl, getSaved, { 'EX': 60 })
         res.json({ message: 'success', articles: articles })
     } catch (err) {
         console.error(err)
