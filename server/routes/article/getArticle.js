@@ -1,6 +1,7 @@
 const express = require('express')
-const updateHistory = require('../../controllers/updateHistory')
-const articleModel = require('../../model/article')
+const updateHistory = require('@/controllers/updateHistory')
+const articleModel = require('@/model/article')
+const Cache = require('@/controllers/Cache')
 
 /**
  * @param {express.Request} req
@@ -10,30 +11,29 @@ const articleModel = require('../../model/article')
 const getArticle = async (req, res) => {
     const { year, month, slug } = req.params
 
-    try {
-        const article = await getCache(
-            `${year}/${month}/${slug}`,
-            async () =>
-                await articleModel.aggregate([
-                    { $match: { year, month, slug } },
-                    {
-                        $lookup: {
-                            from: 'users',
-                            let: { id: '$createdBy' },
-                            pipeline: [
-                                {
-                                    $match: {
-                                        $expr: { $eq: ['$_id', '$$id'] },
-                                    },
-                                },
-                                { $project: { name: 1, _id: 0 } },
-                            ],
-                            as: 'author',
+    const getArticle = async () =>
+        await articleModel.aggregate([
+            { $match: { year, month, slug } },
+            {
+                $lookup: {
+                    from: 'users',
+                    let: { id: '$createdBy' },
+                    pipeline: [
+                        {
+                            $match: {
+                                $expr: { $eq: ['$_id', '$$id'] },
+                            },
                         },
-                    },
-                    { $unwind: { path: '$author' } },
-                ])
-        )
+                        { $project: { name: 1, _id: 0 } },
+                    ],
+                    as: 'author',
+                },
+            },
+            { $unwind: { path: '$author' } },
+        ])
+
+    try {
+        const article = await Cache(req.originalUrl, getArticle)
 
         if (!article || article?.length == 0)
             return res.status(400).json({ message: 'Article not found.' })

@@ -1,3 +1,4 @@
+const Cache = require('@/controllers/Cache')
 const express = require('express')
 const commentModel = require('../../model/comment')
 
@@ -10,8 +11,8 @@ const topUser = async (req, res) => {
     const today = new Date()
     const thisMonth = new Date(today.getFullYear(), today.getMonth(), 1)
 
-    try {
-        const users = await commentModel.aggregate([
+    const getTop = async () =>
+        await commentModel.aggregate([
             { $match: { createdAt: { $gt: thisMonth } } },
             { $project: { likes: { $size: '$likes' }, user: 1 } },
             {
@@ -49,7 +50,8 @@ const topUser = async (req, res) => {
             { $unwind: { path: '$user' } },
             { $project: { _id: 0, user: '$user.name', score: 1 } },
         ])
-
+    try {
+        const users = await Cache(req.originalUrl, getTop)
         return res.json(users)
     } catch (err) {
         consol.error(err)

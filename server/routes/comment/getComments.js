@@ -1,3 +1,4 @@
+const Cache = require('@/controllers/Cache')
 const express = require('express')
 const commentModel = require('../../model/comment')
 
@@ -12,10 +13,14 @@ const getComments = async (req, res) => {
 
     if (articleId) {
         try {
-            const comments = await commentModel
-                .find({ article: articleId })
-                .skip(page * 10 || 0)
-                .limit(items || 10)
+            const comments = await Cache(
+                req.originalUrl,
+                async () =>
+                    await commentModel
+                        .find({ article: articleId })
+                        .skip(page * 10 || 0)
+                        .limit(items || 10)
+            )
 
             res.json({ message: 'success', comments: comments })
         } catch (e) {
@@ -26,10 +31,14 @@ const getComments = async (req, res) => {
 
     if (userId) {
         try {
-            const comments = await commentModel
-                .find({ user: userId })
-                .skip(page * 10 || 0)
-                .limit(items || 10)
+            const comments = await Cache(
+                req.originalUrl,
+                async () =>
+                    await commentModel
+                        .find({ user: userId })
+                        .skip(page * 10 || 0)
+                        .limit(items || 10)
+            )
             res.json({ message: 'success', comments: comments })
         } catch (e) {
             console.log(e)
