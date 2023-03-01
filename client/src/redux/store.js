@@ -6,6 +6,7 @@ import auth from "./reducers/auth"
 import ads from "./reducers/ads"
 import comments from "./reducers/comments"
 import polls from "./reducers/polls"
+import user from "./reducers/user"
 
 export const store = configureStore({
 	reducer: {
@@ -14,6 +15,7 @@ export const store = configureStore({
 		auth: auth,
 		ads: ads,
 		comments: comments,
-		polls: polls
+		polls: polls,
+		user: user
 	},
 })
