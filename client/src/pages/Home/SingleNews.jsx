@@ -24,6 +24,12 @@ const SingleNews = () => {
 	const [fontSize, setFontSize] = useState(1)
 	const dispatch = useDispatch()
 
+	const dateOpt = {
+		weekday: "short",
+		year: "numeric",
+		month: "short",
+		day: "numeric",
+	}
 	useEffect(() => {
 		dispatch(getSingleNews({ params: params, noAudio: false }))
 	}, [params])
@@ -68,9 +74,20 @@ const SingleNews = () => {
 						</div>
 					)}
 				</div>
-				<h1 className="text-xl m-4 font-bold">
-					{news ? news.title : ""}
-				</h1>
+				<div className="flex flex-col gap-0">
+					<h1 className="text-xl mt-4 font-bold">
+						{news ? news.title : ""}
+					</h1>
+					<h2 className="ml-4">
+						{news
+							? new Date(news.publishedAt).toLocaleDateString(
+									"en-US",
+									dateOpt
+							  )
+							: ""}
+						&nbsp;| {news ? news.author.name : ""}
+					</h2>
+				</div>
 				<div className="my-4 w-min mx-auto">
 					{audio ? (
 						<audio
