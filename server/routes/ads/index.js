@@ -2,6 +2,7 @@ const express = require('express')
 const router = express.Router()
 
 const withAuth = require('../../middlewares/withAuth')
+const fetchHistory = require('@/middlewares/fetchHistory')
 
 const addAd = require('./addAd')
 const delAd = require('./delAd')
@@ -13,7 +14,7 @@ const relevantAds = require('./relevantAds')
 
 router.get('/listbypublisher', withAuth, getAds)
 router.get('/list', listAds)
-router.get('/relevant', relevantAds)
+router.get('/relevant', fetchHistory, relevantAds)
 router.get('/', withAuth, getAd)
 router.post('/', withAuth, addAd)
 router.delete('/', withAuth, delAd)

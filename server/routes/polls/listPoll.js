@@ -1,6 +1,7 @@
 const express = require('express')
-const { default: mongoose } = require('mongoose')
+const mongoose = require('mongoose')
 const pollsModel = require('../../model/polls')
+const Cache = require('@/controllers/Cache')
 
 /**
  * @param {express.Request} req
@@ -8,8 +9,9 @@ const pollsModel = require('../../model/polls')
  */
 const listPoll = async (req, res) => {
     const { page = 0, items = 10 } = req.query
-    try {
-        const polls = await pollsModel.aggregate([
+
+    const getPolls = async () =>
+        await pollsModel.aggregate([
             { $sort: { createdAt: -1 } },
             { $skip: Number(page) * Number(items) },
             { $limit: Number(items) },
@@ -38,6 +40,8 @@ const listPoll = async (req, res) => {
                 },
             },
         ])
+    try {
+        const polls = await Cache(req.originalUrl, getPolls, { 'EX': 15 * 60 })
         return res.json(polls)
     } catch (err) {
         console.error(err)
