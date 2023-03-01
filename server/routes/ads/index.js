@@ -13,7 +13,7 @@ const listAds = require('./listAds')
 const relevantAds = require('./relevantAds')
 
 router.get('/listbypublisher', withAuth, getAds)
-router.get('/list', listAds)
+router.get('/list', withAuth, listAds)
 router.get('/relevant', fetchHistory, relevantAds)
 router.get('/', withAuth, getAd)
 router.post('/', /*withAuth,*/ addAd)

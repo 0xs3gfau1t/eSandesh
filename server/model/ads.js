@@ -1,10 +1,13 @@
 const mongoose = require('mongoose')
 
-const adImageSchema = mongoose.Schema({
-    rectX /* Link to image */: { type: String, default: null },
-    rectY: { type: String, default: null },
-    square: { type: String, default: null },
-})
+const adImageSchema = mongoose.Schema(
+    {
+        rectX /* Link to image */: { type: String },
+        rectY: { type: String },
+        square: { type: String },
+    },
+    { _id: false }
+)
 
 const adSchema = mongoose.Schema(
     {

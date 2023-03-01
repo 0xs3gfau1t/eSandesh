@@ -1,9 +1,10 @@
 const articleModel = require('../../model/article')
 const path = require('path')
-const audioAdFolder = path.resolve(__dirname, '../../assets/')
 const fs = require('fs')
 const { JSDOM } = require('jsdom')
 const express = require('express')
+
+const audioAdFolder = path.resolve(__dirname, '../../assets/ads/audio/')
 
 /**
  * @param {express.Request} req

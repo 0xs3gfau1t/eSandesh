@@ -1,33 +1,35 @@
 const express = require('express')
-
 const adsModel = require('../../model/ads')
-
+const uploadAdAssets = require('../../controllers/uploadController')
 /**
  * @param {express.Request} req
  * @param {express.Response} res
  * @return {void}
  */
 
-const normalPricePerMinute = 1000
+const normalPricePerMinute = 100
 const midPriority = 5
 
 module.exports = (req, res) => {
+    // Always check first
+    const { user } = req.session
+    if (!user?.roles?.isRoot)
+        return res.json({ error: 'Not enough permission to create ads' })
+
     const {
         name,
         publisher /*= user.id*/,
-        image, //{type: url}
         redirectUrl,
         priority,
         expiry,
         category,
         popup = false,
-        audio,
     } = req.body
 
-    const { user } = req.session
+    const { imageX, imageY, imageSq, audio } = req.files
 
-    if (!user?.roles?.isRoot)
-        return res.json({ error: 'Not enough permission to create ads' })
+    // Store urls to save in db
+    const [image, audioUrl] = uploadAdAssets(imageX, imageY, imageSq, audio)
 
     const categoryArray = category
         .split(',')
@@ -43,7 +45,7 @@ module.exports = (req, res) => {
     const audioPriceAdjustmentFactor = audio ? 1.5 : 1
     const price = Math.round(
         ((minutesLeft * normalPricePerMinute * priority) / midPriority) *
-            audioPriceAdjustmentFactor
+            (audioPriceAdjustmentFactor + popup * 2)
     )
 
     adsModel.create(
@@ -57,12 +59,13 @@ module.exports = (req, res) => {
             expiry,
             category: categoryArray,
             popup,
-            audio,
+            audio: audioUrl,
         },
         (e, d) => {
-            if (e)
+            if (e) {
+                console.error(e)
                 return res.status(500).json({ error: 'Something went wrong.' })
-
+            }
             res.json({ message: 'success' })
         }
     )
