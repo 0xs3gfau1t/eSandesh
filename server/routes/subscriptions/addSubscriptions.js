@@ -1,35 +1,29 @@
 const express = require('express')
-const { userModel } = require('../../model/user')
+const mongoose = require('mongoose')
+const { userModel } = require('@/model/user')
 
 /**
  * @param {express.Request} req
  * @param {express.Response} res
  */
 
-module.exports = (req, res) => {
+module.exports = async (req, res) => {
     const { id } = req.session.user
+    const { id: subId } = req.body
 
-    if (!id) return res.status(401).json({ error: 'Access Denied' })
+    try {
+        const exists = await userModel.exists({
+            _id: mongoose.Types.ObjectId(subId),
+        })
+        if (!exists) return res.status(500).json({ error: 'Invalid user.' })
 
-    const { categories } = req.body
-
-    userModel.findOne({ _id: id }, { subscriptions: true }, (e, user) => {
-        if (e) return res.status(500).json({ error: 'Something went wrong' })
-
-        if (!user)
-            return res.status(404).json({ error: 'No such record found' })
-
-        categories
-            .split(',')
-            .map(i => i.trim())
-            .filter(i => i !== '')
-            .forEach(category => {
-                if (!user.subscriptions[category]) {
-                    user.subscriptions.set(category, new Object())
-                }
-            })
-
-        user.save()
-        res.json({ message: 'success' })
-    })
+        await userModel.updateOne(
+            { _id: id },
+            { $addToSet: { subscriptions: mongoose.Types.ObjectId(subId) } }
+        )
+        return res.status(200).json({ success: true })
+    } catch (err) {
+        console.error(err)
+        return res.status(500).json({ error: 'Something went wrong.' })
+    }
 }

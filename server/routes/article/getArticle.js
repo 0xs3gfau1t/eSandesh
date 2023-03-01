@@ -1,6 +1,7 @@
 const express = require('express')
-const articleModel = require('../../model/article')
-const { userModel } = require('../../model/user')
+const updateHistory = require('@/controllers/updateHistory')
+const articleModel = require('@/model/article')
+const Cache = require('@/controllers/Cache')
 
 /**
  * @param {express.Request} req
@@ -10,84 +11,61 @@ const { userModel } = require('../../model/user')
 const getArticle = async (req, res) => {
     const { year, month, slug } = req.params
 
-    var article
-    try {
-        article = await articleModel.findOne({ year, month, slug })
+    const getArticle = async () =>
+        await articleModel.aggregate([
+            { $match: { year, month, slug } },
+            {
+                $lookup: {
+                    from: 'users',
+                    let: { id: '$createdBy' },
+                    pipeline: [
+                        {
+                            $match: {
+                                $expr: { $eq: ['$_id', '$$id'] },
+                            },
+                        },
+                        { $project: { name: 1, _id: 0 } },
+                    ],
+                    as: 'author',
+                },
+            },
+            { $unwind: { path: '$author' } },
+        ])
 
-        if (!article)
+    try {
+        const article = await Cache(req.originalUrl, getArticle, {
+            'EX': 24 * 60 * 60,
+        })
+
+        if (!article || article?.length == 0)
             return res.status(400).json({ message: 'Article not found.' })
 
-        // update cookies history
-        var user = req.cookies?.user,
-            userMod
-        if (user) {
-            // if previous cookie exists then parse it
-            user = JSON.parse(user)
-        } else {
-            // if no previous cookie exists
-            if (req.session) {
-                // if the user is logged in fetch from db
-                userMod = await userModel.findOne(
-                    { _id: req.session.user.id },
-                    { history: true }
-                )
-                user = { history: Object.fromEntries(userMod.history) }
-            } else {
-                // if not logged in create empty history
-                user = { history: {} }
-            }
-        }
+        // Update category hits in user's history
+        article[0]?.category.forEach(category => {
+            // If the category doesnot exists then create
+            if (!req.cookies.user.history.hasOwnProperty(category))
+                req.cookies.user.history[category] = {
+                    hits: 0,
+                    likes: 0,
+                    comments: 0,
+                    watchtime: 0,
+                }
 
-        // update category counter in cookie
-        article.category.forEach(category => {
-            let val = user.history[category] || {
-                hits: 0,
-                likes: 0,
-                comments: 0,
-                watchtime: 0,
-            }
-            val.hits += 1
-            user.history[category] = val
+            req.cookies.user.history[category].hits += 1
         })
 
-        // set cookie
-        res.cookie('user', JSON.stringify(user), {
-            httpOnly: true,
-            sameSite: 'lax',
-        })
+        await updateHistory({ req, res })
 
-        res.status(200).json(article)
+        res.status(200).json(article[0])
+
+        // Update article count in db
+        await articleModel.updateOne(
+            { year, month, slug },
+            { $inc: { hits: 1 } }
+        )
     } catch (err) {
         console.error(err)
         return res.status(500).json({ error: 'Something went wrong.' })
-    }
-
-    // Update article count
-    article.hits += 1
-    await article.save()
-
-    // if user is logged in then update history counter in db as well
-    if (req.session) {
-        // if userModel has not been fetched
-        if (!userMod)
-            userMod = await userModel.findOne(
-                { _id: req.session.user.id },
-                { history: true }
-            )
-
-        // update category hits count
-        article.category.forEach(category => {
-            let val = userMod.history.get(category) || {
-                hits: 0,
-                likes: 0,
-                comments: 0,
-                watchtime: 0,
-            }
-            val.hits += 1
-            userMod.history.set(category, val)
-        })
-
-        await userMod.save()
     }
 }
 

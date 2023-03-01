@@ -4,9 +4,12 @@ const articleSchema = mongoose.Schema(
     {
         title: { type: String },
         content: { type: String },
-        createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+        createdBy: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User',
+            required: true,
+        },
         hits: { type: Number, default: 0 },
-        comments: { type: [mongoose.Schema.Types.ObjectId], ref: 'Comment' },
         publishedAt: { type: Date },
         category: { type: [String] },
         tags: { type: [String] },

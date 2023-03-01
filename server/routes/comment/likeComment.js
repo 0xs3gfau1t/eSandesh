@@ -2,6 +2,7 @@ const express = require('express')
 const commentModel = require('../../model/comment')
 const articleModel = require('../../model/article')
 const { userModel } = require('../../model/user')
+const updateHistory = require('../../controllers/updateHistory')
 /**
  * @param {express.Request} req
  * @param {express.Response} res
@@ -31,11 +32,6 @@ module.exports = (req, res) => {
         else d.likes.push(req.session.user.id)
 
         // Update user preference for this category
-        const userCookie = req.cookies?.user
-
-        let parsedCookies
-        if (userCookie) parsedCookies = JSON.parse(userCookie)
-
         const parentArticleCategories = await articleModel.findOne(
             {
                 _id: d.article,
@@ -49,44 +45,19 @@ module.exports = (req, res) => {
                 .json({ error: 'Something went wrong on database' })
 
         parentArticleCategories.category.forEach(category => {
-            if (parsedCookies[category]) parsedCookies[category].likes += 1
-            else {
-                parsedCookies[category] = {
-                    hits: 1,
-                    likes: 1,
+            if (!req.cookies.user.history.hasOwnProperty(category))
+                req.cookies.user.history[category] = {
+                    hits: 0,
+                    likes: 0,
                     comments: 0,
                     watchtime: 0,
                 }
-            }
+            req.cookies.user.history[category].likes += 1
         })
 
-        res.cookie('user', JSON.stringify(parsedCookies), {
-            httpOnly: true,
-            sameSite: 'lax',
-        })
-        d.save()
+        updateHistory({ req, res })
         res.json({ message: 'success' })
 
-        // Update preferance in db as well
-        const user = await userModel.findOne(
-            { _id: req.session.user.id },
-            { history: true }
-        )
-
-        if (!user) return
-
-        parentArticleCategories.category.forEach(category => {
-            if (user.history.get(category))
-                user.history.get(category).likes =
-                    user.history.get(category).likes + 1
-            else
-                user.history.set(category, {
-                    hits: 1,
-                    likes: 1,
-                    comments: 0,
-                    watchtime: 0,
-                })
-        })
-        user.save()
+        await d.save()
     })
 }
