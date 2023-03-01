@@ -1,6 +1,8 @@
 const express = require('express')
 const mongoose = require('mongoose')
 const { userModel } = require('@/model/user')
+const Cache = require('@/controllers/Cache')
+
 /**
  * @param {express.Request} req
  * @param {express.Response} res
@@ -13,8 +15,8 @@ module.exports = async (req, res) => {
     limit = Number(limit)
     page = Number(page)
 
-    try {
-        const userSubs = await userModel.aggregate([
+    const getUserSubs = async () =>
+        await userModel.aggregate([
             { $match: { _id: mongoose.Types.ObjectId(id) } },
             {
                 $project: {
@@ -48,6 +50,10 @@ module.exports = async (req, res) => {
                 },
             },
         ])
+    try {
+        const userSubs = await Cache(req.originalUrl, getUserSubs, {
+            'EX': 60,
+        })
         return res.json({ subs: userSubs.at(0)?.subs || [] })
     } catch (e) {
         console.error(e)
