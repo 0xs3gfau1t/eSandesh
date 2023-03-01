@@ -10,6 +10,8 @@ import Popup from "./Popup"
 import SocialShare from "./SocialShare"
 import DashActions from "./DashActions"
 import SeeAllBtn from "./SeeAllBtn"
+import Alert from "./Alert"
+
 export {
 	SiteLogo,
 	FormText,
@@ -25,4 +27,5 @@ export {
 	SocialShare,
 	DashActions,
 	SeeAllBtn,
+	Alert,
 }

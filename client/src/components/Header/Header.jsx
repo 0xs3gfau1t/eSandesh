@@ -1,22 +1,26 @@
 import { useState, useRef } from "react"
 import { FaRegUserCircle } from "react-icons/fa"
+import { useDispatch } from "react-redux"
+import { Link, useNavigate } from "react-router-dom"
+import { signOut, useSession } from "next-auth/react"
 
+import { setAlert } from "../../redux/actions/misc"
 import { SiteLogo } from "../common"
 import Forex from "./Forex"
-import { Link, useNavigate } from "react-router-dom"
 import GoldSilver from "./GoldSilver"
-import { signOut, useSession } from "next-auth/react"
-import { useEffect } from "react"
 
 export default function Header() {
 	const [show, setShow] = useState(false)
 	const ref = useRef(null)
 	const navigate = useNavigate()
 	const session = useSession()
-
+	const dispatch = useDispatch()
 	const action = () => {
-		if (session.status == "authenticated") signOut({ redirect: false })
-		else navigate("/userauth")
+		if (session.status == "authenticated") {
+			setShow(false)
+			dispatch(setAlert("Logged Out", "success"))
+			signOut({ redirect: false })
+		} else navigate("/userauth")
 	}
 
 	return (
