@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit"
 import { listSavedArticles, deleteSavedArticles, addSavedArticle } from "../actions/user"
 
 const initialState = {
-	savedArticles: {},
+	savedArticles: [],
 }
 
 const userSlice = createSlice({

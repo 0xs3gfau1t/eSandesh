@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react"
 import { useSelector, useDispatch } from "react-redux"
 import { useSession } from "next-auth/react"
-
-import { startCase } from 'lodash'
 import { setFocus } from "../../../redux/reducers/misc"
+
 import UserInfo from "./UserInfo"
 import UserPreference from "./UserPreference"
 import Subscription from "./Subscription"
@@ -13,15 +12,15 @@ import UserPosts from "./UserPosts"
 const UserProfile = () => {
 	const { data: session, status } = useSession()
 	const [showProfile, setShowProfile] = useState(false);
+	// const savedArticles = useSelector(state => state.user.savedArticles)
 	const dispatch = useDispatch()
-
 
 	useEffect(() => {
 		dispatch(setFocus(true))
 	}, [])
 
 	useEffect(()=>{
-		console.log(session?.user)	
+		// hmmm
 	}, [session])
 
 	if (status == "unauthenticated") {
@@ -33,8 +32,6 @@ const UserProfile = () => {
 	// console.log(session.data)
 	return (
 		<div className="font-english p-4 flex flex-col ">
-			<hr className=" w-11/12 my-6 border-neutral-300" />
-
 			<div className="flex justify-between items-center">
 				<p className = ' font-semibold '>Hello, {session?.user.name || 'loading'}</p>
 				<button className=" bg-primary w-64 p-2 rounded"
