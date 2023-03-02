@@ -22,6 +22,8 @@ const sendNewsLetter = async ({ user, data }) => {
         ])
         const emails = subscribers.map(subscriber => subscriber.email)
 
+        if (!emails.length) return { message: 'No subscribers to mail to' }
+
         const transporter = nodemailer.createTransport({
             host: process.env.MAILER_HOST,
             port: process.env.MAILER_POST,

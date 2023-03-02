@@ -1,6 +1,7 @@
 const sendNewsLetter = require('@/controllers/sendNewsLetter')
 const express = require('express')
 const articleModel = require('../../model/article')
+const { JSDOM } = require('jsdom')
 
 const socialApis = {
     facebook: require('./socials/facebook'),
@@ -10,6 +11,11 @@ const socialApis = {
  * @param {express.Request} req
  * @param {express.Response} res
  */
+
+// Dummy functtion to be integrated with summary model
+function generateSummary(content) {
+    return String(content).slice(0, 100)
+}
 
 const addArticle = async (req, res) => {
     const {
@@ -22,6 +28,9 @@ const addArticle = async (req, res) => {
     } = req.body
 
     const { user } = req.session
+    const dom = new JSDOM(content)
+    const contentOnly = dom.window.document.querySelector('body').textContent
+
     const data = {
         title,
         content,
@@ -37,6 +46,7 @@ const addArticle = async (req, res) => {
                 new Date().getMonth(),
                 0
             ).getTime(),
+        summary: generateSummary(contentOnly),
     }
 
     // If the user is an admin then publish the article
@@ -46,20 +56,32 @@ const addArticle = async (req, res) => {
         data.priority = priority
     }
 
-    const providedSocialsToUpdateOn =
-        socials
-            ?.split(',')
-            .map(i => i.trim())
-            .filter(i => i !== '') || []
-
     try {
         const article = new articleModel(data)
         await article.save()
 
         res.status(200).json(data)
 
+        const providedSocialsToUpdateOn =
+            socials
+                ?.split(',')
+                .map(i => i.trim())
+                .filter(i => i !== '') || []
+
         providedSocialsToUpdateOn.forEach(social => {
-            if (socialApis[social]) socialApis[social](title)
+            if (socialApis[social])
+                socialApis[social]({
+                    title,
+                    summary: data.summary,
+                    link:
+                        process.env.ORIGIN +
+                        '/news/' +
+                        data.year +
+                        '/' +
+                        data.month +
+                        '/' +
+                        data.slug,
+                })
         })
 
         const mailStatus = await sendNewsLetter({ user, data })

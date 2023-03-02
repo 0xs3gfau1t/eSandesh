@@ -24,6 +24,7 @@ const articleSchema = mongoose.Schema(
         year: String,
         month: String,
         slug: String,
+        summarizedContent: { type: String },
     },
     { timestamps: true }
 )
