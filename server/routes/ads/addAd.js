@@ -1,14 +1,13 @@
 const express = require('express')
 const adsModel = require('../../model/ads')
 const uploadAdAssets = require('../../controllers/uploadController')
+const calculateAdPrice = require('../../controllers/adPriceController')
+
 /**
  * @param {express.Request} req
  * @param {express.Response} res
  * @return {void}
  */
-
-const normalPricePerMinute = 100
-const midPriority = 5
 
 module.exports = (req, res) => {
     // Always check first
@@ -21,7 +20,7 @@ module.exports = (req, res) => {
         publisher /*= user.id*/,
         redirectUrl,
         priority,
-        expiry,
+        expiry: expiryDay,
         category,
         popup = false,
     } = req.body
@@ -36,18 +35,9 @@ module.exports = (req, res) => {
         .map(i => i.trim())
         .filter(i => i !== '')
 
-    const minutesLeft = (new Date(expiry) - new Date()) / (1000 * 60)
-
-    // We can do better here by analyzing which category the ad falls
-    // Then check performance of this category in db
-    // Then adjust the formula to adjust price by
-    // considering how much users click the ad
-    const audioPriceAdjustmentFactor = audio ? 1.5 : 1
-    const price = Math.round(
-        ((minutesLeft * normalPricePerMinute * priority) / midPriority) *
-            (audioPriceAdjustmentFactor + popup * 2)
-    )
-
+    const expiry = new Date(Date.now() + expiryDay * 24 * 60 * 60 * 1000)
+    const price = calculateAdPrice({ popup, priority, expiry, audio: audioUrl })
+    console.log(price)
     adsModel.create(
         {
             name,

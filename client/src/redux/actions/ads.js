@@ -1,10 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
 import axios from 'axios'
 
-export const createAd = createAsyncThunk('ads/createAd', async data => {
-    data.expiry = data.expiry = new Date(
-        Date.now() + Number(data.expiry) * 24 * 60 * 60 * 1000
-    )
+export const createAd = async data => {
     axios
         .post('/api/ads', data, {
             withCredentials: true,
@@ -18,7 +15,23 @@ export const createAd = createAsyncThunk('ads/createAd', async data => {
         .catch(err => {
             console.error(err)
         })
-})
+}
+
+export const editAd = async data => {
+    axios
+        .patch('/api/ads', data, {
+            withCredentials: true,
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+        })
+        .then(res => {
+            return res.data
+        })
+        .catch(err => {
+            console.error(err)
+        })
+}
 
 export const listAds = createAsyncThunk('ads/listAd', async () => {
     const response = await axios
@@ -36,8 +49,8 @@ export const listAds = createAsyncThunk('ads/listAd', async () => {
     return { success: true, data: response.ad }
 })
 
-export const getAd = createAsyncThunk('ads/getAd', async id => {
-    const response = await axios
+export const getAd = async id => {
+    const res = await axios
         .get(
             '/api/ads',
             { params: { id } },
@@ -50,11 +63,10 @@ export const getAd = createAsyncThunk('ads/getAd', async id => {
         })
         .catch(err => {
             console.error(err)
+            return false
         })
-    if (!response) return { success: false }
-
-    return { success: true, data: response }
-})
+    return res
+}
 
 export const deleteAd = createAsyncThunk('ads/deleteAd', async data => {
     return await axios

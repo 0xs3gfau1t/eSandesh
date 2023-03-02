@@ -4,7 +4,7 @@ import { BsFillPlusSquareFill } from 'react-icons/bs'
 
 import { FormText } from '../../components/common'
 import { Popup } from '../../components/common'
-import { createAd, getAd, listAds } from '../../redux/actions/ads'
+import { createAd, editAd, getAd, listAds } from '../../redux/actions/ads'
 import { AiFillDelete, AiFillEdit } from 'react-icons/ai'
 
 const POPUP_STATE = Object.freeze({
@@ -45,15 +45,15 @@ export default function AdsMan() {
     const onSubmit = () => {
         switch (show) {
             case POPUP_STATE.ADD:
-                dispatch(createAd(prop))
-                dispatch(listAds(prop))
+                createAd(prop)
                 break
             case POPUP_STATE.EDIT:
-                //dispatch(editAd(prop))
+                editAd(prop)
                 break
         }
+        dispatch(listAds(prop))
         setProp(initState)
-        setShow(false)
+        setShow(POPUP_STATE.INACTIVE)
     }
     return (
         <div className="mx-8">
@@ -106,7 +106,7 @@ export default function AdsMan() {
                         type="text"
                         name="redirectUrl"
                         value={prop.redirectUrl}
-                        labelText="Target URL for Ad"
+                        labelText="Redirect URL for Ad"
                         handleChange={handleChange}
                     />
                     <FormText
@@ -189,20 +189,17 @@ export default function AdsMan() {
                                                             size={'1.4em'}
                                                             onClick={async e => {
                                                                 const adData =
-                                                                    await dispatch(
-                                                                        getAd(
-                                                                            e.target.getAttribute(
-                                                                                'data-id'
-                                                                            )
+                                                                    await getAd(
+                                                                        e.target.getAttribute(
+                                                                            'data-id'
                                                                         )
                                                                     )
                                                                 setProp({
-                                                                    ...adData
-                                                                        .payload
-                                                                        .data,
+                                                                    ...adData,
+                                                                    // Revert expiry from DateTime to No. of days
                                                                     expiry: Math.ceil(
                                                                         (new Date(
-                                                                            adData.payload.data.expiry
+                                                                            adData.expiry
                                                                         ) -
                                                                             Date.now()) /
                                                                             (24 *
@@ -210,8 +207,20 @@ export default function AdsMan() {
                                                                                 60 *
                                                                                 1000)
                                                                     ),
+                                                                    imageX: adData
+                                                                        .image
+                                                                        .rectX,
+                                                                    imageY: adData
+                                                                        .image
+                                                                        .rectY,
+                                                                    imageSq:
+                                                                        adData
+                                                                            .image
+                                                                            .square,
                                                                 })
-                                                                setShow(true)
+                                                                setShow(
+                                                                    POPUP_STATE.EDIT
+                                                                )
                                                             }}
                                                             data-id={ad._id}
                                                         />
