@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom"
 import { useSelector, useDispatch } from "react-redux"
-import { deleteSavedArticles } from "../../../redux/actions/user";
+import { deleteSavedArticles, listSavedArticles } from "../../../redux/actions/user";
 import { FiTrash } from "react-icons/fi";
 
 export default function SavedPosts() {
@@ -13,6 +13,7 @@ export default function SavedPosts() {
     dispatch(deleteSavedArticles(id));
   }
 
+  console.log(savedArticles)
   return (
     <div>
       <h2 className="font-bold text-base font-english leading-loose">

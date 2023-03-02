@@ -29,18 +29,6 @@ export default function UserPosts() {
           <li>
             <FiTrash className="text-red" />
           </li>
-          {/* row 2 */}
-          <li>2</li>
-          <li className="font-bold">gohi ra badar ko katha</li>
-          <li>ekadesh ma euta badar thiyo. Usko euta gohi sathi thiyo</li>
-          <li>Story</li>
-          <li>2022-12-12</li>
-          <li>
-            <FiEdit className="text-blue" />
-          </li>
-          <li>
-            <FiTrash className="text-red" />
-          </li>
         </ul>
       </ul>
     </div>

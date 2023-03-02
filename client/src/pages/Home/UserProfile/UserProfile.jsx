@@ -8,39 +8,42 @@ import UserPreference from "./UserPreference"
 import Subscription from "./Subscription"
 import SavedPosts from "./SavedPosts"
 import UserPosts from "./UserPosts"
+import { listSavedArticles } from "../../../redux/actions/user"
 
 const UserProfile = () => {
-	const { data: session, status } = useSession()
+	const session_user = useSession()
 	const [showProfile, setShowProfile] = useState(false);
-	// const savedArticles = useSelector(state => state.user.savedArticles)
 	const dispatch = useDispatch()
+
+
+	useEffect(()=>{
+		console.log(session_user)
+	}, [session_user])
+
 
 	useEffect(() => {
 		dispatch(setFocus(true))
+		dispatch(listSavedArticles(session_user?.data.user.id))
 	}, [])
 
-	useEffect(()=>{
-		// hmmm
-	}, [session])
 
-	if (status == "unauthenticated") {
+	if (session_user.status == "unauthenticated") {
 		return (
 			<h1 className="text-3xl font-bold">You must login to view this page</h1>
 		)
 	}
 
-	// console.log(session.data)
 	return (
 		<div className="font-english p-4 flex flex-col ">
 			<div className="flex justify-between items-center">
-				<p className = ' font-semibold '>Hello, {session?.user.name || 'loading'}</p>
+				<p className = 'font-semibold'>Hello, {session_user?.data?.user.name || 'loading'}</p>
 				<button className=" bg-primary w-64 p-2 rounded"
 						onClick ={()=> setShowProfile(!showProfile)}>
 					Set Your User Profile
 				</button>
 				{showProfile && (
-					<div className="fixed content-end">
-						<div className="m-auto p-4 ince bg-white rounded shadow-lg">
+					<div className="fixed content-center inset-y-0 right-0">
+						<div className="p-4 bg-white rounded shadow-lg w-max ">
 							<h1 className="font-english underline underline-offset-2 leading-loose font-bold text-center text-3xl text-darkblue">
 								User Profile
 							</h1>
@@ -56,8 +59,8 @@ const UserProfile = () => {
 					</div>
 				)}
 			</div>
-			<hr className=" w-11/12 my-6 border-neutral-300" />
-			<UserPreference />
+			{/* <hr className=" w-11/12 my-6 border-neutral-300" />
+			<UserPreference /> */}
 			<hr className=" w-11/12 my-6 border-neutral-300" />
 			<UserPosts />
 			<hr className=" w-11/12 my-6 border-neutral-300" />
