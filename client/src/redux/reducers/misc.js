@@ -6,6 +6,7 @@ const initialState = {
     showAlert: false,
     alertMsg: '',
     alertType: '',
+    forexData: [],
 }
 
 const miscSlice = createSlice({
@@ -14,6 +15,9 @@ const miscSlice = createSlice({
     reducers: {
         setFocus: (state, { payload }) => {
             state.focus = payload
+        },
+        updateForexData: (state, action) => {
+            state.forexData = action.payload
         },
         displayAlert: (state, { payload }) => {
             state.alertMsg = payload.alertMsg
@@ -31,6 +35,11 @@ const miscSlice = createSlice({
     },
 })
 
-export const { setFocus, displayAlert, clearAlert, setLoading } =
-    miscSlice.actions
+export const {
+    setFocus,
+    displayAlert,
+    clearAlert,
+    setLoading,
+    updateForexData,
+} = miscSlice.actions
 export default miscSlice.reducer
