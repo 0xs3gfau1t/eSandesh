@@ -1,5 +1,5 @@
-import { Provider } from "react-redux"
-import { store } from "./redux/store"
+import { useSelector } from "react-redux"
+
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom"
 
 import "./App.css"
@@ -23,53 +23,51 @@ import {
 	Polls,
 	ArchiveNews,
 } from "./pages"
-import { PrivateRoute } from "./components/common"
+import { PrivateRoute, Alert } from "./components/common"
 
 function App() {
+	const misc = useSelector(state => state.misc)
+
 	return (
-		<Provider store={store}>
-			<Router>
-				<Routes>
-					<Route path="/userauth" element={<UserAuth />} />
-					<Route path="/admin" element={<Login />} />
+		<Router>
+			{misc.showAlert && <Alert />}
+			<Routes>
+				<Route path="/userauth" element={<UserAuth />} />
+				<Route path="/admin" element={<Login />} />
+				<Route
+					path="/admin/dashboard"
+					element={
+						<PrivateRoute>
+							<AdminDash />
+						</PrivateRoute>
+					}
+				>
+					<Route path="/admin/dashboard" element={<ManageNews />} />
+					<Route path="readers" element={<ReaderArticles />} />
+					<Route path="addnews" element={<EditNews />} />
+					<Route path="critics" element={<ManageCritics />} />
 					<Route
-						path="/admin/dashboard"
-						element={
-							<PrivateRoute>
-								<AdminDash />
-							</PrivateRoute>
-						}
-					>
-						<Route
-							path="/admin/dashboard"
-							element={<ManageNews />}
-						/>
-						<Route path="readers" element={<ReaderArticles />} />
-						<Route path="addnews" element={<EditNews />} />
-						<Route path="critics" element={<ManageCritics />} />
-						<Route
-							path="editnews/:year/:month/:slug"
-							element={<EditNews isEdit={true} />}
-						/>
-						<Route path="archive" element={<Archive />} />
-						<Route path="ads" element={<AdsMan />} />
-						<Route path="polls" element={<PollsMan />} />
-						<Route path="stats" element={<ViewSiteStats />} />
-					</Route>
-					<Route path="/" element={<Home />}>
-						<Route path="/profile" element={<UserProfile />} />
-						<Route path="/archive" element={<ArchiveNews />} />
-						<Route path="/polls" element={<Polls />} />
-						<Route path="" element={<Landing />} />
-						<Route
-							path="/news/:year/:month/:slug"
-							element={<SingleNews />}
-						/>
-						<Route path="/category/:cat" element={<Category />} />
-					</Route>
-				</Routes>
-			</Router>
-		</Provider>
+						path="editnews/:year/:month/:slug"
+						element={<EditNews isEdit={true} />}
+					/>
+					<Route path="archive" element={<Archive />} />
+					<Route path="ads" element={<AdsMan />} />
+					<Route path="polls" element={<PollsMan />} />
+					<Route path="stats" element={<ViewSiteStats />} />
+				</Route>
+				<Route path="/" element={<Home />}>
+					<Route path="/profile" element={<UserProfile />} />
+					<Route path="/archive" element={<ArchiveNews />} />
+					<Route path="/polls" element={<Polls />} />
+					<Route path="" element={<Landing />} />
+					<Route
+						path="/news/:year/:month/:slug"
+						element={<SingleNews />}
+					/>
+					<Route path="/category/:cat" element={<Category />} />
+				</Route>
+			</Routes>
+		</Router>
 	)
 }
 

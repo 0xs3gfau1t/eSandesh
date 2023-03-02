@@ -21,9 +21,15 @@ const SingleNews = () => {
 	const audio = useSelector(state => state.news.audio)
 	const focus = useSelector(state => state.misc.focus)
 	const [show, setShow] = useState(true)
-
+	const [fontSize, setFontSize] = useState(1)
 	const dispatch = useDispatch()
 
+	const dateOpt = {
+		weekday: "short",
+		year: "numeric",
+		month: "short",
+		day: "numeric",
+	}
 	useEffect(() => {
 		dispatch(getSingleNews({ params: params, noAudio: false }))
 	}, [params])
@@ -52,10 +58,36 @@ const SingleNews = () => {
 						className="text-2xl my-1 cursor-pointer"
 						onClick={e => dispatch(setFocus(!focus))}
 					/>
+					{focus && (
+						<div className="flex gap-2">
+							<span className="text-sm ml-4 py-2">
+								Font Size:
+							</span>
+							<input
+								type="range"
+								min="1"
+								max="5"
+								value={fontSize}
+								className="bg-transparent w-20 "
+								onChange={e => setFontSize(e.target.value)}
+							/>
+						</div>
+					)}
 				</div>
-				<h1 className="text-xl m-4 font-bold">
-					{news ? news.title : ""}
-				</h1>
+				<div className="flex flex-col gap-0">
+					<h1 className="text-xl mt-4 font-bold">
+						{news ? news.title : ""}
+					</h1>
+					<h2 className="ml-4">
+						{news
+							? new Date(news.publishedAt).toLocaleDateString(
+									"en-US",
+									dateOpt
+							  )
+							: ""}
+						&nbsp;| {news ? news.author.name : ""}
+					</h2>
+				</div>
 				<div className="my-4 w-min mx-auto">
 					{audio ? (
 						<audio
@@ -75,6 +107,7 @@ const SingleNews = () => {
 					)}
 				</div>
 				<div
+					className={`text-${fontSize}xl`}
 					dangerouslySetInnerHTML={{
 						__html: news ? news.content : "Fetching",
 					}}
