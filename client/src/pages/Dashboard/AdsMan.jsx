@@ -25,6 +25,7 @@ const initState = {
     expiry: 1,
     publisher: null,
     _id: null,
+    popup: false,
 }
 
 export default function AdsMan() {
@@ -40,15 +41,17 @@ export default function AdsMan() {
     const handleChange = e => {
         if (['imageX', 'imageY', 'imageSq', 'audio'].includes(e.target.name))
             setProp({ ...prop, [e.target.name]: e.target.files[0] })
+        else if (e.target.name === 'popup')
+            setProp({ ...prop, popup: e.target.checked })
         else setProp({ ...prop, [e.target.name]: e.target.value })
     }
-    const onSubmit = () => {
+    const onSubmit = async () => {
         switch (show) {
             case POPUP_STATE.ADD:
-                createAd(prop)
+                await createAd(prop)
                 break
             case POPUP_STATE.EDIT:
-                editAd(prop)
+                await editAd(prop)
                 break
         }
         dispatch(listAds(prop))
@@ -131,6 +134,14 @@ export default function AdsMan() {
                             labelText="Expire after ? days"
                             handleChange={handleChange}
                         />
+                        <FormText
+                            type="checkbox"
+                            name="popup"
+                            labelText="Mark as Popup"
+                            handleChange={handleChange}
+                            className="flex whitespace-nowrap place-items-center place-content-center gap-x-2 ml-8 text-xl"
+                            checked={prop.popup}
+                        />
                     </div>
                     <button
                         className="bg-darkblue text-white"
@@ -194,6 +205,7 @@ export default function AdsMan() {
                                                                             'data-id'
                                                                         )
                                                                     )
+
                                                                 setProp({
                                                                     ...adData,
                                                                     // Revert expiry from DateTime to No. of days
@@ -208,15 +220,15 @@ export default function AdsMan() {
                                                                                 1000)
                                                                     ),
                                                                     imageX: adData
-                                                                        .image
-                                                                        .rectX,
+                                                                        ?.image
+                                                                        ?.rectX,
                                                                     imageY: adData
-                                                                        .image
-                                                                        .rectY,
+                                                                        ?.image
+                                                                        ?.rectY,
                                                                     imageSq:
                                                                         adData
-                                                                            .image
-                                                                            .square,
+                                                                            ?.image
+                                                                            ?.square,
                                                                 })
                                                                 setShow(
                                                                     POPUP_STATE.EDIT

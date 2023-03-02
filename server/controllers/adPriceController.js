@@ -11,6 +11,6 @@ module.exports = function calculateAdPrice({ popup, expiry, priority, audio }) {
     const audioPriceAdjustmentFactor = audio ? 1.5 : 1
     return Math.round(
         ((minutesLeft * normalPricePerMinute * priority) / midPriority) *
-            (audioPriceAdjustmentFactor + Boolean(popup) * 2)
+            (audioPriceAdjustmentFactor + (popup === 'true') * 2)
     )
 }

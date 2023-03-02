@@ -40,25 +40,17 @@ module.exports = (req, res) => {
     //
     // Verify and sanitize edited data
     //
-    console.log(
-        'Assets in req: ',
-        imageXBody,
-        imageYBody,
-        imageSqBody,
-        audio,
-        req.body
-    )
     const data = {}
     if (name) data.name = name
     if (redirectUrl) data.redirectUrl = redirectUrl
     if (publisher) data.publisher = publisher
     if (priority) data.priority = priority
+    if (popup) data.popup = popup === 'true'
     if (image) {
         if (!image.rectX) image.rectX = imageXBody
         if (!image.rectY) image.rectY = imageYBody
         if (!image.square) image.square = imageSqBody
 
-        console.log('Image: ', image)
         data.image = image
     }
     audioUrl ? (data.audio = audioUrl) : (data.audio = audioBody)
@@ -79,11 +71,13 @@ module.exports = (req, res) => {
     }
 
     adsModel.updateOne({ _id }, data, (e, d) => {
-        console.log(d, e)
         if (d === null)
             return res.status(401).json({ error: 'No such ad exists.' })
 
-        if (e) return res.status(500).json({ error: 'Something went wrong' })
+        if (e) {
+            console.error(e)
+            return res.status(500).json({ error: 'Something went wrong' })
+        }
 
         res.json({ message: 'success' })
     })
