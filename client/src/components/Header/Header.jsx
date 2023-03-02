@@ -26,7 +26,10 @@ export default function Header() {
 	return (
 		<div className="header mb-5">
 			<div className="flex justify-between items-center container p-3">
-				<SiteLogo />
+				<div className="flex flex-col items-center sm:items-start">
+					<SiteLogo />
+					<p>खबर नया युग को</p>
+				</div>
 				<div className="relative flex justify-between items-center">
 					<div className="flex justify-between invisible md:visible text-xs lg:text-sm gap-4">
 						<Forex />

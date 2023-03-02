@@ -6,13 +6,13 @@ import { Outlet } from "react-router-dom"
 import { Footer, Header, LeftSideBar, RightSideBar } from "../../components"
 
 export default function Home(match) {
-	const focus = useSelector((state) => state.misc.focus)
+	const focus = useSelector(state => state.misc.focus)
 
 	return (
 		<div className="flex flex-col h-screen">
 			<Header />
 
-			<div className="flex justify-between w-full gap-10 container px-6">
+			<div className="flex justify-between w-full gap-6 container px-2">
 				{/* left side */}
 				{!focus && (
 					<div className="sm:block hidden w-1/5">
