@@ -6,7 +6,7 @@ const userSchema = new mongoose.Schema({
     emailVerified: { type: Date },
     password: { type: String },
     image: { type: String },
-    articles: { type: [mongoose.Schema.Types.ObjectId], ref: 'Article' },
+    // articles: { type: [mongoose.Schema.Types.ObjectId], ref: 'Article' },
     roles: {
         isRoot: { type: Boolean, default: false },
         canPublish: { type: Boolean, default: false },
@@ -15,23 +15,18 @@ const userSchema = new mongoose.Schema({
     },
     history: {
         type: Map,
-        of: new mongoose.Schema({
-            hits: Number,
-            likes: Number,
-            comments: Number,
-            watchtime: Number,
-        }),
-        default: {},
-    },
-    subscriptions: {
-        type: Map,
         of: new mongoose.Schema(
             {
-                priority: { type: Number, default: 5 },
+                hits: Number,
+                likes: Number,
+                comments: Number,
+                watchtime: Number,
             },
             { _id: false }
         ),
+        default: {},
     },
+    subscriptions: { type: [mongoose.Schema.Types.ObjectId], ref: 'User' },
     saved: {
         type: [mongoose.Schema.Types.ObjectId],
     },

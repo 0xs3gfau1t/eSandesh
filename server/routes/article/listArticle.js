@@ -1,6 +1,5 @@
 const express = require('express')
 const articleModel = require('../../model/article')
-const { userModel } = require('../../model/user')
 const { JSDOM } = require('jsdom')
 
 /**
@@ -43,30 +42,7 @@ const listArticle = async (req, res) => {
             { $limit: parseInt(items) },
         ])
 
-        var user = req.cookies?.user
-        if (user) {
-            // if previous cookie exists then parse it
-            user = JSON.parse(user)
-        } else {
-            // if no previous cookie exists
-            if (req.session) {
-                // if the user is logged in fetch from db
-                user = await userModel.findOne(
-                    { _id: req.session.user.id },
-                    { history: true, _id: false }
-                )
-                user = { history: Object.fromEntries(user.history) }
-            } else {
-                // if not logged in create empty history
-                user = { history: {} }
-            }
-
-            // set the new cookie
-            res.cookie('user', JSON.stringify(user), {
-                httpOnly: true,
-                sameSite: 'lax',
-            })
-        }
+        const user = req.cookies.user
 
         // sort the articles based on user's history
         articles.sort((a, b) => {

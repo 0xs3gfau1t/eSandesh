@@ -1,0 +1,76 @@
+<html>
+<style>
+    h1 {
+        background: green;
+    }
+</style>
+
+<body style="background: #eee; padding: 1rem">
+    <header style="text-align: center; margin-bottom: 1rem; width: 100%">
+        <img style="margin: auto; height: 25px; width: auto" src="cid:logo" />
+    </header>
+    <div style="
+                margin-left: auto;
+                margin-right: auto;
+                background: white;
+                width: 50%;
+                max-width: 500px;
+                padding: 2rem;
+                color: black;
+            ">
+        <div style="text-align: center; font-size: 2rem; color: black">
+            A new article!
+        </div>
+        <div style="color: black">
+            <p>Greetings,</p>
+            <p>
+                A new article just got published by
+                '<strong>{{POSTER}}</strong>'. Make sure to check it out on
+                e-Sandesh.
+            </p>
+        </div>
+        <div style="
+                    background: #111;
+                    border-radius: 0.25rem;
+                    color: white;
+                    padding: 1rem;
+                    min-width: 30%;
+                    font-size: 0.85rem;
+                    margin-right: auto;
+                    margin-left: auto;
+                ">
+            <a href="{{URL}}" style="text-decoration: none; color: white">
+                <div style="font-weight: 900">{{TITLE}}</div>
+                <div class="content">{{CONTENT}}</div>
+                <div style="text-align: right">{{DATE}}</div>
+            </a>
+        </div>
+        <div style="color: black">
+            <p>
+                Please email us at support@eSandesh.com if you are
+                experiencing any issues. We look forward to your feedbacks.
+            </p>
+            <p>- Team eSandesh</p>
+        </div>
+    </div>
+    <footer style="
+                margin-top: 1rem;
+                padding: 0.25rem 0px;
+                color: #333;
+                width: 100%;
+                text-align: center;
+            ">
+        <div style="margin-bottom: 0.25rem">@ 2023 eSandesh</div>
+        <div style="margin-bottom: 0.25rem">
+            <span>Talchowk, Pokhara 27</span> •
+            <a style="text-decoration: inherit; color: inherit" href="{{UNSUB_URL}}">Unsubscribe</a>
+        </div>
+        <div style="margin-bottom: 0.25rem">
+            <a href="https://www.facebook.com" style="text-decoration: inherit; color: inherit">Facebook</a>
+            •
+            <a href="https://www.instagram.com" style="text-decoration: inherit; color: inherit">Instagram</a>
+        </div>
+    </footer>
+</body>
+
+</html>
