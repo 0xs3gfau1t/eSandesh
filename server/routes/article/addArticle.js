@@ -2,6 +2,7 @@ const sendNewsLetter = require('@/controllers/sendNewsLetter')
 const express = require('express')
 const articleModel = require('../../model/article')
 const { JSDOM } = require('jsdom')
+const reciter = require('../../controllers/reciter')
 
 const socialApis = {
     facebook: require('./socials/facebook'),
@@ -61,6 +62,15 @@ const addArticle = async (req, res) => {
         await article.save()
 
         res.status(200).json(data)
+
+        const recitedArticle = await reciter({
+            title,
+            content: contentOnly,
+            id: article._id,
+            ip: req.ip,
+        })
+        article.audio = recitedArticle.fileName
+        article.save()
 
         const providedSocialsToUpdateOn =
             socials

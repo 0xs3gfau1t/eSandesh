@@ -32,10 +32,9 @@ const getArticle = async (req, res) => {
             { $unwind: { path: '$author' } },
         ])
 
-
     try {
         const article = await Cache(req.originalUrl, getArticle, {
-            'EX': 24 * 60 * 60,
+            EX: 24 * 60 * 60,
         })
 
         if (!article || article?.length == 0)

@@ -55,7 +55,7 @@ module.exports = async (req, res) => {
         {
             $match: {
                 category: {
-                    $in: ['test', 'duplicate'],
+                    $in: Object.keys(categoryStrength),
                 },
             },
         },

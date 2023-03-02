@@ -1,7 +1,6 @@
 const articleModel = require('../../model/article')
 const path = require('path')
 const fs = require('fs')
-const { JSDOM } = require('jsdom')
 const express = require('express')
 
 const audioAdFolder = path.resolve(__dirname, '../../assets/ads/audio/')
@@ -12,39 +11,27 @@ const audioAdFolder = path.resolve(__dirname, '../../assets/ads/audio/')
  * @return {void}
  */
 
+function getRelevantAudioAd(history) {
+    console.log('Determining best audio ad with history: ', history)
+    return fs.readFileSync(audioAdFolder + '/' + 'ad.mp3')
+}
+
 module.exports = async (req, res) => {
     const { year, month, slug } = req.query
 
     try {
-        const article = await articleModel.findOne({ year, month, slug })
+        const article = await articleModel.findOne(
+            { year, month, slug },
+            { audio: true }
+        )
 
         if (!article) return res.json({ error: 'No such article found' })
 
-        const dom = new JSDOM(article.content)
-        const content = dom.window.document.querySelector('body').textContent
+        const sound = fs.readFileSync(article.audio)
 
-        const body = new FormData()
-        body.append('locale', 'ne-NP')
-        body.append(
-            'content',
-            '<voice name="ne-NP-SagarNeural">' +
-                article.title +
-                '\n' +
-                content +
-                '</voice>'
-        )
-        body.append('ip', req.ip)
+        const ad = getRelevantAudioAd(req?.cookies?.user?.history)
 
-        const sound = await fetch('https://app.micmonster.com/restapi/create', {
-            method: 'POST',
-            body,
-        })
-            .then(res => res.text())
-            .then(base64Str => new Buffer.from(base64Str, 'base64'))
-
-        const ad = fs.readFileSync(audioAdFolder + '/ad.mp3')
         const concatenated = Buffer.concat([ad, sound])
-
         return res.send({
             message: 'success',
             audio: concatenated.toString('base64'),

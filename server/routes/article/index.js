@@ -15,7 +15,7 @@ const recite = require('./recite')
 
 router.get('/list*', fetchHistory, listArticle)
 router.get('/:year/:month/:slug', fetchHistory, getArticle)
-router.get('/recite', recite)
+router.get('/recite', fetchHistory, recite)
 router.get('/topublish', toPublish)
 router.post('/publish', publish)
 router.post('/', withAuth, addArticle)
