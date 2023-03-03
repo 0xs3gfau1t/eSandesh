@@ -54,7 +54,6 @@ export const listNews = createAsyncThunk(
 export const deleteNews = createAsyncThunk(
 	"common/deleteNews",
 	async (id, { dispatch }) => {
-		console.log("Here")
 		const response = await axios
 			.delete(`/api/article/?id=${id}`, {
 				withCredentials: true,

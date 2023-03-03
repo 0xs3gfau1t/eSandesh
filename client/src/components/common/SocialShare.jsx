@@ -1,3 +1,5 @@
+import { useDispatch } from "react-redux"
+import { useSession } from "next-auth/react"
 import {
 	FacebookShareButton,
 	LinkedinIcon,
@@ -6,13 +8,25 @@ import {
 	TwitterShareButton,
 } from "react-share"
 import { FacebookIcon, TwitterIcon, RedditIcon } from "react-share"
-import { FaLink } from "react-icons/fa"
+import { FaLink, FaSave } from "react-icons/fa"
+
+import { setAlert } from "../../redux/actions/misc"
+import { savePost } from "../../redux/actions/user"
 
 const SocialShare = ({ title, id }) => {
 	const url = document.location.href
+	const dispatch = useDispatch()
+	const session = useSession()
 
 	const copyLink = () => {
 		navigator.clipboard.writeText(url)
+		dispatch(setAlert("Link copied to clipboard.", "success"))
+	}
+	const saveNews = () => {
+		if (session.status != "authenticated") {
+			dispatch(setAlert("You must login to save articles.", "danger"))
+		}
+		dispatch(savePost(id))
 	}
 
 	return (
@@ -55,6 +69,11 @@ const SocialShare = ({ title, id }) => {
 				className="my-auto w-6 h-6 cursor-pointer hover:text-blue duration-200"
 				title="Copy Link"
 				onClick={copyLink}
+			/>
+			<FaSave
+				className="my-auto w-6 h-6 cursor-pointer hover:text-blue duration-200"
+				title="Copy Link"
+				onClick={saveNews}
 			/>
 		</div>
 	)

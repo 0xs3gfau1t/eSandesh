@@ -14,7 +14,7 @@ export default function NavBar(activeCategory) {
 		["स्वास्थ्य", "health"],
 		["प्रविधि", "technology"],
 	]
-	const menuItems = categories.map((eachCat) => {
+	const menuItems = categories.map(eachCat => {
 		return (
 			<li key={eachCat[1]} className="my-1">
 				<NavLink
@@ -32,7 +32,6 @@ export default function NavBar(activeCategory) {
 	})
 	return (
 		<nav>
-			<h2 className="font-bold text-3xl leading-relaxed">वर्ग चयन गर्नुहोस्</h2>
 			<ul className="font-medium flex flex-col justify-between gap-1 mt-4 border-r-4 border-r-darkblue ">
 				{menuItems}
 				<li>
