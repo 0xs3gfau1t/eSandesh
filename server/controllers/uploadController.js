@@ -1,8 +1,12 @@
 const fs = require('fs')
+const { Readable } = require('stream')
 const { randomUUID } = require('crypto')
+const Ffmpeg = require('fluent-ffmpeg')
+
+const IMAGE_AD_FOLDER = './assets/ads/images/'
+const AUDIO_AD_FOLDER = './assets/ads/audio/'
 
 function getExt(resource) {
-    console.log('resource: ', resource)
     return '.' + resource.mimetype.split('/')[1]
 }
 
@@ -15,26 +19,57 @@ module.exports = function uploadAdAssets(imageX, imageY, imageSq, audio) {
     let imageXUrl = undefined
     let imageYUrl = undefined
     let imageSqUrl = undefined
-    let audioUrl = undefined
 
     if (imageX) {
         imageXUrl = randomUUID() + getExt(imageX)
-        fs.writeFileSync('./assets/ads/images/' + imageXUrl, imageX.data)
+        fs.writeFileSync(IMAGE_AD_FOLDER + imageXUrl, imageX.data)
     }
     if (imageY) {
         imageYUrl = randomUUID() + getExt(imageY)
-        fs.writeFileSync('./assets/ads/images/' + imageYUrl, imageY.data)
+        fs.writeFileSync(IMAGE_AD_FOLDER + imageYUrl, imageY.data)
     }
     if (imageSq) {
         imageSqUrl = randomUUID() + getExt(imageSq)
-        fs.writeFileSync('./assets/ads/images/' + imageSqUrl, imageSq.data)
+        fs.writeFileSync(IMAGE_AD_FOLDER + imageSqUrl, imageSq.data)
     }
-    if (audio) {
-        audioUrl = randomUUID() + getExt(audio)
-        fs.writeFileSync('./assets/ads/audio/' + audioUrl, audio.data)
-    }
-    return [
-        { rectX: imageXUrl, rectY: imageYUrl, square: imageSqUrl },
-        audioUrl,
-    ]
+
+    return new Promise((resolve, reject) => {
+        const audioUrl = randomUUID() + '.mp3'
+        if (audio) {
+            if (getExt(audio) !== '.mp3')
+                Ffmpeg(Readable.from(audio.data))
+                    .output(AUDIO_AD_FOLDER + audioUrl)
+                    .on('error', e => {
+                        console.error(e)
+                        reject('[x] Cannot convert audio ad to mp3')
+                    })
+                    .on('end', () => {
+                        console.log('[+] Successfully converted audio to mp3')
+                        resolve([
+                            {
+                                rectX: imageXUrl,
+                                rectY: imageYUrl,
+                                square: imageSqUrl,
+                            },
+                            audioUrl,
+                        ])
+                    })
+                    .run()
+            else {
+                fs.writeFileSync(AUDIO_AD_FOLDER + audioUrl, audio.data)
+                resolve([
+                    { rectX: imageXUrl, rectY: imageYUrl, square: imageSqUrl },
+                    audioUrl,
+                ])
+            }
+        } else
+            resolve([
+                {
+                    rectX: imageXUrl,
+                    rectY: imageYUrl,
+                    square: imageSqUrl,
+                },
+                audioUrl,
+            ])
+    })
 }

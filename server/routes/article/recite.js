@@ -52,8 +52,8 @@ async function getRelevantAudioAd(history) {
     ])
 
     return {
-        begin: audioAdFolder + '/' + selectedAd.at(0)?.audio || 'ad.mp3',
-        end: audioAdFolder + '/' + selectedAd.at(1)?.audio || 'ad.mp3',
+        begin: audioAdFolder + '/' + (selectedAd.at(0)?.audio || 'ad.mp3'),
+        end: audioAdFolder + '/' + (selectedAd.at(1)?.audio || 'ad.mp3'),
     }
 }
 
@@ -73,14 +73,17 @@ module.exports = async (req, res) => {
             req?.cookies?.user?.history
         )
 
-        console.log('Begin: ', begin, 'End: ', end)
-
         const concatenationList = []
         if (begin) concatenationList.push(fs.readFileSync(begin))
         if (article) concatenationList.push(recitedArticle)
         if (end) concatenationList.push(fs.readFileSync(end))
         const concatenatedAudioContent = Buffer.concat(concatenationList)
 
+        //
+        // Not necessary now but
+        // Instead of responding with concatenated audio
+        // respond with audio stream chunk by chunk to make it available at once
+        //
         return res.send({
             message: 'success',
             audio: concatenatedAudioContent.toString('base64'),

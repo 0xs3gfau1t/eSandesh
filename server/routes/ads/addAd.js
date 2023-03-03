@@ -9,7 +9,7 @@ const calculateAdPrice = require('../../controllers/adPriceController')
  * @return {void}
  */
 
-module.exports = (req, res) => {
+module.exports = async (req, res) => {
     // Always check first
     const { user } = req.session
     if (!user?.roles?.isRoot)
@@ -27,19 +27,28 @@ module.exports = (req, res) => {
 
     const { imageX, imageY, imageSq, audio } = req.files
 
-    // Store urls to save in db
-    const [image, audioUrl] = uploadAdAssets(imageX, imageY, imageSq, audio)
+    try {
+        // Store urls to save in db
+        const [image, audioUrl] = await uploadAdAssets(
+            imageX,
+            imageY,
+            imageSq,
+            audio
+        )
 
-    const categoryArray = category
-        .split(',')
-        .map(i => i.trim())
-        .filter(i => i !== '')
+        const categoryArray = category
+            .split(',')
+            .map(i => i.trim())
+            .filter(i => i !== '')
 
-    const expiry = new Date(Date.now() + expiryDay * 24 * 60 * 60 * 1000)
-    const price = calculateAdPrice({ popup, priority, expiry, audio: audioUrl })
-    console.log(price)
-    adsModel.create(
-        {
+        const expiry = new Date(Date.now() + expiryDay * 24 * 60 * 60 * 1000)
+        const price = calculateAdPrice({
+            popup,
+            priority,
+            expiry,
+            audio: audioUrl,
+        })
+        await adsModel.create({
             name,
             publisher,
             image,
@@ -50,13 +59,10 @@ module.exports = (req, res) => {
             category: categoryArray,
             popup,
             audio: audioUrl,
-        },
-        (e, d) => {
-            if (e) {
-                console.error(e)
-                return res.status(500).json({ error: 'Something went wrong.' })
-            }
-            res.json({ message: 'success' })
-        }
-    )
+        })
+        res.json({ message: 'success' })
+    } catch (e) {
+        console.error(e)
+        res.status(500).json({ error: 'Something went wrong.' })
+    }
 }
