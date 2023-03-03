@@ -42,7 +42,7 @@ const getArticle = async (req, res) => {
 
         // Update category hits in user's history
         article[0]?.category.forEach(category => {
-            // If the category doesnot exists then create
+            // If the category doesnot exist then create
             if (!req.cookies.user.history.hasOwnProperty(category))
                 req.cookies.user.history[category] = {
                     hits: 0,

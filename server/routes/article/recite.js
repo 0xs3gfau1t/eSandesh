@@ -1,8 +1,9 @@
 const articleModel = require('@/model/article')
 const adsModel = require('@/model/ads')
 const path = require('path')
-const fs = require('fs')
 const express = require('express')
+const fs = require('fs')
+
 const { calculateCategoryStrength } = require('@/routes/ads/relevantAds')
 
 const audioAdFolder = path.resolve(__dirname, '../../assets/ads/audio/')
@@ -13,10 +14,10 @@ const audioAdFolder = path.resolve(__dirname, '../../assets/ads/audio/')
  * @return {void}
  */
 
-async function getRelevantAudioAd(history) {
-    console.log('Determining best audio ad with history: ', history)
+const AD_LIMIT = 2
 
-    const { categoryStrength, maxStrength } = calculateCategoryStrength(history)
+async function getRelevantAudioAd(history) {
+    const { categoryStrength } = calculateCategoryStrength(history)
     const selectedAd = await adsModel.aggregate([
         {
             $match: {
@@ -24,7 +25,7 @@ async function getRelevantAudioAd(history) {
                     $exists: true,
                 },
                 category: {
-                    $in: ['POLITICS', 'SPORTS', 'FINANCE'],
+                    $in: Object.keys(categoryStrength),
                 },
             },
         },
@@ -37,23 +38,52 @@ async function getRelevantAudioAd(history) {
             $skip: 0 * 10,
         },
         {
-            $project: {
-                _id: true,
-                name: true,
-                audio: true,
-                priority: true,
+            $group: {
+                _id: '$category',
+                final: {
+                    $push: {
+                        id: '$_id',
+                        name: '$name',
+                        priority: '$priority',
+                        audio: '$audio',
+                    },
+                },
             },
         },
         {
-            $sort: {
-                priority: -1,
+            $unwind: {
+                path: '$_id',
+            },
+        },
+        {
+            $unwind: {
+                path: '$final',
+            },
+        },
+        {
+            $group: {
+                _id: '$_id',
+                final: {
+                    $push: {
+                        id: '$final.id',
+                        name: '$final.name',
+                        priority: '$final.priority',
+                        audio: '$final.audio',
+                    },
+                },
             },
         },
     ])
 
+    const allocatedAds = selectedAd.map(ad => {
+        const maxAllocated = Math.round(categoryStrength[ad._id] * AD_LIMIT)
+        const sliced = ad.final.slice(0, maxAllocated)
+        return sliced
+    }).flat()
+
     return {
-        begin: audioAdFolder + '/' + (selectedAd.at(0)?.audio || 'ad.mp3'),
-        end: audioAdFolder + '/' + (selectedAd.at(1)?.audio || 'ad.mp3'),
+        begin: audioAdFolder + '/' + (allocatedAds.at(0)?.audio || 'ad.mp3'),
+        end: audioAdFolder + '/' + (allocatedAds.at(1)?.audio || 'ad.mp3'),
     }
 }
 
@@ -72,11 +102,16 @@ module.exports = async (req, res) => {
         const { begin, end } = await getRelevantAudioAd(
             req?.cookies?.user?.history
         )
-
+        //
+        // There's a weird bug during playing the audio
+        // Max seconds seems to increase if content is skipped
+        // Only those audio which has been converted to mp3 using ffmpeg
+        //
         const concatenationList = []
         if (begin) concatenationList.push(fs.readFileSync(begin))
         if (article) concatenationList.push(recitedArticle)
         if (end) concatenationList.push(fs.readFileSync(end))
+
         const concatenatedAudioContent = Buffer.concat(concatenationList)
 
         //

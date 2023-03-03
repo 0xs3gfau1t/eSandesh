@@ -34,11 +34,14 @@ module.exports = function uploadAdAssets(imageX, imageY, imageSq, audio) {
     }
 
     return new Promise((resolve, reject) => {
-        const audioUrl = randomUUID() + '.mp3'
+        // TODO: Validate length and size of uploaded audio to 5s, < 2Mb
         if (audio) {
+            const audioUrl = randomUUID() + '.mp3'
             if (getExt(audio) !== '.mp3')
                 Ffmpeg(Readable.from(audio.data))
                     .output(AUDIO_AD_FOLDER + audioUrl)
+                    .audioFrequency(48000)
+                    .audioChannels(1)
                     .on('error', e => {
                         console.error(e)
                         reject('[x] Cannot convert audio ad to mp3')
@@ -69,7 +72,7 @@ module.exports = function uploadAdAssets(imageX, imageY, imageSq, audio) {
                     rectY: imageYUrl,
                     square: imageSqUrl,
                 },
-                audioUrl,
+                undefined,
             ])
     })
 }

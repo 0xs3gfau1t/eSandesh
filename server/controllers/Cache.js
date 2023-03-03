@@ -11,9 +11,7 @@ const { redisClient } = require('@/config/redis')
 const Cache = async (key, callback, opts) => {
     // Disabling cache temporarily
     // Because of non updating cache bug
-    const c = await callback()
-    console.log("Callback response: ", c)
-    return c
+    return await callback()
     try {
         const value = await redisClient.get(key)
         if (value) {

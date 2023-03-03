@@ -1,7 +1,7 @@
 const express = require('express')
 const adsModel = require('../../model/ads')
-const uploadAdAssets = require('../../controllers/uploadController')
-const calculateAdPrice = require('../../controllers/adPriceController')
+const uploadAdAssets = require('@/controllers/uploadController')
+const calculateAdPrice = require('@/controllers/adPriceController')
 
 /**
  * @param {express.Request} req
