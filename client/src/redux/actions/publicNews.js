@@ -34,7 +34,7 @@ export const getNewsAudio = createAsyncThunk(
 				return res.data
 			})
 			.catch(err => {
-				console.error("k vayo k")
+				console.error("Err")
 			})
 		if (!audio) return { success: false }
 		return { success: true, audio: audio.audio }

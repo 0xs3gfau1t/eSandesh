@@ -4,13 +4,13 @@ export default function GoldSilver() {
 	return (
 		<div className="grid grid-cols-3 gap-x-4 gap-y-2">
 			{/* categories */}
-			<span className="font-bold ">छापावाल सुन</span>
-			<span className="font-bold ">तेजाबी सुन - तोला</span>
-			<span className="font-bold ">चाँदी - तोला</span>
+			<div className="font-bold text-center flex items-center justify-center">छापावाल सुन</div>
+			<div className="font-bold text-center flex items-center justify-center">तेजाबी सुन - तोला</div>
+			<div className="font-bold text-center flex items-center justify-center">चाँदी - तोला</div>
 			{/* rates */}
-			<span>रु. ९९,९०२.१६</span>
-			<span>रु. ९९,४००.६१</span>
-			<span>रु. १,३८५.१०</span>
+			<div className="text-center flex items-center justify-center">रु. ९९,९०२.१६</div>
+			<div className="text-center flex items-center justify-center">रु. ९९,४००.६१</div>
+			<div className="text-center flex items-center justify-center">रु. १,३८५.१०</div>
 		</div>
 	)
 }

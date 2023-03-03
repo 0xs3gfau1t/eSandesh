@@ -14,13 +14,14 @@ module.exports = (req, res) => {
         priority = 1,
         page = 0,
         limit = 10,
-        popup = false,
-        filterExpiry = 1,
+        popup,
+        filterExpiry = false,
     } = req.body
 
-    filter = { popup: { $eq: popup } }
+    const filter = {}
 
-    if (Number(filterExpiry)) filter.expiry = { $gt: new Date() }
+    if (popup) filter.popup = { $eq: Boolean(popup) }
+    if (filterExpiry) filter.expiry = { $gt: new Date() }
 
     if (category)
         filter[category] = {
@@ -29,11 +30,12 @@ module.exports = (req, res) => {
                 .map(i => i.trim())
                 .filter(i => i !== ''),
         }
-    ads = adsModel
+    console.log(filter)
+    adsModel
         .find(filter)
         .skip(page * limit)
         .limit(limit)
-        .sort({ priority: priority })
+        .sort({ priority })
         .exec((e, d) => {
             if (e)
                 return res.status(500).json({ error: 'Something went wrong.' })

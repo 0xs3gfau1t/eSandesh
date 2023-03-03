@@ -24,6 +24,15 @@
 3. Run `yarn` or `npm install` to install necessary packages
 4. Run `yarn dev` or `npm run dev` to start development server
 
+#### Notes for local database initialization
+First of all login as superuser ```mongosh```
+1. Create a new database (`eSandesh` recommended)
+    1.1 ```use eSandesh```
+2. Create a proper user ('eSandesh' recommended) with proper role as
+    2.1```db.createUser({user: 'eSandesh', pwd: passwordPrompt(), roles: [{role: 'readWrite', db: 'eSandesh'}]})```
+3. Enable `authorization` in `/etc/mongodb.conf` under `Security`
+4. Then fill corresponding credentials in `.env`
+
 
 ## Screenshots
 

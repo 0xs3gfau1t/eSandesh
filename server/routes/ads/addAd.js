@@ -1,6 +1,7 @@
 const express = require('express')
-
 const adsModel = require('../../model/ads')
+const uploadAdAssets = require('@/controllers/uploadController')
+const calculateAdPrice = require('@/controllers/adPriceController')
 
 /**
  * @param {express.Request} req
@@ -8,60 +9,60 @@ const adsModel = require('../../model/ads')
  * @return {void}
  */
 
-const normalPricePerMinute = 1000
-const midPriority = 5
-
-module.exports = (req, res) => {
+module.exports = async (req, res) => {
+    // Always check first
     const { user } = req.session
+    if (!user?.roles?.isRoot)
+        return res.json({ error: 'Not enough permission to create ads' })
 
     const {
         name,
-        publisher = user.id,
-        imageEmbedUrl,
+        publisher /*= user.id*/,
         redirectUrl,
         priority,
-        size,
-        expiry,
+        expiry: expiryDay,
         category,
         popup = false,
     } = req.body
 
-    if (!user?.roles?.isRoot)
-        return res.json({ error: 'Not enough permission to create ads' })
+    const { imageX, imageY, imageSq, audio } = req.files
 
-    const categoryArray = category
-        .split(',')
-        .map(i => i.trim())
-        .filter(i => i !== '')
+    try {
+        // Store urls to save in db
+        const [image, audioUrl] = await uploadAdAssets(
+            imageX,
+            imageY,
+            imageSq,
+            audio
+        )
 
-    const minutesLeft = (new Date(expiry) - new Date()) / (1000 * 60)
+        const categoryArray = category
+            .split(',')
+            .map(i => i.trim())
+            .filter(i => i !== '')
 
-    // We can do better here by analyzing which category the ad falls
-    // Then check performance of this category in db
-    // Then adjust the formula to adjust price by
-    // considering how much users click the ad
-    const price = Math.round(
-        (minutesLeft * normalPricePerMinute * priority) / midPriority
-    )
-
-    adsModel.create(
-        {
+        const expiry = new Date(Date.now() + expiryDay * 24 * 60 * 60 * 1000)
+        const price = calculateAdPrice({
+            popup,
+            priority,
+            expiry,
+            audio: audioUrl,
+        })
+        await adsModel.create({
             name,
             publisher,
-            imageEmbedUrl,
+            image,
             redirectUrl,
             priority,
             price,
-            size,
             expiry,
             category: categoryArray,
             popup,
-        },
-        (e, d) => {
-            if (e)
-                return res.status(500).json({ error: 'Something went wrong.' })
-
-            res.json({ message: 'success' })
-        }
-    )
+            audio: audioUrl,
+        })
+        res.json({ message: 'success' })
+    } catch (e) {
+        console.error(e)
+        res.status(500).json({ error: 'Something went wrong.' })
+    }
 }

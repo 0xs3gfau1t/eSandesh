@@ -23,7 +23,7 @@ const Landing = () => {
 	return (
 		<div>
 			<div className="w-full">
-				{recent && (
+                            {recent?.length && (
 					<div className="flex gap-2 mb-10">
 						<div className="w-full sm:w-3/5">
 							<HomeHero data={recent[0]} />

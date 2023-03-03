@@ -1,9 +1,12 @@
-const articleModel = require('../../model/article')
+const articleModel = require('@/model/article')
+const adsModel = require('@/model/ads')
 const path = require('path')
-const audioAdFolder = path.resolve(__dirname, '../../assets/')
-const fs = require('fs')
-const { JSDOM } = require('jsdom')
 const express = require('express')
+const fs = require('fs')
+
+const { calculateCategoryStrength } = require('@/routes/ads/relevantAds')
+
+const audioAdFolder = path.resolve(__dirname, '../../assets/ads/audio/')
 
 /**
  * @param {express.Request} req
@@ -11,42 +14,114 @@ const express = require('express')
  * @return {void}
  */
 
+const AD_LIMIT = 2
+
+async function getRelevantAudioAd(history) {
+    const { categoryStrength } = calculateCategoryStrength(history)
+    const selectedAd = await adsModel.aggregate([
+        {
+            $match: {
+                audio: {
+                    $exists: true,
+                },
+                category: {
+                    $in: Object.keys(categoryStrength),
+                },
+            },
+        },
+        {
+            $sort: {
+                priority: -1,
+            },
+        },
+        {
+            $skip: 0 * 10,
+        },
+        {
+            $group: {
+                _id: '$category',
+                final: {
+                    $push: {
+                        id: '$_id',
+                        name: '$name',
+                        priority: '$priority',
+                        audio: '$audio',
+                    },
+                },
+            },
+        },
+        {
+            $unwind: {
+                path: '$_id',
+            },
+        },
+        {
+            $unwind: {
+                path: '$final',
+            },
+        },
+        {
+            $group: {
+                _id: '$_id',
+                final: {
+                    $push: {
+                        id: '$final.id',
+                        name: '$final.name',
+                        priority: '$final.priority',
+                        audio: '$final.audio',
+                    },
+                },
+            },
+        },
+    ])
+
+    const allocatedAds = selectedAd.map(ad => {
+        const maxAllocated = Math.round(categoryStrength[ad._id] * AD_LIMIT)
+        const sliced = ad.final.slice(0, maxAllocated)
+        return sliced
+    }).flat()
+
+    return {
+        begin: audioAdFolder + '/' + (allocatedAds.at(0)?.audio || 'ad.mp3'),
+        end: audioAdFolder + '/' + (allocatedAds.at(1)?.audio || 'ad.mp3'),
+    }
+}
+
 module.exports = async (req, res) => {
     const { year, month, slug } = req.query
 
     try {
-        const article = await articleModel.findOne({ year, month, slug })
+        const article = await articleModel.findOne(
+            { year, month, slug },
+            { audio: true }
+        )
 
         if (!article) return res.json({ error: 'No such article found' })
 
-        const dom = new JSDOM(article.content)
-        const content = dom.window.document.querySelector('body').textContent
-
-        const body = new FormData()
-        body.append('locale', 'ne-NP')
-        body.append(
-            'content',
-            '<voice name="ne-NP-SagarNeural">' +
-                article.title +
-                '\n' +
-                content +
-                '</voice>'
+        const recitedArticle = fs.readFileSync(article.audio)
+        const { begin, end } = await getRelevantAudioAd(
+            req?.cookies?.user?.history
         )
-        body.append('ip', req.ip)
+        //
+        // There's a weird bug during playing the audio
+        // Max seconds seems to increase if content is skipped
+        // Only those audio which has been converted to mp3 using ffmpeg
+        //
+        const concatenationList = []
+        if (begin) concatenationList.push(fs.readFileSync(begin))
+        if (article) concatenationList.push(recitedArticle)
+        if (end) concatenationList.push(fs.readFileSync(end))
 
-        const sound = await fetch('https://app.micmonster.com/restapi/create', {
-            method: 'POST',
-            body,
-        })
-            .then(res => res.text())
-            .then(base64Str => new Buffer.from(base64Str, 'base64'))
+        const concatenatedAudioContent = Buffer.concat(concatenationList)
 
-        const ad = fs.readFileSync(audioAdFolder + '/ad.mp3')
-        const concatenated = Buffer.concat([ad, sound])
-
+        //
+        // Not necessary now but
+        // Instead of responding with concatenated audio
+        // respond with audio stream chunk by chunk to make it available at once
+        //
         return res.send({
             message: 'success',
-            audio: concatenated.toString('base64'),
+            audio: concatenatedAudioContent.toString('base64'),
         })
     } catch (err) {
         console.error(err)
