@@ -1,7 +1,9 @@
-const articleModel = require('../../model/article')
+const articleModel = require('@/model/article')
+const adsModel = require('@/model/ads')
 const path = require('path')
 const fs = require('fs')
 const express = require('express')
+const { calculateCategoryStrength } = require('@/routes/ads/relevantAds')
 
 const audioAdFolder = path.resolve(__dirname, '../../assets/ads/audio/')
 
@@ -11,9 +13,48 @@ const audioAdFolder = path.resolve(__dirname, '../../assets/ads/audio/')
  * @return {void}
  */
 
-function getRelevantAudioAd(history) {
+async function getRelevantAudioAd(history) {
     console.log('Determining best audio ad with history: ', history)
-    return fs.readFileSync(audioAdFolder + '/' + 'ad.mp3')
+
+    const { categoryStrength, maxStrength } = calculateCategoryStrength(history)
+    const selectedAd = await adsModel.aggregate([
+        {
+            $match: {
+                audio: {
+                    $exists: true,
+                },
+                category: {
+                    $in: ['POLITICS', 'SPORTS', 'FINANCE'],
+                },
+            },
+        },
+        {
+            $sort: {
+                priority: -1,
+            },
+        },
+        {
+            $skip: 0 * 10,
+        },
+        {
+            $project: {
+                _id: true,
+                name: true,
+                audio: true,
+                priority: true,
+            },
+        },
+        {
+            $sort: {
+                priority: -1,
+            },
+        },
+    ])
+
+    return {
+        begin: audioAdFolder + '/' + selectedAd.at(0)?.audio || 'ad.mp3',
+        end: audioAdFolder + '/' + selectedAd.at(1)?.audio || 'ad.mp3',
+    }
 }
 
 module.exports = async (req, res) => {
@@ -27,14 +68,22 @@ module.exports = async (req, res) => {
 
         if (!article) return res.json({ error: 'No such article found' })
 
-        const sound = fs.readFileSync(article.audio)
+        const recitedArticle = fs.readFileSync(article.audio)
+        const { begin, end } = await getRelevantAudioAd(
+            req?.cookies?.user?.history
+        )
 
-        const ad = getRelevantAudioAd(req?.cookies?.user?.history)
+        console.log('Begin: ', begin, 'End: ', end)
 
-        const concatenated = Buffer.concat([ad, sound])
+        const concatenationList = []
+        if (begin) concatenationList.push(fs.readFileSync(begin))
+        if (article) concatenationList.push(recitedArticle)
+        if (end) concatenationList.push(fs.readFileSync(end))
+        const concatenatedAudioContent = Buffer.concat(concatenationList)
+
         return res.send({
             message: 'success',
-            audio: concatenated.toString('base64'),
+            audio: concatenatedAudioContent.toString('base64'),
         })
     } catch (err) {
         console.error(err)
