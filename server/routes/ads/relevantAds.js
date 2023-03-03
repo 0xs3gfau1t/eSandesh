@@ -1,12 +1,31 @@
 const express = require('express')
 
-const adsModel = require('../../model/ads')
+const adsModel = require('@/model/ads')
 
 /**
  * @param {express.Request} req
  * @param {express.Response} res
  * @return {void}
  */
+
+//
+// Issue with less priority ad starvation
+// Projected solution 1:
+//      - Keep track of ad hits
+//      - For every threshold hit for ad A of priority 10, TxA
+//      - Exclude it from next GET /relevant and give chance for ad B of priority 9
+//      - Then again for TxA, serve A
+//      - Then exclude it from next GET
+//      - Continue cycle until TxB hits
+//      - Then exclude A then B and serve C in next GET /relevant
+//
+// Projected solution 2: (Make use of page/limit
+//      - Keep track of ad hits for page0xlimit
+//      - Serve this combination until threshold hits reaches for page0xlimit
+//      - Serve another combination page1xlimit until until it's threshold reaches
+//      - Configure different threshold with threshold decreasing as we increase page number
+//      - This configuration because we sort by priority during skip
+//
 
 // First filter non expired ads
 const strength = {
@@ -16,15 +35,8 @@ const strength = {
     watchtime: 0.3,
 }
 
-const categoryStrength = {
-    test: 0.6,
-    duplicate: 0.4,
-}
-
-module.exports = async (req, res) => {
-    const { page = 0, limit = 10 } = req.query
-
-    const history = req.cookies?.user?.history || {}
+function calculateCategoryStrength(history) {
+    const categoryStrength = {}
 
     Object.keys(history).forEach(category => {
         const catStrength =
@@ -49,7 +61,15 @@ module.exports = async (req, res) => {
         if (maxStrength < val[1] / totalStrength)
             maxStrength = val[1] / totalStrength
     })
-    console.log(categoryStrength)
+    return { categoryStrength, maxStrength }
+}
+
+module.exports = async (req, res) => {
+    const { page = 0, limit = 10 } = req.query
+
+    const history = req.cookies.user.history
+
+    const { categoryStrength, maxStrength } = calculateCategoryStrength(history)
 
     const categoryAds = await adsModel.aggregate([
         {
@@ -57,6 +77,7 @@ module.exports = async (req, res) => {
                 category: {
                     $in: Object.keys(categoryStrength),
                 },
+                image: { $exists: true },
             },
         },
         {
@@ -140,10 +161,10 @@ module.exports = async (req, res) => {
             .slice(0, sliceMax)
     })
 
-    console.log(categoryAds)
-
     res.json({
         message: 'success',
         ads: categoryAds.map(i => i.final).flat(2),
     })
 }
+
+module.exports.calculateCategoryStrength = calculateCategoryStrength
