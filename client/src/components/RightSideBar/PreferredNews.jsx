@@ -11,7 +11,7 @@ function PreferredNews() {
 		dispatch(listNewsCat({ page: 0, cat: "preference", items: 3 }))
 	}, [])
 	return (
-		<div className="flex flex-col flex-wrap bg-white rounded-lg px-4 shadow-sm">
+		<div className="flex flex-col flex-wrap bg-white rounded-lg px-2 shadow-sm">
 			<ul>
 				{prefNews &&
 					prefNews.map((news, index) => {

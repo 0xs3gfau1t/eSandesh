@@ -28,6 +28,7 @@ export const listNewsCat = createAsyncThunk(
 export const getNewsAudio = createAsyncThunk(
 	"public/getNewsAudio",
 	async ({ year, month, slug }, { dispatch }) => {
+		console.log("Load audio")
 		const audio = await axios
 			.get(`/api/article/recite?year=${year}&month=${month}&slug=${slug}`)
 			.then(res => {
@@ -74,24 +75,6 @@ export const getRecentNews = createAsyncThunk(
 				console.error(err)
 			})
 		dispatch(listNewsCat({ page: 0, cat: "hot", items: 7 }))
-		if (!response) return { success: false }
-		return { success: true, data: response }
-	}
-)
-
-export const saveNews = createAsyncThunk(
-	"news/saveNews",
-	async (data, { dispatch }) => {
-		const response = await axios
-			.post(`/api/user/article`, data, {
-				withCredentials: true,
-			})
-			.then(res => {
-				return res.data
-			})
-			.catch(err => {
-				console.error(err)
-			})
 		if (!response) return { success: false }
 		return { success: true, data: response }
 	}

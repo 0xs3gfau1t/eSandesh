@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react"
 import { useSelector, useDispatch } from "react-redux"
 import { useParams } from "react-router-dom"
-// import { MdCenterFocusStrong } from "react-icons/md"
-import { BiBookReader } from "react-icons/bi"
+import { BiBookReader, BiSave } from "react-icons/bi"
 
 import {
 	SocialShare,
@@ -31,7 +30,8 @@ const SingleNews = () => {
 		day: "numeric",
 	}
 	useEffect(() => {
-		dispatch(getSingleNews({ params: params, noAudio: false }))
+		if (news.slug != params.slug)
+			dispatch(getSingleNews({ params: params, noAudio: false }))
 	}, [params])
 	return (
 		<div className="flex justify-between container gap-4">
@@ -58,6 +58,7 @@ const SingleNews = () => {
 						className="text-2xl my-1 cursor-pointer"
 						onClick={e => dispatch(setFocus(!focus))}
 					/>
+
 					{focus && (
 						<div className="flex gap-2">
 							<span className="text-sm ml-4 py-2">
@@ -74,6 +75,7 @@ const SingleNews = () => {
 						</div>
 					)}
 				</div>
+
 				<div className="flex flex-col gap-0">
 					<h1 className="text-xl mt-4 font-bold">
 						{news ? news.title : ""}
@@ -87,6 +89,12 @@ const SingleNews = () => {
 							: ""}
 						&nbsp;| {news ? news.author.name : ""}
 					</h2>
+					<SocialShare
+						title={
+							news ? news.title : "eSandesh, Khabar Naya Yug ko"
+						}
+						id={news ? news._id : ""}
+					/>
 				</div>
 				<div className="my-4 w-min mx-auto">
 					{audio ? (
@@ -111,19 +119,14 @@ const SingleNews = () => {
 					dangerouslySetInnerHTML={{
 						__html: news ? news.content : "Fetching",
 					}}
-					// className="flex items-center justify-center w-full"
 				/>
 				{/* {focus && <RectAds />} */}
 				<RectAds />
 				<div className="w-full flex justify-end">
 					<LikeSaveShare likes={"१.२"} id={news ? news._id : ""} />
 				</div>
-				<SocialShare
-					title={news ? news.title : "eSandesh, Khabar Naya Yug ko"}
-					id={news ? news._id : ""}
-				/>
+
 				<Comments articleId={news ? news._id : ""} />
-				{/* font-bold text-2xl leading-loose */}
 			</div>
 			{/* right column */}
 			{!focus && (
