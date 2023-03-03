@@ -9,6 +9,7 @@ import { setAlert } from "../redux/actions/misc"
 const initialState = {
 	email: "",
 	password: "",
+	password2: "",
 	name: "",
 }
 
@@ -40,16 +41,38 @@ function UserAuth() {
 					email: values.email,
 					password: values.password,
 					redirect: false,
+				}).then(res => {
+					if (res.status == 200)
+						dispatch(setAlert("Login Sucess", "success"))
+					else dispatch(setAlert("Invalid credentials", "danger"))
 				})
-				dispatch(setAlert("Login Sucess", "success"))
 			}
 		} else {
-			if (!values.email || !values.password || !values.name)
+			if (!values.email || !values.password || !values.name) {
 				dispatch(setAlert("One or More Field Missing!", "danger"))
-			else {
-				signIn("register-user", { ...values, redirect: false })
-				dispatch(setAlert("Account Register Sucess", "success"))
+				return
 			}
+			if (values.password !== values.password2) {
+				dispatch(setAlert("Password didn't match.", "danger"))
+				return
+			}
+			if (values.password.length < 6) {
+				dispatch(
+					setAlert(
+						"Password must be atleast 6 charater long.",
+						"danger"
+					)
+				)
+				return
+			}
+			signIn("register-user", { ...values, redirect: false }).then(
+				res => {
+					console.log(res)
+					if (res.status == 200)
+						dispatch(setAlert("Account Register Sucess", "success"))
+					else dispatch(setAlert("Email already used.", "danger"))
+				}
+			)
 		}
 	}
 
@@ -61,9 +84,11 @@ function UserAuth() {
 
 	return (
 		<div>
-			<form className="form my-[15vh] w-1/4" onSubmit={onSubmit}>
+			<form className="form my-[10vh] w-1/4" onSubmit={onSubmit}>
 				<SiteLogo />
-				<h1>User {isLogin ? "Login" : "Register"}</h1>
+				<h1 className="text-center mt-2 text-2xl font-bold">
+					User {isLogin ? "Login" : "Register"}
+				</h1>
 				{!isLogin && (
 					<FormText
 						name="name"
@@ -89,6 +114,15 @@ function UserAuth() {
 					value={values.password}
 					handleChange={handleChange}
 				/>
+				{!isLogin && (
+					<FormText
+						name="password2"
+						type="password"
+						labelText="Confirm Password"
+						value={values.password2}
+						handleChange={handleChange}
+					/>
+				)}
 				<button type="submit" className="bg-darkblue text-white py-2">
 					{isLogin ? "Login" : "Register"}
 				</button>
