@@ -9,6 +9,11 @@ const { redisClient } = require('@/config/redis')
  * @returns {Promise<ReturnType<T>>}
  */
 const Cache = async (key, callback, opts) => {
+    if (process.env.__DISABLE_CACHE == 'true') {
+        console.log(`[!] Not caching key: ${key} since caching is disabled.`)
+        return await callback()
+    }
+
     try {
         const value = await redisClient.get(key)
         if (value) {
