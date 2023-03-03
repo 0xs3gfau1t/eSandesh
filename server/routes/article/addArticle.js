@@ -67,7 +67,6 @@ const addArticle = async (req, res) => {
             title,
             content: contentOnly,
             id: article._id,
-            ip: req.ip,
         })
         article.audio = recitedArticle.fileName
         article.save()

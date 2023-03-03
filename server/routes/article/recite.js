@@ -8,6 +8,8 @@ const { calculateCategoryStrength } = require('@/routes/ads/relevantAds')
 
 const audioAdFolder = path.resolve(__dirname, '../../assets/ads/audio/')
 
+const ARTICLE_AUDIO_FOLDER = path.resolve(__dirname, "../../assets/article/audio")
+
 /**
  * @param {express.Request} req
  * @param {express.Response} res
@@ -98,7 +100,7 @@ module.exports = async (req, res) => {
 
         if (!article) return res.json({ error: 'No such article found' })
 
-        const recitedArticle = fs.readFileSync(article.audio)
+        const recitedArticle = fs.readFileSync( ARTICLE_AUDIO_FOLDER + "/" + article.audio)
         const { begin, end } = await getRelevantAudioAd(
             req?.cookies?.user?.history
         )
