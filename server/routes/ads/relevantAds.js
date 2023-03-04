@@ -38,15 +38,12 @@ const strength = {
 function calculateCategoryStrength(history) {
     const categoryStrength = {}
 
-    Object.keys(history).forEach(category => {
-        const catStrength =
-            strength.hits * history[category].hits +
-            strength.likes * history[category].likes +
-            strength.comments * history[category].comments +
-            strength.watchtime +
-            history[category].watchtime
-
-        categoryStrength[category] = catStrength
+    history.forEach((value, key) => {
+        categoryStrength[key] =
+            strength.hits * value.hits +
+            strength.likes * value.likes +
+            strength.comments * value.comments +
+            strength.watchtime * value.watchtime
     })
 
     const totalStrength = Object.values(categoryStrength).reduce(
@@ -71,14 +68,16 @@ module.exports = async (req, res) => {
 
     const { categoryStrength, maxStrength } = calculateCategoryStrength(history)
 
+    const matchQuery = { image: { $exists: true } }
+    if (Object.keys(categoryStrength).length !== 0)
+        matchQuery['category'] = {
+            $in: Object.keys(categoryStrength),
+        }
+    console.log('Match query: ', matchQuery)
+
     const categoryAds = await adsModel.aggregate([
         {
-            $match: {
-                category: {
-                    $in: Object.keys(categoryStrength),
-                },
-                image: { $exists: true },
-            },
+            $match: matchQuery,
         },
         {
             $sort: {
