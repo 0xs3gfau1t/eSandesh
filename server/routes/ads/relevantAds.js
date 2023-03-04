@@ -63,17 +63,27 @@ function calculateCategoryStrength(history) {
 
 module.exports = async (req, res) => {
     const { page = 0, limit = 10 } = req.query
+    let { imageType = 'image' } = req.query
 
     const history = req.cookies.user.history
 
     const { categoryStrength, maxStrength } = calculateCategoryStrength(history)
 
-    const matchQuery = { image: { $exists: true } }
-    if (Object.keys(categoryStrength).length !== 0)
+    const matchQuery = {}
+
+    // Prepare match query for categories filtering
+    // If no categories specified, dont set filter
+    const categories = Object.keys(categoryStrength)
+    if (categories.length !== 0)
         matchQuery['category'] = {
-            $in: Object.keys(categoryStrength),
+            $in: categories,
         }
-    console.log('Match query: ', matchQuery)
+
+    // Prepare match query for imageType filtering
+    // If no imageType specified, just filter those ads in which image field exists
+    if (['rextX', 'rectY', 'square'].includes(imageType))
+        imageType = 'image.' + imageType
+    matchQuery[imageType] = { $exists: true }
 
     const categoryAds = await adsModel.aggregate([
         {
@@ -145,21 +155,37 @@ module.exports = async (req, res) => {
     // Pass through all category
     // Filter only those category + limit respective numbers
 
-    Object.entries(categoryAds).forEach(val => {
-        // Set strength for response
-        categoryAds[val[0]].strength = categoryStrength[val[1]._id]
-
-        // Find max index to slice to
-        let sliceMax = Math.floor(categoryStrength[val[1]._id] * limit)
-
-        if (categoryStrength[val[1]._id] === maxStrength) sliceMax++
-
-        // Slice ads number according to strength
-        categoryAds[val[0]].final = categoryAds[val[0]].final
-            .sort((a, b) => b.priority - a.priority)
-            .slice(0, sliceMax)
+    // If limit reaches the first iteration, break
+    // else, loop again to include ads with sliceMax=0
+    // until limit reaches, then break
+    // if availableSpace >= availableItem, include all. Havent distributed according to top priority
+    let filteredAdsNumber = 0
+    const finalCategoryAds = categoryAds.map(ci => {
+        return { _id: ci._id, final: [] }
     })
+    for (let i = 0; i < 2; i++) {
+        Object.entries(categoryAds).forEach(val => {
+            // Set strength for response
+            finalCategoryAds[val[0]].strength = categoryStrength[val[1]._id]
 
+            // Find max index to slice to
+            let sliceMax = Math.round(categoryStrength[val[1]._id] * limit)
+            if (filteredAdsNumber < limit && i === 1 && sliceMax === 0) {
+                const availableItems = categoryAds[val[0]].final.length
+                if (limit - filteredAdsNumber <= 0) return
+                else if (limit - filteredAdsNumber <= availableItems)
+                    sliceMax = limit - filteredAdsNumber
+                else sliceMax = availableItems
+            }
+
+            // Slice ads number according to strength
+            finalCategoryAds[val[0]]['final'] = categoryAds[val[0]].final
+                .sort((a, b) => b.priority - a.priority)
+                .slice(0, sliceMax)
+            filteredAdsNumber += finalCategoryAds[val[0]].final.length
+        })
+        if (limit === filteredAdsNumber) break
+    }
     res.json({
         message: 'success',
         ads: categoryAds.map(i => i.final).flat(2),
