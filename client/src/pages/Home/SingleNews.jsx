@@ -98,17 +98,19 @@ const SingleNews = () => {
                     />
                 </div>
                 <div className="my-4 w-min mx-auto">
-                    {audio ? (
+                    {news ? (
                         <audio
                             controls
                             id="audioPlayer"
-                            className="bg-gray-100 rounded-md"
+                            src={
+                                'http://localhost:8000/api/article/recite?year=' +
+                                params.year +
+                                '&month=' +
+                                params.month +
+                                '&slug=' +
+                                params.slug
+                            }
                         >
-                            <source
-                                src={news ? `data:audio;base64,${audio}` : '#'}
-                                type="audio/mpeg"
-                                className=" bg-blue"
-                            />
                             Your browser does not support the audio element.
                         </audio>
                     ) : (

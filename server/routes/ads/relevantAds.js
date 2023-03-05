@@ -38,13 +38,25 @@ const strength = {
 function calculateCategoryStrength(history) {
     const categoryStrength = {}
 
-    history.forEach((value, key) => {
+    Object.keys(history).forEach(category => {
+        const catStrength =
+            strength.hits * history[category].hits +
+            strength.likes * history[category].likes +
+            strength.comments * history[category].comments +
+            strength.watchtime +
+            history[category].watchtime
+
+        categoryStrength[category] = catStrength
+    })
+    /*
+     * history.forEach((value, key) => {
         categoryStrength[key] =
             strength.hits * value.hits +
             strength.likes * value.likes +
             strength.comments * value.comments +
             strength.watchtime * value.watchtime
     })
+    */
 
     const totalStrength = Object.values(categoryStrength).reduce(
         (a, v) => a + v,
