@@ -1,6 +1,6 @@
 import Home from './Home/Home'
 import SingleNews from './Home/SingleNews'
-import UserProfile from './Home/UserProfile/UserProfile'
+import UserProfile from './UserProfile/Layout'
 import Polls from './Home/Polls'
 import ArchiveNews from './Home/ArchiveNews'
 import Category from './Category/Category'

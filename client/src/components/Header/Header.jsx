@@ -25,7 +25,7 @@ export default function Header() {
     }
 
     return (
-        <div className="header mb-5">
+        <div className="header">
             <div className="flex justify-between items-center container p-3">
                 <div className="flex flex-col items-center sm:items-start cursor-pointer">
                     <SiteLogo />
@@ -42,7 +42,9 @@ export default function Header() {
                             <h2>{session.data.user.name}</h2>
                         )}
                         <IoMdArrowDropdown
-                            className="text-4xl cursor-pointer"
+                            className={`${
+                                show ? 'rotate-180' : ''
+                            } text-4xl cursor-pointer transition-all duration-200`}
                             onClick={e => setShow(!show)}
                         />
                     </div>

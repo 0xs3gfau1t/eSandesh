@@ -23,6 +23,14 @@ import {
     Polls,
     ArchiveNews,
 } from './pages'
+import {
+    UserInfo,
+    UserPreference,
+    UserPosts,
+    SavedPosts,
+    Subscription,
+} from './pages/UserProfile'
+
 import { PrivateRoute, Alert } from './components/common'
 
 function App() {
@@ -55,8 +63,16 @@ function App() {
                     <Route path="polls" element={<PollsMan />} />
                     <Route path="stats" element={<ViewSiteStats />} />
                 </Route>
+                <Route path="/profile" element={<UserProfile />}>
+                    <Route path="/profile/" element={<UserInfo />} />
+                    <Route path="saved" element={<SavedPosts />} />
+                    <Route path="preference" element={<UserPreference />} />
+                    <Route path="subscription" element={<Subscription />} />
+                    <Route path="myposts" element={<UserPosts />} />
+                </Route>
+                <Route path="/saved" element={<SavedPosts />} />
+
                 <Route path="/" element={<Home />}>
-                    <Route path="/profile" element={<UserProfile />} />
                     <Route path="/archive" element={<ArchiveNews />} />
                     <Route path="/polls" element={<Polls />} />
                     <Route path="" element={<Landing />} />
