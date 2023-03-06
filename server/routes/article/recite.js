@@ -8,6 +8,11 @@ const { calculateCategoryStrength } = require('@/routes/ads/relevantAds')
 
 const audioAdFolder = path.resolve(__dirname, '../../assets/ads/audio/')
 
+const ARTICLE_AUDIO_FOLDER = path.resolve(
+    __dirname,
+    '../../assets/article/audio'
+)
+
 /**
  * @param {express.Request} req
  * @param {express.Response} res
@@ -75,11 +80,13 @@ async function getRelevantAudioAd(history) {
         },
     ])
 
-    const allocatedAds = selectedAd.map(ad => {
-        const maxAllocated = Math.round(categoryStrength[ad._id] * AD_LIMIT)
-        const sliced = ad.final.slice(0, maxAllocated)
-        return sliced
-    }).flat()
+    const allocatedAds = selectedAd
+        .map(ad => {
+            const maxAllocated = Math.round(categoryStrength[ad._id] * AD_LIMIT)
+            const sliced = ad.final.slice(0, maxAllocated)
+            return sliced
+        })
+        .flat()
 
     return {
         begin: audioAdFolder + '/' + (allocatedAds.at(0)?.audio || 'ad.mp3'),
@@ -98,30 +105,32 @@ module.exports = async (req, res) => {
 
         if (!article) return res.json({ error: 'No such article found' })
 
-        const recitedArticle = fs.readFileSync(article.audio)
+        const recitedArticle = ARTICLE_AUDIO_FOLDER + '/' + article.audio
         const { begin, end } = await getRelevantAudioAd(
             req?.cookies?.user?.history
         )
-        //
-        // There's a weird bug during playing the audio
-        // Max seconds seems to increase if content is skipped
-        // Only those audio which has been converted to mp3 using ffmpeg
-        //
-        const concatenationList = []
-        if (begin) concatenationList.push(fs.readFileSync(begin))
-        if (article) concatenationList.push(recitedArticle)
-        if (end) concatenationList.push(fs.readFileSync(end))
 
-        const concatenatedAudioContent = Buffer.concat(concatenationList)
+        let finalSize = fs.statSync(begin).size
+        const frontAudio = fs.createReadStream(begin)
+        finalSize += fs.statSync(recitedArticle).size
+        const articleAudio = fs.createReadStream(recitedArticle, {
+            highWaterMark: 1024,
+        })
+        finalSize += fs.statSync(end).size
+        const endAudio = fs.createReadStream(end, { highWaterMark: 1024 })
 
-        //
-        // Not necessary now but
-        // Instead of responding with concatenated audio
-        // respond with audio stream chunk by chunk to make it available at once
-        //
-        return res.send({
-            message: 'success',
-            audio: concatenatedAudioContent.toString('base64'),
+        res.writeHead(200, {
+            'Content-Length': finalSize,
+            'Content-Range': 'bytes 0-' + finalSize + '/' + finalSize,
+            'Content-Type': 'audio/mp3',
+        })
+
+        frontAudio.pipe(res, { end: false })
+        frontAudio.on('end', () => {
+            articleAudio.pipe(res, { end: false })
+            articleAudio.on('end', () => {
+                endAudio.pipe(res)
+            })
         })
     } catch (err) {
         console.error(err)

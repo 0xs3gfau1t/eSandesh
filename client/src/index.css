@@ -3,10 +3,10 @@
 @tailwind utilities;
 
 @layer base {
-  html {
-    @apply scroll-smooth;
-  }
-  body {
-    @apply bg-slate-100;
-  }
+    html {
+        @apply scroll-smooth;
+    }
+    body {
+        @apply bg-slate-100;
+    }
 }

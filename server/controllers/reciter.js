@@ -3,7 +3,7 @@ const fs = require('fs')
 
 const audioArticleFolder = path.resolve(__dirname, '../assets/article/audio/')
 
-module.exports = async ({ title, content, id, ip }) => {
+module.exports = async ({ title, content, id }) => {
     try {
         const body = new FormData()
         body.append('locale', 'ne-NP')
@@ -27,7 +27,7 @@ module.exports = async ({ title, content, id, ip }) => {
 
         const fileName = audioArticleFolder + '/' + id + '.mp3'
         fs.writeFileSync(fileName, sound)
-        return { fileName }
+        return { fileName: id + '.mp3' }
     } catch (err) {
         console.error(err)
         return { fileName: null }
