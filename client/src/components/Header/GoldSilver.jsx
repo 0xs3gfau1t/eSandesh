@@ -2,7 +2,7 @@ import React from 'react'
 
 export default function GoldSilver() {
     return (
-        <div className="grid grid-cols-3 gap-x-4 gap-y-2">
+        <div className="grid grid-cols-3">
             {/* categories */}
             <div className="font-bold text-center flex items-center justify-center">
                 छापावाल सुन
