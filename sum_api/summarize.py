@@ -70,4 +70,4 @@ def get_summary(text: str, embedding, n=5):
     print(len(vec_input))
     sents_idx, sents_order = summary(vec_input, int(len(vec_input)/4))
 
-    return u"।".join([processed_text.split(u"।")[sents_idx[x]] for x in sents_order])+u"।"
+    return u"।".join([text.split(u"।")[sents_idx[x]] for x in sents_order])+u"।"
