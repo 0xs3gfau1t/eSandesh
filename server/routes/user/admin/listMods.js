@@ -7,11 +7,11 @@ const { userModel } = require('@/model/user')
  */
 
 module.exports = (req, res) => {
-    const { isReporter, isRoot, isPublisher } = req.query
+    const { isReporter, isRoot, canPublish } = req.query
 
     const roleFilter = { role: true }
     if (isReporter) roleFilter['role.isReporter'] = true
-    if (isPublisher) roleFilter['role.isPublisher'] = true
+    if (canPublish) roleFilter['role.canPublish'] = true
     if (isRoot) roleFilter['role.isRoot'] = true
 
     userModel.find({ $exists: roleFilter }, (e, d) => {
