@@ -67,7 +67,6 @@ def get_summary(text: str, embedding, n=5):
 
     processed_text = preprocess(text)
     vec_input = vectorize(processed_text, embedding)
-    print(len(vec_input))
     sents_idx, sents_order = summary(vec_input, int(len(vec_input)/4))
 
     return u"।".join([text.split(u"।")[sents_idx[x]] for x in sents_order])+u"।"
