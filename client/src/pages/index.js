@@ -7,7 +7,7 @@ import Category from './Category/Category'
 import Landing from './Home/Landing'
 import UserAuth from './UserAuth'
 import {
-    AdminDash,
+    // AdminDash,
     ManageNews,
     EditNews,
     ReaderArticles,
@@ -24,7 +24,7 @@ export {
     Category,
     Login,
     UserAuth,
-    AdminDash,
+    // AdminDash,
     ManageNews,
     EditNews,
     ReaderArticles,

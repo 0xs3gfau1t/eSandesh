@@ -18,16 +18,16 @@ import { SiteLogo } from './common'
 
 const TopNav = () => {
     return (
-        <div className="text-white h-12 bg-darkblue flex">
-            <h1 className="ml-8 my-3 text-3xl">
+        <div className="text-white h-16 bg-darkblue flex border-b-2 border-b-orange-700">
+            <h1 className="ml-8 my-3 text-2xl">
                 <SiteLogo theme={'light'} />
             </h1>
-            <h1 className="mx-auto my-2 text-2xl align-center">
+            <h1 className="mx-auto my-auto text-2xl align-center">
                 Admin Dashboard
             </h1>
             <h2
                 onClick={() => signOut({ redirect: false })}
-                className="flex mr-12 text-lg my-auto py-1 px-2 rounded-md bg-zinc-500 cursor-pointer"
+                className="flex mr-12 text-lg my-auto py-1 px-2 rounded-md bg-zinc-700 cursor-pointer"
             >
                 Logout
             </h2>
@@ -47,7 +47,7 @@ const adminNavs = [
 
 const SideNav = () => {
     return (
-        <ul className="dash-list flex flex-col gap-8 px-1 py-24 bg-darkblue w-1/7 text-white">
+        <ul className="dash-list flex flex-col gap-8 px-1 py-16 bg-darkblue w-1/7 text-white">
             {adminNavs.map(item => {
                 return (
                     <NavLink
@@ -76,7 +76,7 @@ const userNavs = [
 
 const UserSideNav = () => {
     return (
-        <ul className="dash-list flex flex-col gap-6 px-1 py-24 border-r-2 border-r-emerald-700">
+        <ul className="dash-list flex flex-col gap-6 px-1 py-24 border-r-2 border-r-black">
             {userNavs.map(item => {
                 return (
                     <NavLink

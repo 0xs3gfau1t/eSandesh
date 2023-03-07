@@ -10,7 +10,6 @@ export default function SiteIdentity() {
             <div className="flex flex-col items-center sm:items-start">
                 {/* site title and tagline */}
                 <SiteLogo />
-                <p>खबर नया युग को</p>
             </div>
             {/* social icons*/}
             <SocialIcons />
