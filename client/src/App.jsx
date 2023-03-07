@@ -7,6 +7,7 @@ import {
     Home,
     Login,
     UserAuth,
+    ForgotPassword,
     Category,
     AdminDash,
     ManageNews,
@@ -33,6 +34,7 @@ function App() {
             {misc.showAlert && <Alert />}
             <Routes>
                 <Route path="/userauth" element={<UserAuth />} />
+                <Route path="/forgotPassword" element={<ForgotPassword />} />
                 <Route path="/admin" element={<Login />} />
                 <Route
                     path="/admin/dashboard"

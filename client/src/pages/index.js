@@ -6,6 +6,7 @@ import ArchiveNews from './Home/ArchiveNews'
 import Category from './Category/Category'
 import Landing from './Home/Landing'
 import UserAuth from './UserAuth'
+import ForgotPassword from './ForgotPassword'
 import {
     AdminDash,
     ManageNews,
@@ -24,6 +25,7 @@ export {
     Category,
     Login,
     UserAuth,
+    ForgotPassword,
     AdminDash,
     ManageNews,
     EditNews,
