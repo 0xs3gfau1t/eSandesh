@@ -89,7 +89,7 @@ module.exports = async (req, res) => {
                 }`,
             'Accept-Ranges': 'bytes',
             'Content-Length': HEADER_SIZE,
-            'Content-Type': 'audio/wav',
+            'Content-Type': 'audio/x-wav',
         })
 
         return Readable.from(wavHeader).pipe(res)
@@ -121,7 +121,7 @@ module.exports = async (req, res) => {
         'Content-Range': `bytes ${start}-${end}/${totalSize + HEADER_SIZE}`,
         'Accept-Ranges': 'bytes',
         'Content-Length': contentLength,
-        'Content-Type': 'audio/wav',
+        'Content-Type': 'audio/x-wav',
     })
 
     return fs
