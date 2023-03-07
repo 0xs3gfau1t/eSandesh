@@ -74,6 +74,7 @@ function App() {
                     {LazyAdmins.map(item => {
                         return (
                             <Route
+                                key={item.url}
                                 path={item.url}
                                 element={
                                     <Suspense>
