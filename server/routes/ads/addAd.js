@@ -13,7 +13,9 @@ module.exports = async (req, res) => {
     // Always check first
     const { user } = req.session
     if (!user?.roles?.isRoot)
-        return res.json({ error: 'Not enough permission to create ads' })
+        return res
+            .status(403)
+            .json({ error: 'Not enough permission to create ads' })
 
     const {
         name,

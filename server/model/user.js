@@ -10,7 +10,6 @@ const userSchema = new mongoose.Schema({
     roles: {
         isRoot: { type: Boolean, default: false },
         canPublish: { type: Boolean, default: false },
-        canCreate: { type: Boolean, default: true },
         isReporter: { type: Boolean, default: false },
     },
     history: {
