@@ -7,6 +7,8 @@ const fs = require('fs')
 
 const jwt = require('next-auth/jwt')
 
+const EXPIRE_MIN = 5
+
 /**
  * @param {express.Request} req
  * @param {express.Response} res
@@ -21,7 +23,7 @@ module.exports = async (req, res) => {
     const key = await jwt.encode({
         token: { email, name, hashedPassword, roles },
         secret: process.env.NEXTAUTH_SECRET,
-        maxAge: 60 * 5,
+        maxAge: 60 * EXPIRE_MIN,
     })
 
     const logoFilePath = path.resolve(__dirname, '../../../assets/logo.png')

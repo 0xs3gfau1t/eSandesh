@@ -1,17 +1,22 @@
 const express = require('express')
-/*
- * @param {express.Requsst}req
+const { userModel } = require('@/model/user')
+/**
+ * @param {express.Request} req
  * @param {express.Response} res
- * @return {void}
+ * @return {express.Response}
  */
 
 module.exports = (req, res) => {
-    const { isRoot } = req.session?.user?.roles?.isRoot
+    const { isReporter, isRoot, isPublisher } = req.query
 
-    if (!isRoot)
-        return res
-            .status(403)
-            .json({ message: 'Not enough privilage to perform this action' })
+    const roleFilter = { role: true }
+    if (isReporter) roleFilter['role.isReporter'] = true
+    if (isPublisher) roleFilter['role.isPublisher'] = true
+    if (isRoot) roleFilter['role.isRoot'] = true
 
-    res.json({ message: 'Success' })
+    userModel.find({ $exists: roleFilter }, (e, d) => {
+        console.log(d, e)
+        if (e) res.status(500).json({ message: 'Something went wrong' })
+        res.json({ message: 'success', data: d })
+    })
 }
