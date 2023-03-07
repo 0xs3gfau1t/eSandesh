@@ -1,17 +1,29 @@
+const { userModel } = require('@/model/user')
 const express = require('express')
-/*
- * @param {express.Requsst}req
+/**
+ * @param {express.Request}req
  * @param {express.Response} res
  * @return {void}
  */
 
 module.exports = (req, res) => {
-    const { isRoot } = req.session?.user?.roles
+    const { email, isRoot, isReporter, canPublish } = req.body
 
-    if (!isRoot)
-        return res
-            .status(403)
-            .json({ message: 'Not enough privilage to perform this action' })
+    let roles = {}
+    if (isRoot === 'true') roles.isRoot = isRoot
+    if (isReporter === 'true') roles.isReporter = isReporter
+    if (canPublish === 'true') roles.canPublish = canPublish
 
-    res.json({ message: 'Success' })
+    if (!Object.keys(roles).length) roles = undefined
+
+    userModel.deleteOne({ email, roles }, (e, d) => {
+        if (e) {
+            console.log(e, d)
+            return res.status(500).json({ message: 'Something went wrong.' })
+        }
+        if (!d)
+            return res.status(404).json({ message: 'No such record exists' })
+
+        res.json({ message: 'success' })
+    })
 }
