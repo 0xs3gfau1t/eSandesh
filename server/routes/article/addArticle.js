@@ -1,8 +1,9 @@
 const sendNewsLetter = require('@/controllers/sendNewsLetter')
 const express = require('express')
-const articleModel = require('../../model/article')
+const articleModel = require('@/model/article')
 const { JSDOM } = require('jsdom')
-const reciter = require('../../controllers/reciter')
+const reciter = require('@/controllers/reciter')
+const generateSummary = require('@/controllers/summaryGenerationController')
 
 const socialApis = {
     facebook: require('./socials/facebook'),
@@ -12,11 +13,6 @@ const socialApis = {
  * @param {express.Request} req
  * @param {express.Response} res
  */
-
-// Dummy functtion to be integrated with summary model
-function generateSummary(content) {
-    return String(content).slice(0, 100)
-}
 
 const addArticle = async (req, res) => {
     const {
@@ -67,7 +63,6 @@ const addArticle = async (req, res) => {
             title,
             content: contentOnly,
             id: article._id,
-            ip: req.ip,
         })
         article.audio = recitedArticle.fileName
         article.save()

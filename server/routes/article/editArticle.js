@@ -1,6 +1,8 @@
 const { redisClient } = require('@/config/redis')
 const express = require('express')
-const articleModel = require('../../model/article')
+const articleModel = require('@/model/article')
+const generateSummary = require('@/controllers/summaryGenerationController')
+const reciter = require('@/controllers/reciter')
 
 /**
  * @param {express.Request} req
@@ -26,6 +28,15 @@ const editArticle = async (req, res) => {
     if (title) data.title = title
     if (category) data.category = category
     if (tags) data.tags = tags
+    data.summary = generateSummary(data.content)
+
+    const recitedArticle = await reciter({
+        title,
+        content,
+        id,
+    })
+    data.audio = recitedArticle.fileName
+
     var key
     try {
         const article = await articleModel.findOneAndUpdate(filter, data)

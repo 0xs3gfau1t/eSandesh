@@ -139,6 +139,9 @@ const authOptions = {
     session: {
         strategy: 'jwt',
     },
+    theme: {
+        colorScheme: 'dark',
+    },
     debug: process.env.NODE_ENV == 'development',
 }
 
