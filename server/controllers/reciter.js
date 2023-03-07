@@ -1,10 +1,11 @@
 const path = require('path')
 
 const audioArticleFolder = path.resolve(__dirname, '../assets/article/audio/')
+
 const Ffmpeg = require('fluent-ffmpeg')
 const { Readable } = require('stream')
 
-module.exports = async ({ title, content, id, ip }) => {
+module.exports = async ({ title, content, id }) => {
     const body = new FormData()
     body.append('locale', 'ne-NP')
     body.append(
@@ -13,7 +14,7 @@ module.exports = async ({ title, content, id, ip }) => {
     )
     body.append('ip', '8.8.8.8')
 
-    const fileName = audioArticleFolder + '/' + id + '.raw'
+    const fileName = id + '.raw'
 
     return new Promise(async (resolve, reject) => {
         const soundBuffer = await fetch(
@@ -51,7 +52,7 @@ module.exports = async ({ title, content, id, ip }) => {
             .audioCodec('pcm_s16le')
             .audioFrequency(48000)
             .audioChannels(1)
-            .output(fileName)
+            .output(AUDIO_AD_FOLDER + '/' + fileName)
             .run()
     })
 }
