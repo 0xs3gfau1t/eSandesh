@@ -43,7 +43,7 @@ const addArticle = async (req, res) => {
                 new Date().getMonth(),
                 0
             ).getTime(),
-        summary: await generateSummary(contentOnly),
+        summarizedContent: await generateSummary(contentOnly),
     }
 
     // If the user is an admin then publish the article
