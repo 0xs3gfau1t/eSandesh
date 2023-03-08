@@ -1,11 +1,13 @@
 import { useEffect, useState } from 'react'
 import { signIn, useSession } from 'next-auth/react'
 import { useNavigate } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
 
 import { SiteLogo, FormText } from '../../components/common'
+import { setAlert } from '../../redux/actions/misc'
 
 const initialState = {
-    username: '',
+    email: '',
     password: '',
 }
 
@@ -14,6 +16,7 @@ const Login = () => {
 
     const session = useSession()
     const navigate = useNavigate()
+    const dispatch = useDispatch()
 
     useEffect(() => {
         // console.log(session)
@@ -31,7 +34,15 @@ const Login = () => {
 
     const onSubmit = e => {
         e.preventDefault()
-        signIn('admin', { ...values, redirect: false })
+        if (!values.email || !values.password)
+            dispatch(setAlert('One or More Field Missing!', 'danger'))
+        else {
+            signIn('admin', { ...values, redirect: false }).then(res => {
+                if (res.status == 200)
+                    dispatch(setAlert('Login Sucess', 'success'))
+                else dispatch(setAlert('Invalid credentials', 'danger'))
+            })
+        }
     }
 
     return (
@@ -41,8 +52,8 @@ const Login = () => {
                 <h1>Admin Login</h1>
                 <FormText
                     type="email"
-                    name="username"
-                    value={values.username}
+                    name="email"
+                    value={values.email}
                     labelText="Email"
                     handleChange={handleChange}
                 />
