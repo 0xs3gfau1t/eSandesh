@@ -24,15 +24,16 @@ def vectorize(sentences, embedding):
     '''create vectors from sentences using word2vec embedding'''
     X = []
     vocab = embedding.key_to_index
+    wc = 0
     for sentence in sentences:
         words = sentence.split(" ")
+        wc += len(words)
         sent_vec = np.zeros((embedding.vector_size))
         for word in words:
             if word in vocab:
                 sent_vec += embedding[word]
         X.append(sent_vec)
-
-    return X
+    return X, wc
 
 
 def summary(X, lines=5):
@@ -66,7 +67,18 @@ def get_summary(text: str, embedding, n=5):
     '''
 
     processed_text = preprocess(text)
-    vec_input = vectorize(processed_text, embedding)
-    sents_idx, sents_order = summary(vec_input, int(len(vec_input)/4))
+    vec_input, wc = vectorize(processed_text, embedding)
+    sents_idx, sents_order = summary(vec_input, 10)
+    raw_sents = text.split(u"।")
+    result = ""
+    count = 0
+    max_sent = int(wc/4)
 
-    return u"।".join([text.split(u"।")[sents_idx[x]] for x in sents_order])+u"।"
+    for x in sents_order:
+        sel_sent = raw_sents[sents_idx[x]]
+        count += len(sel_sent.split(" "))
+        result += sel_sent + u"।"
+        if count > max_sent:
+            break
+
+    return result

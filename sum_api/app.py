@@ -9,9 +9,13 @@ embedding = load_vector()
 @app.route("/summary", methods=['POST'])
 def summarize():
     """Return summarized text"""
-    text = request.json['text']
-    summary = get_summary(text, embedding)
-    return {"summary": summary}
+    try:
+        text = request.form['text']
+        summary = get_summary(text, embedding)
+        return {"summary": summary}
+    except Exception as exp:
+        print(exp)
+        return {"err": "Something went wrong"}, 500
 
 
 @app.route("/")
