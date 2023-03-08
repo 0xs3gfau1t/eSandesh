@@ -8,15 +8,9 @@ const userSchema = new mongoose.Schema({
     image: { type: String },
     // articles: { type: [mongoose.Schema.Types.ObjectId], ref: 'Article' },
     roles: {
-        type: Map,
-        of: new mongoose.Schema(
-            {
-                isRoot: { type: Boolean, default: false },
-                canPublish: { type: Boolean, default: false },
-                isReporter: { type: Boolean, default: false },
-            },
-            { _id: false }
-        ),
+        isRoot: { type: Boolean },
+        canPublish: { type: Boolean },
+        isReporter: { type: Boolean },
     },
     history: {
         type: Map,
