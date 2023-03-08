@@ -1,5 +1,5 @@
 import { useState, useRef } from 'react'
-import { FaRegUserCircle } from 'react-icons/fa'
+import { IoMdArrowDropdown, IoMdPerson } from 'react-icons/io'
 import { useDispatch } from 'react-redux'
 import { Link, useNavigate } from 'react-router-dom'
 import { signOut, useSession } from 'next-auth/react'
@@ -16,6 +16,7 @@ export default function Header() {
     const session = useSession()
     const dispatch = useDispatch()
     const action = () => {
+        console.log('header bata', session)
         if (session.status == 'authenticated') {
             setShow(false)
             dispatch(setAlert('Logged Out', 'success'))
@@ -24,21 +25,29 @@ export default function Header() {
     }
 
     return (
-        <div className="header mb-5">
+        <div className="header">
             <div className="flex justify-between items-center container p-3">
-                <div className="flex flex-col items-center sm:items-start">
+                <div className="flex flex-col items-center sm:items-start cursor-pointer">
                     <SiteLogo />
-                    <p>खबर नया युग को</p>
                 </div>
-                <div className="relative flex justify-between items-center">
-                    <div className="flex justify-between invisible md:visible text-xs lg:text-sm gap-4">
+                <div className="relative flex justify-between items-center gap-8">
+                    <div className="flex justify-end invisible md:visible text-xs lg:text-sm gap-4">
                         <Forex />
                         <GoldSilver />
                     </div>
-                    <FaRegUserCircle
-                        className="text-3xl cursor-pointer"
-                        onClick={e => setShow(!show)}
-                    />
+                    <div className="flex gap-2">
+                        <IoMdPerson className="text-4xl cursor-pointer" />
+                        {session.status == 'authenticated' && (
+                            <h2>{session.data.user.name}</h2>
+                        )}
+                        <IoMdArrowDropdown
+                            className={`${
+                                show ? 'rotate-180' : ''
+                            } text-4xl cursor-pointer transition-all duration-200`}
+                            onClick={e => setShow(!show)}
+                        />
+                    </div>
+
                     {show && (
                         <>
                             <div
@@ -49,7 +58,8 @@ export default function Header() {
                                 ref={ref}
                                 className="header-drop absolute z-99 right-0 mt-32 p-2 w-36 text-center border-blue border-2 rounded-md font-bold text-xl"
                             >
-                                <Link to="/profile">
+                                <hr className="w-11/12 border-neutral-300" />
+                                <Link to="/profile/">
                                     <li onClick={e => setShow(false)}>
                                         प्रोफाइल
                                     </li>
