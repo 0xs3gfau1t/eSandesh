@@ -2,6 +2,8 @@ const express = require('express')
 const updateHistory = require('@/controllers/updateHistory')
 const articleModel = require('@/model/article')
 const Cache = require('@/controllers/Cache')
+const getRelevantAudioAd = require('@/controllers/relevantAudioAd')
+const crypto = require('crypto')
 
 /**
  * @param {express.Request} req
@@ -39,6 +41,35 @@ const getArticle = async (req, res) => {
 
         if (!article || article?.length == 0)
             return res.status(400).json({ message: 'Article not found.' })
+
+        const { begin, end } = await getRelevantAudioAd(
+            req.cookies.user.history
+        )
+
+        const audioStreams = []
+        if (begin) audioStreams.push(begin)
+        if (article[0].audio) audioStreams.push(article[0].audio)
+        if (end) audioStreams.push(end)
+        const data = JSON.stringify(audioStreams)
+
+        // Encrypt the data as key
+        var audioKey
+        if (!process.env.AUDIO_KEY) {
+            console.debug('[!] AUDIO_KEY not found in env')
+            console.debug(
+                '[!] Using default AUDIO_KEY. Create one with `openssl -rand base64 32`'
+            )
+            audioKey = 'w+0s8w5H1oqlw5/3uCqDIDGUQ6RcJ0QFWXTm/5t+R98='
+        } else {
+            audioKey = process.env.AUDIO_KEY
+        }
+
+        const secret = Buffer.from(audioKey, 'base64')
+        const cipher = crypto.createCipheriv('aes-256-ecb', secret, null)
+        const key = Buffer.concat([cipher.update(data), cipher.final()])
+        const params = new URLSearchParams()
+        params.set('key', key.toString('base64'))
+        article[0].audio = '/api/article/recite?' + params.toString()
 
         // Update category hits in user's history
         article[0]?.category.forEach(category => {

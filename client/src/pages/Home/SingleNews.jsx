@@ -17,7 +17,6 @@ import Comments from '../../components/Comments'
 const SingleNews = () => {
     const params = useParams()
     const news = useSelector(state => state.news.singleNews)
-    const audio = useSelector(state => state.news.audio)
     const focus = useSelector(state => state.misc.focus)
     const [show, setShow] = useState(true)
     const [fontSize, setFontSize] = useState(1)
@@ -49,9 +48,8 @@ const SingleNews = () => {
 
                 <div className="flex">
                     <h3
-                        className={`font-bold px-2 ${
-                            !focus ? 'text-green-600' : 'text-red'
-                        }`}
+                        className={`font-bold px-2 ${!focus ? 'text-green-600' : 'text-red'
+                            }`}
                     >
                         {focus ? 'Exit' : 'Enter'} Focus Mode
                     </h3>
@@ -84,9 +82,9 @@ const SingleNews = () => {
                     <h2 className="ml-4">
                         {news
                             ? new Date(news.publishedAt).toLocaleDateString(
-                                  'en-US',
-                                  dateOpt
-                              )
+                                'en-US',
+                                dateOpt
+                            )
                             : ''}
                         &nbsp;| {news ? news.author.name : ''}
                     </h2>
@@ -99,18 +97,7 @@ const SingleNews = () => {
                 </div>
                 <div className="my-4 w-min mx-auto">
                     {news ? (
-                        <audio
-                            controls
-                            id="audioPlayer"
-                            src={
-                                'http://localhost:8000/api/article/recite?year=' +
-                                params.year +
-                                '&month=' +
-                                params.month +
-                                '&slug=' +
-                                params.slug
-                            }
-                        >
+                        <audio controls id="audioPlayer" src={news.audio}>
                             Your browser does not support the audio element.
                         </audio>
                     ) : (
