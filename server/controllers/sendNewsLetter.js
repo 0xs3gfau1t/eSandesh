@@ -1,9 +1,10 @@
 const { userModel } = require('@/model/user')
 const mongoose = require('mongoose')
-const nodemailer = require('nodemailer')
 const fs = require('fs')
 const path = require('path')
 const { JSDOM } = require('jsdom')
+
+const transporter = require('@/controllers/mailer')
 
 const sendNewsLetter = async ({ user, data }) => {
     try {
@@ -24,15 +25,6 @@ const sendNewsLetter = async ({ user, data }) => {
 
         if (!emails.length) return { message: 'No subscribers to mail to' }
 
-        const transporter = nodemailer.createTransport({
-            host: process.env.MAILER_HOST,
-            port: process.env.MAILER_POST,
-            secure: false,
-            auth: {
-                user: process.env.MAILER_ADD,
-                pass: process.env.MAILER_PASS,
-            },
-        })
         const htmlFilePath = path.resolve(__dirname, '../assets/mail.html')
         const logoFilePath = path.resolve(__dirname, '../assets/logo.png')
 

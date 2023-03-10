@@ -1,18 +1,10 @@
 const nodemailer = require('nodemailer')
 const fs = require('fs')
 const path = require('path')
+const transporter = require("@/controllers/mailer")
 
 const sendPasswordResetMail = async ({ email, url }) => {
     try {
-        const transporter = nodemailer.createTransport({
-            host: process.env.MAILER_HOST,
-            port: process.env.MAILER_POST,
-            secure: false,
-            auth: {
-                user: process.env.MAILER_ADD,
-                pass: process.env.MAILER_PASS,
-            },
-        })
         const htmlFilePath = path.resolve(
             __dirname,
             '../assets/forgotPassword.html'
