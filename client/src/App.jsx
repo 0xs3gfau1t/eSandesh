@@ -18,6 +18,7 @@ import {
     UserProfile,
     Polls,
     ArchiveNews,
+    NotFound,
 } from './pages'
 import {
     UserInfo,
@@ -112,6 +113,7 @@ function App() {
                     />
                     <Route path="/category/:cat" element={<Category />} />
                 </Route>
+                <Route path="*" element={<NotFound />} />
             </Routes>
         </Router>
     )
