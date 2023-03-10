@@ -99,7 +99,7 @@ const authOptions = {
             async authorize(creds, _req) {
                 try {
                     const user = await userModel.findOne({
-                        email: creds.username,
+                        email: creds.email,
                         'roles.isRoot': true,
                     })
                     if (
