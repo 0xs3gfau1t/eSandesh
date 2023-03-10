@@ -85,8 +85,9 @@ module.exports = async (req, res) => {
         ) // data chunk size
 
         res.writeHead(206, {
-            'Content-Range': `bytes ${start}-${HEADER_SIZE - 1}/${totalSize + HEADER_SIZE
-                }`,
+            'Content-Range': `bytes ${start}-${HEADER_SIZE - 1}/${
+                totalSize + HEADER_SIZE
+            }`,
             'Accept-Ranges': 'bytes',
             'Content-Length': HEADER_SIZE,
             'Content-Type': 'audio/wav',

@@ -46,10 +46,10 @@ const addArticle = async (req, res) => {
         summarizedContent: await generateSummary(contentOnly),
     }
 
-    // If the user is an admin then publish the article
-    // also set the priority
+    // Donot publish article on save
+    // POST to /publish to publish it
+    // If you want to publish, create {publishedAt: new Date()}
     if (user.roles.isRoot) {
-        data.publishedAt = new Date()
         data.priority = priority
     }
 

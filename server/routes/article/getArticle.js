@@ -4,12 +4,19 @@ const articleModel = require('@/model/article')
 const Cache = require('@/controllers/Cache')
 const getRelevantAudioAd = require('@/controllers/relevantAudioAd')
 const crypto = require('crypto')
+const path = require('path')
 
 /**
  * @param {express.Request} req
  * @param {express.Response} res
  * @return {void}
  */
+
+const audioArticleFolder = path.resolve(
+    __dirname,
+    '../../assets/article/audio/'
+)
+
 const getArticle = async (req, res) => {
     const { year, month, slug } = req.params
 
@@ -48,7 +55,8 @@ const getArticle = async (req, res) => {
 
         const audioStreams = []
         if (begin) audioStreams.push(begin)
-        if (article[0].audio) audioStreams.push(article[0].audio)
+        if (article[0].audio)
+            audioStreams.push(audioArticleFolder + '/' + article[0].audio)
         if (end) audioStreams.push(end)
         const data = JSON.stringify(audioStreams)
 
