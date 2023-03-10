@@ -3,7 +3,6 @@ const router = express.Router()
 
 const withAuth = require('../../middlewares/withAuth')
 const withPublisher = require('../../middlewares/withPublisher')
-// Need reporter here
 const fetchHistory = require('../../middlewares/fetchHistory')
 
 const addArticle = require('./addArticle')
@@ -19,7 +18,7 @@ const userArticles = require('./userArticles')
 router.get('/list*', fetchHistory, listArticle)
 router.get('/:year/:month/:slug', fetchHistory, getArticle)
 router.get('/recite', fetchHistory, recite)
-router.get('/topublish', /*withPublisher*/ toPublish)
+router.get('/topublish', withPublisher, toPublish)
 router.post('/publish', withPublisher, publish)
 router.get('/byuser', userArticles)
 router.post('/', withAuth, addArticle)
