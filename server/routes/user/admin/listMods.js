@@ -14,9 +14,13 @@ module.exports = (req, res) => {
     if (canPublish) roleFilter['role.canPublish'] = true
     if (isRoot) roleFilter['role.isRoot'] = true
 
-    userModel.find({ $exists: roleFilter }, (e, d) => {
-        console.log(d, e)
-        if (e) res.status(500).json({ message: 'Something went wrong' })
-        res.json({ message: 'success', data: d })
-    })
+    userModel.find(
+        { $exists: roleFilter },
+        { _id: true, name: true, email: true, roles: true },
+        (e, d) => {
+            console.log(d, e)
+            if (e) res.status(500).json({ message: 'Something went wrong' })
+            res.json({ message: 'success', data: d })
+        }
+    )
 }
