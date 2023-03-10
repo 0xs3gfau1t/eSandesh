@@ -13,6 +13,7 @@ export default function SavedPosts() {
         await axios
             .get('/api/user/article')
             .then(res => {
+                console.log(res.data.articles)
                 setPosts(res.data.articles)
             })
             .catch(err => {
@@ -45,7 +46,7 @@ export default function SavedPosts() {
                     posts.map(post => {
                         return (
                             <li
-                                key={post._id}
+                                key={post.id}
                                 className="w-48 flex flex-col my-4 shadow-md hover:shadow-lg duration-200 rounded-md bg-white p-4"
                             >
                                 <img
@@ -59,11 +60,12 @@ export default function SavedPosts() {
                                     {post.title}
                                 </Link>
                                 <p className="flex flex-col text-sm">
-                                    -Bagheshwori Pathak 2023-02-23
+                                    <span>-{post.author}</span>{' '}
+                                    <span>{post.updatedAt.slice(0, 10)}</span>
                                 </p>
                                 <AiFillDelete
                                     className="ml-36 cursor-pointer hover:text-rose-700"
-                                    onClick={e => deletePost(post._id)}
+                                    onClick={e => deletePost(post.id)}
                                 />
                             </li>
                         )

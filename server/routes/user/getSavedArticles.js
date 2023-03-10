@@ -73,18 +73,19 @@ module.exports = async (req, res) => {
             },
             {
                 $project: {
-                    'articles._id': true,
-                    'articles.year': true,
-                    'articles.month': true,
-                    'articles.slug': true,
-                    'articles.title': true,
-                    'articles.author': true,
+                    id: '$articles._id',
+                    year: '$articles.year',
+                    month: '$articles.month',
+                    slug: '$articles.slug',
+                    title: '$articles.title',
+                    author: '$articles.author',
+                    updatedAt: '$articles.updatedAt',
                 },
             },
         ])
     try {
         const articles = await Cache(req.originalUrl, getSaved, { EX: 60 })
-        res.json({ message: 'success', articles: articles })
+        res.json({ message: 'success', articles })
     } catch (err) {
         console.error(err)
         return res.status(500).json({ error: 'Something went wrong.' })
