@@ -81,6 +81,7 @@ const UserSideNav = () => {
             {userNavs.map(item => {
                 return (
                     <NavLink
+                        key={item.url}
                         to={item.url}
                         className={({ isActive }) =>
                             isActive
