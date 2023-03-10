@@ -24,19 +24,15 @@ module.exports = async (req, res) => {
             },
             {
                 $project: {
-                    saved: { $slice: ['$saved', limit * page, limit] },
+                    saved: true,
                     _id: false,
                 },
             },
-            { $unwind: { path: '$saved' } },
             {
                 $lookup: {
                     from: 'articles',
-                    let: { saved: '$saved' },
-                    pipeline: [
-                        { $match: { $expr: { $eq: ['$_id', '$$saved'] } } },
-                        { $project: { title: 1, year: 1, month: 1, slug: 1 } },
-                    ],
+                    localField: 'saved',
+                    foreignField: '_id',
                     as: 'articles',
                 },
             },
@@ -51,12 +47,38 @@ module.exports = async (req, res) => {
                 },
             },
             {
+                $lookup: {
+                    from: 'users',
+                    localField: 'articles.createdBy',
+                    foreignField: '_id',
+                    as: 'author',
+                },
+            },
+            {
+                $addFields: {
+                    author: {
+                        $arrayElemAt: ['$author', 0],
+                    },
+                    articles: {
+                        $mergeObjects: [
+                            '$articles',
+                            {
+                                author: {
+                                    $arrayElemAt: ['$author.name', 0],
+                                },
+                            },
+                        ],
+                    },
+                },
+            },
+            {
                 $project: {
-                    _id: '$articles._id',
-                    year: '$articles.year',
-                    month: '$articles.month',
-                    slug: '$articles.slug',
-                    title: '$articles.title',
+                    'articles._id': true,
+                    'articles.year': true,
+                    'articles.month': true,
+                    'articles.slug': true,
+                    'articles.title': true,
+                    'articles.author': true,
                 },
             },
         ])
