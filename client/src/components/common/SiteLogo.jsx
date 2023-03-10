@@ -11,6 +11,7 @@ const SiteLogo = ({ theme }) => {
                 alt="eSandesh | Khabar Naya Yug ko"
                 title="eSandesh | Khabar Naya Yug ko"
             />
+            <p>खबर नया युग को</p>
         </Link>
     )
 }

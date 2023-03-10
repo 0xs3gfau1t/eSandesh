@@ -43,7 +43,7 @@ const addArticle = async (req, res) => {
                 new Date().getMonth(),
                 0
             ).getTime(),
-        summary: generateSummary(contentOnly),
+        summarizedContent: await generateSummary(contentOnly),
     }
 
     // Donot publish article on save

@@ -1,23 +1,33 @@
 import { NavLink } from 'react-router-dom'
 import { signOut } from 'next-auth/react'
 import { BiArchiveOut, BiStats } from 'react-icons/bi'
-import { AiFillFileAdd, AiOutlinePullRequest } from 'react-icons/ai'
+import {
+    AiFillFileAdd,
+    AiOutlinePullRequest,
+    AiFillSetting,
+    AiFillSave,
+} from 'react-icons/ai'
 import { IoIosPeople } from 'react-icons/io'
-import { RiAdvertisementFill, RiChatPollFill } from 'react-icons/ri'
+import {
+    RiAdvertisementFill,
+    RiChatPollFill,
+    RiMailFill,
+    RiArticleFill,
+} from 'react-icons/ri'
 import { SiteLogo } from './common'
 
 const TopNav = () => {
     return (
-        <div className="text-white h-12 bg-darkblue flex">
-            <h1 className="ml-8 my-3 text-3xl">
+        <div className="text-white h-16 bg-darkblue flex border-b-2 border-b-orange-700">
+            <h1 className="ml-8 my-3 text-2xl">
                 <SiteLogo theme={'light'} />
             </h1>
-            <h1 className="mx-auto my-2 text-2xl align-center">
+            <h1 className="mx-auto my-auto text-2xl align-center">
                 Admin Dashboard
             </h1>
             <h2
                 onClick={() => signOut({ redirect: false })}
-                className="flex mr-12 text-lg my-auto py-1 px-2 rounded-md bg-zinc-500 cursor-pointer"
+                className="flex mr-12 text-lg my-auto py-1 px-2 rounded-md bg-zinc-700 cursor-pointer"
             >
                 Logout
             </h2>
@@ -25,88 +35,68 @@ const TopNav = () => {
     )
 }
 
+const adminNavs = [
+    { url: '/admin/dashboard/', name: 'News', icon: AiFillFileAdd },
+    { url: 'readers', name: 'Readers articles', icon: AiOutlinePullRequest },
+    { url: 'critics', name: 'Manage Critics', icon: IoIosPeople },
+    { url: 'polls', name: 'Manage Polls', icon: RiChatPollFill },
+    { url: 'ads', name: 'Manage Ads', icon: RiAdvertisementFill },
+    { url: 'archive', name: 'Manage Archive', icon: BiArchiveOut },
+    { url: 'stats', name: 'Stats', icon: BiStats },
+]
+
 const SideNav = () => {
     return (
-        <ul className="dash-list flex flex-col gap-8 px-1 py-24 bg-darkblue w-1/7 text-white">
-            <NavLink
-                to="/admin/dashboard/"
-                className={({ isActive }) =>
-                    isActive ? 'bg-sky-600 font-bold' : ''
-                }
-            >
-                <li>
-                    <AiFillFileAdd />
-                    News
-                </li>
-            </NavLink>
-            <NavLink
-                to="readers"
-                className={({ isActive }) =>
-                    isActive ? 'bg-sky-600 font-bold' : ''
-                }
-            >
-                <li>
-                    <AiOutlinePullRequest />
-                    Readers articles
-                </li>
-            </NavLink>
-            <NavLink
-                to="critics"
-                className={({ isActive }) =>
-                    isActive ? 'bg-sky-600 font-bold' : ''
-                }
-            >
-                <li>
-                    <IoIosPeople />
-                    Manage Critics
-                </li>
-            </NavLink>
-            <NavLink
-                to="polls"
-                className={({ isActive }) =>
-                    isActive ? 'bg-sky-600 font-bold' : ''
-                }
-            >
-                <li>
-                    <RiChatPollFill />
-                    Manage Polls
-                </li>
-            </NavLink>
-            <NavLink
-                to="archive"
-                className={({ isActive }) =>
-                    isActive ? 'bg-sky-600 font-bold' : ''
-                }
-            >
-                <li>
-                    <BiArchiveOut />
-                    Manage Archive
-                </li>
-            </NavLink>
-            <NavLink
-                to="ads"
-                className={({ isActive }) =>
-                    isActive ? 'bg-sky-600 font-bold' : ''
-                }
-            >
-                <li>
-                    <RiAdvertisementFill />
-                    Manage Ads
-                </li>
-            </NavLink>
-            <NavLink
-                to="stats"
-                className={({ isActive }) =>
-                    isActive ? 'bg-sky-600 font-bold' : ''
-                }
-            >
-                <li>
-                    <BiStats />
-                    Stats
-                </li>
-            </NavLink>
+        <ul className="dash-list flex flex-col gap-8 px-1 py-16 bg-darkblue w-1/7 text-white">
+            {adminNavs.map(item => {
+                return (
+                    <NavLink
+                        key={item.url}
+                        to={item.url}
+                        className={({ isActive }) =>
+                            isActive ? 'bg-sky-600 font-bold' : ''
+                        }
+                    >
+                        <li>
+                            <item.icon className=" text-2xl" />
+                            {item.name}
+                        </li>
+                    </NavLink>
+                )
+            })}
         </ul>
     )
 }
 
-export { TopNav, SideNav }
+const userNavs = [
+    { url: '/profile/', name: 'Account', icon: AiFillSetting },
+    { url: 'saved', name: 'Saved Articles', icon: AiFillSave },
+    { url: 'subscription', name: 'Subsriptions', icon: RiMailFill },
+    { url: 'myposts', name: 'My Posts', icon: RiArticleFill },
+]
+
+const UserSideNav = () => {
+    return (
+        <ul className="dash-list flex flex-col gap-6 px-1 py-24 border-r-2 border-r-black">
+            {userNavs.map(item => {
+                return (
+                    <NavLink
+                        to={item.url}
+                        className={({ isActive }) =>
+                            isActive
+                                ? 'bg-orange-700 rounded-md text-white'
+                                : ''
+                        }
+                    >
+                        <li>
+                            <item.icon className=" text-2xl" />
+                            {item.name}
+                        </li>
+                    </NavLink>
+                )
+            })}
+        </ul>
+    )
+}
+
+export { TopNav, SideNav, UserSideNav }

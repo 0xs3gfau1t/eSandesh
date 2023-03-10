@@ -4,7 +4,7 @@ const AdminDash = () => {
     return (
         <div>
             <TopNav title={'Admin Dashboard'} />
-            <div className="flex h-[93vh]">
+            <div className="flex h-full">
                 <SideNav />
                 <div className="w-3/4">
                     <Outlet />
