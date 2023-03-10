@@ -1,6 +1,6 @@
 import Home from './Home/Home'
 import SingleNews from './Home/SingleNews'
-import UserProfile from './Home/UserProfile/UserProfile'
+import UserProfile from './UserProfile/Layout'
 import Polls from './Home/Polls'
 import ArchiveNews from './Home/ArchiveNews'
 import Category from './Category/Category'
@@ -8,7 +8,7 @@ import Landing from './Home/Landing'
 import UserAuth from './UserAuth'
 import ForgotPassword from './ForgotPassword'
 import {
-    AdminDash,
+    // AdminDash,
     ManageNews,
     EditNews,
     ReaderArticles,
@@ -26,7 +26,7 @@ export {
     Login,
     UserAuth,
     ForgotPassword,
-    AdminDash,
+    // AdminDash,
     ManageNews,
     EditNews,
     ReaderArticles,

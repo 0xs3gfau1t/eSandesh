@@ -21,7 +21,7 @@ const Login = () => {
             session.status == 'authenticated' &&
             session?.data?.user?.roles?.isRoot
         ) {
-            navigate('/admin/dashboard')
+            navigate('/admin/dashboard/')
         }
     }, [session])
 
@@ -40,10 +40,10 @@ const Login = () => {
                 <SiteLogo />
                 <h1>Admin Login</h1>
                 <FormText
-                    type="text"
+                    type="email"
                     name="username"
                     value={values.username}
-                    labelText="Username"
+                    labelText="Email"
                     handleChange={handleChange}
                 />
 

@@ -12,7 +12,7 @@ export default function Home(match) {
         <div className="flex flex-col h-screen">
             <Header />
 
-            <div className="flex justify-between w-full gap-6 container px-2">
+            <div className="flex justify-between w-full gap-6 container px-2 mt-2">
                 {/* left side */}
                 {!focus && (
                     <div className="sm:block hidden w-1/5">
