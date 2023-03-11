@@ -46,7 +46,6 @@ const LazyReadersArticles = lazy(() =>
 )
 
 const LazyAdmins = [
-    { url: '/admin/dashboard', comp: LazyManageNews },
     { url: 'readers', comp: LazyReadersArticles },
     { url: 'critics', comp: LazyManageCritics },
     { url: 'archive', comp: LazyManageArchive },
@@ -102,6 +101,14 @@ function App() {
                             }
                         />
                     )}
+                    <Route
+                        path="/admin/dashboard"
+                        element={
+                            <Suspense>
+                                <LazyManageNews />
+                            </Suspense>
+                        }
+                    />
                     <Route
                         path="addnews"
                         element={

@@ -47,7 +47,7 @@ const adminNavs = [
 
 const SideNav = ({ role }) => {
     return (
-        <ul className="dash-list flex flex-col gap-8 px-1 py-16 bg-darkblue w-1/7 text-white">
+        <ul className="min-h-screen dash-list flex flex-col gap-8 px-1 py-16 bg-darkblue w-1/7 text-white">
             <NavLink
                 to={'/admin/dashboard/'}
                 className={({ isActive }) =>
@@ -59,22 +59,24 @@ const SideNav = ({ role }) => {
                     Manage Articles
                 </li>
             </NavLink>
-            {adminNavs.map(item => {
-                return (
-                    <NavLink
-                        key={item.url}
-                        to={item.url}
-                        className={({ isActive }) =>
-                            isActive ? 'bg-sky-600 font-bold' : ''
-                        }
-                    >
-                        <li>
-                            <item.icon className=" text-2xl" />
-                            {item.name}
-                        </li>
-                    </NavLink>
-                )
-            })}
+            {role &&
+                (role?.isRoot || role.canPublish) &&
+                adminNavs.map(item => {
+                    return (
+                        <NavLink
+                            key={item.url}
+                            to={item.url}
+                            className={({ isActive }) =>
+                                isActive ? 'bg-sky-600 font-bold' : ''
+                            }
+                        >
+                            <li>
+                                <item.icon className=" text-2xl" />
+                                {item.name}
+                            </li>
+                        </NavLink>
+                    )
+                })}
             {role?.isRoot && (
                 <NavLink
                     to={'mods'}
