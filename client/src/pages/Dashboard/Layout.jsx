@@ -5,7 +5,7 @@ const AdminDash = ({ session }) => {
         <div>
             <TopNav title={'Admin Dashboard'} />
             <div className="flex h-full">
-                <SideNav role={session.data.user.roles} />
+                <SideNav role={session?.data?.user?.roles} />
                 <div className="w-3/4">
                     <Outlet />
                 </div>

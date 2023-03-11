@@ -61,8 +61,11 @@ function App() {
         <Router>
             {misc.showAlert && <Alert />}
             <Routes>
-                <Route path="/userauth" element={<UserAuth />} />
-                <Route path="/admin" element={<Login />} />
+                <Route
+                    path="/userauth"
+                    element={<UserAuth session={session} />}
+                />
+                <Route path="/admin" element={<Login session={session} />} />
                 <Route
                     path="/admin/dashboard"
                     element={
@@ -73,8 +76,9 @@ function App() {
                         </PrivateRoute>
                     }
                 >
-                    {(session?.data?.user?.roles.isRoot ||
-                        session?.data?.user?.roles.canPublish) &&
+                    {session?.data?.user?.roles &&
+                        (session?.data?.user?.roles?.isRoot ||
+                            session?.data?.user?.roles.canPublish) &&
                         LazyAdmins.map(item => {
                             return (
                                 <Route
@@ -88,6 +92,16 @@ function App() {
                                 />
                             )
                         })}
+                    {session?.data?.user?.roles?.isRoot && (
+                        <Route
+                            path="mods"
+                            element={
+                                <Suspense>
+                                    <LazyManageMods />
+                                </Suspense>
+                            }
+                        />
+                    )}
                     <Route
                         path="addnews"
                         element={
@@ -105,7 +119,10 @@ function App() {
                         }
                     />
                 </Route>
-                <Route path="/profile" element={<UserProfile />}>
+                <Route
+                    path="/profile"
+                    element={<UserProfile session={session} />}
+                >
                     <Route path="/profile/" element={<UserInfo />} />
                     <Route path="saved" element={<SavedPosts />} />
                     <Route path="preference" element={<UserPreference />} />
@@ -114,9 +131,12 @@ function App() {
                 </Route>
                 <Route path="/saved" element={<SavedPosts />} />
 
-                <Route path="/" element={<Home />}>
+                <Route path="/" element={<Home session={session} />}>
                     <Route path="/archive" element={<ArchiveNews />} />
-                    <Route path="/polls" element={<Polls />} />
+                    <Route
+                        path="/polls"
+                        element={<Polls session={session} />}
+                    />
                     <Route path="" element={<Landing />} />
                     <Route
                         path="/news/:year/:month/:slug"
