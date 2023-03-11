@@ -1,6 +1,7 @@
 import { lazy, Suspense } from 'react'
 import { useSelector } from 'react-redux'
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom'
+import { useSession } from 'next-auth/react'
 
 import './App.css'
 import {
@@ -37,6 +38,7 @@ const LazyManageArchive = lazy(() => import('./pages/Dashboard/Archive'))
 const LazyManageAds = lazy(() => import('./pages/Dashboard/AdsMan'))
 const LazyManageCritics = lazy(() => import('./pages/Dashboard/ManageCritics'))
 const LazyManagePolls = lazy(() => import('./pages/Dashboard/PollsMan'))
+const LazyManageMods = lazy(() => import('./pages/Dashboard/ManageMods'))
 const LazyManageStats = lazy(() => import('./pages/Dashboard/ViewSiteStats'))
 
 const LazyReadersArticles = lazy(() =>
@@ -46,7 +48,6 @@ const LazyReadersArticles = lazy(() =>
 const LazyAdmins = [
     { url: '/admin/dashboard', comp: LazyManageNews },
     { url: 'readers', comp: LazyReadersArticles },
-    { url: 'addnews', comp: LazyEditNews },
     { url: 'critics', comp: LazyManageCritics },
     { url: 'archive', comp: LazyManageArchive },
     { url: 'ads', comp: LazyManageAds },
@@ -55,7 +56,7 @@ const LazyAdmins = [
 ]
 function App() {
     const misc = useSelector(state => state.misc)
-
+    const session = useSession()
     return (
         <Router>
             {misc.showAlert && <Alert />}
@@ -65,26 +66,36 @@ function App() {
                 <Route
                     path="/admin/dashboard"
                     element={
-                        <PrivateRoute>
+                        <PrivateRoute session={session}>
                             <Suspense fallback="Loading Admin Dashboard">
-                                <LazyAdmin />
+                                <LazyAdmin session={session} />
                             </Suspense>
                         </PrivateRoute>
                     }
                 >
-                    {LazyAdmins.map(item => {
-                        return (
-                            <Route
-                                key={item.url}
-                                path={item.url}
-                                element={
-                                    <Suspense>
-                                        <item.comp />
-                                    </Suspense>
-                                }
-                            />
-                        )
-                    })}
+                    {(session?.data?.user?.roles.isRoot ||
+                        session?.data?.user?.roles.canPublish) &&
+                        LazyAdmins.map(item => {
+                            return (
+                                <Route
+                                    key={item.url}
+                                    path={item.url}
+                                    element={
+                                        <Suspense>
+                                            <item.comp />
+                                        </Suspense>
+                                    }
+                                />
+                            )
+                        })}
+                    <Route
+                        path="addnews"
+                        element={
+                            <Suspense>
+                                <LazyEditNews />
+                            </Suspense>
+                        }
+                    />
                     <Route
                         path="editnews/:year/:month/:slug"
                         element={

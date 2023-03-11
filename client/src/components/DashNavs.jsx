@@ -6,6 +6,7 @@ import {
     AiOutlinePullRequest,
     AiFillSetting,
     AiFillSave,
+    AiOutlineUsergroupAdd,
 } from 'react-icons/ai'
 import { IoIosPeople } from 'react-icons/io'
 import {
@@ -36,7 +37,6 @@ const TopNav = () => {
 }
 
 const adminNavs = [
-    { url: '/admin/dashboard/', name: 'News', icon: AiFillFileAdd },
     { url: 'readers', name: 'Readers articles', icon: AiOutlinePullRequest },
     { url: 'critics', name: 'Manage Critics', icon: IoIosPeople },
     { url: 'polls', name: 'Manage Polls', icon: RiChatPollFill },
@@ -45,9 +45,20 @@ const adminNavs = [
     { url: 'stats', name: 'Stats', icon: BiStats },
 ]
 
-const SideNav = () => {
+const SideNav = ({ role }) => {
     return (
         <ul className="dash-list flex flex-col gap-8 px-1 py-16 bg-darkblue w-1/7 text-white">
+            <NavLink
+                to={'/admin/dashboard/'}
+                className={({ isActive }) =>
+                    isActive ? 'bg-sky-600 font-bold' : ''
+                }
+            >
+                <li>
+                    <AiFillFileAdd className=" text-2xl" />
+                    Manage Articles
+                </li>
+            </NavLink>
             {adminNavs.map(item => {
                 return (
                     <NavLink
@@ -64,6 +75,19 @@ const SideNav = () => {
                     </NavLink>
                 )
             })}
+            {role?.isRoot && (
+                <NavLink
+                    to={'mods'}
+                    className={({ isActive }) =>
+                        isActive ? 'bg-sky-600 font-bold' : ''
+                    }
+                >
+                    <li>
+                        <AiOutlineUsergroupAdd className=" text-2xl" />
+                        Manage Mods
+                    </li>
+                </NavLink>
+            )}
         </ul>
     )
 }

@@ -15,14 +15,14 @@ const Login = () => {
     const [values, setValues] = useState(initialState)
 
     const session = useSession()
+    const role = session?.data?.user?.roles
     const navigate = useNavigate()
     const dispatch = useDispatch()
 
     useEffect(() => {
-        // console.log(session)
         if (
             session.status == 'authenticated' &&
-            session?.data?.user?.roles?.isRoot
+            (role?.isRoot || role?.canPublish || role?.isReporter)
         ) {
             navigate('/admin/dashboard/')
         }
