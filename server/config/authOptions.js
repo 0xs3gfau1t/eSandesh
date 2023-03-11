@@ -98,9 +98,14 @@ const authOptions = {
             },
             async authorize(creds, _req) {
                 try {
+                    console.log(creds)
                     const user = await userModel.findOne({
                         email: creds.email,
-                        'roles.isRoot': true,
+                        $or: [
+                            { 'roles.isRoot': true },
+                            { 'roles.canPublish': true },
+                            { 'roles.isReporter': true },
+                        ],
                     })
                     if (
                         !user ||
