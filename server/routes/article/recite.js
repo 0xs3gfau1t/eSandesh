@@ -48,9 +48,7 @@ module.exports = async (req, res) => {
     ])
 
     const audioPaths = JSON.parse(decrypted.toString())
-    const audioSizes = audioPaths.map(p => {
-        return fs.statSync(p).size
-    })
+    const audioSizes = audioPaths.map(p => fs.statSync(p).size)
     const totalSize = audioSizes.reduce((accum, value) => accum + value, 0)
 
     const start = Number(range.replace(/\D/g, ''))

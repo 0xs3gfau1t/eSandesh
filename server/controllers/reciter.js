@@ -52,7 +52,7 @@ module.exports = async ({ title, content, id }) => {
             .audioCodec('pcm_s16le')
             .audioFrequency(48000)
             .audioChannels(1)
-            .output(AUDIO_AD_FOLDER + '/' + fileName)
+            .output(audioArticleFolder + '/' + fileName)
             .run()
     })
 }

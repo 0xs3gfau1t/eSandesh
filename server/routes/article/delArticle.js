@@ -24,13 +24,13 @@ const delArticle = async (req, res) => {
     if (user.provider != 'admin') filter.createdBy = user.id
 
     try {
-        const article = await articleModel.findOne(filter, { audio: true })
-        console.log('Deleting article audio: ', article.audio)
+        const article = await articleModel.findOneAndDelete(filter)
+        console.log('Deleting article audio: ', article?.audio)
 
         if (article.audio)
             fs.unlinkSync(ARTICLE_AUDIO_FOLDER + '/' + article.audio)
 
-        return res.status(200).json(await articleModel.deleteOne(filter))
+        return res.status(200).json(article)
     } catch (err) {
         console.error(err)
         return res.status(500).json({ error: 'Something went wrong.' })
