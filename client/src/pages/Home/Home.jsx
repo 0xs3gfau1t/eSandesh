@@ -5,12 +5,12 @@ import { Outlet } from 'react-router-dom'
 
 import { Footer, Header, LeftSideBar, RightSideBar } from '../../components'
 
-export default function Home(match) {
+export default function Home({ session }) {
     const focus = useSelector(state => state.misc.focus)
 
     return (
         <div className="flex flex-col h-screen">
-            <Header />
+            <Header session={session} />
 
             <div className="flex justify-between w-full gap-6 container px-2 mt-2">
                 {/* left side */}

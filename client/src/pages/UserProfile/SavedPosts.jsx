@@ -1,42 +1,75 @@
-import React from 'react'
+import axios from 'axios'
+import { useEffect, useState } from 'react'
+import { AiFillDelete } from 'react-icons/ai'
+import { Link } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
 
+import { setAlert } from '../../redux/actions/misc'
 export default function SavedPosts() {
+    const [posts, setPosts] = useState([])
+    const dispatch = useDispatch()
+
+    async function getSavedPosts() {
+        await axios
+            .get('/api/user/article')
+            .then(res => {
+                console.log(res.data.articles)
+                setPosts(res.data.articles)
+            })
+            .catch(err => {
+                console.log(err)
+                dispatch(setAlert('Something went wrong', 'danger'))
+            })
+    }
+    useEffect(() => {
+        getSavedPosts()
+    }, [])
+
+    const deletePost = id => {
+        axios
+            .delete('/api/user/article', { data: { id: id } })
+            .then(res => {
+                getSavedPosts()
+                dispatch(setAlert('Removed from saved list.', 'success'))
+            })
+            .catch(err => {
+                dispatch(setAlert('Something went wrong', 'danger'))
+            })
+    }
     return (
         <div>
             <h2 className="font-bold text-base font-english leading-loose">
                 Saved Posts
             </h2>
             <ul className="flex items-center gap-4">
-                <li className="w-48 flex flex-col my-4 shadow-md hover:shadow-lg duration-200 rounded-md bg-white p-4">
-                    <img className="w-full h-24 object-cover rounded-sm" />
-                    <h3 className="font-english font-bold leading-none my-4">
-                        Syal ra Bagh ko katha
-                    </h3>
-                    <p className="text-xs">
-                        -by Bagheshwori Pathak. Ekadesh ma euta jungle ma bagh
-                        ra syal...
-                    </p>
-                </li>
-                <li className="w-48 flex flex-col my-4 shadow-md hover:shadow-lg duration-200 rounded-md bg-white p-4">
-                    <img className="w-full h-24 object-cover rounded-sm" />
-                    <h3 className="font-english leading-none my-4 font-bold">
-                        Syal ra Bagh ko katha
-                    </h3>
-                    <p className="text-xs">
-                        -by Bagheshwori Pathak. Ekadesh ma euta jungle ma bagh
-                        ra syal...
-                    </p>
-                </li>
-                <li className="w-48 flex flex-col my-4 shadow-md hover:shadow-lg duration-200 rounded-md bg-white p-4">
-                    <img className="w-full h-24 object-cover rounded-sm" />
-                    <h3 className="font-english leading-none my-4 font-bold">
-                        Syal ra Bagh ko katha
-                    </h3>
-                    <p className="text-xs">
-                        -by Bagheshwori Pathak. Ekadesh ma euta jungle ma bagh
-                        ra syal...
-                    </p>
-                </li>
+                {posts &&
+                    posts.map(post => {
+                        return (
+                            <li
+                                key={post.id}
+                                className="w-48 flex flex-col my-4 shadow-md hover:shadow-lg duration-200 rounded-md bg-white p-4"
+                            >
+                                <img
+                                    className="w-full h-24 object-cover rounded-sm"
+                                    src="https://developers.elementor.com/docs/assets/img/elementor-placeholder-image.png"
+                                />
+                                <Link
+                                    to={`/news/${post.year}/${post.month}/${post.slug}`}
+                                    className="font-english font-bold leading-none my-4 truncate"
+                                >
+                                    {post.title}
+                                </Link>
+                                <p className="flex flex-col text-sm">
+                                    <span>-{post.author}</span>{' '}
+                                    <span>{post.updatedAt.slice(0, 10)}</span>
+                                </p>
+                                <AiFillDelete
+                                    className="ml-36 cursor-pointer hover:text-rose-700"
+                                    onClick={e => deletePost(post.id)}
+                                />
+                            </li>
+                        )
+                    })}
             </ul>
         </div>
     )

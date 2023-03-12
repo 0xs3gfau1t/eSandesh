@@ -28,7 +28,7 @@ const SingleNews = () => {
         month: 'short',
         day: 'numeric',
     }
-    console.log(news, params)
+
     useEffect(() => {
         if (news?.slug != params.slug)
             dispatch(getSingleNews({ params: params, noAudio: false }))
@@ -48,8 +48,9 @@ const SingleNews = () => {
 
                 <div className="flex">
                     <h3
-                        className={`font-bold px-2 ${!focus ? 'text-green-600' : 'text-red'
-                            }`}
+                        className={`font-bold px-2 ${
+                            !focus ? 'text-green-600' : 'text-red'
+                        }`}
                     >
                         {focus ? 'Exit' : 'Enter'} Focus Mode
                     </h3>
@@ -82,9 +83,9 @@ const SingleNews = () => {
                     <h2 className="ml-4">
                         {news
                             ? new Date(news.publishedAt).toLocaleDateString(
-                                'en-US',
-                                dateOpt
-                            )
+                                  'en-US',
+                                  dateOpt
+                              )
                             : ''}
                         &nbsp;| {news ? news.author.name : ''}
                     </h2>
