@@ -151,7 +151,7 @@ function Comments(props) {
                                             >
                                                 <BiLike />
                                                 <span className="text-xs">
-                                                    {comment.likes}
+                                                    {comment.likes.length}
                                                 </span>
                                             </span>
                                             <span
