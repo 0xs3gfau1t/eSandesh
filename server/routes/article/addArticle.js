@@ -59,12 +59,11 @@ const addArticle = async (req, res) => {
 
         res.status(200).json(data)
 
-        const recitedArticle = await reciter({
+        article.audio = await reciter({
             title,
             content: contentOnly,
             id: article._id,
         })
-        article.audio = recitedArticle.fileName
         article.save()
 
         const providedSocialsToUpdateOn =

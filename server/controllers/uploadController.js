@@ -1,17 +1,9 @@
-const fs = require('fs')
-const path = require('path')
-const { Readable } = require('stream')
+const { Readable, Writable } = require('stream')
 const { randomUUID } = require('crypto')
 const Ffmpeg = require('fluent-ffmpeg')
+const audioModel = require('@/model/audio')
 
-const IMAGE_AD_FOLDER = path.resolve(__dirname, '../assets/ads/images/')
-const AUDIO_AD_FOLDER = path.resolve(__dirname, '../assets/ads/audio/')
-
-function getExt(resource) {
-    return '.' + resource.mimetype.split('/')[1]
-}
-
-module.exports = function uploadAdAssets(imageX, imageY, imageSq, audio) {
+module.exports = function (imageX, imageY, imageSq, audio) {
     //
     // Provide custom random uuid instead of using name
     // Because name has to be sanitized for path injection vulnerability counter measures
@@ -22,32 +14,35 @@ module.exports = function uploadAdAssets(imageX, imageY, imageSq, audio) {
     let imageSqUrl = undefined
 
     if (imageX) {
-        imageXUrl = randomUUID() + getExt(imageX)
-        fs.writeFileSync(IMAGE_AD_FOLDER + '/' + imageXUrl, imageX.data)
+        imageXUrl = randomUUID()
     }
     if (imageY) {
-        imageYUrl = randomUUID() + getExt(imageY)
-        fs.writeFileSync(IMAGE_AD_FOLDER + '/' + imageYUrl, imageY.data)
+        imageYUrl = randomUUID()
     }
     if (imageSq) {
-        imageSqUrl = randomUUID() + getExt(imageSq)
-        fs.writeFileSync(IMAGE_AD_FOLDER + '/' + imageSqUrl, imageSq.data)
+        imageSqUrl = randomUUID()
     }
 
     return new Promise((resolve, reject) => {
         // TODO: Validate length and size of uploaded audio to 5s, < 2Mb
         if (audio) {
-            const audioUrl = randomUUID() + '.raw'
             // No matter what the file type is
             // Convert the audio to raw format
             // with 48000 sample rate, 1 channel
             // and 16bit for one sample size
+            const buffer = []
+            const stream = new Writable({
+                write(chunk, encoding, next) {
+                    buffer.push(chunk)
+                    next()
+                },
+            })
             Ffmpeg(Readable.from(audio.data))
                 .format('s16le')
                 .audioCodec('pcm_s16le')
                 .audioFrequency(48000)
                 .audioChannels(1)
-                .output(AUDIO_AD_FOLDER + '/' + audioUrl)
+                .output(stream, { end: true })
                 .on('error', e => {
                     console.error(e)
                     reject('[x] Cannot convert audio ad to raw format')
@@ -56,13 +51,19 @@ module.exports = function uploadAdAssets(imageX, imageY, imageSq, audio) {
                     console.log(
                         '[+] Successfully converted audio to raw format'
                     )
+                    const audioDoc = audioModel({
+                        name: audio.name,
+                        data: Buffer.concat(buffer),
+                    })
+                    audioDoc.save()
+
                     resolve([
                         {
                             rectX: imageXUrl,
                             rectY: imageYUrl,
                             square: imageSqUrl,
                         },
-                        audioUrl,
+                        audioDoc._id,
                     ])
                 })
                 .run()

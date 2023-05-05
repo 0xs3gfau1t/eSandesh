@@ -15,7 +15,7 @@ const adSchema = mongoose.Schema(
         hits: { type: String, default: 0 },
         publisher: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
         image: adImageSchema,
-        audio: { type: String },
+        audio: { type: mongoose.Schema.Types.ObjectId, ref: 'Audio' },
         redirectUrl: { type: String },
         priority: {
             type: Number,

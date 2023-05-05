@@ -31,7 +31,7 @@ module.exports = async (req, res) => {
 
     try {
         // Store urls to save in db
-        const [image, audioUrl] = await uploadAdAssets(
+        const [image, audioId] = await uploadAdAssets(
             imageX,
             imageY,
             imageSq,
@@ -48,7 +48,7 @@ module.exports = async (req, res) => {
             popup,
             priority,
             expiry,
-            audio: audioUrl,
+            audio: audioId,
         })
         await adsModel.create({
             name,
@@ -60,7 +60,7 @@ module.exports = async (req, res) => {
             expiry,
             category: categoryArray,
             popup,
-            audio: audioUrl,
+            audio: audioId,
         })
         res.json({ message: 'success' })
     } catch (e) {
