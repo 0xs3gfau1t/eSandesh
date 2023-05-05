@@ -2,7 +2,8 @@ const express = require('express')
 const crypto = require('crypto')
 const { ObjectId } = require('mongodb')
 const { Readable } = require('stream')
-const audioModel = require('@/model/audio')
+const adsModel = require('@/model/ads')
+const articleModel = require('@/model/article')
 
 const CHUNK_SIZE = 1024 * 1024
 const HEADER_SIZE = 44
@@ -49,18 +50,29 @@ module.exports = async (req, res) => {
     ])
 
     const audioPaths = JSON.parse(decrypted.toString())
-    let audioSizes = await audioModel.aggregate([
+    let audioSizes = await adsModel.aggregate([
         { $match: { _id: { $in: audioPaths.map(i => ObjectId(i)) } } },
         {
             $project: {
-                dataSize: { $binarySize: '$data' },
+                dataSize: { $binarySize: '$audio' },
                 _id: { $toString: '$_id' },
             },
         },
     ])
+    audioSizes.push(
+        ...(await articleModel.aggregate([
+            { $match: { _id: { $in: audioPaths.map(i => ObjectId(i)) } } },
+            {
+                $project: {
+                    dataSize: { $binarySize: '$audio' },
+                    _id: { $toString: '$_id' },
+                },
+            },
+        ]))
+    )
     audioSizes = audioPaths.map(path => audioSizes.find(x => x._id == path))
     const totalSize = audioSizes.reduce(
-        (accum, value) => accum + value.dataSize,
+        (accum, value) => accum + value?.dataSize,
         0
     )
 
@@ -140,11 +152,22 @@ module.exports = async (req, res) => {
     // $slice on BinData didn't work
     // Always returned first X bytes of data of respective audio
     //
-    const stream = await audioModel.findOne(
-        { _id: ObjectId(audioSizes[selectedFileIdx]._id) },
-        {
-            data: 1,
-        }
+    let stream
+    if (selectedFileIdx != 1)
+        stream = await adsModel.findOne(
+            { _id: ObjectId(audioSizes[selectedFileIdx]._id) },
+            {
+                audio: 1,
+            }
+        )
+    else
+        stream = await articleModel.findOne(
+            { _id: ObjectId(audioSizes[selectedFileIdx]._id) },
+            {
+                audio: 1,
+            }
+        )
+    res.write(
+        stream.audio.slice(start - offset, start - offset + contentLength)
     )
-    res.write(stream.data.slice(start - offset, start - offset + contentLength))
 }

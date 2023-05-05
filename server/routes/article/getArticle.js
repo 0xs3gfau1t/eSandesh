@@ -49,7 +49,7 @@ const getArticle = async (req, res) => {
 
         const audioStreams = []
         if (begin) audioStreams.push(begin)
-        if (article[0].audio) audioStreams.push(article[0].audio)
+        if (article[0].audio) audioStreams.push(article[0]._id)
         if (end) audioStreams.push(end)
         const data = JSON.stringify(audioStreams)
 

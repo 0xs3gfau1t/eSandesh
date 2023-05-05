@@ -11,7 +11,7 @@ const toPublish = async (req, res) => {
 
     try {
         const articles = await articleModel
-            .find({ publishedAt: { $exists: false } })
+            .find({ publishedAt: { $exists: false } }, { audio: 0 })
             .sort({ [sortBy]: -1 })
             .skip(page * items)
             .limit(items)

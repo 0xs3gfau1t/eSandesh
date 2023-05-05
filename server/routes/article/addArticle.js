@@ -4,6 +4,7 @@ const articleModel = require('@/model/article')
 const { JSDOM } = require('jsdom')
 const reciter = require('@/controllers/reciter')
 const generateSummary = require('@/controllers/summaryGenerationController')
+const rawConverter = require('@/controllers/rawConverter')
 
 const socialApis = {
     facebook: require('./socials/facebook'),
@@ -59,12 +60,17 @@ const addArticle = async (req, res) => {
 
         res.status(200).json(data)
 
-        article.audio = await reciter({
-            title,
-            content: contentOnly,
-            id: article._id,
-        })
-        article.save()
+        try {
+            article.audio = await rawConverter(
+                await reciter({
+                    title,
+                    content: contentOnly,
+                })
+            )
+            article.save()
+        } catch (e) {
+            console.error(e)
+        }
 
         const providedSocialsToUpdateOn =
             socials

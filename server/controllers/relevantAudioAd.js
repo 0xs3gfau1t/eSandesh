@@ -71,8 +71,8 @@ async function getRelevantAudioAd(history) {
         .flat()
 
     return {
-        begin: allocatedAds.at(0)?.audio || 'ffffffffffffffffffffffff',
-        end: allocatedAds.at(1)?.audio || 'ffffffffffffffffffffffff',
+        begin: allocatedAds.at(0)?._id || 'ffffffffffffffffffffffff',
+        end: allocatedAds.at(1)?._id || 'ffffffffffffffffffffffff',
     }
 }
 
