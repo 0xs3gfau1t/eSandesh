@@ -2,22 +2,21 @@ import { useState, useRef } from 'react'
 import { IoMdArrowDropdown, IoMdPerson } from 'react-icons/io'
 import { useDispatch } from 'react-redux'
 import { Link, useNavigate } from 'react-router-dom'
-import { signOut, useSession } from 'next-auth/react'
+import { signOut } from 'next-auth/react'
 
 import { setAlert } from '../../redux/actions/misc'
 import { SiteLogo } from '../common'
 import Forex from './Forex'
 import GoldSilver from './GoldSilver'
 
-export default function Header() {
+export default function Header({ session }) {
     const [show, setShow] = useState(false)
     const ref = useRef(null)
     const navigate = useNavigate()
-    const session = useSession()
     const dispatch = useDispatch()
+
     const action = () => {
-        console.log('header bata', session)
-        if (session.status == 'authenticated') {
+        if (session?.status == 'authenticated') {
             setShow(false)
             dispatch(setAlert('Logged Out', 'success'))
             signOut({ redirect: false })
@@ -30,15 +29,17 @@ export default function Header() {
                 <div className="flex flex-col items-center sm:items-start cursor-pointer">
                     <SiteLogo />
                 </div>
-                <div className="relative flex justify-between items-center gap-8">
+                <div className="relative flex justify-between items-center gap-6">
                     <div className="flex justify-end invisible md:visible text-xs lg:text-sm gap-4">
                         <Forex />
                         <GoldSilver />
                     </div>
-                    <div className="flex gap-2">
+                    <div className="flex gap-1">
                         <IoMdPerson className="text-4xl cursor-pointer" />
-                        {session.status == 'authenticated' && (
-                            <h2>{session.data.user.name}</h2>
+                        {session?.status == 'authenticated' && (
+                            <h2 className="text-sm">
+                                {session?.data?.user?.name}
+                            </h2>
                         )}
                         <IoMdArrowDropdown
                             className={`${
@@ -66,7 +67,7 @@ export default function Header() {
                                 </Link>
                                 <hr className="w-11/12 border-neutral-300" />
                                 <li onClick={action}>
-                                    {session.status == 'authenticated'
+                                    {session?.status == 'authenticated'
                                         ? 'लग आउट'
                                         : 'लग इन'}
                                 </li>

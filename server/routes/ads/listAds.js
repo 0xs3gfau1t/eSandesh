@@ -32,7 +32,7 @@ module.exports = (req, res) => {
         }
     console.log(filter)
     adsModel
-        .find(filter)
+        .find(filter, {audio: 0})
         .skip(page * limit)
         .limit(limit)
         .sort({ priority })

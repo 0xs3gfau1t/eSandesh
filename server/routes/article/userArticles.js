@@ -22,6 +22,7 @@ const userArticles = async (req, res) => {
                 month: true,
                 slug: true,
                 _id: false,
+                audio: false
             }
         )
         return res.json(articles)

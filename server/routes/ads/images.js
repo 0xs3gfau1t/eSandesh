@@ -1,7 +1,5 @@
 const express = require('express')
-const fs = require('fs')
-const path = require('path')
-const sanitize = require('sanitize-filename')
+const adModel = require('@/model/ads')
 
 /**
  * @param {express.Request} req
@@ -10,14 +8,10 @@ const sanitize = require('sanitize-filename')
  */
 
 module.exports = async (req, res) => {
-    fs.readFile(
-        path.resolve(
-            __dirname,
-            '../../assets/ads/images/' + sanitize(req.params.id)
-        ),
+    adModel.findOne({_id: req.params.id},
         (err, data) => {
             if (err) res.status(404)
-            res.send(data)
+            res.send(data.image)
         }
     )
 }

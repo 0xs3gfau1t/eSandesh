@@ -26,7 +26,7 @@ const EditNews = ({ isEdit }) => {
     const singleNews = useSelector(state => state.news.singleNews)
     const dispatch = useDispatch()
     const navigate = useNavigate()
-
+    console.log('hjhjdhjd')
     useEffect(() => {
         if (params.year)
             dispatch(getSingleNews({ params: params, noAudio: true }))

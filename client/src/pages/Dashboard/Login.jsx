@@ -1,25 +1,27 @@
 import { useEffect, useState } from 'react'
-import { signIn, useSession } from 'next-auth/react'
+import { signIn } from 'next-auth/react'
 import { useNavigate } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
 
 import { SiteLogo, FormText } from '../../components/common'
+import { setAlert } from '../../redux/actions/misc'
 
 const initialState = {
-    username: '',
+    email: '',
     password: '',
 }
 
-const Login = () => {
+const Login = ({ session }) => {
     const [values, setValues] = useState(initialState)
 
-    const session = useSession()
+    const role = session?.data?.user?.roles
     const navigate = useNavigate()
+    const dispatch = useDispatch()
 
     useEffect(() => {
-        // console.log(session)
         if (
             session.status == 'authenticated' &&
-            session?.data?.user?.roles.isRoot
+            (role?.isRoot || role?.canPublish || role?.isReporter)
         ) {
             navigate('/admin/dashboard/')
         }
@@ -31,7 +33,15 @@ const Login = () => {
 
     const onSubmit = e => {
         e.preventDefault()
-        signIn('admin', { ...values, redirect: false })
+        if (!values.email || !values.password)
+            dispatch(setAlert('One or More Field Missing!', 'danger'))
+        else {
+            signIn('admin', { ...values, redirect: false }).then(res => {
+                if (res.status == 200)
+                    dispatch(setAlert('Login Sucess', 'success'))
+                else dispatch(setAlert('Invalid credentials', 'danger'))
+            })
+        }
     }
 
     return (
@@ -41,8 +51,8 @@ const Login = () => {
                 <h1>Admin Login</h1>
                 <FormText
                     type="email"
-                    name="username"
-                    value={values.username}
+                    name="email"
+                    value={values.email}
                     labelText="Email"
                     handleChange={handleChange}
                 />

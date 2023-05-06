@@ -1,15 +1,12 @@
 import { Outlet } from 'react-router-dom'
-import { useSession } from 'next-auth/react'
 
 import { Header, UserSideNav } from '../../components'
 
-const UserProfile = () => {
-    const { data: session, status } = useSession()
-
-    if (status == 'unauthenticated') {
+const UserProfile = ({ session }) => {
+    if (session?.status == 'unauthenticated') {
         return (
             <>
-                <Header />
+                <Header session={session} />
                 <h1 className="text-3xl font-bold text-center my-[25vh]">
                     You must login to view this page
                 </h1>
@@ -19,7 +16,7 @@ const UserProfile = () => {
 
     return (
         <div className="h-screen flex flex-col ">
-            <Header />
+            <Header session={session} />
             <div className="flex h-full gap-16">
                 <UserSideNav />
                 <div className="w-3/4 mt-4">

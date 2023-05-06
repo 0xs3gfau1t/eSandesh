@@ -8,7 +8,7 @@ const { userModel } = require('../../model/user')
  */
 module.exports = async (req, res) => {
     const { id } = req.body
-
+    console.log('body ho yo', req.body)
     const { user } = req.session
 
     const u = await userModel.findOne({ _id: user.id }, { saved: true })

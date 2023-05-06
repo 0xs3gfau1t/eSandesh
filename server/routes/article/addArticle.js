@@ -4,6 +4,7 @@ const articleModel = require('@/model/article')
 const { JSDOM } = require('jsdom')
 const reciter = require('@/controllers/reciter')
 const generateSummary = require('@/controllers/summaryGenerationController')
+const rawConverter = require('@/controllers/rawConverter')
 
 const socialApis = {
     facebook: require('./socials/facebook'),
@@ -46,10 +47,10 @@ const addArticle = async (req, res) => {
         summarizedContent: await generateSummary(contentOnly),
     }
 
-    // If the user is an admin then publish the article
-    // also set the priority
+    // Donot publish article on save
+    // POST to /publish to publish it
+    // If you want to publish, create {publishedAt: new Date()}
     if (user.roles.isRoot) {
-        data.publishedAt = new Date()
         data.priority = priority
     }
 
@@ -59,13 +60,17 @@ const addArticle = async (req, res) => {
 
         res.status(200).json(data)
 
-        const recitedArticle = await reciter({
-            title,
-            content: contentOnly,
-            id: article._id,
-        })
-        article.audio = recitedArticle.fileName
-        article.save()
+        try {
+            article.audio = await rawConverter(
+                await reciter({
+                    title,
+                    content: contentOnly,
+                })
+            )
+            article.save()
+        } catch (e) {
+            console.error(e)
+        }
 
         const providedSocialsToUpdateOn =
             socials
