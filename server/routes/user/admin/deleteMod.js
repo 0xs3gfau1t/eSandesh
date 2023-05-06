@@ -9,14 +9,15 @@ const express = require('express')
 module.exports = (req, res) => {
     const { email, isRoot, isReporter, canPublish } = req.body
 
-    let roles = {}
-    if (isRoot === 'true') roles.isRoot = isRoot
+    const query = { email }
+    const roles = {} 
+    if (isRoot === 'true') roles.isRoot = true 
     if (isReporter === 'true') roles.isReporter = isReporter
     if (canPublish === 'true') roles.canPublish = canPublish
 
-    if (!Object.keys(roles).length) roles = undefined
+    if (Object.keys(roles).length) query.roles = roles
 
-    userModel.findOneAndDelete({ email, roles }, (e, d) => {
+    userModel.findOneAndDelete(query, (e, d) => {
         console.log(e,d)
         if (e) {
             console.log(e, d)
