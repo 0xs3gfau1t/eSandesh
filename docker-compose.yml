@@ -1,17 +1,25 @@
 services:
   news-backend:
+    image: server
     build:
       context: server
       dockerfile: Dockerfile
     restart: always
+    links:
+      - summarizing_api
     env_file: server/.env
     environment:
       HOST: 0.0.0.0
       PORT: 80 
       NEXT_AUTH_URL: "http://127.0.0.1:80"
-    ports:
-      - "4000:80"
+      SUMM_HOST: http://summarizing_api
+      SUMM_PORT: 80
+    volumes:
+      - ./server:/app
+      - /app/node_modules
+    command: "npm run dev"
   news-client:
+    image: client
     build:
       context: client
       dockerfile: Dockerfile
@@ -27,4 +35,20 @@ services:
       NEXT_AUTH: http://news-backend:4000
     ports:
       - "8000:80"
-    
+    volumes:
+        - ./client:/app
+        - /app/node_modules
+    command: "npm run dev"
+
+  summarizing_api:
+    image: sum_api
+    build:
+      context: sum_api
+      dockerfile: Dockerfile
+    restart: always
+    environment:
+      HOST: 0.0.0.0
+      PORT: 80
+    volumes:
+        - ./sum_api:/app
+        - /app/venv
