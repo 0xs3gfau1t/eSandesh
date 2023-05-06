@@ -16,7 +16,8 @@ module.exports = (req, res) => {
 
     if (!Object.keys(roles).length) roles = undefined
 
-    userModel.deleteOne({ email, roles }, (e, d) => {
+    userModel.findOneAndDelete({ email, roles }, (e, d) => {
+        console.log(e,d)
         if (e) {
             console.log(e, d)
             return res.status(500).json({ message: 'Something went wrong.' })
@@ -24,6 +25,6 @@ module.exports = (req, res) => {
         if (!d)
             return res.status(404).json({ message: 'No such record exists' })
 
-        res.json({ message: 'success' })
+        res.json({ message: 'success', deletedInfo: d})
     })
 }
