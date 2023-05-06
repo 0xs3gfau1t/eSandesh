@@ -18,6 +18,7 @@ module.exports = async (req, res) => {
         return res.status(403).json({
             message: "You don't have enough privilage to perform this task.",
         })
+
     const { email, name, password, isRoot, canPublish, isReporter } = req.body
     const hashedPassword = hashSync(password, 10)
     const roles = { isRoot, canPublish, isReporter }
