@@ -1,9 +1,11 @@
 const express = require('express')
 const crypto = require('crypto')
-const fs = require('fs')
+const { ObjectId } = require('mongodb')
 const { Readable } = require('stream')
+const adsModel = require('@/model/ads')
+const articleModel = require('@/model/article')
 
-const CHUNK_SIZE = 10 ** 6
+const CHUNK_SIZE = 1024 * 1024
 const HEADER_SIZE = 44
 
 // Helper function to convert hex
@@ -48,10 +50,31 @@ module.exports = async (req, res) => {
     ])
 
     const audioPaths = JSON.parse(decrypted.toString())
-    const audioSizes = audioPaths.map(p => {
-        return fs.statSync(p).size
-    })
-    const totalSize = audioSizes.reduce((accum, value) => accum + value, 0)
+    let audioSizes = await adsModel.aggregate([
+        { $match: { _id: { $in: audioPaths.map(i => ObjectId(i)) } } },
+        {
+            $project: {
+                dataSize: { $binarySize: '$audio' },
+                _id: { $toString: '$_id' },
+            },
+        },
+    ])
+    audioSizes.push(
+        ...(await articleModel.aggregate([
+            { $match: { _id: { $in: audioPaths.map(i => ObjectId(i)) } } },
+            {
+                $project: {
+                    dataSize: { $binarySize: '$audio' },
+                    _id: { $toString: '$_id' },
+                },
+            },
+        ]))
+    )
+    audioSizes = audioPaths.map(path => audioSizes.find(x => x._id == path))
+    const totalSize = audioSizes.reduce(
+        (accum, value) => accum + value?.dataSize,
+        0
+    )
 
     const start = Number(range.replace(/\D/g, ''))
 
@@ -101,20 +124,20 @@ module.exports = async (req, res) => {
 
     let selectedFileIdx, offset
     // TODO: make generic way to find selectedFileIdx
-    if (start < audioSizes[0]) {
+    if (start < audioSizes[0].dataSize) {
         selectedFileIdx = 0
         offset = HEADER_SIZE
-    } else if (start < audioSizes[0] + audioSizes[1]) {
+    } else if (start < audioSizes[0].dataSize + audioSizes[1].dataSize) {
         selectedFileIdx = 1
-        offset = HEADER_SIZE + audioSizes[0]
+        offset = HEADER_SIZE + audioSizes[0].dataSize
     } else {
         selectedFileIdx = 2
-        offset = HEADER_SIZE + audioSizes[0] + audioSizes[1]
+        offset = HEADER_SIZE + audioSizes[0].dataSize + audioSizes[1].dataSize
     }
 
     const end = Math.min(
         start + CHUNK_SIZE - 1,
-        offset + audioSizes[selectedFileIdx] - 1
+        offset + audioSizes[selectedFileIdx].dataSize - 1
     )
     const contentLength = end - start + 1
 
@@ -124,11 +147,27 @@ module.exports = async (req, res) => {
         'Content-Length': contentLength,
         'Content-Type': 'audio/x-wav',
     })
-
-    return fs
-        .createReadStream(audioPaths[selectedFileIdx], {
-            start: start - offset,
-            end: start - offset + contentLength - 1,
-        })
-        .pipe(res)
+    //
+    // Tried fetching just the required chunk to reduce server memory footprint for this request
+    // $slice on BinData didn't work
+    // Always returned first X bytes of data of respective audio
+    //
+    let stream
+    if (selectedFileIdx != 1)
+        stream = await adsModel.findOne(
+            { _id: ObjectId(audioSizes[selectedFileIdx]._id) },
+            {
+                audio: 1,
+            }
+        )
+    else
+        stream = await articleModel.findOne(
+            { _id: ObjectId(audioSizes[selectedFileIdx]._id) },
+            {
+                audio: 1,
+            }
+        )
+    res.write(
+        stream.audio.slice(start - offset, start - offset + contentLength)
+    )
 }

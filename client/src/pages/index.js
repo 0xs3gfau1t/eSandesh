@@ -19,8 +19,10 @@ import {
     ManageCritics,
     PollsMan,
 } from './Dashboard'
+import NotFound from './404'
 
 export {
+    NotFound,
     Home,
     Category,
     Login,

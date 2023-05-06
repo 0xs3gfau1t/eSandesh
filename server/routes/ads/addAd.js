@@ -1,7 +1,7 @@
 const express = require('express')
 const adsModel = require('../../model/ads')
-const uploadAdAssets = require('@/controllers/uploadController')
 const calculateAdPrice = require('@/controllers/adPriceController')
+const convertToRaw = require('@/controllers/rawConverter.js')
 
 /**
  * @param {express.Request} req
@@ -30,14 +30,6 @@ module.exports = async (req, res) => {
     const { imageX, imageY, imageSq, audio } = req.files
 
     try {
-        // Store urls to save in db
-        const [image, audioUrl] = await uploadAdAssets(
-            imageX,
-            imageY,
-            imageSq,
-            audio
-        )
-
         const categoryArray = category
             .split(',')
             .map(i => i.trim())
@@ -48,20 +40,35 @@ module.exports = async (req, res) => {
             popup,
             priority,
             expiry,
-            audio: audioUrl,
+            audio,
         })
-        await adsModel.create({
+        const ad = await adsModel({
             name,
             publisher,
-            image,
             redirectUrl,
             priority,
             price,
             expiry,
             category: categoryArray,
             popup,
-            audio: audioUrl,
         })
+
+        if (audio) {
+            if (audio.size / 1024 ** 2 > 2)
+                return res.status(411).json({ message: 'Audio size too large' })
+            ad.audio = await convertToRaw(audio.data)
+        }
+
+        // Now store available images
+        if (imageY || imageX || imageSq) {
+            const images = {}
+            if (imageX) images.rectX = imageX.data
+            if (imageY) images.rectY = imageY.data
+            if (imageSq) images.square = imageSq.data
+            ad.image = images
+        }
+
+        await ad.save()
         res.json({ message: 'success' })
     } catch (e) {
         console.error(e)

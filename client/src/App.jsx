@@ -1,6 +1,7 @@
 import { lazy, Suspense } from 'react'
 import { useSelector } from 'react-redux'
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom'
+import { useSession } from 'next-auth/react'
 
 import './App.css'
 import {
@@ -19,6 +20,7 @@ import {
     UserProfile,
     Polls,
     ArchiveNews,
+    NotFound,
 } from './pages'
 import {
     UserInfo,
@@ -37,6 +39,7 @@ const LazyManageArchive = lazy(() => import('./pages/Dashboard/Archive'))
 const LazyManageAds = lazy(() => import('./pages/Dashboard/AdsMan'))
 const LazyManageCritics = lazy(() => import('./pages/Dashboard/ManageCritics'))
 const LazyManagePolls = lazy(() => import('./pages/Dashboard/PollsMan'))
+const LazyManageMods = lazy(() => import('./pages/Dashboard/ManageMods'))
 const LazyManageStats = lazy(() => import('./pages/Dashboard/ViewSiteStats'))
 
 const LazyReadersArticles = lazy(() =>
@@ -44,9 +47,7 @@ const LazyReadersArticles = lazy(() =>
 )
 
 const LazyAdmins = [
-    { url: '/admin/dashboard', comp: LazyManageNews },
     { url: 'readers', comp: LazyReadersArticles },
-    { url: 'addnews', comp: LazyEditNews },
     { url: 'critics', comp: LazyManageCritics },
     { url: 'archive', comp: LazyManageArchive },
     { url: 'ads', comp: LazyManageAds },
@@ -55,37 +56,69 @@ const LazyAdmins = [
 ]
 function App() {
     const misc = useSelector(state => state.misc)
-
+    const session = useSession()
     return (
         <Router>
             {misc.showAlert && <Alert />}
             <Routes>
-                <Route path="/userauth" element={<UserAuth />} />
+                <Route
+                    path="/userauth"
+                    element={<UserAuth session={session} />}
+                />
                 <Route path="/forgotPassword" element={<ForgotPassword />} />
-                <Route path="/admin" element={<Login />} />
+                <Route path="/admin" element={<Login session={session} />} />
                 <Route
                     path="/admin/dashboard"
                     element={
-                        <PrivateRoute>
+                        <PrivateRoute session={session}>
                             <Suspense fallback="Loading Admin Dashboard">
-                                <LazyAdmin />
+                                <LazyAdmin session={session} />
                             </Suspense>
                         </PrivateRoute>
                     }
                 >
-                    {LazyAdmins.map(item => {
-                        return (
-                            <Route
-                                key={item.url}
-                                path={item.url}
-                                element={
-                                    <Suspense>
-                                        <item.comp />
-                                    </Suspense>
-                                }
-                            />
-                        )
-                    })}
+                    {session?.data?.user?.roles &&
+                        (session?.data?.user?.roles?.isRoot ||
+                            session?.data?.user?.roles.canPublish) &&
+                        LazyAdmins.map(item => {
+                            return (
+                                <Route
+                                    key={item.url}
+                                    path={item.url}
+                                    element={
+                                        <Suspense>
+                                            <item.comp />
+                                        </Suspense>
+                                    }
+                                />
+                            )
+                        })}
+                    {session?.data?.user?.roles?.isRoot && (
+                        <Route
+                            path="mods"
+                            element={
+                                <Suspense>
+                                    <LazyManageMods />
+                                </Suspense>
+                            }
+                        />
+                    )}
+                    <Route
+                        path="/admin/dashboard"
+                        element={
+                            <Suspense>
+                                <LazyManageNews />
+                            </Suspense>
+                        }
+                    />
+                    <Route
+                        path="addnews"
+                        element={
+                            <Suspense>
+                                <LazyEditNews />
+                            </Suspense>
+                        }
+                    />
                     <Route
                         path="editnews/:year/:month/:slug"
                         element={
@@ -95,7 +128,10 @@ function App() {
                         }
                     />
                 </Route>
-                <Route path="/profile" element={<UserProfile />}>
+                <Route
+                    path="/profile"
+                    element={<UserProfile session={session} />}
+                >
                     <Route path="/profile/" element={<UserInfo />} />
                     <Route path="saved" element={<SavedPosts />} />
                     <Route path="preference" element={<UserPreference />} />
@@ -104,9 +140,12 @@ function App() {
                 </Route>
                 <Route path="/saved" element={<SavedPosts />} />
 
-                <Route path="/" element={<Home />}>
+                <Route path="/" element={<Home session={session} />}>
                     <Route path="/archive" element={<ArchiveNews />} />
-                    <Route path="/polls" element={<Polls />} />
+                    <Route
+                        path="/polls"
+                        element={<Polls session={session} />}
+                    />
                     <Route path="" element={<Landing />} />
                     <Route
                         path="/news/:year/:month/:slug"
@@ -114,6 +153,7 @@ function App() {
                     />
                     <Route path="/category/:cat" element={<Category />} />
                 </Route>
+                <Route path="*" element={<NotFound />} />
             </Routes>
         </Router>
     )

@@ -22,7 +22,12 @@ const listArticle = async (req, res) => {
 
     let preference = false
     let hits = false
-    const filter = { category: { $nin: ['STORY'] } }
+    // Only list published articles
+    // Non published has to be requested through /toPublish endpoint
+    const filter = {
+        category: { $nin: ['STORY'] },
+        publishedAt: { $exists: true },
+    }
     if (category) {
         if (category == 'preference') preference = true
         else if (category == 'hot') hits = true
@@ -37,6 +42,7 @@ const listArticle = async (req, res) => {
     try {
         const articles = await articleModel.aggregate([
             { $match: filter },
+            { $project: { audio: 0 } },
             { $sort: sortParameters },
             { $skip: page * items },
             { $limit: parseInt(items) },

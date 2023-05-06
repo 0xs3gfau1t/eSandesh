@@ -5,9 +5,7 @@ const { hashSync } = require('bcryptjs')
 const path = require('path')
 const fs = require('fs')
 
-const jwt = require('next-auth/jwt')
-
-const EXPIRE_MIN = 5
+const { userModel } = require('@/model/user')
 
 /**
  * @param {express.Request} req
@@ -16,45 +14,67 @@ const EXPIRE_MIN = 5
  */
 
 module.exports = async (req, res) => {
+    if (!req.session?.user?.roles?.isRoot)
+        return res.status(403).json({
+            message: "You don't have enough privilage to perform this task.",
+        })
     const { email, name, password, isRoot, canPublish, isReporter } = req.body
     const hashedPassword = hashSync(password, 10)
     const roles = { isRoot, canPublish, isReporter }
 
-    const key = await jwt.encode({
-        token: { email, name, hashedPassword, roles },
-        secret: process.env.NEXTAUTH_SECRET,
-        maxAge: 60 * EXPIRE_MIN,
-    })
-
-    const logoFilePath = path.resolve(__dirname, '../../../assets/logo.png')
-    const htmlFilePath = path.resolve(
-        __dirname,
-        '../../../assets/simplemail.html'
-    )
-
-    const html = fs
-        .readFileSync(htmlFilePath, 'utf8')
-        .replace('{{TITLE}}', 'Verify Your Email')
-        .replace(
-            '{{CONTENT}}',
-            `Your email address has been used to register in e-Sandesh. <br/></br>Click on <strong><a href=\'${process.env.ORIGIN}/api/user/verify?key=${key}\'>link</a></strong>thisIf you don\'t know what\'s going on, please ignore and delete this email.`
+    try {
+        const logoFilePath = path.resolve(__dirname, '../../../assets/logo.png')
+        const htmlFilePath = path.resolve(
+            __dirname,
+            '../../../assets/simplemail.html'
         )
-        .replace('{{DATE}}', new Date().toString())
 
-    // Send Verification Email before adding to database
-    await transporter.sendMail({
-        from: process.env.MAILER_ADD,
-        to: email,
-        subject: 'e-Sandesh: Verify Email',
-        html,
-        attachments: [
-            {
-                filename: 'logo.png',
-                path: logoFilePath,
-                cid: 'logo',
-            },
-        ],
-    })
+        const html = fs
+            .readFileSync(htmlFilePath, 'utf8')
+            .replace('{{TITLE}}', 'Be ready to change Nepal')
+            .replace(
+                '{{CONTENT}}',
+                `Congratulations on becoming a member of eSandesh team.\nYour email has been used to register a moderator account in eSandesh. You can login to the portal using the following credentials.\nEmail: ${email}\nPassword: ${password}\nName: ${name}\nYour role is: ${
+                    isRoot
+                        ? 'Administrator'
+                        : isReporter
+                        ? 'Reporter'
+                        : canPublish
+                        ? 'Publisher'
+                        : 'Normal User'
+                }</br></br>`
+            )
+            .replace('{{DATE}}', new Date().toString())
 
-    res.json({ message: 'Verification Email Sent' })
+        await userModel({
+            email,
+            password: hashedPassword,
+            roles,
+            name,
+            emailVerified: new Date(),
+        }).save()
+
+        await transporter.sendMail({
+            from: process.env.MAILER_ADD,
+            to: 'anishchapagai0@gmail.com',
+            subject: 'e-Sandesh: Welcome to eSandesh',
+            html,
+            attachments: [
+                {
+                    filename: 'logo.png',
+                    path: logoFilePath,
+                    cid: 'logo',
+                },
+            ],
+        })
+
+        res.json({ message: 'success' })
+    } catch (e) {
+        console.error(e)
+        if (e.code === 11000 && e.title === 'MongoServerError')
+            res.status(409).json({
+                message: 'User with that credentials already exist.',
+            })
+        else res.status(500).json({ message: 'Something went wrong' })
+    }
 }

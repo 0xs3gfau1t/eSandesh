@@ -2,7 +2,6 @@ const express = require('express')
 
 const adsModel = require('../../model/ads')
 const calculateAdPrice = require('../../controllers/adPriceController')
-const uploadAdAssets = require('../../controllers/uploadController')
 
 /**
  * @param {express.Request} req
@@ -10,7 +9,7 @@ const uploadAdAssets = require('../../controllers/uploadController')
  * @return {void}
  */
 
-module.exports = (req, res) => {
+module.exports = async (req, res) => {
     const {
         name,
         publisher,
@@ -20,40 +19,35 @@ module.exports = (req, res) => {
         _id,
         expiry: expiryDay,
         popup,
-        imageX: imageXBody,
-        imageY: imageYBody,
-        imageSq: imageSqBody,
-        audio: audioBody,
     } = req.body
     const { user } = req.session
     const { imageX, imageY, imageSq, audio } = req.files ? req.files : {}
 
     // Store urls to save in db
-    const [image, audioUrl] =
-        imageX || imageY || imageSq || audio
-            ? uploadAdAssets(imageX, imageY, imageSq, audio)
-            : []
-
     if (!user?.roles?.isRoot)
         return res.json({ error: 'Not enough permission to edit ads' })
 
     //
     // Verify and sanitize edited data
     //
-    const data = {}
+    const data = await adsModel.findOne({ _id }, { audio: 0 })
     if (name) data.name = name
     if (redirectUrl) data.redirectUrl = redirectUrl
     if (publisher) data.publisher = publisher
     if (priority) data.priority = priority
     if (popup) data.popup = popup === 'true'
-    if (image) {
-        if (!image.rectX) image.rectX = imageXBody
-        if (!image.rectY) image.rectY = imageYBody
-        if (!image.square) image.square = imageSqBody
-
-        data.image = image
+    if (imageX || imageY || imageSq) {
+        const images = data.image || {}
+        if (imageX) images.rectX = imageX.data
+        if (imageY) images.rectY = imageY.data
+        if (imageSq) images.square = imageSq.data
+        data.image = images
     }
-    audioUrl ? (data.audio = audioUrl) : (data.audio = audioBody)
+    if (audio) {
+        if (audio.data.size / 1024 ** 2 > 2)
+            return res.status(411).json({ message: 'Audio size too large' })
+        data.audio = audio.data
+    }
     if (category)
         data.category = category
             .split(',')
@@ -66,11 +60,11 @@ module.exports = (req, res) => {
             popup,
             expiry: data.expiry,
             priority: data.priority,
-            audio: audioUrl,
+            audio: data.audio,
         })
     }
 
-    adsModel.updateOne({ _id }, data, (e, d) => {
+    await adsModel.updateOne({ _id }, data, (e, d) => {
         if (d === null)
             return res.status(401).json({ error: 'No such ad exists.' })
 

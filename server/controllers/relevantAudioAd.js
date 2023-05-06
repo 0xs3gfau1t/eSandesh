@@ -1,8 +1,6 @@
 const adsModel = require('@/model/ads')
-const path = require('path')
 
 const { calculateCategoryStrength } = require('@/routes/ads/relevantAds')
-const audioAdFolder = path.resolve(__dirname, '../assets/ads/audio/')
 const AD_LIMIT = 2
 
 async function getRelevantAudioAd(history) {
@@ -73,8 +71,8 @@ async function getRelevantAudioAd(history) {
         .flat()
 
     return {
-        begin: audioAdFolder + '/' + (allocatedAds.at(0)?.audio || 'ad.raw'),
-        end: audioAdFolder + '/' + (allocatedAds.at(1)?.audio || 'ad.raw'),
+        begin: allocatedAds.at(0)?._id || 'ffffffffffffffffffffffff',
+        end: allocatedAds.at(1)?._id || 'ffffffffffffffffffffffff',
     }
 }
 

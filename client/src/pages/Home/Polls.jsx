@@ -1,10 +1,8 @@
 import { use, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { useSession } from 'next-auth/react'
 import { listPolls, votePoll } from '../../redux/actions/polls'
 
-const Polls = () => {
-    const { data: session, status } = useSession()
+const Polls = ({ session }) => {
     const polls = useSelector(state => state.polls.pollsList)
 
     const dispatch = useDispatch()
@@ -18,7 +16,7 @@ const Polls = () => {
             dispatch(votePoll({ poll: poll, option: opt }))
     }
 
-    if (status == 'unauthenticated') {
+    if (session.status == 'unauthenticated') {
         return <h1>You must login to view this page</h1>
     }
 

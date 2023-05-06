@@ -3,6 +3,8 @@ const express = require('express')
 const articleModel = require('@/model/article')
 const generateSummary = require('@/controllers/summaryGenerationController')
 const reciter = require('@/controllers/reciter')
+const rawConverter = require('@/controllers/rawConverter')
+const { JSDOM } = require('jsdom')
 
 /**
  * @param {express.Request} req
@@ -24,22 +26,26 @@ const editArticle = async (req, res) => {
     // they can't delete others article
     if (user.provider != 'admin') filter.createdBy = user.id
 
-    const data = { content }
-    if (title) data.title = title
-    if (category) data.category = category
-    if (tags) data.tags = tags
-    data.summary = generateSummary(data.content)
+    const contentOnly = new JSDOM(content).window.document.querySelector(
+        'body'
+    ).textContent
 
-    const recitedArticle = await reciter({
-        title,
-        content,
-        id,
-    })
-    data.audio = recitedArticle.fileName
+    const article = await articleModel.findOne({ _id: id })
+    if (title) article.title = title
+    if (content) article.content = content
+    if (category) article.category = category
+    if (tags) article.tags = tags
+    article.summary = await generateSummary(contentOnly)
+    article.audio = await rawConverter(
+        await reciter({
+            title,
+            content: contentOnly,
+        })
+    )
 
     var key
     try {
-        const article = await articleModel.findOneAndUpdate(filter, data)
+        await article.save()
         key = `/api/article/${article.year}/${article.month}/${article.slug}`
         res.status(200).json({ success: true })
     } catch (err) {

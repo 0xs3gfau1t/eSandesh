@@ -9,14 +9,18 @@ const { userModel } = require('@/model/user')
 module.exports = (req, res) => {
     const { isReporter, isRoot, canPublish } = req.query
 
-    const roleFilter = { role: true }
-    if (isReporter) roleFilter['role.isReporter'] = true
-    if (canPublish) roleFilter['role.canPublish'] = true
-    if (isRoot) roleFilter['role.isRoot'] = true
+    const roleFilter = { roles: { $exists: true } }
+    if (isReporter) roleFilter['roles.isReporter'] = { $exists: true }
+    if (canPublish) roleFilter['roles.canPublish'] = { $exists: true }
+    if (isRoot) roleFilter['roles.isRoot'] = { $exists: true }
 
-    userModel.find({ $exists: roleFilter }, (e, d) => {
-        console.log(d, e)
-        if (e) res.status(500).json({ message: 'Something went wrong' })
-        res.json({ message: 'success', data: d })
-    })
+    userModel.find(
+        roleFilter,
+        { _id: true, name: true, email: true, roles: true },
+        (e, d) => {
+            console.log(d, e)
+            if (e) res.status(500).json({ message: 'Something went wrong' })
+            res.json({ message: 'success', data: d })
+        }
+    )
 }

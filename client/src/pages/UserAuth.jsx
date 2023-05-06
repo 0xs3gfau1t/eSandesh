@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { signIn, useSession } from 'next-auth/react'
+import { signIn } from 'next-auth/react'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 
@@ -13,11 +13,10 @@ const initialState = {
     name: '',
 }
 
-function UserAuth() {
+function UserAuth({ session }) {
     const [values, setValues] = useState(initialState)
     const [isLogin, setIsLogin] = useState(true)
 
-    const session = useSession()
     const navigate = useNavigate()
     const dispatch = useDispatch()
 
