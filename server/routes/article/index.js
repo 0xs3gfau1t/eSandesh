@@ -17,7 +17,7 @@ const userArticles = require('./userArticles')
 
 router.get('/list*', fetchHistory, listArticle)
 router.get('/:year/:month/:slug', fetchHistory, getArticle)
-router.get('/recite', fetchHistory, recite)
+router.get('/recite', recite)
 router.get('/topublish', withPublisher, toPublish)
 router.post('/publish', withPublisher, publish)
 router.get('/byuser', userArticles)
