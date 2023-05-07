@@ -23,8 +23,7 @@ module.exports = async (req, res) => {
     else if (isReporter !== undefined)
         setRole['$unset']['roles.isReporter'] = true
 
-    if (canPublish === 'true')
-        setRole['$unset']['roles.canPublish'] = canPublish
+    if (canPublish === 'true') setRole['$set']['roles.canPublish'] = canPublish
     else if (canPublish !== undefined)
         setRole['$unset']['roles.canPublish'] = true
 

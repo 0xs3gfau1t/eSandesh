@@ -32,7 +32,7 @@ module.exports = async (req, res) => {
     try {
         const categoryArray = category
             .split(',')
-            .map(i => i.trim())
+            .map(i => i.trim().toUpperCase())
             .filter(i => i !== '')
 
         const expiry = new Date(Date.now() + expiryDay * 24 * 60 * 60 * 1000)
