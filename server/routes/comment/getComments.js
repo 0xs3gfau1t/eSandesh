@@ -57,6 +57,7 @@ const getComments = async (req, res) => {
                     {
                         $unwind: {
                             path: '$user',
+                            preserveNullAndEmptyArrays: true,
                         },
                     },
                     {
@@ -73,6 +74,7 @@ const getComments = async (req, res) => {
                     {
                         $unwind: {
                             path: '$subComments',
+                            preserveNullAndEmptyArrays: true,
                         },
                     },
                     {
@@ -107,6 +109,7 @@ const getComments = async (req, res) => {
                     {
                         $unwind: {
                             path: '$subComments.user',
+                            preserveNullAndEmptyArrays: true,
                         },
                     },
                     {
@@ -121,15 +124,44 @@ const getComments = async (req, res) => {
                             },
                             likes: { $size: '$likes' },
                             'subComments.liked': {
-                                $in: [
-                                    currentUserId
-                                        ? mongoose.Types.ObjectId(currentUserId)
-                                        : 'false',
-                                    '$subComments.likes',
+                                $cond: [
+                                    {
+                                        $ifNull: ['$subComments._id', false],
+                                    },
+                                    {
+                                        $in: [
+                                            currentUserId
+                                                ? mongoose.Types.ObjectId(
+                                                      currentUserId
+                                                  )
+                                                : 'false',
+                                            '$subComments.likes',
+                                        ],
+                                    },
+                                    '$$REMOVE',
                                 ],
                             },
                             'subComments.likes': {
-                                $size: '$subComments.likes',
+                                $cond: [
+                                    {
+                                        $ifNull: ['$subComments._id', false],
+                                    },
+                                    {
+                                        $size: '$subComments.likes',
+                                    },
+                                    '$$REMOVE',
+                                ],
+                            },
+                        },
+                    },
+                    {
+                        $set: {
+                            subComments: {
+                                $cond: [
+                                    { $ifNull: ['$subComments._id', false] },
+                                    '$subComments',
+                                    '$$REMOVE',
+                                ],
                             },
                         },
                     },

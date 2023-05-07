@@ -10,17 +10,6 @@ const { default: mongoose } = require('mongoose')
  * @return {void}
  */
 
-//
-//
-// Preferance likes are not reduced even if the user disliked the comment
-// Because.
-// Even if user dislikes particular comment, their preferance is still on this category
-// over other, that gives like factor a truthy value
-//
-// Also it's an excuse for some additional logic cause I'm exhausted
-// And its almost 12AM ;)
-//
-
 module.exports = (req, res) => {
     const { id } = req.body
 
