@@ -6,16 +6,20 @@ import {
     addComments,
     editComments,
     addSubComments,
-    addLikes,
+    likeComment,
 } from '../redux/actions/comments'
-import { Link } from 'react-router-dom'
+import { useSession } from 'next-auth/react'
 import { FaUserCircle } from 'react-icons/fa'
-import { MdModeEditOutline, MdDelete } from 'react-icons/md'
-import { BiLike, BiReply, BiChat } from 'react-icons/bi'
+import {
+    AiFillEdit,
+    AiFillDelete,
+    AiOutlineLike,
+    AiFillLike,
+} from 'react-icons/ai'
+import { BiReply, BiChat } from 'react-icons/bi'
 
 const initialValue = {
     txtvalue: '',
-    a: 1,
     editting: false,
     comId: '',
     sub: false,
@@ -23,20 +27,21 @@ const initialValue = {
     items: 10,
 }
 
-function Comments(props) {
+function Comments({ articleId }) {
     const comments = useSelector(state => state.comments.comments)
     const dispatch = useDispatch()
     const [value, setValue] = useState(initialValue)
 
     useEffect(() => {
-        dispatch(
-            listCommentsByArticle({
-                articleId: props.articleId,
-                page: value.page,
-                items: value.items,
-            })
-        )
-    }, [value.a])
+        if (articleId)
+            dispatch(
+                listCommentsByArticle({
+                    articleId,
+                    page: value.page,
+                    items: value.items,
+                })
+            )
+    }, [articleId])
 
     const handleSubmit = e => {
         e.preventDefault()
@@ -66,15 +71,8 @@ function Comments(props) {
             setValue({ ...value, txtvalue: '', a: value.a + 1, sub: false })
             return
         }
-        dispatch(
-            addComments({ articleId: props.articleId, content: value.txtvalue })
-        )
+        dispatch(addComments({ articleId, content: value.txtvalue }))
         setValue({ ...value, txtvalue: '', a: value.a + 1 })
-    }
-
-    const handleDltCmnt = cmnt => {
-        dispatch(dltComments({ commentId: cmnt._id }))
-        setValue({ ...value, a: value.a + 1 })
     }
 
     const handleChange = e => {
@@ -94,92 +92,101 @@ function Comments(props) {
         })
     }
 
-    const handleLikeCmnt = cmnt => {
-        dispatch(addLikes({ id: cmnt._id }))
-    }
+    const session = useSession()
+    const formatter = new Intl.NumberFormat('en-US', { notation: 'compact' })
 
     return (
         <div>
-            {comments &&
-                comments.comments?.map(comment => {
-                    if (comment.article === props.articleId) {
-                        return (
-                            <div
-                                key={comment._id}
-                                className="flex flex-row p-4 box-border border-4"
-                            >
-                                <div className="pr-2">
-                                    <Link to="userProfie">
-                                        <FaUserCircle className="text-5xl" />
-                                    </Link>
-                                </div>
-                                <div className="w-full">
-                                    <div className="flex justify-between">
-                                        <span className=" justify-start text-sm font-medium">
-                                            {comment.user.slice(0, 10)}
-                                        </span>
-                                        <div className="flex justify-end w-full space-x-2">
-                                            <span className="text-xs">
-                                                {comment.createdAt.slice(0, 10)}
-                                            </span>
-                                            <span
+            {comments?.map(c => {
+                return (
+                    <div
+                        key={c.id}
+                        className="flex flex-row p-4 box-border border-4"
+                    >
+                        <div className="pr-2">
+                            {c.user?.image ? (
+                                <img
+                                    src={c.user.image}
+                                    className="w-8 h-8 rounded-full"
+                                />
+                            ) : (
+                                <FaUserCircle className="text-5xl w-8 h-8 rounded-full" />
+                            )}
+                        </div>
+                        <div className="w-full">
+                            <div className="flex justify-between">
+                                <span className=" justify-start text-sm font-medium">
+                                    {c.user.name}
+                                </span>
+                                <div className="flex justify-end w-full space-x-2">
+                                    <span className="text-xs">
+                                        {c.createdAt.slice(0, 10)}
+                                    </span>
+                                    {c.user.id == session.data?.user?.id && (
+                                        <>
+                                            <AiFillEdit
                                                 onClick={() =>
-                                                    handleEditComment(comment)
+                                                    handleEditComment(c)
                                                 }
                                                 className="cursor-pointer transition-all duration-200 hover:text-orange-500"
-                                            >
-                                                <MdModeEditOutline />
-                                            </span>
-                                            <span
-                                                onClick={() =>
-                                                    handleDltCmnt(comment)
-                                                }
+                                            />
+                                            <AiFillDelete
                                                 className="cursor-pointer transition-all duration-200 hover:text-rose-500 "
-                                            >
-                                                <MdDelete />
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <p>{comment.content}</p>
-                                        <div className="flex justify-between w-full gap-2">
-                                            <span
                                                 onClick={() =>
-                                                    handleLikeCmnt(comment)
+                                                    dispatch(
+                                                        dltComments({
+                                                            id: c.id,
+                                                        })
+                                                    )
                                                 }
-                                                className="flex items-end content-center cursor-pointer transition-all duration-200 hover:text-green-500"
-                                            >
-                                                <BiLike />
-                                                <span className="text-xs">
-                                                    {comment.likes.length}
-                                                </span>
-                                            </span>
-                                            <span
-                                                onClick={() =>
-                                                    handleSubCmnt(comment)
-                                                }
-                                                className="flex items-end cursor-pointer  transition-all duration-200 hover:text-orange-500"
-                                            >
-                                                <BiReply />
-                                            </span>
-                                            <span className="flex items-end cursor-pointer transition-all duration-200 hover:text-sky-500 ">
-                                                <BiChat />
-                                                <span className="text-xs">
-                                                    {comment.subComments.length}
-                                                </span>
-                                            </span>
-                                        </div>
-                                    </div>
-                                    {/* <div className=''>
-                                    {comments.subComments?.map(comment=>{
-
-                                    })}
-                                </div> */}
+                                            />
+                                        </>
+                                    )}
                                 </div>
                             </div>
-                        )
-                    }
-                })}
+                            <div>
+                                <p>{c.content}</p>
+                                <div className="flex justify-between w-full gap-2">
+                                    <span
+                                        onClick={() =>
+                                            dispatch(likeComment({ id: c.id }))
+                                        }
+                                        className="flex items-end justify-center gap-1 content-center cursor-pointer transition-all duration-200 hover:text-green-500"
+                                    >
+                                        {c.liked ? (
+                                            <AiFillLike className="" />
+                                        ) : (
+                                            <AiOutlineLike />
+                                        )}
+                                        <span className="text-xs">
+                                            {formatter.format(c.likes)}
+                                        </span>
+                                    </span>
+                                    <span
+                                        onClick={() => handleSubCmnt(c)}
+                                        className="flex items-end cursor-pointer  transition-all duration-200 hover:text-orange-500"
+                                    >
+                                        <BiReply />
+                                    </span>
+                                    <span
+                                        className="flex items-end justify-center gap-1 content-center cursor-pointer transition-all duration-200 hover:text-sky-500 "
+                                        title={
+                                            c.subComments.length
+                                                ? 'View Replies'
+                                                : 'No Replies'
+                                        }
+                                    >
+                                        <BiChat />
+                                        <span className="text-xs">
+                                            {c.subComments.length}
+                                        </span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                )
+            })}
             <div className="w-full">
                 <form onSubmit={handleSubmit}>
                     <input

@@ -3,11 +3,11 @@ import axios from 'axios'
 
 export const dltComments = createAsyncThunk(
     'news/dltComments',
-    async (comment, { dispatch }) => {
+    async ({ id }, { dispatch }) => {
         const response = await axios
             .delete('/api/comment', {
                 withCredentials: true,
-                data: { commentId: comment.commentId },
+                data: { id },
             })
             .then(res => {
                 console.log(res.data)
@@ -19,7 +19,7 @@ export const dltComments = createAsyncThunk(
 
         if (!response) return { success: false }
 
-        return { success: true }
+        return { success: true, data: { id } }
     }
 )
 
@@ -43,13 +43,17 @@ export const addComments = createAsyncThunk(
     }
 )
 
-export const addLikes = createAsyncThunk(
+export const likeComment = createAsyncThunk(
     'news/addLikes',
-    async (like, { dispatch }) => {
+    async ({ id }, { dispatch }) => {
         const response = await axios
-            .post('/api/comment/like', like, {
-                withCredentials: true,
-            })
+            .post(
+                '/api/comment/like',
+                { id },
+                {
+                    withCredentials: true,
+                }
+            )
             .then(res => {
                 return res.data
             })
@@ -59,7 +63,10 @@ export const addLikes = createAsyncThunk(
 
         if (!response) return { success: false }
 
-        return { success: true }
+        return {
+            success: true,
+            data: { id, liked: response.newStatus == 'Liked' },
+        }
     }
 )
 
@@ -106,12 +113,9 @@ export const addSubComments = createAsyncThunk(
 export const listCommentsByArticle = createAsyncThunk(
     'news/listCommentsByArticle',
     async ({ articleId, page, items }, { dispatch }) => {
-        console.log(
-            `/api/comment?articleId=${articleId}&page=${page}&items=${items}`
-        )
         const response = await axios
             .get(
-                `/api/comment?articleId=${articleId}&page=${page}&items=${items}`,
+                `/api/comment/?articleId=${articleId}&page=${page}&items=${items}`,
                 {
                     withCredentials: true,
                 }

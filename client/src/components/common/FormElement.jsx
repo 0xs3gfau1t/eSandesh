@@ -7,6 +7,8 @@ const FormText = ({
     encType,
     className,
     checked,
+    children,
+    ...rest
 }) => {
     return (
         <div className={'mb-4 ' + className}>
@@ -22,7 +24,9 @@ const FormText = ({
                 className="form-input w-full py-1 px-2 rounded-md border-[1px] border-[#FFBD03]"
                 formEncType={encType}
                 checked={checked}
+                {...rest}
             />
+            {children}
         </div>
     )
 }

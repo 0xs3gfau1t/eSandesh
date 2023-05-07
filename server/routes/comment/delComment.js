@@ -1,4 +1,5 @@
 const express = require('express')
+const { default: mongoose } = require('mongoose')
 const commentModel = require('../../model/comment')
 
 /**
@@ -6,34 +7,34 @@ const commentModel = require('../../model/comment')
  * @param {express.Response} res
  * @return {void}
  */
-const deleteChildren = arr => {
-    for (i of arr) {
-        commentModel.findOne({ _id: i._id.toString() }, (e, d) => {
-            if (e)
-                return res.json({ error: 'Cannot find specified subcomment' })
-            deleteChildren(d.subComments)
-            commentModel.deleteOne({ _id: d._id }, (e, d) => {
-                if (e) return res.json({ error: 'Cannot delete subcomment' })
-            })
-        })
-    }
-}
-const delComment = (req, res) => {
-    const { commentId } = req.body
+const delComment = async (req, res) => {
+    const { id } = req.body
     const { user } = req.session
-    commentModel.findOneAndDelete(
+
+    const rootComment = await commentModel.findOne(
         {
-            _id: commentId,
-            user: user.id,
+            _id: mongoose.Types.ObjectId(id),
+            user: mongoose.Types.ObjectId(user.id),
         },
-        (e, d) => {
-            if (e || !d) return res.json({ error: 'Comment Not Found' })
-
-            deleteChildren(d.subComments)
-
-            res.json({ message: 'success', comment: d })
-        }
+        { subComments: true }
     )
+    if (!rootComment) return res.json({ error: 'Comment not found' })
+
+    let toDelete = [id, ...rootComment.subComments]
+    let ids = [...rootComment.subComments]
+
+    while (ids.length > 0) {
+        const currentId = ids.pop()
+        const currentComment = await commentModel.findOne(
+            { _id: mongoose.Types.ObjectId(currentId) },
+            { subComments: true }
+        )
+        ids.concat(currentComment.subComments)
+        toDelete.concat(currentComment.subComments)
+    }
+
+    await commentModel.deleteMany({ _id: { $in: toDelete } })
+    return res.json({ message: 'success' })
 }
 
 module.exports = delComment

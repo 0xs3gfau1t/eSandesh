@@ -117,7 +117,7 @@ const SingleNews = () => {
                     <LikeSaveShare likes={'१.२'} id={news ? news._id : ''} />
                 </div>
 
-                <Comments articleId={news ? news._id : ''} />
+                <Comments articleId={news?._id} />
             </div>
             {/* right column */}
             {!focus && (

@@ -1,5 +1,6 @@
 const Cache = require('@/controllers/Cache')
 const express = require('express')
+const { default: mongoose } = require('mongoose')
 const commentModel = require('../../model/comment')
 
 /**
@@ -16,11 +17,63 @@ const getComments = async (req, res) => {
             const comments = await Cache(
                 req.originalUrl,
                 async () =>
-                    await commentModel
-                        .find({ article: articleId })
-                        .skip(page * 10 || 0)
-                        .limit(items || 10),
-                { 'EX': 15 * 60 }
+                    await commentModel.aggregate([
+                        {
+                            $match: {
+                                article: mongoose.Types.ObjectId(articleId),
+                            },
+                        },
+                        { $skip: Number(page) * 10 || 0 },
+                        { $limit: Number(items) || 10 },
+                        {
+                            $project: {
+                                _id: false,
+                                id: '$_id',
+                                user: true,
+                                content: true,
+                                subComments: true,
+                                liked: {
+                                    $in: [
+                                        req.session?.user?.id
+                                            ? mongoose.Types.ObjectId(
+                                                req.session?.user?.id
+                                            )
+                                            : 'false',
+                                        '$likes',
+                                    ],
+                                },
+                                likes: { $size: '$likes' },
+                                createdAt: true,
+                            },
+                        },
+                        {
+                            $lookup: {
+                                from: 'users',
+                                let: { id: '$user' },
+                                pipeline: [
+                                    {
+                                        $match: {
+                                            $expr: { $eq: ['$_id', '$$id'] },
+                                        },
+                                    },
+                                    {
+                                        $project: {
+                                            name: 1,
+                                            image: 1,
+                                            id: '$_id',
+                                        },
+                                    },
+                                ],
+                                as: 'user',
+                            },
+                        },
+                        {
+                            $unwind: {
+                                path: '$user',
+                            },
+                        },
+                    ]),
+                { EX: 15 * 60 }
             )
 
             res.json({ message: 'success', comments: comments })
@@ -39,7 +92,7 @@ const getComments = async (req, res) => {
                         .find({ user: userId })
                         .skip(page * 10 || 0)
                         .limit(items || 10),
-                { 'EX': 15 * 60 }
+                { EX: 15 * 60 }
             )
             res.json({ message: 'success', comments: comments })
         } catch (e) {
