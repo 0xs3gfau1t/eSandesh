@@ -3,6 +3,7 @@ const commentModel = require('../../model/comment')
 const articleModel = require('../../model/article')
 const { userModel } = require('../../model/user')
 const updateHistory = require('../../controllers/updateHistory')
+const { default: mongoose } = require('mongoose')
 /**
  * @param {express.Request} req
  * @param {express.Response} res
@@ -52,11 +53,15 @@ module.exports = (req, res) => {
                     comments: 0,
                     watchtime: 0,
                 }
-            req.cookies.user.history[category].likes += 1
+            if (index == -1) req.cookies.user.history[category].likes += 1
+            else req.cookies.user.history[category].likes -= 1
         })
 
         updateHistory({ req, res })
-        res.json({ message: 'success' })
+        res.json({
+            message: 'success',
+            newStatus: index == -1 ? 'Liked' : 'Not Liked',
+        })
 
         await d.save()
     })

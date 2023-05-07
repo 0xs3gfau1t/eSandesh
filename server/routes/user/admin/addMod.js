@@ -16,7 +16,7 @@ const { userModel } = require('@/model/user')
 module.exports = async (req, res) => {
     if (!req.session?.user?.roles?.isRoot)
         return res.status(403).json({
-            message: "You don't have enough privilage to perform this task.",
+            message: "You don't have enough privilege to perform this task.",
         })
 
     const { email, name, password, isRoot, canPublish, isReporter } = req.body
@@ -57,7 +57,7 @@ module.exports = async (req, res) => {
 
         await transporter.sendMail({
             from: process.env.MAILER_ADD,
-            to: 'anishchapagai0@gmail.com',
+            to: email,
             subject: 'e-Sandesh: Welcome to eSandesh',
             html,
             attachments: [
