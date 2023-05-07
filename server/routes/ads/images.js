@@ -8,10 +8,8 @@ const adModel = require('@/model/ads')
  */
 
 module.exports = async (req, res) => {
-    adModel.findOne({_id: req.params.id},
-        (err, data) => {
-            if (err) res.status(404)
-            res.send(data.image)
-        }
-    )
+    adModel.findOne({ _id: req.query.id }, { image: 1 }, (err, data) => {
+        if (err) res.status(404)
+        res.send(data.image)
+    })
 }

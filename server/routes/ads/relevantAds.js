@@ -36,7 +36,6 @@ const strength = {
 }
 
 function calculateCategoryStrength(history) {
-    console.log('From categoty strength: ', history)
     const categoryStrength = {}
 
     if (history instanceof Map) history = Object.fromEntries(history)
@@ -60,7 +59,6 @@ function calculateCategoryStrength(history) {
             strength.watchtime * value.watchtime
     })
     */
-    console.log('Categoryt Strength: ', categoryStrength)
 
     const totalStrength = Object.values(categoryStrength).reduce(
         (a, v) => a + v,
@@ -100,7 +98,6 @@ module.exports = async (req, res) => {
     if (['rextX', 'rectY', 'square'].includes(imageType))
         imageType = 'image.' + imageType
     matchQuery[imageType] = { $exists: true }
-    console.log('Match Query: ', matchQuery)
 
     const categoryAds = await adsModel.aggregate([
         {
