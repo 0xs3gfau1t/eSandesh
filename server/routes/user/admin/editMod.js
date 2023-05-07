@@ -11,6 +11,7 @@ module.exports = async (req, res) => {
     // This means admin can convert any regular user with registered email
     // To one of moderators
     const { email, isRoot, canPublish, isReporter } = req.body
+    // console.log('Body: ', req.body)
     if (!email)
         return res.status(400).json({ message: 'Update requires a updatee' })
 
@@ -34,7 +35,7 @@ module.exports = async (req, res) => {
         { new: true },
         (e, d) => {
             if (e) {
-                console.log(e, d)
+                // console.log(e, d)
                 return res
                     .status(500)
                     .json({ message: 'Something went wrong.' })
