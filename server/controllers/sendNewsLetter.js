@@ -89,7 +89,8 @@ const sendNewsLetter = async articleId => {
             .replace('{{TITLE}}', subscribers[0].title)
             .replace(
                 '{{CONTENT}}',
-                content?.slice(0, 35) + (content?.length > 35 ? '...' : '')
+                content?.slice(0, content.indexOf('।')) +
+                    (content?.length > 35 ? '...' : '')
             )
             .replace('{{DATE}}', new Date().toDateString())
             .replace('{{UNSUB_URL}}', `${process.env.DOMAIN_URL}/unsubscribe`)
