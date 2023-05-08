@@ -8,6 +8,7 @@ import {
     Home,
     Login,
     UserAuth,
+    ForgotPassword,
     Category,
     Archive,
     AdsMan,
@@ -64,6 +65,7 @@ function App() {
                     path="/userauth"
                     element={<UserAuth session={session} />}
                 />
+                <Route path="/forgotPassword" element={<ForgotPassword />} />
                 <Route path="/admin" element={<Login session={session} />} />
                 <Route
                     path="/admin/dashboard"

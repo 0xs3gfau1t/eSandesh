@@ -82,8 +82,8 @@ function UserAuth({ session }) {
     }
 
     return (
-        <div>
-            <form className="form my-[10vh] w-1/4" onSubmit={onSubmit}>
+        <div className="h-screen w-screen flex items-center">
+            <form className="form w-1/4" onSubmit={onSubmit}>
                 <SiteLogo />
                 <h1 className="text-center mt-2 text-2xl font-bold">
                     User {isLogin ? 'Login' : 'Register'}
@@ -112,7 +112,17 @@ function UserAuth({ session }) {
                     labelText="Password"
                     value={values.password}
                     handleChange={handleChange}
-                />
+                >
+                    {isLogin && (
+                        <a
+                            className="text-sm cursor-pointer"
+                            title="Seriously?"
+                            href="/forgotPassword"
+                        >
+                            Forgot Password?
+                        </a>
+                    )}
+                </FormText>
                 {!isLogin && (
                     <FormText
                         name="password2"

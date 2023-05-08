@@ -3,22 +3,12 @@ const commentModel = require('../../model/comment')
 const articleModel = require('../../model/article')
 const { userModel } = require('../../model/user')
 const updateHistory = require('../../controllers/updateHistory')
+const { default: mongoose } = require('mongoose')
 /**
  * @param {express.Request} req
  * @param {express.Response} res
  * @return {void}
  */
-
-//
-//
-// Preferance likes are not reduced even if the user disliked the comment
-// Because.
-// Even if user dislikes particular comment, their preferance is still on this category
-// over other, that gives like factor a truthy value
-//
-// Also it's an excuse for some additional logic cause I'm exhausted
-// And its almost 12AM ;)
-//
 
 module.exports = (req, res) => {
     const { id } = req.body
@@ -52,12 +42,16 @@ module.exports = (req, res) => {
                     comments: 0,
                     watchtime: 0,
                 }
-            req.cookies.user.history[category].likes += 1
+            if (index == -1) req.cookies.user.history[category].likes += 1
+            else req.cookies.user.history[category].likes -= 1
         })
 
         updateHistory({ req, res })
-        res.json({ message: 'success' })
+        res.json({
+            message: 'success',
+            newStatus: index == -1 ? 'Liked' : 'Not Liked',
+        })
 
-        await d.save()
+        await d.save({ timestamps: false })
     })
 }
