@@ -93,7 +93,7 @@ export const listCommentsByArticle = createAsyncThunk(
                     withCredentials: true,
                 }
             )
-            .then(res.data)
+            .then(res => res.data)
             .catch(console.error)
 
         if (!response) return { success: false }

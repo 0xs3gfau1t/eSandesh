@@ -317,21 +317,23 @@ function Comments({ articleId }) {
                     </>
                 )}
             </div>
-            <div className="flex flex-col gap-2 border-blue border border-solid rounded-md p-2">
-                {comments?.map((c, idx) => (
-                    <CommentBox
-                        key={[idx]}
-                        cmnt={c}
-                        path={[idx]}
-                        editing={editing}
-                        setEditing={setEditing}
-                        replying={replying}
-                        setReplying={setReplying}
-                        currentUser={session.data?.user}
-                        articleId={articleId}
-                    />
-                ))}
-            </div>
+            {comments?.length > 0 && (
+                <div className="flex flex-col gap-2 border-blue border border-solid rounded-md p-2">
+                    {comments?.map((c, idx) => (
+                        <CommentBox
+                            key={[idx]}
+                            cmnt={c}
+                            path={[idx]}
+                            editing={editing}
+                            setEditing={setEditing}
+                            replying={replying}
+                            setReplying={setReplying}
+                            currentUser={session.data?.user}
+                            articleId={articleId}
+                        />
+                    ))}
+                </div>
+            )}
         </div>
     )
 }
