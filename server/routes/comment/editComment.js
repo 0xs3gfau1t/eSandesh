@@ -8,12 +8,12 @@ const commentModel = require('../../model/comment')
  * @return {void}
  */
 const editComment = async (req, res) => {
-    const { commentId, content } = req.body
+    const { id, content } = req.body
     const { user } = req.session
     // Find a way to find-and-update with previous content on hand during wuery exection
     try {
         const comment = await commentModel.findOne({
-            _id: commentId,
+            _id: id,
             user: user.id,
         })
 
@@ -22,8 +22,8 @@ const editComment = async (req, res) => {
                 .status(404)
                 .json({ error: 'Cannot find requested comment' })
 
-        const updatedComment = await commentModel.updateOne(
-            { _id: commentId },
+        await commentModel.updateOne(
+            { _id: id },
             {
                 content: content,
                 $push: {
@@ -34,7 +34,7 @@ const editComment = async (req, res) => {
                 },
             }
         )
-        return res.json({ message: 'success', comment: updatedComment })
+        return res.json({ message: 'success' })
     } catch (e) {
         console.log(e)
         return res.status(500).json({

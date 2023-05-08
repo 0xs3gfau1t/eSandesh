@@ -3,7 +3,7 @@ import axios from 'axios'
 
 export const dltComments = createAsyncThunk(
     'news/dltComments',
-    async ({ id }, { dispatch }) => {
+    async ({ id, path }, { dispatch }) => {
         const response = await axios
             .delete('/api/comment', {
                 withCredentials: true,
@@ -19,17 +19,24 @@ export const dltComments = createAsyncThunk(
 
         if (!response) return { success: false }
 
-        return { success: true, data: { id } }
+        return { success: true, data: { id, path } }
     }
 )
 
 export const addComments = createAsyncThunk(
     'news/addComments',
-    async (comment, { dispatch }) => {
+    async (
+        { articleId, content, parentComment, path, currentUser },
+        { dispatch }
+    ) => {
         const response = await axios
-            .post('/api/comment', comment, {
-                withCredentials: true,
-            })
+            .post(
+                '/api/comment',
+                { articleId, content, parentComment },
+                {
+                    withCredentials: true,
+                }
+            )
             .then(res => {
                 return res.data
             })
@@ -37,15 +44,20 @@ export const addComments = createAsyncThunk(
                 console.error(err)
             })
 
+        console.log(response)
+
         if (!response) return { success: false }
 
-        return { success: true }
+        return {
+            success: true,
+            data: { newComment: response.comment, path, currentUser },
+        }
     }
 )
 
 export const likeComment = createAsyncThunk(
     'news/addLikes',
-    async ({ id }, { dispatch }) => {
+    async ({ id, path }, { dispatch }) => {
         const response = await axios
             .post(
                 '/api/comment/like',
@@ -65,18 +77,22 @@ export const likeComment = createAsyncThunk(
 
         return {
             success: true,
-            data: { id, liked: response.newStatus == 'Liked' },
+            data: { path, liked: response.newStatus == 'Liked' },
         }
     }
 )
 
 export const editComments = createAsyncThunk(
     'news/editComments',
-    async (comment, { dispatch }) => {
+    async ({ id, content, path }, { dispatch }) => {
         const response = await axios
-            .patch('/api/comment', comment, {
-                withCredentials: true,
-            })
+            .patch(
+                '/api/comment',
+                { id, content },
+                {
+                    withCredentials: true,
+                }
+            )
             .then(res => {
                 return res.data
             })
@@ -84,29 +100,13 @@ export const editComments = createAsyncThunk(
                 console.error(err)
             })
 
+        console.log(response)
         if (!response) return { success: false }
 
-        return { success: true }
-    }
-)
-
-export const addSubComments = createAsyncThunk(
-    'news/addSubComments',
-    async (comment, { dispatch }) => {
-        const response = await axios
-            .post('/api/comment', comment, {
-                withCredentials: true,
-            })
-            .then(res => {
-                return res.data
-            })
-            .catch(err => {
-                console.error(err)
-            })
-
-        if (!response) return { success: false }
-
-        return { success: true }
+        return {
+            success: true,
+            data: { path, content },
+        }
     }
 )
 

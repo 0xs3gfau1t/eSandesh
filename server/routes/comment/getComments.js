@@ -132,8 +132,8 @@ const getComments = async (req, res) => {
                                         $in: [
                                             currentUserId
                                                 ? mongoose.Types.ObjectId(
-                                                      currentUserId
-                                                  )
+                                                    currentUserId
+                                                )
                                                 : 'false',
                                             '$subComments.likes',
                                         ],
@@ -174,7 +174,7 @@ const getComments = async (req, res) => {
                             liked: { $first: '$liked' },
                             likes: { $first: '$likes' },
                             revisions: { $first: '$revisions' },
-                            createdAt: { $first: '$createdAt' },
+                            updatedAt: { $first: '$updatedAt' },
                             subComments: { $push: '$subComments' },
                         },
                     },
@@ -234,8 +234,8 @@ const getComments = async (req, res) => {
                                                                 likes: '$$this.likes',
                                                                 revisions:
                                                                     '$$this.revisions',
-                                                                createdAt:
-                                                                    '$$this.createdAt',
+                                                                updatedAt:
+                                                                    '$$this.updatedAt',
                                                                 parentComment:
                                                                     '$$this.parentComment',
                                                                 subComments: {
