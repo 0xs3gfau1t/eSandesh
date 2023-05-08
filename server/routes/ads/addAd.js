@@ -2,6 +2,7 @@ const express = require('express')
 const adsModel = require('../../model/ads')
 const calculateAdPrice = require('@/controllers/adPriceController')
 const convertToRaw = require('@/controllers/rawConverter.js')
+const imageChecker = require('@/controllers/imageDimensionChecker')
 
 /**
  * @param {express.Request} req
@@ -62,9 +63,24 @@ module.exports = async (req, res) => {
         // Now store available images
         if (imageY || imageX || imageSq) {
             const images = {}
-            if (imageX) images.rectX = imageX.data
-            if (imageY) images.rectY = imageY.data
-            if (imageSq) images.square = imageSq.data
+            if (imageX) {
+                const imageDetail = imageChecker(imageX.data)
+                if(imageDetail.width === 720 && imageDetail.height === 110)
+                    images.rectX = imageX.data
+                else throw Error("Invalid Image Size. 720x110 horizontal images")
+            }
+            if (imageY) {
+                const imageDetail = imageChecker(imageY.data)
+                if(imageDetail.width === 110 && imageDetail.height === 720)
+                    images.rectY = imageY.data
+                else throw Error("Invalid Image Size. 110x720 for vertical images")
+            }
+            if (imageSq) {
+                const imageDetail = imageChecker(imageY.data)
+                if(imageDetail.width === 500 && imageDetail.height === 500)
+                    images.square = imageSq.data
+                else throw Error("Invalid Image Size. 500x500 for square images")
+            }
             ad.image = images
         }
 
@@ -72,6 +88,6 @@ module.exports = async (req, res) => {
         res.json({ message: 'success' })
     } catch (e) {
         console.error(e)
-        res.status(500).json({ error: 'Something went wrong.' })
+        res.status(400).json({ error: 'Something went wrong.', errMsg: e.message})
     }
 }
