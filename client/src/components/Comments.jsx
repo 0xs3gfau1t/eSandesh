@@ -143,7 +143,7 @@ const CommentBox = ({
                     <span title={new Date(cmnt.updatedAt)}>
                         {getRelativeTime(new Date(cmnt.updatedAt))}
                     </span>
-                    {cmnt.revisions.length && hover && (
+                    {cmnt.revisions.length > 0 && hover && (
                         <div
                             className="absolute bottom-full p-2 rounded-md bg-slate-200 border-solid border-slate-400 border"
                             onMouseEnter={() => setHover(true)}
