@@ -44,6 +44,10 @@ const AddCommentBox = ({ value, onChange, onSubmit, onCancel }) => {
         >
             <textarea
                 className="placeholder:text-slate-400 bg-transparent w-full rounded-md py-2 px-3 shadow-sm focus:outline-none text-sm"
+                onKeyDown={e => {
+                    if (e.key == 'Enter' && e.ctrlKey) onSubmit(e)
+                    else if (e.key == 'Escape') onCancel()
+                }}
                 rows={2}
                 required={true}
                 value={value}

@@ -9,16 +9,10 @@ export const dltComments = createAsyncThunk(
                 withCredentials: true,
                 data: { id },
             })
-            .then(res => {
-                console.log(res.data)
-                return res.data
-            })
-            .catch(err => {
-                console.error(err)
-            })
+            .then(res => res.data)
+            .catch(console.error)
 
         if (!response) return { success: false }
-
         return { success: true, data: { id, path } }
     }
 )
@@ -37,17 +31,10 @@ export const addComments = createAsyncThunk(
                     withCredentials: true,
                 }
             )
-            .then(res => {
-                return res.data
-            })
-            .catch(err => {
-                console.error(err)
-            })
-
-        console.log(response)
+            .then(res => res.data)
+            .catch(console.error)
 
         if (!response) return { success: false }
-
         return {
             success: true,
             data: { newComment: response.comment, path, currentUser },
@@ -66,15 +53,10 @@ export const likeComment = createAsyncThunk(
                     withCredentials: true,
                 }
             )
-            .then(res => {
-                return res.data
-            })
-            .catch(err => {
-                console.error(err)
-            })
+            .then(res => res.data)
+            .catch(console.error)
 
         if (!response) return { success: false }
-
         return {
             success: true,
             data: { path, liked: response.newStatus == 'Liked' },
@@ -93,20 +75,11 @@ export const editComments = createAsyncThunk(
                     withCredentials: true,
                 }
             )
-            .then(res => {
-                return res.data
-            })
-            .catch(err => {
-                console.error(err)
-            })
+            .then(res => res.data)
+            .catch(console.error)
 
-        console.log(response)
         if (!response) return { success: false }
-
-        return {
-            success: true,
-            data: { path, content },
-        }
+        return { success: true, data: { path, content } }
     }
 )
 
@@ -120,13 +93,9 @@ export const listCommentsByArticle = createAsyncThunk(
                     withCredentials: true,
                 }
             )
-            .then(res => {
-                console.log(res.data)
-                return res.data
-            })
-            .catch(err => {
-                console.error(err)
-            })
+            .then(res.data)
+            .catch(console.error)
+
         if (!response) return { success: false }
         return { success: true, data: response, page: page }
     }
@@ -135,9 +104,6 @@ export const listCommentsByArticle = createAsyncThunk(
 export const listCommentsByUser = createAsyncThunk(
     'news/listCommentsByUser',
     async ({ page, items, userId }, { dispatch }) => {
-        console.log(
-            `/api/comment?page=${articleId}&items=${page}&userId=${items}`
-        )
         const response = await axios
             .get(
                 `/api/comment?page=${articleId}&items=${page}&userId=${items}`,
@@ -145,13 +111,9 @@ export const listCommentsByUser = createAsyncThunk(
                     withCredentials: true,
                 }
             )
-            .then(res => {
-                console.log(res.data)
-                return res.data
-            })
-            .catch(err => {
-                console.error(err)
-            })
+            .then(res => res.data)
+            .catch(console.error)
+
         if (!response) return { success: false }
         return { success: true, data: response, page: page }
     }

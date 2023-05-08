@@ -80,13 +80,11 @@ const commentSlice = createSlice({
                     if (i == 0) par = par[j]
                     else par = par.subComments[j]
                 }
-                console.log({ par, i, j })
                 if (i == 0) par.splice(payload.data.path[i], 1)
                 else par.subComments.splice(payload.data.path[i], 1)
             }
         })
         builder.addCase(editComments.fulfilled, (state, { payload }) => {
-            console.log(payload.data.newComment)
             if (payload.success && payload.data) {
                 let com = state.comments,
                     j = 0,
