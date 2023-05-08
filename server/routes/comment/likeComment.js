@@ -52,6 +52,6 @@ module.exports = (req, res) => {
             newStatus: index == -1 ? 'Liked' : 'Not Liked',
         })
 
-        await d.save()
+        await d.save({ timestamps: false })
     })
 }
