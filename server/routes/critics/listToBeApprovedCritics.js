@@ -1,6 +1,5 @@
 const express = require('express')
 const criticModel = require('../../model/critics')
-const { ObjectId } = require('mongodb')
 
 /**
  * @param {express.Request} req
@@ -8,19 +7,23 @@ const { ObjectId } = require('mongodb')
  * @return {void}
  */
 
+//
+// Top critics are those with high likes and subcomments
+//
 module.exports = async (req, res) => {
-    const { criticId } = req.query
-
-    let d = await criticModel.aggregate([
+    const { page = 0, limit = 10 } = req.query
+    const d = await criticModel.aggregate([
         {
             $match: {
-                _id: ObjectId(criticId),
+                publishedAt: {
+                    $exists: false,
+                },
             },
         },
         {
             $lookup: {
                 from: 'comments',
-                localField: 'commentId',
+                localField: '_id',
                 foreignField: '_id',
                 as: 'commentInfo',
                 pipeline: [
@@ -42,27 +45,14 @@ module.exports = async (req, res) => {
             },
         },
         {
-            $lookup: {
-                from: 'article',
-                localField: 'commentInfo.article',
-                foreignField: '_id',
-                as: 'articleInfo',
-                pipeline: [
-                    {
-                        $project: {
-                            title: true,
-                        },
-                    },
-                ],
-            },
-        },
-        {
-            $unwind: {
-                path: '$articleInfo',
+            $sort: {
+                'commentInfo.likeCount': -1,
             },
         },
     ])
-    d = await criticModel.aggregate([{ $match: { _id: ObjectId(criticId) } }])
 
-    res.json({ message: 'success', critic: d })
+    res.json({
+        message: 'success',
+        doc: d,
+    })
 }
