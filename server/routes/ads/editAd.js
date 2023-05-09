@@ -37,7 +37,7 @@ module.exports = async (req, res) => {
     if (priority) data.priority = priority
     if (popup) data.popup = popup === 'true'
     if (imageX || imageY || imageSq) {
-        const images = data.image || {}
+        const images = data?.image || {}
         if (imageX) images.rectX = imageX.data
         if (imageY) images.rectY = imageY.data
         if (imageSq) images.square = imageSq.data
@@ -64,7 +64,7 @@ module.exports = async (req, res) => {
         })
     }
 
-    await adsModel.updateOne({ _id }, data, (e, d) => {
+    data.save((e, d) => {
         if (d === null)
             return res.status(401).json({ error: 'No such ad exists.' })
 
