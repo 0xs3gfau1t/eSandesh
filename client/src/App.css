@@ -46,11 +46,18 @@ button {
     background: #03552f;
 }
 .alert {
-    @apply flex fixed md:w-1/4 min-w-fit z-[100] rounded border px-4 py-2 text-center opacity-95 drop-shadow-lg text-white;
-    top: 6%;
-    left: 50%;
-    transform: translateX(-50%);
-    animation: alertSlide 0.2s ease-out;
+    @apply flex fixed md:w-1/4 min-w-fit z-[100] rounded-md border px-4 py-2 text-center opacity-95 drop-shadow-lg text-white items-center;
+    bottom: 0.5rem;
+    animation: alertSlide 0.2s forwards;
+}
+
+@keyframes alertSlide {
+    0% {
+        right: -25%;
+    }
+    100% {
+        right: 0%;
+    }
 }
 
 .dash-list li {
