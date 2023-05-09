@@ -28,7 +28,7 @@ module.exports = async (req, res) => {
         popup = false,
     } = req.body
 
-    const { imageX, imageY, imageSq, audio } = req.files
+    const { imageX, imageY, imageSq, audio } = req.files || {}
 
     try {
         const categoryArray = category

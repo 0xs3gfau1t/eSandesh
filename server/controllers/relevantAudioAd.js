@@ -153,20 +153,16 @@ async function getRelevantAudioAd(history) {
         { $replaceRoot: { newRoot: '$result' } },
     ])
 
-    console.log('Non filtered Ads: ', selectedAd)
-    let totalAvailableAds = 0
     const allocatedAds = selectedAd
         .map(ad => {
             const maxAllocated = Math.round(categoryStrength[ad._id] * AD_LIMIT)
-            console.log('Max allocated for ', ad._id, maxAllocated)
             const sliced = ad.final.slice(0, maxAllocated)
-            console.log('Sliced: ', sliced)
-            totalAvailableAds += ad.final.length
             return sliced
         })
         .flat()
     let freeSpace = AD_LIMIT - allocatedAds.length
-    while (freeSpace) {
+    
+    while (freeSpace && !allocatedAds.length && selectedAd.length){
         selectedAd.forEach(ad => {
             const lastElement = ad.final.pop()
             if (lastElement !== undefined && freeSpace) {
@@ -175,7 +171,6 @@ async function getRelevantAudioAd(history) {
             }
         })
     }
-    console.log('Filtered ads: ', allocatedAds)
 
     return {
         begin: allocatedAds.at(0)?._id || 'ffffffffffffffffffffffff',

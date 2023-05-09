@@ -8,7 +8,7 @@ const updateHistory = async ({ req, res }) => {
 
     if (req.session) {
         await userModel.updateOne(
-            { id: req.session.user.id },
+            { _id: req.session.user.id },
             { history: req.cookies.user.history }
         )
     }
