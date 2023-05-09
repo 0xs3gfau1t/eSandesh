@@ -3,49 +3,48 @@ import axios from 'axios'
 
 export const dltComments = createAsyncThunk(
     'news/dltComments',
-    async ({ id }, { dispatch }) => {
+    async ({ id, path }, { dispatch }) => {
         const response = await axios
             .delete('/api/comment', {
                 withCredentials: true,
                 data: { id },
             })
-            .then(res => {
-                console.log(res.data)
-                return res.data
-            })
-            .catch(err => {
-                console.error(err)
-            })
+            .then(res => res.data)
+            .catch(console.error)
 
         if (!response) return { success: false }
-
-        return { success: true, data: { id } }
+        return { success: true, data: { id, path } }
     }
 )
 
 export const addComments = createAsyncThunk(
     'news/addComments',
-    async (comment, { dispatch }) => {
+    async (
+        { articleId, content, parentComment, path, currentUser },
+        { dispatch }
+    ) => {
         const response = await axios
-            .post('/api/comment', comment, {
-                withCredentials: true,
-            })
-            .then(res => {
-                return res.data
-            })
-            .catch(err => {
-                console.error(err)
-            })
+            .post(
+                '/api/comment',
+                { articleId, content, parentComment },
+                {
+                    withCredentials: true,
+                }
+            )
+            .then(res => res.data)
+            .catch(console.error)
 
         if (!response) return { success: false }
-
-        return { success: true }
+        return {
+            success: true,
+            data: { newComment: response.comment, path, currentUser },
+        }
     }
 )
 
 export const likeComment = createAsyncThunk(
     'news/addLikes',
-    async ({ id }, { dispatch }) => {
+    async ({ id, path }, { dispatch }) => {
         const response = await axios
             .post(
                 '/api/comment/like',
@@ -54,59 +53,33 @@ export const likeComment = createAsyncThunk(
                     withCredentials: true,
                 }
             )
-            .then(res => {
-                return res.data
-            })
-            .catch(err => {
-                console.error(err)
-            })
+            .then(res => res.data)
+            .catch(console.error)
 
         if (!response) return { success: false }
-
         return {
             success: true,
-            data: { id, liked: response.newStatus == 'Liked' },
+            data: { path, liked: response.newStatus == 'Liked' },
         }
     }
 )
 
 export const editComments = createAsyncThunk(
     'news/editComments',
-    async (comment, { dispatch }) => {
+    async ({ id, content, path }, { dispatch }) => {
         const response = await axios
-            .patch('/api/comment', comment, {
-                withCredentials: true,
-            })
-            .then(res => {
-                return res.data
-            })
-            .catch(err => {
-                console.error(err)
-            })
+            .patch(
+                '/api/comment',
+                { id, content },
+                {
+                    withCredentials: true,
+                }
+            )
+            .then(res => res.data)
+            .catch(console.error)
 
         if (!response) return { success: false }
-
-        return { success: true }
-    }
-)
-
-export const addSubComments = createAsyncThunk(
-    'news/addSubComments',
-    async (comment, { dispatch }) => {
-        const response = await axios
-            .post('/api/comment', comment, {
-                withCredentials: true,
-            })
-            .then(res => {
-                return res.data
-            })
-            .catch(err => {
-                console.error(err)
-            })
-
-        if (!response) return { success: false }
-
-        return { success: true }
+        return { success: true, data: { path, content } }
     }
 )
 
@@ -120,13 +93,9 @@ export const listCommentsByArticle = createAsyncThunk(
                     withCredentials: true,
                 }
             )
-            .then(res => {
-                console.log(res.data)
-                return res.data
-            })
-            .catch(err => {
-                console.error(err)
-            })
+            .then(res => res.data)
+            .catch(console.error)
+
         if (!response) return { success: false }
         return { success: true, data: response, page: page }
     }
@@ -135,9 +104,6 @@ export const listCommentsByArticle = createAsyncThunk(
 export const listCommentsByUser = createAsyncThunk(
     'news/listCommentsByUser',
     async ({ page, items, userId }, { dispatch }) => {
-        console.log(
-            `/api/comment?page=${articleId}&items=${page}&userId=${items}`
-        )
         const response = await axios
             .get(
                 `/api/comment?page=${articleId}&items=${page}&userId=${items}`,
@@ -145,13 +111,9 @@ export const listCommentsByUser = createAsyncThunk(
                     withCredentials: true,
                 }
             )
-            .then(res => {
-                console.log(res.data)
-                return res.data
-            })
-            .catch(err => {
-                console.error(err)
-            })
+            .then(res => res.data)
+            .catch(console.error)
+
         if (!response) return { success: false }
         return { success: true, data: response, page: page }
     }

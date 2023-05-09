@@ -95,7 +95,7 @@ module.exports = async (req, res) => {
 
     // Prepare match query for imageType filtering
     // If no imageType specified, just filter those ads in which image field exists
-    if (['rextX', 'rectY', 'square'].includes(imageType))
+    if (['rectX', 'rectY', 'square'].includes(imageType))
         imageType = 'image.' + imageType
     matchQuery[imageType] = { $exists: true }
 
