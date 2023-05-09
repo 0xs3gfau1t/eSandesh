@@ -18,7 +18,7 @@ module.exports = (req, res) => {
         roleFilter,
         { _id: true, name: true, email: true, roles: true },
         (e, d) => {
-            console.log(d, e)
+            // console.log(d, e)
             if (e) res.status(500).json({ message: 'Something went wrong' })
             res.json({ message: 'success', data: d })
         }
