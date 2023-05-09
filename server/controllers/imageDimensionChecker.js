@@ -7,8 +7,8 @@ module.exports = image => {
         height = image.readUInt32BE(20)
     } else if (imageTypeHeader === '47494638') {
         // GIF image
-        width = image.readUInt16BE(6)
-        height = image.readUInt16BE(8)
+        width = image.readUInt16LE(6)
+        height = image.readUInt16LE(8)
     } else if (
         imageTypeHeader === 'ffd8ffe0' ||
         imageTypeHeader === 'ffd8ffe1'
@@ -31,6 +31,6 @@ module.exports = image => {
             i += 2
         }
     }
-    console.log("Width: ", width, "Height: ", height)
-    return {width, height}
+    console.log('Width: ', width, 'Height: ', height)
+    return { width, height }
 }
