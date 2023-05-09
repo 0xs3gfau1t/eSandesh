@@ -1,19 +1,22 @@
 module.exports = image => {
     const imageTypeHeader = image.toString('hex', 0, 4)
-    let width, height
+    let width, height, type
     if (imageTypeHeader === '89504e47') {
         // PNG image
         width = image.readUInt32BE(16)
         height = image.readUInt32BE(20)
+        type = 'image/png'
     } else if (imageTypeHeader === '47494638') {
         // GIF image
         width = image.readUInt16LE(6)
         height = image.readUInt16LE(8)
+        type = 'image/gif'
     } else if (
         imageTypeHeader === 'ffd8ffe0' ||
         imageTypeHeader === 'ffd8ffe1'
     ) {
         // JPEG image
+        type = 'image/jpeg'
         let i = 4
         while (i < image.length) {
             const segmentLength = image.readUInt16BE(i)
@@ -32,5 +35,5 @@ module.exports = image => {
         }
     }
     console.log('Width: ', width, 'Height: ', height)
-    return { width, height }
+    return { width, height, type }
 }

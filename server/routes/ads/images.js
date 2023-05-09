@@ -1,5 +1,6 @@
 const express = require('express')
 const adModel = require('@/model/ads')
+const imageDimensionChecker = require('@/controllers/imageDimensionChecker')
 
 /**
  * @param {express.Request} req
@@ -8,8 +9,12 @@ const adModel = require('@/model/ads')
  */
 
 module.exports = async (req, res) => {
-    adModel.findOne({ _id: req.query.id }, { image: 1 }, (err, data) => {
-        if (err) res.status(404)
-        res.send(data.image)
+    const { id, imageType } = req.query
+    adModel.findOne({ _id: id }, { image: 1 }, (err, data) => {
+        if (err) return res.status(404)
+        if (!data) return res.status(404)
+        const { type } = imageDimensionChecker(data.image[imageType])
+        res.setHeader('Content-Type', type)
+        res.send(data.image[imageType])
     })
 }
