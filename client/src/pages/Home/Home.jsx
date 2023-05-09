@@ -1,12 +1,17 @@
-import React from 'react'
-// import { Link } from "react-router-dom";
-import { useSelector } from 'react-redux'
+import { useEffect } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
 import { Outlet } from 'react-router-dom'
 
 import { Footer, Header, LeftSideBar, RightSideBar } from '../../components'
+import { getRelAds } from '../../redux/actions/ads'
 
 export default function Home({ session }) {
     const focus = useSelector(state => state.misc.focus)
+    const dispatch = useDispatch()
+
+    useEffect(() => {
+        dispatch(getRelAds({ limit: 4, type: 'rectX' }))
+    }, [])
 
     return (
         <div className="flex flex-col h-screen">

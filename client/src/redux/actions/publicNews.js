@@ -57,6 +57,7 @@ export const getRecentNews = createAsyncThunk(
                 console.error(err)
             })
         dispatch(listNewsCat({ page: 0, cat: 'hot', items: 7 }))
+
         if (!response) return { success: false }
         return { success: true, data: response }
     }
