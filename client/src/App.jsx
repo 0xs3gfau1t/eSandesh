@@ -20,6 +20,7 @@ import {
     UserProfile,
     Polls,
     ArchiveNews,
+    SearchPage,
     NotFound,
 } from './pages'
 import {
@@ -152,6 +153,7 @@ function App() {
                         element={<SingleNews />}
                     />
                     <Route path="/category/:cat" element={<Category />} />
+                    <Route path="search" element={<SearchPage />} />
                 </Route>
                 <Route path="*" element={<NotFound />} />
             </Routes>
