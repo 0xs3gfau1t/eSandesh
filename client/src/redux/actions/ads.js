@@ -84,3 +84,20 @@ export const deleteAd = createAsyncThunk('ads/deleteAd', async data => {
         )
         .finally(res => res.data)
 })
+
+export const getRelAds = createAsyncThunk(
+    'ads/getRelAds',
+    async ({ limit, type }, { dispatch }) => {
+        const response = await axios
+            .get(`/api/ads/relevant?limit=${limit}&imageType=${type}`)
+            .then(res => {
+                return res.data
+            })
+            .catch(err => {
+                console.error(err)
+            })
+
+        if (!response) return { success: false }
+        return { size: type, data: response }
+    }
+)
