@@ -168,7 +168,7 @@ module.exports = async (req, res) => {
         {
             $project: {
                 final: {
-                    $slice: ['$final', 10],
+                    $slice: ['$final', Number(limit)],
                 },
             },
         },
