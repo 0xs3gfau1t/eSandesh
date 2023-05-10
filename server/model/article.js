@@ -26,6 +26,7 @@ const articleSchema = mongoose.Schema(
         slug: String,
         summarizedContent: { type: String },
         audio: { type: Buffer },
+        archived: { type: Boolean },
     },
     { timestamps: true }
 )
