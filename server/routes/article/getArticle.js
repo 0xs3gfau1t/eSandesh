@@ -28,6 +28,7 @@ const getArticle = async (req, res) => {
                     publishedAt: true,
                     title: true,
                     createdBy: true,
+                    audio: { $ne: [{ $type: '$audio' }, 'missing'] },
                 },
             },
             {
@@ -52,6 +53,7 @@ const getArticle = async (req, res) => {
         const article = await Cache(req.originalUrl, getArticle, {
             EX: 24 * 60 * 60,
         })
+        console.log(article)
 
         if (!article || article?.length == 0)
             return res.status(400).json({ message: 'Article not found.' })
@@ -65,6 +67,7 @@ const getArticle = async (req, res) => {
         if (article[0].audio) audioStreams.push(article[0]._id)
         if (end) audioStreams.push(end)
         const data = JSON.stringify(audioStreams)
+        console.log(data)
 
         // Encrypt the data as key
         var audioKey
