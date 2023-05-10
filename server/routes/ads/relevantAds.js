@@ -65,14 +65,10 @@ function calculateCategoryStrength(history) {
         0
     )
 
-    let maxStrength = 0
-
-    Object.entries(categoryStrength).forEach(val => {
-        categoryStrength[val[0]] = val[1] / totalStrength
-        if (maxStrength < val[1] / totalStrength)
-            maxStrength = val[1] / totalStrength
-    })
-    return { categoryStrength, maxStrength }
+    Object.entries(categoryStrength).forEach(
+        val => (categoryStrength[val[0]] = val[1] / totalStrength)
+    )
+    return categoryStrength
 }
 
 async function relevantAds(req, res) {
@@ -81,7 +77,7 @@ async function relevantAds(req, res) {
 
     const history = req.cookies.user.history
 
-    const { categoryStrength, maxStrength } = calculateCategoryStrength(history)
+    const categoryStrength = calculateCategoryStrength(history)
 
     const matchQuery = {}
 
@@ -99,6 +95,17 @@ async function relevantAds(req, res) {
         imageType = 'image.' + imageType
     matchQuery[imageType] = { $exists: true }
 
+    //
+    // This is used to match filter categories available in history
+    // and of ads
+    //
+    const aggregationMatchQuery = req.categoryStrength
+        ? {}
+        : {
+              _id: {
+                  $in: Object.keys(categoryStrength),
+              },
+          }
     const categoryAds = await adsModel.aggregate([
         {
             $match: matchQuery,
@@ -140,11 +147,7 @@ async function relevantAds(req, res) {
             },
         },
         {
-            $match: {
-                _id: {
-                    $in: Object.keys(categoryStrength),
-                },
-            },
+            $match: aggregationMatchQuery,
         },
         {
             $group: {
@@ -243,6 +246,7 @@ async function relevantAds(req, res) {
         Object.keys(req.cookies.user.history).length > 0
     ) {
         req.cookies.user.history = {}
+        req.categoryStrength = categoryStrength
         relevantAds(req, res)
     } else
         res.json({
