@@ -38,7 +38,6 @@ const strength = {
 function calculateCategoryStrength(history) {
     const categoryStrength = {}
 
-    console.log('History: ', history)
     if (history instanceof Map) history = Object.fromEntries(history)
 
     Object.keys(history).forEach(category => {
@@ -61,7 +60,6 @@ function calculateCategoryStrength(history) {
     })
     */
 
-    console.log('Strength: ', categoryStrength)
     const totalStrength = Object.values(categoryStrength).reduce(
         (a, v) => a + v,
         0
@@ -77,7 +75,7 @@ function calculateCategoryStrength(history) {
     return { categoryStrength, maxStrength }
 }
 
-module.exports = async (req, res) => {
+async function relevantAds(req, res) {
     const { page = 0, limit = 10 } = req.query
     let { imageType = 'image' } = req.query
 
@@ -139,6 +137,13 @@ module.exports = async (req, res) => {
         {
             $unwind: {
                 path: '$final',
+            },
+        },
+        {
+            $match: {
+                _id: {
+                    $in: Object.keys(categoryStrength),
+                },
             },
         },
         {
@@ -205,7 +210,7 @@ module.exports = async (req, res) => {
     //If requested amount of ads are not generated, loop over queried ads then push ads in incremental order
     //
     let adIndex = 0
-    while (freeSpace > 0) {
+    while (freeSpace > 0 && categoryAds.length) {
         categoryAds.some(cat => {
             if (freeSpace <= 0) return true
             //
@@ -228,10 +233,23 @@ module.exports = async (req, res) => {
         })
     }
 
-    res.json({
-        message: 'success',
-        ads: finalCategoryAds,
-    })
+    //
+    // If no matching ads are available
+    // clear history recursively call this function
+    // and forward response from there
+    //
+    if (
+        categoryAds.length <= 0 &&
+        Object.keys(req.cookies.user.history).length > 0
+    ) {
+        req.cookies.user.history = {}
+        relevantAds(req, res)
+    } else
+        res.json({
+            message: 'success',
+            ads: finalCategoryAds,
+        })
 }
 
+module.exports = relevantAds
 module.exports.calculateCategoryStrength = calculateCategoryStrength

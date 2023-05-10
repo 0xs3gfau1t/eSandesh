@@ -4,6 +4,12 @@ const calculateAdPrice = require('@/controllers/adPriceController')
 const convertToRaw = require('@/controllers/rawConverter.js')
 const imageChecker = require('@/controllers/imageDimensionChecker')
 
+const xHSize = 720
+const yHSize = 110
+const xVSize = yHSize
+const yVSize = xHSize
+const sqSize = 250
+
 /**
  * @param {express.Request} req
  * @param {express.Response} res
@@ -65,21 +71,39 @@ module.exports = async (req, res) => {
             const images = {}
             if (imageX) {
                 const imageDetail = imageChecker(imageX.data)
-                if(imageDetail.width === 720 && imageDetail.height === 110)
+                if (
+                    imageDetail.width === xHSize &&
+                    imageDetail.height === yHSize
+                )
                     images.rectX = imageX.data
-                else throw Error("Invalid Image Size. 720x110 horizontal images")
+                else
+                    throw Error(
+                        `Invalid Image Size. ${xHSize}x${yHSize} for horizontal images`
+                    )
             }
             if (imageY) {
                 const imageDetail = imageChecker(imageY.data)
-                if(imageDetail.width === 110 && imageDetail.height === 720)
+                if (
+                    imageDetail.width === xVSize &&
+                    imageDetail.height === yVSize
+                )
                     images.rectY = imageY.data
-                else throw Error("Invalid Image Size. 110x720 for vertical images")
+                else
+                    throw Error(
+                        `Invalid Image Size. ${xVSize}x${yVSize} for horizontal images`
+                    )
             }
             if (imageSq) {
-                const imageDetail = imageChecker(imageY.data)
-                if(imageDetail.width === 500 && imageDetail.height === 500)
+                const imageDetail = imageChecker(imageSq.data)
+                if (
+                    imageDetail.width === sqSize &&
+                    imageDetail.height === sqSize
+                )
                     images.square = imageSq.data
-                else throw Error("Invalid Image Size. 500x500 for square images")
+                else
+                    throw Error(
+                        `Invalid Image Size. ${sqSize}x${sqSize} for horizontal images`
+                    )
             }
             ad.image = images
         }
@@ -88,6 +112,9 @@ module.exports = async (req, res) => {
         res.json({ message: 'success' })
     } catch (e) {
         console.error(e)
-        res.status(400).json({ error: 'Something went wrong.', errMsg: e.message})
+        res.status(400).json({
+            error: 'Something went wrong.',
+            errMsg: e.message,
+        })
     }
 }
