@@ -4,7 +4,7 @@ import PreferredNews from './PreferredNews'
 import QuickUpdates from './QuickUpdates'
 import { SeeAllBtn, SqAds } from '../common'
 
-function RightSideBar() {
+function RightSideBar({ ads }) {
     return (
         <>
             <div className="flex justify-between items-baseline my-2">
@@ -23,8 +23,9 @@ function RightSideBar() {
                 <SeeAllBtn url={'/category/preference'} />
             </div>
             <PreferredNews />
-            <div className="">
-                <SqAds />
+            <div className="flex flex-col gap-4 my-2">
+                <SqAds ad={ads ? (ads[1] ? ads[1] : false) : false} />
+                <SqAds ad={ads ? (ads[2] ? ads[2] : false) : false} />
             </div>
             {/* end of a section */}
         </>

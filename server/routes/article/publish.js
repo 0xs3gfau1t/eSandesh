@@ -1,5 +1,6 @@
 const express = require('express')
 const articleModel = require('../../model/article')
+const sendNewsLetter = require('@/controllers/sendNewsLetter')
 
 /**
  * @param {express.Request} req
@@ -11,7 +12,11 @@ const Publish = async (req, res) => {
     try {
         const now = new Date()
         await articleModel.updateOne({ _id: id }, { publishedAt: now })
-        return res.json({ success: true })
+        if (req.body.noResponse !== true) res.json({ success: true })
+
+        // Now notify subscribers
+        const mailStatus = await sendNewsLetter(id)
+        console.log({ mailStatus })
     } catch (err) {
         console.error(err)
         return res.status(500).json({ error: 'Something went wrong.' })

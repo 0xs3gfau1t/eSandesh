@@ -4,8 +4,19 @@ import { BsFillPlusSquareFill } from 'react-icons/bs'
 
 import { FormText } from '../../components/common'
 import { Popup } from '../../components/common'
-import { createAd, editAd, getAd, listAds } from '../../redux/actions/ads'
-import { AiFillDelete, AiFillEdit } from 'react-icons/ai'
+import {
+    createAd,
+    editAd,
+    getAd,
+    listAds,
+    deleteAd,
+} from '../../redux/actions/ads'
+import {
+    AiFillDelete,
+    AiFillEdit,
+    AiOutlineArrowLeft,
+    AiOutlineArrowRight,
+} from 'react-icons/ai'
 
 const POPUP_STATE = Object.freeze({
     ADD: 'Add new Ad',
@@ -33,10 +44,11 @@ export default function AdsMan() {
     const [prop, setProp] = useState(initState)
     const [show, setShow] = useState(POPUP_STATE.INACTIVE)
     const dispatch = useDispatch()
+    const [page, setPage] = useState(0)
 
     useEffect(() => {
-        dispatch(listAds())
-    }, [])
+        dispatch(listAds({ page }))
+    }, [page])
 
     const handleChange = e => {
         if (['imageX', 'imageY', 'imageSq', 'audio'].includes(e.target.name))
@@ -54,7 +66,7 @@ export default function AdsMan() {
                 await editAd(prop)
                 break
         }
-        dispatch(listAds(prop))
+        dispatch(listAds({ page }))
         setProp(initState)
         setShow(POPUP_STATE.INACTIVE)
     }
@@ -175,6 +187,7 @@ export default function AdsMan() {
                                             <tr
                                                 key={index}
                                                 className="border-b"
+                                                data-id={ad._id}
                                             >
                                                 <td>{parseInt(index) + 1}</td>
                                                 <td>{ad.name}</td>
@@ -194,14 +207,17 @@ export default function AdsMan() {
                                                     ).toLocaleDateString()}
                                                 </td>
                                                 <td>
-                                                    <div className="flex gap-x-3">
+                                                    <div
+                                                        className="flex gap-x-3"
+                                                        data-id={ad._id}
+                                                    >
                                                         <AiFillEdit
                                                             className="hover:cursor-pointer hover:scale-125 duration-200"
                                                             size={'1.4em'}
                                                             onClick={async e => {
                                                                 const adData =
                                                                     await getAd(
-                                                                        e.target.getAttribute(
+                                                                        e.target.parentNode.getAttribute(
                                                                             'data-id'
                                                                         )
                                                                     )
@@ -234,14 +250,21 @@ export default function AdsMan() {
                                                                     POPUP_STATE.EDIT
                                                                 )
                                                             }}
-                                                            data-id={ad._id}
                                                         />
                                                         <AiFillDelete
                                                             className="hover:cursor-pointer hover:scale-125 duration-200"
                                                             size={'1.4em'}
                                                             color={'#aa0000'}
-                                                            onClick={() => {
-                                                                //dispatch(deleteAd())
+                                                            onClick={e => {
+                                                                const id =
+                                                                    e.target.parentNode.parentNode.getAttribute(
+                                                                        'data-id'
+                                                                    )
+                                                                dispatch(
+                                                                    deleteAd(
+                                                                        {id}
+                                                                    )
+                                                                )
                                                             }}
                                                         />
                                                     </div>
@@ -251,6 +274,17 @@ export default function AdsMan() {
                                     })}
                             </tbody>
                         </table>
+                    </div>
+                    <div className="flex justify-center space-x-32">
+                        <AiOutlineArrowLeft
+                            className="hover:cursor-pointer hover:scale-125"
+                            onClick={() => setPage(page - 1)}
+                        />
+                        <p>{'Page ' + page}</p>
+                        <AiOutlineArrowRight
+                            className="hover:cursor-pointer hover:scale-125"
+                            onClick={() => setPage(page + 1)}
+                        />
                     </div>
                 </div>
             </div>

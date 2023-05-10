@@ -13,7 +13,11 @@ const initialState = {
 const newsSlice = createSlice({
     name: 'news',
     initialState,
-    reducers: {},
+    reducers: {
+        delSingleNews: (state, { payload }) => {
+            if (state.singleNews) delete state.singleNews
+        },
+    },
 
     extraReducers: builder => {
         builder.addCase(listNews.fulfilled, (state, { payload }) => {
@@ -41,3 +45,4 @@ const newsSlice = createSlice({
 })
 
 export default newsSlice.reducer
+export const { delSingleNews } = newsSlice.actions

@@ -16,7 +16,7 @@ module.exports = (req, res) => {
         limit = 10,
         popup,
         filterExpiry = false,
-    } = req.body
+    } = req.query
 
     const filter = {}
 
@@ -32,7 +32,7 @@ module.exports = (req, res) => {
         }
     console.log(filter)
     adsModel
-        .find(filter, {audio: 0})
+        .find(filter, {audio: 0, image: 0})
         .skip(page * limit)
         .limit(limit)
         .sort({ priority })

@@ -7,10 +7,10 @@ const express = require('express')
 */
 
 module.exports = (req, res) => {
-    const { commentId } = req.body
+    const { criticId } = req.body
 
     critics
-        .updateOne({ commentId }, { publishedAt: new Date().toISOString() })
+        .updateOne({ _id: criticId }, { publishedAt: new Date().toISOString() })
         .then(r => {
             res.json({ message: 'success' })
         })

@@ -6,9 +6,8 @@ COPY package.json .
 COPY package-lock.json .
 
 RUN npm install
+RUN apk add --no-cache ffmpeg
 
 COPY . .
-
-ENV HOST 0.0.0.0
 
 CMD ["npm", "run", "start"]

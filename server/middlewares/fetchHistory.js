@@ -19,7 +19,7 @@ const fetchHistory = async (req, res, next) => {
         if (!req.cookies?.user) {
             // if no cookie
             const userMod = await userModel.findOne(
-                { id: req.session.user.id },
+                { _id: req.session.user.id },
                 { history: true }
             )
 
