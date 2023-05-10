@@ -18,6 +18,19 @@ const getArticle = async (req, res) => {
         await articleModel.aggregate([
             { $match: { year, month, slug } },
             {
+                $project: {
+                    year: true,
+                    month: true,
+                    slug: true,
+                    _id: true,
+                    content: true,
+                    category: true,
+                    publishedAt: true,
+                    title: true,
+                    createdBy: true,
+                },
+            },
+            {
                 $lookup: {
                     from: 'users',
                     let: { id: '$createdBy' },
