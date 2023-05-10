@@ -2,6 +2,13 @@ const express = require('express')
 const adsModel = require('../../model/ads')
 const calculateAdPrice = require('@/controllers/adPriceController')
 const convertToRaw = require('@/controllers/rawConverter.js')
+const imageChecker = require('@/controllers/imageDimensionChecker')
+
+const xHSize = 720
+const yHSize = 110
+const xVSize = yHSize
+const yVSize = xHSize
+const sqSize = 250
 
 /**
  * @param {express.Request} req
@@ -27,12 +34,12 @@ module.exports = async (req, res) => {
         popup = false,
     } = req.body
 
-    const { imageX, imageY, imageSq, audio } = req.files
+    const { imageX, imageY, imageSq, audio } = req.files || {}
 
     try {
         const categoryArray = category
             .split(',')
-            .map(i => i.trim())
+            .map(i => i.trim().toUpperCase())
             .filter(i => i !== '')
 
         const expiry = new Date(Date.now() + expiryDay * 24 * 60 * 60 * 1000)
@@ -62,9 +69,42 @@ module.exports = async (req, res) => {
         // Now store available images
         if (imageY || imageX || imageSq) {
             const images = {}
-            if (imageX) images.rectX = imageX.data
-            if (imageY) images.rectY = imageY.data
-            if (imageSq) images.square = imageSq.data
+            if (imageX) {
+                const imageDetail = imageChecker(imageX.data)
+                if (
+                    imageDetail.width === xHSize &&
+                    imageDetail.height === yHSize
+                )
+                    images.rectX = imageX.data
+                else
+                    throw Error(
+                        `Invalid Image Size. ${xHSize}x${yHSize} for horizontal images`
+                    )
+            }
+            if (imageY) {
+                const imageDetail = imageChecker(imageY.data)
+                if (
+                    imageDetail.width === xVSize &&
+                    imageDetail.height === yVSize
+                )
+                    images.rectY = imageY.data
+                else
+                    throw Error(
+                        `Invalid Image Size. ${xVSize}x${yVSize} for horizontal images`
+                    )
+            }
+            if (imageSq) {
+                const imageDetail = imageChecker(imageSq.data)
+                if (
+                    imageDetail.width === sqSize &&
+                    imageDetail.height === sqSize
+                )
+                    images.square = imageSq.data
+                else
+                    throw Error(
+                        `Invalid Image Size. ${sqSize}x${sqSize} for horizontal images`
+                    )
+            }
             ad.image = images
         }
 
@@ -72,6 +112,9 @@ module.exports = async (req, res) => {
         res.json({ message: 'success' })
     } catch (e) {
         console.error(e)
-        res.status(500).json({ error: 'Something went wrong.' })
+        res.status(400).json({
+            error: 'Something went wrong.',
+            errMsg: e.message,
+        })
     }
 }

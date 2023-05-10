@@ -1,4 +1,5 @@
 from flask import Flask, jsonify, request
+import os
 
 from summarize import get_summary, load_vector
 
@@ -25,4 +26,4 @@ def home():
 
 
 if __name__ == "__main__":
-    app.run()
+    app.run(host=os.environ.get('HOST') or '127.0.0.1', port=os.environ.get('PORT') or 5000)

@@ -1,27 +1,46 @@
 import { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { useParams } from 'react-router-dom'
-import { BiBookReader, BiSave } from 'react-icons/bi'
+import { BiBookReader } from 'react-icons/bi'
+import axios from 'axios'
 
 import {
     SocialShare,
     SqAds,
-    RectAds,
+    RectXAd,
+    RectYAd,
     Popup,
     LikeSaveShare,
 } from '../../components/common'
 import { getSingleNews } from '../../redux/actions/publicNews'
 import { setFocus } from '../../redux/reducers/misc'
 import Comments from '../../components/Comments'
+import { getRelAds } from '../../redux/actions/ads'
+import { delSingleNews } from '../../redux/reducers/news'
 
 const SingleNews = () => {
     const params = useParams()
     const news = useSelector(state => state.news.singleNews)
     const focus = useSelector(state => state.misc.focus)
-    const [show, setShow] = useState(true)
+    const adsX = useSelector(state => state.ads.rectX)
+    const adsY = useSelector(state => state.ads.rectY)
+
+    const [showPopup, setPopup] = useState(true)
+    const [showSummary, setSummary] = useState(false)
+    const [summary, upSummary] = useState('Loading..')
     const [fontSize, setFontSize] = useState(1)
     const dispatch = useDispatch()
 
+    const getSummary = async () => {
+        const sum = await axios
+            .get(`/api/article/summary?_id=${news._id}`)
+            .then(res => {
+                return res.data.summary
+            })
+
+        upSummary(sum)
+        setSummary(true)
+    }
     const dateOpt = {
         weekday: 'short',
         year: 'numeric',
@@ -30,21 +49,35 @@ const SingleNews = () => {
     }
 
     useEffect(() => {
-        if (news?.slug != params.slug)
+        if (news?.slug != params.slug) {
+            dispatch(delSingleNews())
             dispatch(getSingleNews({ params: params, noAudio: false }))
+            dispatch(getRelAds({ limit: 4, type: 'rectY' }))
+        }
     }, [params])
     return (
-        <div className="flex justify-between container gap-4">
-            {news && news.category[0] == 'STORY' && show && (
-                <Popup setShow={setShow} title={'Ad'}>
+        <div className="flex justify-between container gap-2">
+            {news && news.category.includes('STORY') && showPopup && (
+                <Popup setShow={setPopup} title={'Ad'}>
                     <div className="flex flex-row w-full">
                         <SqAds />
-                        <button onClick={e => setShow(false)}>X</button>
+                        <button onClick={e => setPopup(false)}>X</button>
                     </div>
                 </Popup>
             )}
-            <div className="news-content ml-4 mb-10 w-full">
-                {focus && <RectAds />}
+            {showSummary && (
+                <Popup
+                    setShow={setSummary}
+                    title={`सारांश: ${news?.title}`}
+                    width={'w-2/4'}
+                >
+                    {summary}
+                </Popup>
+            )}
+            <div className="news-content ml-2 mb-10">
+                {focus && (
+                    <RectXAd ad={adsX ? (adsX[0] ? adsX[0] : false) : false} />
+                )}
 
                 <div className="flex">
                     <h3
@@ -78,16 +111,16 @@ const SingleNews = () => {
 
                 <div className="flex flex-col gap-0">
                     <h1 className="text-xl mt-4 font-bold">
-                        {news ? news.title : ''}
+                        {news ? news.title : 'Loading....'}
                     </h1>
                     <h2 className="ml-4">
                         {news
                             ? new Date(news.publishedAt).toLocaleDateString(
                                   'en-US',
                                   dateOpt
-                              )
+                              ) + ' | '
                             : ''}
-                        &nbsp;| {news ? news.author.name : ''}
+                        {news ? news.author.name : ''}
                     </h2>
                     <SocialShare
                         title={
@@ -96,23 +129,40 @@ const SingleNews = () => {
                         id={news ? news._id : ''}
                     />
                 </div>
-                <div className="my-4 w-min mx-auto">
-                    {news ? (
-                        <audio controls id="audioPlayer" src={news.audio}>
-                            Your browser does not support the audio element.
-                        </audio>
-                    ) : (
-                        <h1 className="w-max">Loading news audio...</h1>
+                <div className="my-4  mx-auto flex justify-center gap-8">
+                    {!news?.category.includes('STORY') && (
+                        <>
+                            {news ? (
+                                <audio
+                                    controls
+                                    id="audioPlayer"
+                                    src={news.audio}
+                                >
+                                    Your browser does not support the audio
+                                    element.
+                                </audio>
+                            ) : (
+                                <h1 className="w-max">Loading news audio...</h1>
+                            )}
+                        </>
                     )}
+                    <span
+                        onClick={getSummary}
+                        className="px-2 py-1 h-min bg-green-700 text-white rounded cursor-pointer"
+                    >
+                        सारांश पढ्नुहोस्
+                    </span>
                 </div>
                 <div
-                    className={`text-${fontSize}xl`}
+                    className={`text-${fontSize}xl mt-4`}
                     dangerouslySetInnerHTML={{
-                        __html: news ? news.content : 'Fetching',
+                        __html: news
+                            ? news.content
+                            : 'Fetching news content...',
                     }}
                 />
-                {/* {focus && <RectAds />} */}
-                <RectAds />
+                {/* {focus && <RectXAd />} */}
+                <RectXAd ad={adsX ? (adsX[3] ? adsX[3] : false) : false} />
                 <div className="w-full flex justify-end">
                     <LikeSaveShare likes={'१.२'} id={news ? news._id : ''} />
                 </div>
@@ -121,10 +171,12 @@ const SingleNews = () => {
             </div>
             {/* right column */}
             {!focus && (
-                <div className="hidden xl:block px-4">
+                <div className="hidden xl:block pl-2">
                     {/* ads go here */}
-                    <SqAds />
-                    <SqAds />
+                    <RectYAd
+                        ad={adsY ? (adsY[0] ? adsY[0] : false) : false}
+                        type={'y'}
+                    />
                 </div>
             )}
         </div>

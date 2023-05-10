@@ -7,6 +7,7 @@ import Category from './Category/Category'
 import Landing from './Home/Landing'
 import UserAuth from './UserAuth'
 import ForgotPassword from './ForgotPassword'
+import SearchPage from './Search'
 import {
     // AdminDash,
     ManageNews,
@@ -42,4 +43,5 @@ export {
     UserProfile,
     ArchiveNews,
     Polls,
+    SearchPage
 }

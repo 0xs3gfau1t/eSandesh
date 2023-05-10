@@ -9,24 +9,50 @@ const criticModel = require('../../model/critics')
 
 //
 // Top critics are those with high likes and subcomments
+// TODO: Personalize top critics
 //
 module.exports = async (req, res) => {
-    const { category, page = 0, limit = 10, timeRange = 1 } = req.query
+    const { page = 0, limit = 10, timeRange = 1 } = req.query
 
-    //
-    // Bholi implement hanchu category wala critics
-    //
-    const timeFilter = new Date(
-        new Date() - timeRange * 30 * 24 * 60 * 60 * 1000
-    ).toISOString()
+    const d = await criticModel.aggregate([
+        {
+            $match: {
+                publishedAt: {
+                    $exists: true,
+                    $gt: new Date(Date.now() - 60000 * 60 * 24 * timeRange),
+                },
+            },
+        },
+        {
+            $lookup: {
+                from: 'comments',
+                localField: '_id',
+                foreignField: '_id',
+                as: 'commentInfo',
+                pipeline: [
+                    {
+                        $project: {
+                            content: true,
+                            article: true,
+                            likeCount: {
+                                $size: '$likes',
+                            },
+                        },
+                    },
+                ],
+            },
+        },
+        {
+            $unwind: {
+                path: '$commentInfo',
+            },
+        },
+        {
+            $sort: {
+                'commentInfo.likeCount': -1,
+            },
+        },
+    ])
 
-    const d = await criticModel
-        .find({
-            createdAt: { $gt: timeFilter },
-        })
-        .sort({ likes: -1 })
-        .skip(page)
-        .limit(limit)
-
-    res.json({ message: 'success', doc: d })
+    res.json({ message: 'success', critics: d })
 }

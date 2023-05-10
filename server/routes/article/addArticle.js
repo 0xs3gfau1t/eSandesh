@@ -1,10 +1,10 @@
-const sendNewsLetter = require('@/controllers/sendNewsLetter')
 const express = require('express')
 const articleModel = require('@/model/article')
 const { JSDOM } = require('jsdom')
 const reciter = require('@/controllers/reciter')
 const generateSummary = require('@/controllers/summaryGenerationController')
 const rawConverter = require('@/controllers/rawConverter')
+const publish = require('@/routes/article/publish')
 
 const socialApis = {
     facebook: require('./socials/facebook'),
@@ -93,9 +93,11 @@ const addArticle = async (req, res) => {
                         data.slug,
                 })
         })
-
-        const mailStatus = await sendNewsLetter({ user, data })
-        console.log({ mailStatus })
+        if (user.roles.isRoot || user.roles.canPublish) {
+            req.body.id = article._id
+            req.body.noResponse = true
+            publish(req, res)
+        }
     } catch (err) {
         console.error(err)
         return res.status(500).json({ error: 'Something went wrong.' })

@@ -38,6 +38,8 @@ const strength = {
 function calculateCategoryStrength(history) {
     const categoryStrength = {}
 
+    if (history instanceof Map) history = Object.fromEntries(history)
+
     Object.keys(history).forEach(category => {
         const catStrength =
             strength.hits * history[category].hits +
@@ -63,23 +65,19 @@ function calculateCategoryStrength(history) {
         0
     )
 
-    let maxStrength = 0
-
-    Object.entries(categoryStrength).forEach(val => {
-        categoryStrength[val[0]] = val[1] / totalStrength
-        if (maxStrength < val[1] / totalStrength)
-            maxStrength = val[1] / totalStrength
-    })
-    return { categoryStrength, maxStrength }
+    Object.entries(categoryStrength).forEach(
+        val => (categoryStrength[val[0]] = val[1] / totalStrength)
+    )
+    return categoryStrength
 }
 
-module.exports = async (req, res) => {
+async function relevantAds(req, res) {
     const { page = 0, limit = 10 } = req.query
     let { imageType = 'image' } = req.query
 
     const history = req.cookies.user.history
 
-    const { categoryStrength, maxStrength } = calculateCategoryStrength(history)
+    const categoryStrength = calculateCategoryStrength(history)
 
     const matchQuery = {}
 
@@ -93,13 +91,30 @@ module.exports = async (req, res) => {
 
     // Prepare match query for imageType filtering
     // If no imageType specified, just filter those ads in which image field exists
-    if (['rextX', 'rectY', 'square'].includes(imageType))
+    if (['rectX', 'rectY', 'square'].includes(imageType))
         imageType = 'image.' + imageType
     matchQuery[imageType] = { $exists: true }
 
+    //
+    // This is used to match filter categories available in history
+    // and of ads
+    //
+    const aggregationMatchQuery = req.categoryStrength
+        ? {}
+        : {
+              _id: {
+                  $in: Object.keys(categoryStrength),
+              },
+          }
     const categoryAds = await adsModel.aggregate([
         {
             $match: matchQuery,
+        },
+        {
+            $project: {
+                audio: 0,
+                image: 0,
+            },
         },
         {
             $sort: {
@@ -116,7 +131,7 @@ module.exports = async (req, res) => {
                     $push: {
                         _id: '$_id',
                         name: '$name',
-                        priority: '$priority',
+                        redirectUrl: '$redirectUrl',
                     },
                 },
             },
@@ -132,13 +147,16 @@ module.exports = async (req, res) => {
             },
         },
         {
+            $match: aggregationMatchQuery,
+        },
+        {
             $group: {
                 _id: '$final._id',
                 final: {
                     $first: {
                         name: '$final.name',
                         category: '$_id',
-                        priority: '$final.priority',
+                        redirectUrl: '$final.redirectUrl',
                     },
                 },
             },
@@ -150,7 +168,7 @@ module.exports = async (req, res) => {
                     $addToSet: {
                         name: '$final.name',
                         _id: '$_id',
-                        priority: '$final.priority',
+                        redirectUrl: '$final.redirectUrl',
                     },
                 },
             },
@@ -158,50 +176,84 @@ module.exports = async (req, res) => {
         {
             $project: {
                 final: {
-                    $slice: ['$final', 10],
+                    $slice: ['$final', Number(limit)],
                 },
             },
         },
     ])
 
-    // Pass through all category
-    // Filter only those category + limit respective numbers
+    //
+    // This variable is used later to cover all unique ads
+    //
+    let maxIndexToWhichAdIsAvailable = -1
 
-    // If limit reaches the first iteration, break
-    // else, loop again to include ads with sliceMax=0
-    // until limit reaches, then break
-    // if availableSpace >= availableItem, include all. Havent distributed according to top priority
-    let filteredAdsNumber = 0
-    const finalCategoryAds = categoryAds.map(ci => {
-        return { _id: ci._id, final: [] }
+    let freeSpace = limit
+    const finalCategoryAds = [] // {}
+    categoryAds.forEach(cat => {
+        let totalNeededAds = Math.round(categoryStrength[cat._id] * limit)
+        let adIndex = 0
+
+        // finalCategoryAds[cat._id] = []
+
+        //
+        // First fill distributed ads for category cat
+        //
+        while (totalNeededAds-- > 0 && freeSpace-- > 0) {
+            // finalCategoryAds[cat._id].push(cat.final[adIndex])
+            finalCategoryAds.push(cat.final[adIndex])
+
+            if (maxIndexToWhichAdIsAvailable < adIndex)
+                maxIndexToWhichAdIsAvailable = adIndex
+
+            adIndex = adIndex >= cat.final.length - 1 ? 0 : adIndex + 1
+        }
     })
-    for (let i = 0; i < 2; i++) {
-        Object.entries(categoryAds).forEach(val => {
-            // Set strength for response
-            finalCategoryAds[val[0]].strength = categoryStrength[val[1]._id]
 
-            // Find max index to slice to
-            let sliceMax = Math.round(categoryStrength[val[1]._id] * limit)
-            if (filteredAdsNumber < limit && i === 1 && sliceMax === 0) {
-                const availableItems = categoryAds[val[0]].final.length
-                if (limit - filteredAdsNumber <= 0) return
-                else if (limit - filteredAdsNumber <= availableItems)
-                    sliceMax = limit - filteredAdsNumber
-                else sliceMax = availableItems
-            }
+    //
+    //If requested amount of ads are not generated, loop over queried ads then push ads in incremental order
+    //
+    let adIndex = 0
+    while (freeSpace > 0 && categoryAds.length) {
+        categoryAds.some(cat => {
+            if (freeSpace <= 0) return true
+            //
+            // If this category ad list elements' size is less then adIndex
+            // then skip this category otherwise indexRangeExceeded error will be thrown
+            //
+            if (cat.final.length <= adIndex) return
 
-            // Slice ads number according to strength
-            finalCategoryAds[val[0]]['final'] = categoryAds[val[0]].final
-                .sort((a, b) => b.priority - a.priority)
-                .slice(0, sliceMax)
-            filteredAdsNumber += finalCategoryAds[val[0]].final.length
+            // finalCategoryAds[cat._id].push(cat.final[adIndex])
+            finalCategoryAds.push(cat.final[adIndex])
+            freeSpace--
+
+            //
+            // Check to see if no any ad list contains greater elements than current adIndex
+            // Unable to check will throw indexRangeExceeded error
+            // And we have still to cover all unique ads instead of repeating
+            //
+            if (adIndex >= maxIndexToWhichAdIsAvailable) adIndex = 0
+            else adIndex++
         })
-        if (limit === filteredAdsNumber) break
     }
-    res.json({
-        message: 'success',
-        ads: categoryAds.map(i => i.final).flat(2),
-    })
+
+    //
+    // If no matching ads are available
+    // clear history recursively call this function
+    // and forward response from there
+    //
+    if (
+        categoryAds.length <= 0 &&
+        Object.keys(req.cookies.user.history).length > 0
+    ) {
+        req.cookies.user.history = {}
+        req.categoryStrength = categoryStrength
+        relevantAds(req, res)
+    } else
+        res.json({
+            message: 'success',
+            ads: finalCategoryAds,
+        })
 }
 
+module.exports = relevantAds
 module.exports.calculateCategoryStrength = calculateCategoryStrength

@@ -33,11 +33,15 @@ export const editAd = async data => {
         })
 }
 
-export const listAds = createAsyncThunk('ads/listAd', async () => {
+export const listAds = createAsyncThunk('ads/listAd', async filters => {
     const response = await axios
-        .get(`/api/ads/list`, {
-            withCredentials: true,
-        })
+        .get(
+            `/api/ads/list`,
+            { params: filters },
+            {
+                withCredentials: true,
+            }
+        )
         .then(res => {
             return res.data
         })
@@ -69,9 +73,31 @@ export const getAd = async id => {
 }
 
 export const deleteAd = createAsyncThunk('ads/deleteAd', async data => {
+    console.log('Deleting: ', data)
     return await axios
-        .delete('/api/ads', data, {
-            withCredentials: true,
-        })
+        .delete(
+            '/api/ads',
+            { data },
+            {
+                withCredentials: true,
+            }
+        )
         .finally(res => res.data)
 })
+
+export const getRelAds = createAsyncThunk(
+    'ads/getRelAds',
+    async ({ limit, type }, { dispatch }) => {
+        const response = await axios
+            .get(`/api/ads/relevant?limit=${limit}&imageType=${type}`)
+            .then(res => {
+                return res.data
+            })
+            .catch(err => {
+                console.error(err)
+            })
+
+        if (!response) return { success: false }
+        return { size: type, data: response }
+    }
+)

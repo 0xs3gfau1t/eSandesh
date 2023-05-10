@@ -1,35 +1,76 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 
-export default function RectAds({ type }) {
+function RectXAd({ ad }) {
     return (
-        <div className="flex items-center justify-center bg-amber-500 gap-4 my-6">
-            <a
-                href={
-                    'https://media.tenor.com/IRcIGzwz7IQAAAAC/money-wallet.gif'
-                }
-                target="_blank"
-            >
-                <img
-                    className="w-24"
-                    src={
-                        'http://kunjanaghimire.com/storage/images/kunjana-hero-2.png'
-                    }
-                />
-            </a>
-            <div className="w-2/3 flex flex-col justify-between h-full">
-                <h3 className="lg:text-xl text-sm font-secondary">
-                    <a
-                        href={
-                            'https://media.tenor.com/IRcIGzwz7IQAAAAC/money-wallet.gif'
-                        }
-                        target="_blank"
-                    >
-                        {type}
+        <div className="my-4">
+            {ad ? (
+                <div className="float w-auto relative">
+                    <span className="absolute bg-rose-500 px-1 text-sm right-4 text-white">
+                        Ad
+                    </span>
+                    <a href={ad.redirectUrl} target="_blank">
+                        <img
+                            src={`/api/ads/images?id=${ad._id}&imageType=rectX`}
+                        />
                     </a>
-                </h3>
-                {/* <p>mostly ads are images/gifs so this is not needed</p> */}
-            </div>
+                </div>
+            ) : (
+                <div className="flex items-center justify-center bg-amber-500 h-20">
+                    <p className="lg:text-xl text-sm font-secondary text-justify">
+                        <a
+                            href={
+                                'https://media.tenor.com/IRcIGzwz7IQAAAAC/money-wallet.gif'
+                            }
+                            target="_blank"
+                        >
+                            Place your ads here, contact us at
+                            advertise@esandesh.com
+                        </a>
+                    </p>
+                </div>
+            )}
         </div>
     )
 }
+
+function RectYAd({ ad }) {
+    return (
+        <div className="my-4 ">
+            {ad ? (
+                <div className="float relative">
+                    <span className="absolute bg-rose-500 px-1 text-sm right-1 text-white">
+                        Ad
+                    </span>
+                    <a href={ad.redirectUrl} target="_blank">
+                        <img
+                            className="h-screen min-w-fit max-w-96"
+                            src={`/api/ads/images?id=${ad._id}&imageType=rectY`}
+                        />
+                    </a>
+                </div>
+            ) : (
+                <div className="flex items-center justify-center bg-amber-500 h-screen">
+                    <p className="lg:text-xl text-sm font-secondary text-justify">
+                        <a
+                            href={
+                                'https://media.tenor.com/IRcIGzwz7IQAAAAC/money-wallet.gif'
+                            }
+                            target="_blank"
+                        >
+                            <div className="flex flex-col px-4 justify-center">
+                                <span>Place</span> <span>your</span>
+                                <span>ads</span>
+                                <span>here.</span>
+                                <span>Contact</span>
+                                <span>Us</span>
+                            </div>
+                        </a>
+                    </p>
+                </div>
+            )}
+        </div>
+    )
+}
+
+export { RectXAd, RectYAd }

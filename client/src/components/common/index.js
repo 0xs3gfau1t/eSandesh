@@ -4,7 +4,7 @@ import PrivateRoute from './PrivateRoute'
 import ArticlePreviewMd from './ArticlePreviewMd'
 import ArticlePreviewSm from './ArticlePreviewSm'
 import SqAds from './SqAds'
-import RectAds from './RectAds'
+import { RectXAd, RectYAd } from './RectAds'
 import LikeSaveShare from './LikeSaveShare'
 import Popup from './Popup'
 import SocialShare from './SocialShare'
@@ -21,7 +21,8 @@ export {
     ArticlePreviewMd,
     ArticlePreviewSm,
     SqAds,
-    RectAds,
+    RectXAd,
+    RectYAd,
     LikeSaveShare,
     Popup,
     SocialShare,

@@ -167,7 +167,9 @@ module.exports = async (req, res) => {
                 audio: 1,
             }
         )
-    res.write(
-        stream.audio.slice(start - offset, start - offset + contentLength)
-    )
+    if (stream?.audio)
+        res.write(
+            stream?.audio?.slice(start - offset, start - offset + contentLength)
+        )
+    else res.status(400)
 }
