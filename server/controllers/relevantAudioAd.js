@@ -4,7 +4,7 @@ const { calculateCategoryStrength } = require('@/routes/ads/relevantAds')
 const AD_LIMIT = 2
 
 async function getRelevantAudioAd(history) {
-    const { categoryStrength } = calculateCategoryStrength(history)
+    const categoryStrength = calculateCategoryStrength(history)
     const selectedAd = await adsModel.aggregate([
         {
             $facet: {
@@ -161,8 +161,8 @@ async function getRelevantAudioAd(history) {
         })
         .flat()
     let freeSpace = AD_LIMIT - allocatedAds.length
-    
-    while (freeSpace && !allocatedAds.length && selectedAd.length){
+
+    while (freeSpace && !allocatedAds.length && selectedAd.length) {
         selectedAd.forEach(ad => {
             const lastElement = ad.final.pop()
             if (lastElement !== undefined && freeSpace) {
