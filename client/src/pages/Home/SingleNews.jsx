@@ -15,6 +15,7 @@ import { getSingleNews } from '../../redux/actions/publicNews'
 import { setFocus } from '../../redux/reducers/misc'
 import Comments from '../../components/Comments'
 import { getRelAds } from '../../redux/actions/ads'
+import { delSingleNews } from '../../redux/reducers/news'
 
 const SingleNews = () => {
     const params = useParams()
@@ -35,6 +36,7 @@ const SingleNews = () => {
 
     useEffect(() => {
         if (news?.slug != params.slug) {
+            dispatch(delSingleNews())
             dispatch(getSingleNews({ params: params, noAudio: false }))
             dispatch(getRelAds({ limit: 4, type: 'rectY' }))
         }
@@ -86,16 +88,16 @@ const SingleNews = () => {
 
                 <div className="flex flex-col gap-0">
                     <h1 className="text-xl mt-4 font-bold">
-                        {news ? news.title : ''}
+                        {news ? news.title : 'Loading....'}
                     </h1>
                     <h2 className="ml-4">
                         {news
                             ? new Date(news.publishedAt).toLocaleDateString(
                                   'en-US',
                                   dateOpt
-                              )
+                              ) + ' | '
                             : ''}
-                        &nbsp;| {news ? news.author.name : ''}
+                        {news ? news.author.name : ''}
                     </h2>
                     <SocialShare
                         title={
@@ -116,7 +118,9 @@ const SingleNews = () => {
                 <div
                     className={`text-${fontSize}xl`}
                     dangerouslySetInnerHTML={{
-                        __html: news ? news.content : 'Fetching',
+                        __html: news
+                            ? news.content
+                            : 'Fetching news content...',
                     }}
                 />
                 {/* {focus && <RectXAd />} */}
