@@ -44,7 +44,7 @@ function RectYAd({ ad }) {
                     </span>
                     <a href={ad.redirectUrl} target="_blank">
                         <img
-                            className="h-screen w-48"
+                            className="h-screen min-w-fit max-w-96"
                             src={`/api/ads/images?id=${ad._id}&imageType=rectY`}
                         />
                     </a>

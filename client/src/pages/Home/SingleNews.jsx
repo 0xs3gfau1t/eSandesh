@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { useParams } from 'react-router-dom'
-import { BiBookReader, BiSave } from 'react-icons/bi'
+import { BiBookReader } from 'react-icons/bi'
+import axios from 'axios'
 
 import {
     SocialShare,
@@ -23,10 +24,23 @@ const SingleNews = () => {
     const focus = useSelector(state => state.misc.focus)
     const adsX = useSelector(state => state.ads.rectX)
     const adsY = useSelector(state => state.ads.rectY)
-    const [show, setShow] = useState(true)
+
+    const [showPopup, setPopup] = useState(true)
+    const [showSummary, setSummary] = useState(false)
+    const [summary, upSummary] = useState('Loading..')
     const [fontSize, setFontSize] = useState(1)
     const dispatch = useDispatch()
 
+    const getSummary = async () => {
+        const sum = await axios
+            .get(`/api/article/summary?_id=${news._id}`)
+            .then(res => {
+                return res.data.summary
+            })
+
+        upSummary(sum)
+        setSummary(true)
+    }
     const dateOpt = {
         weekday: 'short',
         year: 'numeric',
@@ -43,15 +57,24 @@ const SingleNews = () => {
     }, [params])
     return (
         <div className="flex justify-between container gap-2">
-            {news && news.category[0] == 'STORY' && show && (
-                <Popup setShow={setShow} title={'Ad'}>
+            {news && news.category.includes('STORY') && showPopup && (
+                <Popup setShow={setPopup} title={'Ad'}>
                     <div className="flex flex-row w-full">
                         <SqAds />
-                        <button onClick={e => setShow(false)}>X</button>
+                        <button onClick={e => setPopup(false)}>X</button>
                     </div>
                 </Popup>
             )}
-            <div className="news-content ml-4 mb-10 w-auto">
+            {showSummary && (
+                <Popup
+                    setShow={setSummary}
+                    title={`सारांश: ${news?.title}`}
+                    width={'w-2/4'}
+                >
+                    {summary}
+                </Popup>
+            )}
+            <div className="news-content ml-2 mb-10">
                 {focus && (
                     <RectXAd ad={adsX ? (adsX[0] ? adsX[0] : false) : false} />
                 )}
@@ -106,17 +129,32 @@ const SingleNews = () => {
                         id={news ? news._id : ''}
                     />
                 </div>
-                <div className="my-4 w-min mx-auto">
-                    {news ? (
-                        <audio controls id="audioPlayer" src={news.audio}>
-                            Your browser does not support the audio element.
-                        </audio>
-                    ) : (
-                        <h1 className="w-max">Loading news audio...</h1>
+                <div className="my-4  mx-auto flex justify-center gap-8">
+                    {!news?.category.includes('STORY') && (
+                        <>
+                            {news ? (
+                                <audio
+                                    controls
+                                    id="audioPlayer"
+                                    src={news.audio}
+                                >
+                                    Your browser does not support the audio
+                                    element.
+                                </audio>
+                            ) : (
+                                <h1 className="w-max">Loading news audio...</h1>
+                            )}
+                        </>
                     )}
+                    <span
+                        onClick={getSummary}
+                        className="px-2 py-1 h-min bg-green-700 text-white rounded cursor-pointer"
+                    >
+                        सारांश पढ्नुहोस्
+                    </span>
                 </div>
                 <div
-                    className={`text-${fontSize}xl`}
+                    className={`text-${fontSize}xl mt-4`}
                     dangerouslySetInnerHTML={{
                         __html: news
                             ? news.content
