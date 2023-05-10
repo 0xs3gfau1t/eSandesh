@@ -91,12 +91,14 @@ export const getRelAds = createAsyncThunk(
         const response = await axios
             .get(`/api/ads/relevant?limit=${limit}&imageType=${type}`)
             .then(res => {
+                if (type == 'rectY') console.log(res)
                 return res.data
             })
             .catch(err => {
                 console.error(err)
             })
 
+        console.log('feirjgfdj', type, limit)
         if (!response) return { success: false }
         return { size: type, data: response }
     }

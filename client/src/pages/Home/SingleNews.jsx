@@ -6,18 +6,22 @@ import { BiBookReader, BiSave } from 'react-icons/bi'
 import {
     SocialShare,
     SqAds,
-    RectAds,
+    RectXAd,
+    RectYAd,
     Popup,
     LikeSaveShare,
 } from '../../components/common'
 import { getSingleNews } from '../../redux/actions/publicNews'
 import { setFocus } from '../../redux/reducers/misc'
 import Comments from '../../components/Comments'
+import { getRelAds } from '../../redux/actions/ads'
 
 const SingleNews = () => {
     const params = useParams()
     const news = useSelector(state => state.news.singleNews)
     const focus = useSelector(state => state.misc.focus)
+    const adsX = useSelector(state => state.ads.rectX)
+    const adsY = useSelector(state => state.ads.rectY)
     const [show, setShow] = useState(true)
     const [fontSize, setFontSize] = useState(1)
     const dispatch = useDispatch()
@@ -30,11 +34,13 @@ const SingleNews = () => {
     }
 
     useEffect(() => {
-        if (news?.slug != params.slug)
+        if (news?.slug != params.slug) {
             dispatch(getSingleNews({ params: params, noAudio: false }))
+            dispatch(getRelAds({ limit: 4, type: 'rectY' }))
+        }
     }, [params])
     return (
-        <div className="flex justify-between container gap-4">
+        <div className="flex justify-between container gap-2">
             {news && news.category[0] == 'STORY' && show && (
                 <Popup setShow={setShow} title={'Ad'}>
                     <div className="flex flex-row w-full">
@@ -43,8 +49,10 @@ const SingleNews = () => {
                     </div>
                 </Popup>
             )}
-            <div className="news-content ml-4 mb-10 w-full">
-                {focus && <RectAds />}
+            <div className="news-content ml-4 mb-10 w-auto">
+                {focus && (
+                    <RectXAd ad={adsX ? (adsX[0] ? adsX[0] : false) : false} />
+                )}
 
                 <div className="flex">
                     <h3
@@ -111,8 +119,8 @@ const SingleNews = () => {
                         __html: news ? news.content : 'Fetching',
                     }}
                 />
-                {/* {focus && <RectAds />} */}
-                <RectAds />
+                {/* {focus && <RectXAd />} */}
+                <RectXAd ad={adsX ? (adsX[3] ? adsX[3] : false) : false} />
                 <div className="w-full flex justify-end">
                     <LikeSaveShare likes={'१.२'} id={news ? news._id : ''} />
                 </div>
@@ -121,10 +129,12 @@ const SingleNews = () => {
             </div>
             {/* right column */}
             {!focus && (
-                <div className="hidden xl:block px-4">
+                <div className="hidden xl:block pl-2">
                     {/* ads go here */}
-                    <SqAds />
-                    <SqAds />
+                    <RectYAd
+                        ad={adsY ? (adsY[0] ? adsY[0] : false) : false}
+                        type={'y'}
+                    />
                 </div>
             )}
         </div>
