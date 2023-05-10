@@ -100,7 +100,6 @@ module.exports = async (req, res) => {
     if (['rectX', 'rectY', 'square'].includes(imageType))
         imageType = 'image.' + imageType
     matchQuery[imageType] = { $exists: true }
-    console.log('Image Type:', imageType, categoryStrength)
 
     const categoryAds = await adsModel.aggregate([
         {
@@ -191,7 +190,7 @@ module.exports = async (req, res) => {
         //
         // First fill distributed ads for category cat
         //
-        while (totalNeededAds--) {
+        while (totalNeededAds-- > 0 && freeSpace-- > 0) {
             // finalCategoryAds[cat._id].push(cat.final[adIndex])
             finalCategoryAds.push(cat.final[adIndex])
 
@@ -199,7 +198,6 @@ module.exports = async (req, res) => {
                 maxIndexToWhichAdIsAvailable = adIndex
 
             adIndex = adIndex >= cat.final.length - 1 ? 0 : adIndex + 1
-            freeSpace--
         }
     })
 
@@ -207,8 +205,9 @@ module.exports = async (req, res) => {
     //If requested amount of ads are not generated, loop over queried ads then push ads in incremental order
     //
     let adIndex = 0
-    while (freeSpace) {
-        categoryAds.forEach(cat => {
+    while (freeSpace > 0) {
+        categoryAds.some(cat => {
+            if (freeSpace <= 0) return true
             //
             // If this category ad list elements' size is less then adIndex
             // then skip this category otherwise indexRangeExceeded error will be thrown
@@ -231,7 +230,7 @@ module.exports = async (req, res) => {
 
     res.json({
         message: 'success',
-        ads: finalCategoryAds, // 2 represents depth of flattening
+        ads: finalCategoryAds,
     })
 }
 
