@@ -1,4 +1,5 @@
 const express = require('express')
+const { default: mongoose } = require('mongoose')
 const { userModel } = require('../../model/user')
 
 /**
@@ -8,18 +9,16 @@ const { userModel } = require('../../model/user')
  */
 module.exports = async (req, res) => {
     const { id } = req.body
-    console.log('body ho yo', req.body)
     const { user } = req.session
 
-    const u = await userModel.findOne({ _id: user.id }, { saved: true })
-
-    if (!u) return res.status(404).json({ error: 'No such user found' })
-
-    const saved = u.saved.indexOf(id)
-
-    if (saved > -1) u.saved.splice(id)
-
-    u.save()
-
-    res.json({ message: 'success' })
+    try {
+        await userModel.updateOne(
+            { _id: user?.id },
+            { $pull: { saved: mongoose.Types.ObjectId(id) } }
+        )
+        return res.status(200).json({ message: 'success' })
+    } catch (err) {
+        console.error(err)
+        return res.status(500).json({ error: 'Something went wrong.' })
+    }
 }
