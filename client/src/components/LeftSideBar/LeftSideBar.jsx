@@ -5,7 +5,7 @@ import SearchBar from './SearchBar'
 import { Link } from 'react-router-dom'
 import { SqAds } from '../common'
 
-function LeftSideBar() {
+function LeftSideBar({ ads }) {
     return (
         <div className="flex flex-col">
             <div className="my-4">
@@ -28,7 +28,7 @@ function LeftSideBar() {
                 <TopCritics />
             </div>
             <div className="w-full">
-                <SqAds />
+                <SqAds ad={ads ? (ads[0] ? ads[0] : false) : false} />
             </div>
         </div>
     )

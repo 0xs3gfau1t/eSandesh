@@ -1,18 +1,26 @@
 import React from 'react'
 
-export default function SqAds() {
+export default function SqAds({ ad }) {
+    // console.log('Sqr ad ', ad._id)
     return (
-        <div className="my-4 w-full hidden lg:block">
-            <a
-                href={
-                    'https://media.tenor.com/IRcIGzwz7IQAAAAC/money-wallet.gif'
-                }
-                target="_blank"
-            >
-                <div className=" h-64 bg-darkblue w-full text-center text-white flex justify-center items-center ">
-                    $१०० को लागि यहाँ क्लिक गर्नुहोस्।
+        <div>
+            {ad ? (
+                <div className="float w-auto relative">
+                    <span className="absolute bg-rose-500 px-1 text-sm right-4 text-white">
+                        Ad
+                    </span>
+                    <a href={ad.redirectUrl} target="_blank">
+                        <img
+                            src={`/api/ads/images?id=${ad._id}&imageType=square`}
+                        />
+                    </a>
                 </div>
-            </a>
+            ) : (
+                <div className=" h-64 bg-darkblue w-full text-center text-white flex justify-center items-center ">
+                    Place your ads here. <br />
+                    advertise@esandesh.com
+                </div>
+            )}
         </div>
     )
 }

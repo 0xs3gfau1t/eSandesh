@@ -37,7 +37,7 @@ function RectXAd({ ad }) {
 function RectYAd({ ad }) {
     return (
         <div className="my-4 ">
-            {!ad ? (
+            {ad ? (
                 <div className="float relative">
                     <span className="absolute bg-rose-500 px-1 text-sm right-1 text-white">
                         Ad
