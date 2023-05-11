@@ -49,11 +49,17 @@ export const addNews = createAsyncThunk(
 
 export const listNews = createAsyncThunk(
     'common/listNews',
-    async (page, { dispatch }) => {
+    async ({ page, category }, { dispatch }) => {
+        console.log('Page', page)
         const response = await axios
-            .get(`/api/article/list?page=${page}`, {
-                withCredentials: true,
-            })
+            .get(
+                `/api/article/list?page=${page}&category=${
+                    category != 'All' ? category : ''
+                }`,
+                {
+                    withCredentials: true,
+                }
+            )
             .then(res => {
                 return res.data
             })

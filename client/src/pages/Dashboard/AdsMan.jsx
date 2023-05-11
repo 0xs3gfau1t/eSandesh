@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { BsFillPlusSquareFill } from 'react-icons/bs'
 
 import { FormText } from '../../components/common'
-import { Popup } from '../../components/common'
+import { Popup, FormSelect } from '../../components/common'
 import {
     createAd,
     editAd,
@@ -14,8 +14,8 @@ import {
 import {
     AiFillDelete,
     AiFillEdit,
-    AiOutlineArrowLeft,
-    AiOutlineArrowRight,
+    AiOutlineCaretRight,
+    AiOutlineCaretLeft,
 } from 'react-icons/ai'
 
 const POPUP_STATE = Object.freeze({
@@ -23,6 +23,19 @@ const POPUP_STATE = Object.freeze({
     EDIT: 'Edit Ad',
     INACTIVE: false,
 })
+const categories = [
+    'All',
+    'POLITICS',
+    'BUSINESS',
+    'SPORTS',
+    'ENTERTAINMENT',
+    'STORY',
+    'FINANCE',
+    'GLOBAL',
+    'BUSINESS',
+    'HEALTH',
+    'TECHNOLOGY',
+]
 
 const initState = {
     name: '',
@@ -44,11 +57,16 @@ export default function AdsMan() {
     const [prop, setProp] = useState(initState)
     const [show, setShow] = useState(POPUP_STATE.INACTIVE)
     const dispatch = useDispatch()
-    const [page, setPage] = useState(0)
+    // const [page, setPage] = useState(0)
+    let [filter, setFilter] = useState({ page: 0, category: '', popup: false })
 
     useEffect(() => {
-        dispatch(listAds({ page }))
-    }, [page])
+        let filterCopy = JSON.parse(JSON.stringify(filter))
+        if (!filter.popup) {
+            delete filterCopy.popup
+        }
+        dispatch(listAds(filterCopy))
+    }, [filter])
 
     const handleChange = e => {
         if (['imageX', 'imageY', 'imageSq', 'audio'].includes(e.target.name))
@@ -56,6 +74,13 @@ export default function AdsMan() {
         else if (e.target.name === 'popup')
             setProp({ ...prop, popup: e.target.checked })
         else setProp({ ...prop, [e.target.name]: e.target.value })
+    }
+    const handleFilter = e => {
+        setFilter({
+            ...filter,
+            [e.target.name]: e.target.value != 'All' ? e.target.value : '',
+            page: 0,
+        })
     }
     const onSubmit = async () => {
         switch (show) {
@@ -165,6 +190,49 @@ export default function AdsMan() {
             )}
 
             <div className="flex flex-col">
+                <div className="flex ml-2 place-items-center gap-16">
+                    <FormSelect
+                        name={'category'}
+                        options={categories}
+                        handleChange={handleFilter}
+                    />
+                    <div className="flex flex-col">
+                        <span>Popup</span>
+                        <input
+                            type={'checkbox'}
+                            checked={filter.popup}
+                            onChange={e =>
+                                setFilter({
+                                    ...filter,
+                                    popup: !filter.popup,
+                                })
+                            }
+                        />
+                    </div>
+                    <div className="flex">
+                        <AiOutlineCaretLeft
+                            className="cursor-pointer hover:text-rose-700 text-3xl"
+                            onClick={e =>
+                                setFilter({
+                                    ...filter,
+                                    page:
+                                        filter.page == 0
+                                            ? filter.page
+                                            : filter.page - 1,
+                                })
+                            }
+                        />
+                        <span className="py-1 px-2 bg-cyan-900 place-items-center rounded text-white">
+                            Page {filter.page + 1}
+                        </span>
+                        <AiOutlineCaretRight
+                            className="cursor-pointer hover:text-rose-700 text-3xl"
+                            onClick={e =>
+                                setFilter({ ...filter, page: filter.page + 1 })
+                            }
+                        />
+                    </div>
+                </div>
                 <div className="overflow-x-auto">
                     <div className="py-2 inline-block min-w-full sm:px-6 lg:px-8">
                         <table className="newsListTable w-full border">
@@ -261,9 +329,9 @@ export default function AdsMan() {
                                                                         'data-id'
                                                                     )
                                                                 dispatch(
-                                                                    deleteAd(
-                                                                        {id}
-                                                                    )
+                                                                    deleteAd({
+                                                                        id,
+                                                                    })
                                                                 )
                                                             }}
                                                         />
@@ -275,7 +343,7 @@ export default function AdsMan() {
                             </tbody>
                         </table>
                     </div>
-                    <div className="flex justify-center space-x-32">
+                    {/* <div className="flex justify-center space-x-32">
                         <AiOutlineArrowLeft
                             className="hover:cursor-pointer hover:scale-125"
                             onClick={() => setPage(page - 1)}
@@ -285,7 +353,7 @@ export default function AdsMan() {
                             className="hover:cursor-pointer hover:scale-125"
                             onClick={() => setPage(page + 1)}
                         />
-                    </div>
+                    </div> */}
                 </div>
             </div>
         </div>

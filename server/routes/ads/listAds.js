@@ -24,15 +24,15 @@ module.exports = (req, res) => {
     if (filterExpiry) filter.expiry = { $gt: new Date() }
 
     if (category)
-        filter[category] = {
+        filter['category'] = {
             $all: category
                 .split(',')
                 .map(i => i.trim())
                 .filter(i => i !== ''),
         }
-    console.log(filter)
+    // console.log(filter)
     adsModel
-        .find(filter, {audio: 0, image: 0})
+        .find(filter, { audio: 0, image: 0 })
         .skip(page * limit)
         .limit(limit)
         .sort({ priority })
