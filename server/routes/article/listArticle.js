@@ -13,6 +13,8 @@ const listArticle = async (req, res) => {
         page = 0,
         items = 10,
         priority = false,
+        from,
+        to = new Date(),
     } = req.query
     const [year, month] = req.url.replace(/\?.*/, '').split('/').slice(2)
 
@@ -38,6 +40,7 @@ const listArticle = async (req, res) => {
     }
     if (year) filter.year = year
     if (month) filter.month = month
+    if (from) filter.createdAt = { $gte: new Date(from), $lt: new Date(to) }
 
     try {
         const articles = await articleModel.aggregate([
