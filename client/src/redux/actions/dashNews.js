@@ -1,10 +1,15 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
 import axios from 'axios'
+import { setAlert } from './misc'
+import { setEditing } from '../reducers/misc'
 
 export const addNews = createAsyncThunk(
     'dash/addNews',
     async ({ data, isEdit, id }, { dispatch }) => {
-        // console.log("data: ", data)
+        dispatch(
+            setAlert(`${isEdit ? 'Updating' : 'Adding'} news.`, 'wait', true)
+        )
+
         let payload = JSON.parse(JSON.stringify(data))
         if (isEdit) {
             payload.id = id
@@ -21,9 +26,18 @@ export const addNews = createAsyncThunk(
                 },
             })
             .then(res => {
+                dispatch(setEditing('done'))
+                dispatch(
+                    setAlert(`News ${isEdit ? 'edited.' : 'added.'}`, 'success')
+                )
+                dispatch(setAlert('Article saved.', 'success'))
+                setTimeout(() => {
+                    dispatch(setEditing(false))
+                }, 3000)
                 return res.data
             })
             .catch(err => {
+                dispatch(setAlert(`Something went wrong!`, 'danger'))
                 console.error(err)
             })
 

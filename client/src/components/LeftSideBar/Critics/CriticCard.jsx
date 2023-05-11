@@ -21,13 +21,13 @@ export default function CriticCard({ articleInfo, name, body, date }) {
                 <span className="font-bold pr-1 text-2xl ">''</span>
                 {body}
             </p>
-            <a
+            <Link
                 className="truncate text-base font-secondary font-bold my-2 text-start w-full hover:text-rose-700 duration-300"
                 title="पूरा लेख पढ्न क्लिक गर्नुहोस्"
-                href={`/news/${articleInfo?.year}/${articleInfo?.month}/${articleInfo?.slug}`}
+                to={`/news/${articleInfo?.year}/${articleInfo?.month}/${articleInfo?.slug}`}
             >
                 {articleInfo?.title}
-            </a>
+            </Link>
         </div>
     )
 }

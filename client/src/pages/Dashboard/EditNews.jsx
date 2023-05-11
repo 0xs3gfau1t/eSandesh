@@ -9,14 +9,14 @@ import EditorToolbar, { modules, formats } from './EditorTools'
 import { FormText } from '../../components/common'
 import { addNews } from '../../redux/actions/dashNews'
 import { getSingleNews } from '../../redux/actions/publicNews'
-import SingleNews from '../Home/SingleNews'
+import { setEditing } from '../../redux/reducers/misc'
 
 const initState = {
     title: '',
     category: '',
     tags: '',
-    socials: '',
     priority: 10,
+    socials: '',
 }
 
 const EditNews = ({ isEdit }) => {
@@ -24,23 +24,28 @@ const EditNews = ({ isEdit }) => {
     const [content, setNews] = useState('')
     const [property, setProp] = useState(initState)
     const singleNews = useSelector(state => state.news.singleNews)
+    const isEditing = useSelector(state => state.misc.isEditing)
     const dispatch = useDispatch()
     const navigate = useNavigate()
-    console.log('hjhjdhjd')
+
     useEffect(() => {
-        if (params.year)
+        if (params.year) {
+            dispatch(setEditing(true))
             dispatch(getSingleNews({ params: params, noAudio: true }))
+        }
     }, [])
 
     useEffect(() => {
+        if (isEditing == 'done') navigate('/admin/dashboard')
+    })
+    useEffect(() => {
         if (singleNews) {
             setNews(singleNews.content)
-
             setProp({
                 ...property,
                 title: singleNews.title,
                 priority: singleNews.priority,
-                tags: singleNews.tags.join(','),
+                tags: singleNews?.tags?.join(','),
                 category: singleNews.category.join(','),
             })
         }
@@ -56,9 +61,11 @@ const EditNews = ({ isEdit }) => {
             return
         }
         let tags = property.tags
-            .split(',')
-            .map(tag => tag.trim())
-            .map(tag => tag.toUpperCase())
+            ? property.tags
+                  .split(',')
+                  .map(tag => tag.trim())
+                  .map(tag => tag.toUpperCase())
+            : []
         let category = property.category
             .split(',')
             .map(category => category.trim())
@@ -75,11 +82,6 @@ const EditNews = ({ isEdit }) => {
                 id: singleNews ? singleNews._id : false,
             })
         )
-        setNews('')
-        setProp(initState)
-        setTimeout(() => {
-            navigate('/admin/dashboard')
-        }, 3000)
     }
     return (
         <div className="ml-4 flex gap-8">
@@ -87,14 +89,14 @@ const EditNews = ({ isEdit }) => {
                 <FormText
                     type="text"
                     name="title"
-                    value={property.title}
+                    value={property?.title ?? ''}
                     labelText="Title"
                     handleChange={handleChange}
                 />
                 <EditorToolbar />
                 <ReactQuill
                     theme="snow"
-                    value={content}
+                    value={content ?? ''}
                     onChange={setNews}
                     placeholder={"What's hot?..."}
                     modules={modules}
@@ -111,14 +113,14 @@ const EditNews = ({ isEdit }) => {
                 <FormText
                     type="text"
                     name="category"
-                    value={property.category}
+                    value={property?.category ?? ''}
                     labelText="Categories"
                     handleChange={handleChange}
                 />
                 <FormText
                     type="text"
                     name="tags"
-                    value={property.tags}
+                    value={property?.tags}
                     labelText="Tags"
                     handleChange={handleChange}
                 />
@@ -126,7 +128,7 @@ const EditNews = ({ isEdit }) => {
                     <FormText
                         type="text"
                         name="socials"
-                        value={property.socials}
+                        value={property?.socials ?? ''}
                         labelText="Share to socials"
                         handleChange={handleChange}
                     />
@@ -134,7 +136,7 @@ const EditNews = ({ isEdit }) => {
                 <FormText
                     type="number"
                     name="priority"
-                    value={property.priority}
+                    value={property.priority ?? ''}
                     labelText="Priority"
                     handleChange={handleChange}
                 />
