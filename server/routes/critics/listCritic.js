@@ -37,6 +37,24 @@ module.exports = async (req, res) => {
                             likeCount: {
                                 $size: '$likes',
                             },
+                            user: true,
+                            _id: false,
+                        },
+                    },
+                ],
+            },
+        },
+        {
+            $lookup: {
+                from: 'users',
+                localField: 'commentInfo.user',
+                foreignField: '_id',
+                as: 'commentUserInfo',
+                pipeline: [
+                    {
+                        $project: {
+                            name: true,
+                            _id: false,
                         },
                     },
                 ],
@@ -45,6 +63,42 @@ module.exports = async (req, res) => {
         {
             $unwind: {
                 path: '$commentInfo',
+            },
+        },
+        {
+            $unwind: {
+                path: '$commentUserInfo',
+            },
+        },
+        {
+            $lookup: {
+                from: 'articles',
+                localField: 'commentInfo.article',
+                foreignField: '_id',
+                as: 'articleInfo',
+                pipeline: [
+                    {
+                        $project: {
+                            title: true,
+                            year: true,
+                            month: true,
+                            slug: true,
+                            _id: false,
+                        },
+                    },
+                ],
+            },
+        },
+        {
+            $unwind: {
+                path: '$articleInfo',
+            },
+        },
+        {
+            $project: {
+                'commentInfo.user': false,
+                'commentInfo.article': false,
+                _id: false,
             },
         },
         {
