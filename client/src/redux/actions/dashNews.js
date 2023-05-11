@@ -50,7 +50,6 @@ export const addNews = createAsyncThunk(
 export const listNews = createAsyncThunk(
     'common/listNews',
     async ({ page, category }, { dispatch }) => {
-        console.log('Page', page)
         const response = await axios
             .get(
                 `/api/article/list?page=${page}&category=${

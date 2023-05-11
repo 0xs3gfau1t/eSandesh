@@ -58,12 +58,21 @@ export default function AdsMan() {
     const [show, setShow] = useState(POPUP_STATE.INACTIVE)
     const dispatch = useDispatch()
     // const [page, setPage] = useState(0)
-    let [filter, setFilter] = useState({ page: 0, category: '', popup: false })
+    let [filter, setFilter] = useState({
+        page: 0,
+        category: '',
+        popup: false,
+        imageType: '',
+        audio: false,
+    })
 
     useEffect(() => {
         let filterCopy = JSON.parse(JSON.stringify(filter))
         if (!filter.popup) {
             delete filterCopy.popup
+        }
+        if (!filter.audio) {
+            delete filterCopy.audio
         }
         dispatch(listAds(filterCopy))
     }, [filter])
@@ -190,10 +199,15 @@ export default function AdsMan() {
             )}
 
             <div className="flex flex-col">
-                <div className="flex ml-2 place-items-center gap-16">
+                <div className="flex ml-2 place-items-center gap-8">
                     <FormSelect
                         name={'category'}
                         options={categories}
+                        handleChange={handleFilter}
+                    />
+                    <FormSelect
+                        name={'imageType'}
+                        options={['All', 'square', 'rectX', 'rectY']}
                         handleChange={handleFilter}
                     />
                     <div className="flex flex-col">
@@ -205,6 +219,19 @@ export default function AdsMan() {
                                 setFilter({
                                     ...filter,
                                     popup: !filter.popup,
+                                })
+                            }
+                        />
+                    </div>
+                    <div className="flex flex-col">
+                        <span>Audio</span>
+                        <input
+                            type={'checkbox'}
+                            checked={filter.audio}
+                            onChange={e =>
+                                setFilter({
+                                    ...filter,
+                                    audio: !filter.audio,
                                 })
                             }
                         />
