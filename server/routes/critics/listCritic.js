@@ -38,7 +38,7 @@ module.exports = async (req, res) => {
                                 $size: '$likes',
                             },
                             user: true,
-                            _id: false,
+                            _id: true,
                         },
                     },
                 ],
