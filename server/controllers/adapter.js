@@ -92,4 +92,4 @@ const MongooseAdapter = () => {
     }
 }
 
-module.exports = MongooseAdapter
+module.exports = { MongooseAdapter, sanitize }
