@@ -8,6 +8,9 @@ const criticModel = require('../../model/critics')
  */
 
 module.exports = async (req, res) => {
+    return res.json({
+        message: 'Cannot add critics manually. This service is terminated.',
+    })
     const { name, content, year, month, slug, likes = 0, commentId } = req.body
 
     const articleIdentifier = { year, month, slug }
