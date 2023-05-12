@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { useParams } from 'react-router-dom'
+import { AiOutlineCaretRight, AiOutlineCaretLeft } from 'react-icons/ai'
 
 import { ArticlePreviewMd, SqAds } from '../../components/common'
 import HeroSection from './HeroSection'
@@ -39,13 +40,25 @@ export default function Content() {
                                 <ArticlePreviewMd
                                     key={key}
                                     title={data.title}
-                                    summary={'छोटो वर्णन यहाँ...'}
                                     imgUrl={data.img ? data.img : ''}
                                     articleUrl={`/news/${data.year}/${data.month}/${data.slug}`}
                                 />
                             )
                         })}
                 </div>
+            </div>
+            <div className="flex w-fit mx-auto">
+                <AiOutlineCaretLeft
+                    className="cursor-pointer hover:text-rose-700 text-3xl"
+                    onClick={e => setPage(page == 0 ? 0 : page - 1)}
+                />
+                <span className="py-1 px-2 bg-cyan-900 place-items-center rounded text-white">
+                    Page {page + 1}
+                </span>
+                <AiOutlineCaretRight
+                    className="cursor-pointer hover:text-rose-700 text-3xl"
+                    onClick={e => setPage(page + 1)}
+                />
             </div>
         </div>
     )

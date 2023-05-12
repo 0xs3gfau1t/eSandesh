@@ -15,7 +15,6 @@ export default function ArticlePreviewMd({
                 <h3 className="lg:text-xl text-sm font-primary font-bold hover:text-rose-600 duration-300">
                     <Link to={articleUrl}>{title}</Link>
                 </h3>
-                <div className="hidden lg:block">{summary}</div>
             </div>
         </div>
     )

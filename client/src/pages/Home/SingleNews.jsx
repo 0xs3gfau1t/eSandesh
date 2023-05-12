@@ -11,7 +11,9 @@ import {
     RectYAd,
     Popup,
     LikeSaveShare,
+    SeeAllBtn,
 } from '../../components/common'
+import SideScrollNewsSection from './SideScrollNewsSection'
 import { getSingleNews } from '../../redux/actions/publicNews'
 import { setFocus } from '../../redux/reducers/misc'
 import Comments from '../../components/Comments'
@@ -21,10 +23,13 @@ import { delSingleNews } from '../../redux/reducers/news'
 const SingleNews = () => {
     const params = useParams()
     const news = useSelector(state => state.news.singleNews)
+    const similar = useSelector(
+        state => state.news[news?.category[0].toLowerCase()]
+    )
     const focus = useSelector(state => state.misc.focus)
     const adsX = useSelector(state => state.ads.rectX)
     const adsY = useSelector(state => state.ads.rectY)
-
+    console.log('Smii', similar, news?.category[0])
     const [showPopup, setPopup] = useState(true)
     const [showSummary, setSummary] = useState(false)
     const [summary, upSummary] = useState('Loading..')
@@ -52,7 +57,6 @@ const SingleNews = () => {
         if (news?.slug != params.slug) {
             dispatch(delSingleNews())
             dispatch(getSingleNews({ params: params, noAudio: false }))
-            dispatch(getRelAds({ limit: 4, type: 'rectY' }))
         }
     }, [params])
     return (
@@ -78,7 +82,6 @@ const SingleNews = () => {
                 {focus && (
                     <RectXAd ad={adsX ? (adsX[0] ? adsX[0] : false) : false} />
                 )}
-
                 <div className="flex">
                     <h3
                         className={`font-bold px-2 ${
@@ -108,7 +111,6 @@ const SingleNews = () => {
                         </div>
                     )}
                 </div>
-
                 <div className="flex flex-col gap-0">
                     <h1 className="text-xl mt-4 font-bold">
                         {news ? news.title : 'Loading....'}
@@ -166,7 +168,16 @@ const SingleNews = () => {
                 <div className="w-full flex justify-end">
                     <LikeSaveShare likes={'१.२'} id={news ? news._id : ''} />
                 </div>
-
+                <h1 className="flex items-baseline justify-between font-semibold text-2xl">
+                    अन्य समान वर्गका विषयहरू लेखहरू{' '}
+                    <SeeAllBtn
+                        url={`/category/${news?.category[0].toLowerCase()}`}
+                    />
+                </h1>
+                <SideScrollNewsSection
+                    category={news?.category[0]}
+                    data={similar}
+                />
                 <Comments articleId={news?._id} />
             </div>
             {/* right column */}

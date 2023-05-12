@@ -37,6 +37,7 @@ export const getSingleNews = createAsyncThunk(
             .catch(err => {
                 console.error(err)
             })
+        dispatch(listNewsCat({ page: 0, cat: response?.category[0] }))
         if (!response) return { success: false }
 
         return { success: true, data: response }
@@ -47,7 +48,7 @@ export const getRecentNews = createAsyncThunk(
     'news/getRecentNews',
     async ({}, { dispatch }) => {
         const response = await axios
-            .get(`/api/article/list?items=7`, {
+            .get(`/api/article/list?items=6`, {
                 withCredentials: true,
             })
             .then(res => {
