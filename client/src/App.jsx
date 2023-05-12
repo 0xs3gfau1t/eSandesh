@@ -10,7 +10,6 @@ import {
     UserAuth,
     ForgotPassword,
     Category,
-    Archive,
     AdsMan,
     ViewSiteStats,
     SingleNews,
