@@ -37,8 +37,8 @@ const SingleNews = () => {
             .then(res => {
                 return res.data.summary
             })
-
-        upSummary(sum)
+        if (!sum) upSummary('छोटो समाचारको लागि सारांश उपलब्ध छैन।')
+        else upSummary(sum)
         setSummary(true)
     }
     const dateOpt = {

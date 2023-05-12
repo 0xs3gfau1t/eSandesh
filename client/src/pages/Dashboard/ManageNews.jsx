@@ -1,11 +1,12 @@
 import { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { BsFillPlusSquareFill } from 'react-icons/bs'
+import { FiDelete } from 'react-icons/fi'
 import { AiOutlineCaretLeft, AiOutlineCaretRight } from 'react-icons/ai'
 import { Link } from 'react-router-dom'
 
 import { listNews } from '../../redux/actions/dashNews'
-import { DashActions, FormSelect } from '../../components/common'
+import { DashActions, FormSelect, FormText } from '../../components/common'
 
 const categories = [
     'All',
@@ -20,7 +21,7 @@ const categories = [
     'HEALTH',
     'TECHNOLOGY',
 ]
-const initState = { page: 0, category: 'All' }
+const initState = { page: 0, category: 'All', from: '', to: '' }
 
 const ManageNews = () => {
     const news = useSelector(state => state.news.newsList)
@@ -29,10 +30,15 @@ const ManageNews = () => {
     let [values, setValues] = useState(initState)
 
     useEffect(() => {
-        dispatch(listNews(values))
+        let filter = JSON.parse(JSON.stringify(values))
+        if (filter.category == 'All') delete filter.category
+        if (!filter.from) delete filter.from
+        if (!filter.to) delete filter.to
+        dispatch(listNews(filter))
     }, [values])
 
     const handleChange = e => {
+        console.log(e.target.name, e.target.value, values)
         setValues({ ...values, [e.target.name]: e.target.value, page: 0 })
     }
     return (
@@ -42,12 +48,31 @@ const ManageNews = () => {
                 <h2>Create news</h2>
             </Link>
             <div className="flex flex-col">
-                <div className="flex ml-2 place-items-center gap-16">
+                <div className="flex ml-2 place-items-center gap-8">
                     <FormSelect
                         name={'category'}
                         options={categories}
                         handleChange={handleChange}
                     />
+                    <FormText
+                        type={'date'}
+                        labelText="From"
+                        name={'from'}
+                        handleChange={handleChange}
+                    />
+                    <FormText
+                        type={'date'}
+                        labelText="To"
+                        name={'to'}
+                        handleChange={handleChange}
+                    />
+                    <div className="flex flex-col place-items-center">
+                        Reset Filter
+                        <FiDelete
+                            className="text-2xl mb-4 hover:text-rose-700 cursor-pointer"
+                            onClick={e => setValues(initState)}
+                        />
+                    </div>
                     <div className="flex">
                         <AiOutlineCaretLeft
                             className="cursor-pointer hover:text-rose-700 text-3xl"
@@ -61,6 +86,7 @@ const ManageNews = () => {
                                 })
                             }
                         />
+
                         <span className="py-1 px-2 bg-cyan-900 place-items-center rounded text-white">
                             Page {values.page + 1}
                         </span>
@@ -80,6 +106,7 @@ const ManageNews = () => {
                                     <tr>
                                         <th scope="col">#</th>
                                         <th scope="col">Title</th>
+                                        <th scope="col">Date Published</th>
                                         <th scope="col">Date Modified</th>
                                         <th scope="col">Hits</th>
                                         <th scope="col">Categories</th>
@@ -109,6 +136,11 @@ const ManageNews = () => {
                                                                     ? khabar.title
                                                                     : ''}
                                                             </Link>
+                                                        </td>
+                                                        <td>
+                                                            {new Date(
+                                                                khabar.createdAt
+                                                            ).toLocaleDateString()}
                                                         </td>
                                                         <td>
                                                             {new Date(

@@ -40,8 +40,15 @@ const listArticle = async (req, res) => {
     }
     if (year) filter.year = year
     if (month) filter.month = month
-    if (from) filter.createdAt = { $gte: new Date(from), $lt: new Date(to) }
-
+    if (from)
+        filter.createdAt = {
+            $gte: new Date(new Date(from).setHours(0, 0, 0, 0)),
+            $lte: new Date(new Date(to).setHours(23, 59, 59, 0)),
+        }
+    if (!from)
+        filter.createdAt = {
+            $lte: new Date(new Date(to).setHours(23, 59, 59, 0)),
+        }
     try {
         const articles = await articleModel.aggregate([
             { $match: filter },
@@ -86,6 +93,7 @@ const listArticle = async (req, res) => {
             const img = dom.window.document.querySelector('img')
             if (img) article.img = img.src
             delete article.content
+            delete article.summarizedContent
             return article
         })
 

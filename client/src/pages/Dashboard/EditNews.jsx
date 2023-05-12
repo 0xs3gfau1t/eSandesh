@@ -29,7 +29,7 @@ const EditNews = ({ isEdit }) => {
     const navigate = useNavigate()
 
     useEffect(() => {
-        if (params.year) {
+        if (params.year && isEdit) {
             dispatch(setEditing(true))
             dispatch(getSingleNews({ params: params, noAudio: true }))
         }
