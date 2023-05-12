@@ -42,20 +42,36 @@ const postImage = async (req, res) => {
         return res.status(415).json({ error: 'File must be an image.' })
 
     try {
+        const imageUrl = `/api/user/image?id=${req.session?.user?.id}`
         await userModel.updateOne(
             {
                 _id: mongoose.Types.ObjectId(req.session?.user?.id),
             },
             {
                 imageBuffer: image.data,
-                image: `/api/user/image?id=${req.session?.user?.id}`,
+                image: imageUrl,
             }
         )
-        return res.json({ message: 'success' })
+        return res.json({ message: 'success', image: imageUrl })
     } catch (err) {
         console.error(err)
         return res.status(500).json({ error: 'Something went wrong' })
     }
 }
 
-module.exports = { getImage, postImage }
+const deleteImage = async (req, res) => {
+    try {
+        await userModel.updateOne(
+            {
+                _id: mongoose.Types.ObjectId(req.session?.user?.id),
+            },
+            { $unset: { image: '', imageBuffer: '' } }
+        )
+        return res.json({ image: null })
+    } catch (err) {
+        console.error(err)
+        return res.status(500).json({ error: 'Something went wrong' })
+    }
+}
+
+module.exports = { getImage, postImage, deleteImage }
