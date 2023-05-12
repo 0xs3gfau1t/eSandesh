@@ -29,7 +29,7 @@ const UserProfile = ({ session }) => {
     return (
         <div className="h-screen flex flex-col ">
             <Header session={session} />
-            <div className="flex flex-grow gap-16 bg-pink-200 overflow-scroll">
+            <div className="flex flex-grow gap-16 overflow-scroll">
                 <ul className="flex flex-col gap-1">
                     {sections.map((s, idx) => (
                         <div

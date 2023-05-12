@@ -46,7 +46,10 @@ export default function SavedPosts() {
                             >
                                 <img
                                     className="w-full h-24 object-cover rounded-sm"
-                                    src="https://developers.elementor.com/docs/assets/img/elementor-placeholder-image.png"
+                                    src={
+                                        post.img ||
+                                        'https://developers.elementor.com/docs/assets/img/elementor-placeholder-image.png'
+                                    }
                                 />
                                 <Link
                                     to={`/news/${post.year}/${post.month}/${post.slug}`}

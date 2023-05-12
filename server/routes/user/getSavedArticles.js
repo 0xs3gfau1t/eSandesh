@@ -80,6 +80,7 @@ module.exports = async (req, res) => {
                     title: '$articles.title',
                     author: '$articles.author',
                     updatedAt: '$articles.updatedAt',
+                    img: '$articles.img',
                 },
             },
         ])

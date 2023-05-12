@@ -24,6 +24,7 @@ const articleSchema = mongoose.Schema(
         year: String,
         month: String,
         slug: String,
+        img: String,
         summarizedContent: { type: String },
         audio: { type: Buffer },
         archived: { type: Boolean },

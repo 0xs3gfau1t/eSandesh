@@ -1,6 +1,5 @@
 const express = require('express')
 const articleModel = require('../../model/article')
-const { JSDOM } = require('jsdom')
 
 /**
  * @param {express.Request} req
@@ -45,7 +44,7 @@ const listArticle = async (req, res) => {
     try {
         const articles = await articleModel.aggregate([
             { $match: filter },
-            { $project: { audio: 0 } },
+            { $project: { audio: 0, content: 0 } },
             { $sort: sortParameters },
             { $skip: page * items },
             { $limit: parseInt(items) },
@@ -81,15 +80,7 @@ const listArticle = async (req, res) => {
             return 0
         })
 
-        const new_articles = articles.map(article => {
-            const dom = new JSDOM(article.content)
-            const img = dom.window.document.querySelector('img')
-            if (img) article.img = img.src
-            delete article.content
-            return article
-        })
-
-        return res.status(200).json(new_articles)
+        return res.status(200).json(articles)
     } catch (err) {
         console.error(err)
         return res.status(500).json({ error: 'Something went wrong.' })
