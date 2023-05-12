@@ -6,6 +6,7 @@ const userSchema = new mongoose.Schema({
     emailVerified: { type: Date },
     password: { type: String },
     image: { type: String },
+    imageBuffer: { type: Buffer },
     // articles: { type: [mongoose.Schema.Types.ObjectId], ref: 'Article' },
     roles: {
         isRoot: { type: Boolean },

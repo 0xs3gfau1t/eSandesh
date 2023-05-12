@@ -8,20 +8,30 @@ const { default: mongoose } = require('mongoose')
  */
 const getInfo = async (req, res) => {
     const id = req.query.id || req.session?.user?.id
-
     if (!id) return res.status(400).json({ error: 'Invalid user id' })
 
-    let projection = { name: 1, image: 1 }
-    if (id == req.session?.user?.id) {
-        projection.email = 1
-        projection.roles = 1
-    }
-
     try {
-        const userInfo = await userModel.findOne(
-            { _id: mongoose.Types.ObjectId(id) },
-            projection
-        )
+        let userInfo
+        if (id == req.session?.user?.id) {
+            userInfo = await userModel.aggregate([
+                { $match: { _id: mongoose.Types.ObjectId(id) } },
+                { $project: { name: 1, image: 1, email: 1, roles: 1 } },
+                {
+                    $lookup: {
+                        from: 'accounts',
+                        localField: '_id',
+                        foreignField: 'userId',
+                        pipeline: [{ $project: { provider: true } }],
+                        as: 'accounts',
+                    },
+                },
+            ])
+        } else {
+            userInfo = await userModel.aggregate([
+                { $match: { _id: mongoose.Types.ObjectId(id) } },
+                { $project: { name: 1, image: 1 } },
+            ])
+        }
 
         return res.status(200).json({ message: 'success', userInfo })
     } catch (err) {
