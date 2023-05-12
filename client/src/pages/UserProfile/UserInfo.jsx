@@ -6,19 +6,6 @@ import { CiSquareRemove } from 'react-icons/ci'
 import { RxReset } from 'react-icons/rx'
 import { AiOutlineEdit, AiOutlineSave } from 'react-icons/ai'
 
-const sample = {
-    _id: '63920ba318bdf6576c8a420d',
-    name: 'immo',
-    email: 'vizandabijan@gmail.com',
-    image: '/api/user/image?id=63920ba318bdf6576c8a420d',
-    accounts: [
-        {
-            _id: '645ce97437132883e8686b74',
-            provider: 'facebook',
-        },
-    ],
-}
-
 const PASSWORD_INIT_VALUES = {
     current: '',
     new: '',

@@ -9,41 +9,36 @@ export default function SavedPosts() {
     const [posts, setPosts] = useState([])
     const dispatch = useDispatch()
 
-    async function getSavedPosts() {
-        await axios
+    useEffect(() => {
+        axios
             .get('/api/user/article')
-            .then(res => {
-                console.log(res.data.articles)
-                setPosts(res.data.articles)
-            })
+            .then(res => setPosts(res.data.articles))
             .catch(err => {
                 console.log(err)
                 dispatch(setAlert('Something went wrong', 'danger'))
             })
-    }
-    useEffect(() => {
-        getSavedPosts()
     }, [])
 
     const deletePost = id => {
         axios
             .delete('/api/user/article', { data: { id: id } })
             .then(res => {
-                getSavedPosts()
-                dispatch(setAlert('Removed from saved list.', 'success'))
+                if (res.status == 200) {
+                    setPosts(o => o.filter(x => x.id != id))
+                    dispatch(setAlert('Removed from saved list.', 'success'))
+                }
             })
             .catch(err => {
+                console.error(err)
                 dispatch(setAlert('Something went wrong', 'danger'))
             })
     }
     return (
         <div>
-            <h2 className="font-bold text-base font-english leading-loose">
-                Saved Posts
-            </h2>
-            <ul className="flex items-center gap-4">
-                {posts &&
-                    posts.map(post => {
+            <h2 className="font-bold text-base leading-loose">Saved Posts</h2>
+            {posts.length > 0 ? (
+                <ul className="flex items-center gap-4 flex-wrap">
+                    {posts.map(post => {
                         return (
                             <li
                                 key={post.id}
@@ -65,12 +60,18 @@ export default function SavedPosts() {
                                 </p>
                                 <AiFillDelete
                                     className="ml-36 cursor-pointer hover:text-rose-700"
-                                    onClick={e => deletePost(post.id)}
+                                    title="Unsave article"
+                                    onClick={() => deletePost(post.id)}
                                 />
                             </li>
                         )
                     })}
-            </ul>
+                </ul>
+            ) : (
+                <div className="text-center py-8 text-xl">
+                    No articles saved
+                </div>
+            )}
         </div>
     )
 }
