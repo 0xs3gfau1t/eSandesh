@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { useEffect, useState } from 'react'
-import { AiFillDelete } from 'react-icons/ai'
+import { AiOutlineDelete } from 'react-icons/ai'
 import { Link } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 
@@ -58,7 +58,7 @@ export default function SavedPosts() {
                                     <span>-{post.author}</span>{' '}
                                     <span>{post.updatedAt.slice(0, 10)}</span>
                                 </p>
-                                <AiFillDelete
+                                <AiOutlineDelete
                                     className="ml-36 cursor-pointer hover:text-rose-700"
                                     title="Unsave article"
                                     onClick={() => deletePost(post.id)}

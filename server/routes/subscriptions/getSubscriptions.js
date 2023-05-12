@@ -20,6 +20,7 @@ module.exports = async (req, res) => {
             { $match: { _id: mongoose.Types.ObjectId(id) } },
             {
                 $project: {
+                    _id: false,
                     subscriptions: {
                         $slice: ['$subscriptions', limit * page, limit],
                     },
@@ -32,29 +33,19 @@ module.exports = async (req, res) => {
                     let: { id: '$subscriptions' },
                     pipeline: [
                         { $match: { $expr: { $eq: ['$_id', '$$id'] } } },
-                        { $project: { name: true } },
+                        { $project: { name: true, image: true } },
                     ],
                     as: 'subscriptions',
                 },
             },
             { $unwind: '$subscriptions' },
-            {
-                $group: {
-                    _id: '$_id',
-                    subs: {
-                        $push: {
-                            id: '$subscriptions._id',
-                            name: '$subscriptions.name',
-                        },
-                    },
-                },
-            },
+            { $replaceRoot: { newRoot: '$subscriptions' } },
         ])
     try {
         const userSubs = await Cache(req.originalUrl, getUserSubs, {
-            'EX': 60,
+            EX: 60,
         })
-        return res.json({ subs: userSubs.at(0)?.subs || [] })
+        return res.json(userSubs)
     } catch (e) {
         console.error(e)
         res.status(500).json({ message: 'Something went wrong' })

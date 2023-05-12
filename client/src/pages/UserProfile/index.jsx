@@ -22,8 +22,8 @@ const UserProfile = ({ session }) => {
     const sections = [
         { name: 'Info', ref: useRef(), element: UserInfo },
         { name: 'Saved posts', ref: useRef(), element: SavedPosts },
-        /* { name: 'Comments', ref: useRef(), element: SavedPosts },
-        { name: 'Subscriptions', ref: useRef(), element: Subscription }, */
+        /* { name: 'Comments', ref: useRef(), element: SavedPosts }, */
+        { name: 'Subscriptions', ref: useRef(), element: Subscription },
     ]
 
     return (
