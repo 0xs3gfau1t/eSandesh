@@ -33,7 +33,9 @@ const getInfo = async (req, res) => {
             ])
         }
 
-        return res.status(200).json({ message: 'success', userInfo })
+        return res
+            .status(200)
+            .json({ message: 'success', userInfo: userInfo[0] })
     } catch (err) {
         console.error(err)
         return res.status(500).json({
