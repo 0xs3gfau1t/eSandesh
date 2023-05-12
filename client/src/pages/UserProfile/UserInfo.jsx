@@ -19,10 +19,19 @@ const sample = {
     ],
 }
 
+const PASSWORD_INIT_VALUES = {
+    current: '',
+    new: '',
+    confirm: '',
+    editing: false,
+    show: false,
+}
+
 export default function UserInfo() {
     const [user, setData] = useState()
     const [newImage, setNewImage] = useState({ file: null, buffer: null })
     const [name, setName] = useState(-1)
+    const [password, setPassword] = useState(PASSWORD_INIT_VALUES)
 
     useEffect(() => {
         axios.get('/api/user/').then(res => setData(res.data.userInfo))
@@ -81,6 +90,36 @@ export default function UserInfo() {
                 if (res.status == 200) {
                     setData(o => ({ ...o, name: name }))
                     setName(-1)
+                }
+            })
+    }
+
+    const changePasswordValue = e => {
+        setPassword(o => ({ ...o, [e.target.name]: e.target.value }))
+        if (e.target.name == 'confirm')
+            e.target.setCustomValidity(
+                e.target.value != password.new ? 'Passwords donot match' : ''
+            )
+        else if (e.target.name == 'new')
+            e.target.setCustomValidity(
+                e.target.value === password.current
+                    ? 'New password cannot be same as old password'
+                    : ''
+            )
+    }
+    const startPasswordChange = () =>
+        setPassword({ ...PASSWORD_INIT_VALUES, editing: true })
+    const cancelPasswordChange = () => setPassword(PASSWORD_INIT_VALUES)
+    const savePasswordChange = e => {
+        e.preventDefault()
+        axios
+            .post('/api/user/', {
+                password: password.new,
+                currentPassword: password.current,
+            })
+            .then(res => {
+                if (res.status == 200) {
+                    setPassword(PASSWORD_INIT_VALUES)
                 }
             })
     }
@@ -224,7 +263,88 @@ export default function UserInfo() {
 
                     <hr className="my-4" />
 
-                    <div>Change Password</div>
+                    {password.editing ? (
+                        <form
+                            className="text-sm grid grid-cols-[5rem,auto] grid-rows-2 items-center gap-y-2"
+                            onReset={cancelPasswordChange}
+                            onSubmit={savePasswordChange}
+                        >
+                            <label htmlFor="current" className="block">
+                                Current
+                            </label>
+                            <input
+                                className="border-solid border-b border-black focus:outline-none "
+                                placeholder="Enter your current password"
+                                type={password.show ? 'text' : 'password'}
+                                id="current"
+                                name="current"
+                                value={password.current}
+                                onChange={changePasswordValue}
+                                required
+                            />
+                            <label htmlFor="new" className="block">
+                                New
+                            </label>
+                            <input
+                                className="border-solid border-b border-black focus:outline-none "
+                                placeholder="Enter your new password"
+                                type={password.show ? 'text' : 'password'}
+                                id="new"
+                                name="new"
+                                value={password.new}
+                                onChange={changePasswordValue}
+                                required
+                            />
+                            <label htmlFor="confirm" className="block">
+                                Confirm
+                            </label>
+                            <input
+                                className="border-solid border-b border-black focus:outline-none"
+                                placeholder="Retype your password"
+                                type={password.show ? 'text' : 'password'}
+                                id="confirm"
+                                name="confirm"
+                                value={password.confirm}
+                                onChange={changePasswordValue}
+                                required
+                            />
+                            <div className="col-span-2 flex flex-row-reverse gap-2">
+                                <label htmlFor="show">Show Password</label>
+                                <input
+                                    type="checkbox"
+                                    id="show"
+                                    name="show"
+                                    checked={password.show}
+                                    onChange={e =>
+                                        setPassword(o => ({
+                                            ...o,
+                                            show: e.target.checked,
+                                        }))
+                                    }
+                                    className="col-span-2 flex flex-row-reverse gap-2"
+                                />
+                            </div>
+                            <div className="col-span-2 flex flex-row-reverse gap-2">
+                                <input
+                                    type="reset"
+                                    value="Cancel"
+                                    className="cursor-pointer"
+                                />
+                                <input
+                                    type="submit"
+                                    value="Save"
+                                    className="cursor-pointer"
+                                />
+                            </div>
+                        </form>
+                    ) : (
+                        <input
+                            className="cursor-pointer rounded-lg py-2 px-4 shadow-md hover:shadow-lg"
+                            value="Change Password"
+                            type="button"
+                            onClick={startPasswordChange}
+                        />
+                    )}
                 </div>
             </div>
         </div>
