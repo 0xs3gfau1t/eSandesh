@@ -31,41 +31,52 @@ const UserProfile = ({ session }) => {
         <div className="h-screen flex flex-col ">
             <Header session={session} />
             <div className="flex flex-grow gap-16 overflow-scroll">
-                <ul className="flex flex-col gap-1">
-                    {sections.map((s, idx) => (
-                        <div
-                            className="flex-grow grid grid-rows-[2rem,auto] grid-cols-[2rem,auto] gap-x-2"
-                            key={idx}
-                        >
-                            <div className="border-solid border-black border rounded-full w-8 h-8 p-1">
-                                <div
-                                    className={`w-full h-full rounded-full ${
-                                        currentSection == idx ? 'bg-black' : ''
-                                    }`}
-                                />
-                            </div>
-                            <li
-                                className="h-full flex items-center"
+                <ul className="flex flex-col gap-1 ml-20 pt-4">
+                    {sections.map((s, idx) => {
+                        const active = idx == currentSection
+                        return (
+                            <div
+                                className={`flex-grow grid grid-rows-[1.5rem,auto] grid-cols-[1.5rem,auto] gap-x-2 hover:border-slate-700 hover:text-slate-700 ${
+                                    active
+                                        ? 'text-slate-800 border-slate-800'
+                                        : 'text-gray-400 border-gray-400'
+                                }`}
+                                key={idx}
                                 onClick={() => {
                                     s.ref.current.scrollIntoView({
                                         behavior: 'smooth',
                                     })
+                                    setCurrentSection(idx)
                                 }}
                             >
-                                {s.name}
-                            </li>
-                            <div className="w-1/2 block border-solid border-r-2 border-black" />
-                            <div />
-                        </div>
-                    ))}
+                                <div className="border-solid border-inherit border rounded-full w-6 h-6 p-1 cursor-pointer">
+                                    <div
+                                        className={`w-full h-full rounded-full ${
+                                            active ? 'bg-slate-800' : ''
+                                        }`}
+                                    />
+                                </div>
+                                <li className="h-full flex items-center cursor-pointer text-inherit">
+                                    {s.name}
+                                </li>
+                                <div className="w-1/2 block border-solid border-r-2 border-inherit" />
+                                <div />
+                            </div>
+                        )
+                    })}
                 </ul>
-                <main className="flex-grow overflow-scroll" ref={mainRef}>
+                <main
+                    className="flex-grow overflow-scroll flex flex-col"
+                    ref={mainRef}
+                >
                     {sections.map((s, idx) => (
                         <div
                             key={idx}
                             ref={s.ref}
                             onMouseEnter={() => setCurrentSection(idx)}
-                            className="border-b border-solid border-black inline"
+                            className={`border-b border-solid border-black ${
+                                idx == 0 ? 'min-h-full' : ''
+                            }`}
                         >
                             <s.element />
                         </div>

@@ -1,6 +1,6 @@
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
-import { AiOutlineUser } from 'react-icons/ai'
+import { AiOutlineUser, AiOutlineArrowRight } from 'react-icons/ai'
 import { RiMailCloseLine } from 'react-icons/ri'
 import { Popup } from '../../components/common'
 import { useAxiosError } from '../../utils/useAxiosError'
@@ -8,15 +8,25 @@ import { useAxiosError } from '../../utils/useAxiosError'
 export default function Subscription() {
     const [subs, setSubs] = useState([])
     const [unsubbing, setUnsubbing] = useState(false)
+    const [nextPage, setNextPage] = useState(0)
 
     const { onError } = useAxiosError()
 
-    useEffect(() => {
-        axios
-            .get('/api/subscriptions/', { withCredentials: true })
-            .then(res => setSubs(res.data))
-            .catch(onError)
-    }, [])
+    const fetchSubs = () => {
+        if (nextPage != undefined)
+            axios
+                .get('/api/subscriptions/', {
+                    params: { page: nextPage },
+                    withCredentials: true,
+                })
+                .then(res => {
+                    setNextPage(res.data.nextPage)
+                    setSubs(o => o.concat(res.data.subs))
+                })
+                .catch(onError)
+    }
+
+    useEffect(fetchSubs, [])
 
     const unsubUser = () => {
         axios
@@ -34,14 +44,14 @@ export default function Subscription() {
     }
 
     return (
-        <div>
+        <div className="py-4">
             <h2 className="font-bold text-base leading-loose">Subscriptions</h2>
-            {subs?.length > 0 ? (
-                <ul className="flex items-center gap-4 flex-wrap">
-                    {subs?.map(s => (
+            {subs.length > 0 ? (
+                <ul className="flex items-center gap-x-8 gap-y-0 flex-wrap">
+                    {subs.map(s => (
                         <li
                             key={s._id}
-                            className="w-48 rounded-lg bg-white shadow-md hover:shadow-lg"
+                            className="w-48 rounded-lg bg-white shadow-md hover:shadow-lg my-4"
                         >
                             {s.image ? (
                                 <img
@@ -64,6 +74,15 @@ export default function Subscription() {
                             </div>
                         </li>
                     ))}
+                    {nextPage !== undefined && (
+                        <li
+                            className="flex flex-col my-4 shadow-md hover:shadow-lg duration-200 rounded-md bg-white p-4 self-center cursor-pointer"
+                            onClick={fetchSubs}
+                        >
+                            <span className="text-lg">Load More</span>
+                            <AiOutlineArrowRight className="align-middle w-full" />
+                        </li>
+                    )}
                 </ul>
             ) : (
                 <div className="text-center py-8 text-xl">

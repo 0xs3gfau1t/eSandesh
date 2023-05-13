@@ -40,10 +40,10 @@ export default function SavedPosts() {
     }
 
     return (
-        <div>
+        <div className="py-4">
             <h2 className="font-bold text-base leading-loose">Saved Posts</h2>
             {posts.length > 0 ? (
-                <ul className="flex items-center gap-4 flex-wrap">
+                <ul className="flex items-center gap-x-8 gap-y-0 flex-wrap">
                     {posts.map(post => {
                         return (
                             <li
@@ -104,7 +104,7 @@ export default function SavedPosts() {
                     })}
                     {nextPage !== undefined && (
                         <li
-                            className="flex flex-col my-4 shadow-md hover:shadow-lg duration-200 rounded-md bg-white p-4 self-center"
+                            className="flex flex-col my-4 shadow-md hover:shadow-lg duration-200 rounded-md bg-white p-4 self-center cursor-pointer"
                             onClick={fetchSaved}
                         >
                             <span className="text-lg">Load More</span>

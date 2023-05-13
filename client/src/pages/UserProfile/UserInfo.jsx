@@ -133,7 +133,7 @@ export default function UserInfo() {
     if (!user) return <></>
 
     return (
-        <div className="flex flex-col items-center justify-center w-full bg-transparent py-4 h-full">
+        <div className="flex flex-col items-center justify-center w-full bg-transparent py-4 min-h-full">
             <div className="bg-white shadow-lg rounded-lg overflow-hidden w-96">
                 <label htmlFor="img">
                     {user.image || newImage.buffer ? (
