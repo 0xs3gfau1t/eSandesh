@@ -5,6 +5,8 @@ import { FiEdit } from 'react-icons/fi'
 import { CiSquareRemove } from 'react-icons/ci'
 import { RxReset } from 'react-icons/rx'
 import { AiOutlineEdit, AiOutlineSave } from 'react-icons/ai'
+import { setAlert } from '../../redux/actions/misc'
+import { useAxiosError } from '../../utils/useAxiosError'
 
 const PASSWORD_INIT_VALUES = {
     current: '',
@@ -20,8 +22,13 @@ export default function UserInfo() {
     const [name, setName] = useState(-1)
     const [password, setPassword] = useState(PASSWORD_INIT_VALUES)
 
+    const { dispatch, onError } = useAxiosError()
+
     useEffect(() => {
-        axios.get('/api/user/').then(res => setData(res.data.userInfo))
+        axios
+            .get('/api/user/')
+            .then(res => setData(res.data.userInfo))
+            .catch(onError)
     }, [])
 
     const loadImage = e => {
@@ -51,22 +58,28 @@ export default function UserInfo() {
                 if (res.status == 200) {
                     setData(o => ({ ...o, image: res.data.image }))
                     setNewImage({ file: null, buffer: null })
+                    dispatch(setAlert('New image set', 'success'))
                 }
             })
+            .catch(onError)
     }
 
     const removeImage = e => {
         e.stopPropagation()
         e.preventDefault()
-        axios.delete('/api/user/image', { withCredentials: true }).then(res => {
-            if (res.status == 200) {
-                setData(o => ({ ...o, image: res.data.image }))
-                setNewImage({ file: null, buffer: null })
-            }
-        })
+        axios
+            .delete('/api/user/image', { withCredentials: true })
+            .then(res => {
+                if (res.status == 200) {
+                    setData(o => ({ ...o, image: res.data.image }))
+                    setNewImage({ file: null, buffer: null })
+                    dispatch(setAlert('Image removed', 'success'))
+                }
+            })
+            .catch(onError)
     }
 
-    const editName = () => setName(user.name)
+    const startEditingName = () => setName(user.name)
 
     const saveName = e => {
         e.preventDefault()
@@ -77,8 +90,10 @@ export default function UserInfo() {
                 if (res.status == 200) {
                     setData(o => ({ ...o, name: name }))
                     setName(-1)
+                    dispatch(setAlert('New name set', 'success'))
                 }
             })
+            .catch(onError)
     }
 
     const changePasswordValue = e => {
@@ -107,14 +122,18 @@ export default function UserInfo() {
             .then(res => {
                 if (res.status == 200) {
                     setPassword(PASSWORD_INIT_VALUES)
+                    dispatch(
+                        setAlert('Password changed successfully', 'success')
+                    )
                 }
             })
+            .catch(onError)
     }
 
     if (!user) return <></>
 
     return (
-        <div className="flex flex-col items-center justify-center w-full bg-transparent py-4">
+        <div className="flex flex-col items-center justify-center w-full bg-transparent py-4 h-full">
             <div className="bg-white shadow-lg rounded-lg overflow-hidden w-96">
                 <label htmlFor="img">
                     {user.image || newImage.buffer ? (
@@ -182,7 +201,7 @@ export default function UserInfo() {
                                 <AiOutlineEdit
                                     title="Edit name"
                                     className="absolute top-0 right-0 w-6 aspect-square cursor-pointer hover:text-blue"
-                                    onClick={editName}
+                                    onClick={startEditingName}
                                 />
                             </>
                         ) : (
@@ -204,9 +223,9 @@ export default function UserInfo() {
                     <hr className="my-4" />
 
                     <p className="font-bold text-gray-700">Roles:</p>
-                    {user.roles?.length > 0 ? (
+                    {Object.keys(user.roles)?.length > 0 ? (
                         <ul className="list-disc list-inside">
-                            {user.roles?.map((role, idx) => (
+                            {Object.keys(user.roles)?.map((role, idx) => (
                                 <li
                                     key={idx}
                                     className="text-sm text-gray-600 mt-2"

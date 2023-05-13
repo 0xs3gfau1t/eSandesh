@@ -3,6 +3,7 @@ import { Header } from '../../components'
 import SavedPosts from './SavedPosts'
 import Subscription from './Subscription'
 import UserInfo from './UserInfo'
+import UserPosts from './UserPosts'
 
 const UserProfile = ({ session }) => {
     if (session?.status == 'unauthenticated') {
@@ -22,8 +23,8 @@ const UserProfile = ({ session }) => {
     const sections = [
         { name: 'Info', ref: useRef(), element: UserInfo },
         { name: 'Saved posts', ref: useRef(), element: SavedPosts },
-        /* { name: 'Comments', ref: useRef(), element: SavedPosts }, */
         { name: 'Subscriptions', ref: useRef(), element: Subscription },
+        { name: 'My posts', ref: useRef(), element: UserPosts },
     ]
 
     return (
@@ -38,8 +39,9 @@ const UserProfile = ({ session }) => {
                         >
                             <div className="border-solid border-black border rounded-full w-8 h-8 p-1">
                                 <div
-                                    className={`w-full h-full rounded-full ${currentSection == idx ? 'bg-black' : ''
-                                        }`}
+                                    className={`w-full h-full rounded-full ${
+                                        currentSection == idx ? 'bg-black' : ''
+                                    }`}
                                 />
                             </div>
                             <li
@@ -62,11 +64,8 @@ const UserProfile = ({ session }) => {
                         <div
                             key={idx}
                             ref={s.ref}
-                            onMouseEnter={() => {
-                                console.log('Mouse entered')
-                                setCurrentSection(idx)
-                            }}
-                            className="border-b border-solid border-black"
+                            onMouseEnter={() => setCurrentSection(idx)}
+                            className="border-b border-solid border-black inline"
                         >
                             <s.element />
                         </div>
