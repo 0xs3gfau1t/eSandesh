@@ -16,8 +16,6 @@ const userArticles = async (req, res) => {
     let { page = 0 } = req.query
     page = Number(page)
 
-    console.log(page, ITEMS_PER_PAGE)
-
     try {
         const articles = await articleModel.aggregate([
             { $match: { createdBy: mongoose.Types.ObjectId(userId) } },
@@ -26,6 +24,7 @@ const userArticles = async (req, res) => {
                     title: true,
                     category: true,
                     createdAt: true,
+                    publishedAt: true,
                     img: true,
                     hits: true,
                     year: true,
@@ -45,4 +44,20 @@ const userArticles = async (req, res) => {
     }
 }
 
-module.exports = userArticles
+const getContent = async (req, res) => {
+    const { id } = req.query
+    try {
+        const article = await articleModel.findOne(
+            {
+                _id: mongoose.Types.ObjectId(id),
+            },
+            { content: true }
+        )
+        return res.send(article.content)
+    } catch (err) {
+        console.error(err)
+        return res.status(500).json({ error: 'Something went wrong.' })
+    }
+}
+
+module.exports = { userArticles, getContent }

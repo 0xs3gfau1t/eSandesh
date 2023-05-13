@@ -21,7 +21,7 @@ const FormText = ({
                 value={value}
                 name={name}
                 onChange={handleChange}
-                className="form-input w-full py-1 px-2 rounded-md border-[1px] border-[#FFBD03]"
+                className="form-input w-full py-1 px-2 rounded-md border-[1px] border-[#FFBD03] focus:outline-none"
                 formEncType={encType}
                 checked={checked}
                 {...rest}
@@ -47,7 +47,7 @@ const FormTextArea = ({ name, value, handleChange, labelText, rows, cols }) => {
                 rows={rows}
                 cols={cols}
                 onChange={handleChange}
-                className="form-input w-full py-1 px-2 rounded-md border-[1px] border-[#FFBD03]"
+                className="form-input w-full py-1 px-2 rounded-md border-[1px] border-[#FFBD03] focus:outline-none"
             />
         </div>
     )

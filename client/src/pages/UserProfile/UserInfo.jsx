@@ -2,7 +2,7 @@ import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import { RiImageAddLine } from 'react-icons/ri'
 import { FiEdit } from 'react-icons/fi'
-import { CiSquareRemove } from 'react-icons/ci'
+import { HiOutlineDocumentRemove } from 'react-icons/hi'
 import { RxReset } from 'react-icons/rx'
 import { AiOutlineEdit, AiOutlineSave } from 'react-icons/ai'
 import { setAlert } from '../../redux/actions/misc'
@@ -155,7 +155,7 @@ export default function UserInfo() {
                                             title="Change Image"
                                             className="absolute top-2 right-2 w-8 h-8 rounded-md text-xl cursor-pointer text-white bg-black"
                                         />
-                                        <CiSquareRemove
+                                        <HiOutlineDocumentRemove
                                             title="Remove Image"
                                             className="absolute top-2 right-11 w-8 h-8 rounded-md text-xl cursor-pointer text-white bg-black"
                                             onClick={removeImage}

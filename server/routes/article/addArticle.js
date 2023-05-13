@@ -28,7 +28,8 @@ const addArticle = async (req, res) => {
     const { user } = req.session
     const dom = new JSDOM(content)
     const contentOnly = dom.window.document.querySelector('body').textContent
-    const img = dom.window.document.querySelector('img')?.src || ''
+    const img =
+        req.body.img || dom.window.document.querySelector('img')?.src || ''
 
     const data = {
         title,
