@@ -1,7 +1,5 @@
 const express = require('express')
 const articleModel = require('@/model/article')
-const { ObjectId } = require('mongodb')
-const { create } = require('@/model/article')
 
 /**
  * @param {express.Request} req
@@ -14,15 +12,15 @@ module.exports = async (req, res) => {
     const {
         dateFrom,
         dateTo,
-        limit = 10,
+        limit = 0,
         page = 0,
-        categories,
+        category,
         title,
     } = req.query
-    let { createdBy, authorMatch = {} } = req.query
+    let { author, authorMatch = {} } = req.query
 
-    let categoryArray = categories
-        ? String(categories)
+    let categoryArray = category
+        ? String(category)
               ?.split(',')
               ?.map(i => String(i)?.trim()?.toUpperCase())
         : []
@@ -37,11 +35,11 @@ module.exports = async (req, res) => {
         },
         archived: { $exists: true },
     }
-    if (createdBy && createdBy !== '')
+    if (author && author !== '')
         authorMatch = {
-            name: createdBy,
+            name: author,
         }
-    if (title) filter.title = { $regex: `${title}` }
+    if (title) filter.title = { $regex: title }
     if (dateFrom) filter.publishedAt['$gte'] = new Date(dateFrom)
     if (dateTo) filter.publishedAt['$lte'] = new Date(dateTo)
     if (categoryArray.length) filter.category = { $all: categoryArray }
@@ -62,7 +60,7 @@ module.exports = async (req, res) => {
                     from: 'users',
                     localField: 'createdBy',
                     foreignField: '_id',
-                    as: 'userInfo',
+                    as: 'author',
                     pipeline: [
                         {
                             $match: authorMatch,
@@ -70,14 +68,13 @@ module.exports = async (req, res) => {
                         {
                             $project: {
                                 name: true,
-                                _id: false,
                             },
                         },
                     ],
                 },
             },
             {
-                $unwind: { path: '$userInfo' },
+                $unwind: { path: '$author' },
             },
             {
                 $project: {
@@ -87,7 +84,7 @@ module.exports = async (req, res) => {
                     year: true,
                     month: true,
                     slug: true,
-                    'userInfo.name': true,
+                    'author.name': true,
                 },
             },
         ])

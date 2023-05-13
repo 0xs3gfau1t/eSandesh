@@ -14,7 +14,7 @@ export default function ({ queryChange, cancel, reset, query}) {
             <div className="flex justify-between mt-1 items-center">
                 <label htmlFor="dateFrom">Date To: </label>
                 <input
-                    name="dateFrom"
+                    name="dateTo"
                     type="date"
                     onChange={queryChange}
                     value={query.dateTo}
@@ -24,20 +24,20 @@ export default function ({ queryChange, cancel, reset, query}) {
             <div className="flex justify-between mt-1 items-center">
                 <label htmlFor="dateFrom">Author: </label>
                 <input
-                    name="createdBy"
+                    name="author"
                     type="text"
                     onChange={queryChange}
                     className="bg-inherit border border-slate-600 px-2 py-1 rounded-lg"
-                    value={query.createdBy}
+                    value={query.author}
                 />
             </div>
             <div className="flex justify-between mt-1 items-center">
                 <label htmlFor="dateTo">Categories</label>
                 <input
-                    name="categories"
+                    name="category"
                     type="text"
                     onChange={queryChange}
-                    value={query.categories}
+                    value={query.category}
                     className="bg-inherit border border-slate-600 px-2 py-1 rounded-lg"
                 />
             </div>

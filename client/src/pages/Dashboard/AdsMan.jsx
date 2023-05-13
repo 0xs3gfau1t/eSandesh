@@ -2,8 +2,7 @@ import { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { BsFillPlusSquareFill } from 'react-icons/bs'
 
-import { FormText } from '../../components/common'
-import { Popup } from '../../components/common'
+import { FormText, Popup, PaginationComponent } from '../../components/common'
 import {
     createAd,
     editAd,
@@ -11,12 +10,7 @@ import {
     listAds,
     deleteAd,
 } from '../../redux/actions/ads'
-import {
-    AiFillDelete,
-    AiFillEdit,
-    AiOutlineArrowLeft,
-    AiOutlineArrowRight,
-} from 'react-icons/ai'
+import { AiFillDelete, AiFillEdit } from 'react-icons/ai'
 
 const POPUP_STATE = Object.freeze({
     ADD: 'Add new Ad',
@@ -261,9 +255,9 @@ export default function AdsMan() {
                                                                         'data-id'
                                                                     )
                                                                 dispatch(
-                                                                    deleteAd(
-                                                                        {id}
-                                                                    )
+                                                                    deleteAd({
+                                                                        id,
+                                                                    })
                                                                 )
                                                             }}
                                                         />
@@ -275,17 +269,7 @@ export default function AdsMan() {
                             </tbody>
                         </table>
                     </div>
-                    <div className="flex justify-center space-x-32">
-                        <AiOutlineArrowLeft
-                            className="hover:cursor-pointer hover:scale-125"
-                            onClick={() => setPage(page - 1)}
-                        />
-                        <p>{'Page ' + page}</p>
-                        <AiOutlineArrowRight
-                            className="hover:cursor-pointer hover:scale-125"
-                            onClick={() => setPage(page + 1)}
-                        />
-                    </div>
+                    <PaginationComponent page={page} setPage={setPage} />
                 </div>
             </div>
         </div>

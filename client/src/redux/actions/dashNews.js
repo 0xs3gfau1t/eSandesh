@@ -35,9 +35,9 @@ export const addNews = createAsyncThunk(
 
 export const listNews = createAsyncThunk(
     'common/listNews',
-    async (page, { dispatch }) => {
+    async (queryParams, { dispatch }) => {
         const response = await axios
-            .get(`/api/article/list?page=${page}`, {
+            .get('/api/article/list', {params: queryParams}, {
                 withCredentials: true,
             })
             .then(res => {
@@ -47,7 +47,7 @@ export const listNews = createAsyncThunk(
                 console.error(err)
             })
         if (!response) return { success: false }
-        return { success: true, data: response, page: page }
+        return { success: true, data: response, page: queryParams.page}
     }
 )
 
@@ -65,6 +65,6 @@ export const deleteNews = createAsyncThunk(
                 console.error(err)
             })
         if (!response) return { success: false }
-        return { success: true, data: response }
+        return { success: true, data: response, id: id}
     }
 )

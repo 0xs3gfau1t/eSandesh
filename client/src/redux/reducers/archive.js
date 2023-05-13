@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { listArchive } from '../actions/archive'
+import { convertToArchive, listArchive } from '../actions/archive'
 
 const initialState = { archiveList: [] }
 
@@ -9,11 +9,18 @@ const archiveSlice = createSlice({
     reducers: {},
 
     extraReducers: builder => {
-        builder.addCase(listArchive.fulfilled, (state, { payload }) => {
-            if (payload.success && payload.data) {
-                state.archiveList = payload.data
-            }
-        })
+        builder
+            .addCase(listArchive.fulfilled, (state, { payload }) => {
+                if (payload.success && payload.data) {
+                    state.archiveList = payload.data
+                }
+            })
+            .addCase(convertToArchive.fulfilled, (state, { payload }) => {
+                console.log(state.archiveList)
+                state.archiveList = state.archiveList.filter(
+                    archive => archive._id !== payload.id
+                )
+            })
     },
 })
 

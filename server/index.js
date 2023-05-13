@@ -21,7 +21,7 @@ app.use('/api', require('./middlewares/withSession'), require('./routes'))
 
 // Redirect everything other that /api/ to frontend
 app.all('*', (_req, res) => {
-    return res.json({ response: 'What are you doing onii-chaan?' })
+    return res.status(404).json({ response: 'What are you doing onii-chaan?' })
 })
 
 // Start the server specied in PORT from .env

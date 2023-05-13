@@ -6,15 +6,17 @@ import { AiOutlineSearch } from 'react-icons/ai'
 import { GiSettingsKnobs } from 'react-icons/gi'
 import { useDispatch, useSelector } from 'react-redux'
 import { listArchive } from '../../redux/actions/archive'
+import { PaginationComponent } from '../../components/common'
 
 const initQueryParams = {
     title: '',
     dateFrom: undefined, // 180 default returned
     dateTo: undefined, // Upto today
-    createdBy: '',
+    author: '',
     limit: 10,
     page: 0,
-    categories: [],
+    category: '',
+    page: 0,
 }
 
 export default function Archive() {
@@ -32,9 +34,14 @@ export default function Archive() {
         e.preventDefault()
         dispatch(listArchive(queryParams))
     }
-
     function queryChange(e) {
-        setQueryParams({ ...queryParams, [e.target.name]: e.target.value })
+        setQueryParams({
+            ...queryParams,
+            [e.target.name]:
+                e.target.name === 'category'
+                    ? String(e.target.value).toUpperCase()
+                    : e.target.value,
+        })
     }
 
     return (
@@ -76,7 +83,7 @@ export default function Archive() {
                         <Filter
                             queryChange={queryChange}
                             cancel={() => setFilterDisplay(!filterDisplay)}
-                            reset={()=>setQueryParams(initQueryParams)}
+                            reset={() => setQueryParams(initQueryParams)}
                             query={queryParams}
                         />
                     )}
@@ -89,6 +96,10 @@ export default function Archive() {
                     ))}
                 </ul>
             </div>
+            <PaginationComponent
+                page={queryParams.page}
+                setPage={page => setQueryParams({ ...queryParams, page })}
+            />
         </>
     )
 }

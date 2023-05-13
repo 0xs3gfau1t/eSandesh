@@ -22,3 +22,25 @@ export const listArchive = createAsyncThunk(
         return { success: true, data }
     }
 )
+
+export const convertToArchive = createAsyncThunk(
+    'archive/convertToArchive',
+    async _id => {
+        const data = await axios
+            .post(
+                `/api/article/archive`,
+                { _id },
+                {
+                    withCredentials: true,
+                }
+            )
+            .then(res => res.data)
+            .catch(err => {
+                console.error(err)
+            })
+
+        if (!data) return { success: false }
+
+        return { success: true, data , _id}
+    }
+)
