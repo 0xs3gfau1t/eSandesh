@@ -1,18 +1,24 @@
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import { AiOutlineUser } from 'react-icons/ai'
-import { MdOutlineUnsubscribe } from 'react-icons/md'
+import { RiMailCloseLine } from 'react-icons/ri'
+import { Popup } from '../../components/common'
+import { useAxiosError } from '../../utils/useAxiosError'
 
 export default function Subscription() {
     const [subs, setSubs] = useState([])
+    const [unsubbing, setUnsubbing] = useState(false)
+
+    const { onError } = useAxiosError()
 
     useEffect(() => {
         axios
             .get('/api/subscriptions/', { withCredentials: true })
             .then(res => setSubs(res.data))
+            .catch(onError)
     }, [])
 
-    const unsubUser = id => {
+    const unsubUser = () => {
         axios
             .delete('/api/subscriptions/', {
                 data: { id },
@@ -20,9 +26,11 @@ export default function Subscription() {
             })
             .then(res => {
                 if (res.status == 200) {
-                    setSubs(o => o.filter(x => x._id != id))
+                    setUnsubbing(false)
+                    setSubs(o => o.filter(x => x._id != unsubbing))
                 }
             })
+            .catch(onError)
     }
 
     return (
@@ -47,10 +55,10 @@ export default function Subscription() {
                                 {s.name}
                             </span>
                             <hr className="my-1" />
-                            <div className="flex w-full justify-end items-center">
-                                <MdOutlineUnsubscribe
-                                    className="text-2xl cursor-pointer hover:text-red"
-                                    onClick={() => unsubUser(s._id)}
+                            <div className="flex justify-end items-center gap-1 py-1 px-2">
+                                <RiMailCloseLine
+                                    className="w-5 h-5 cursor-pointer hover:text-red"
+                                    onClick={() => setUnsubbing(s._id)}
                                     title="Unsubscribe"
                                 />
                             </div>
@@ -61,6 +69,25 @@ export default function Subscription() {
                 <div className="text-center py-8 text-xl">
                     No users subscribed
                 </div>
+            )}
+            {unsubbing != false && (
+                <Popup title="Unsub User" setShow={setUnsubbing}>
+                    <h1>Are you sure you want to unsubscribe this user?</h1>
+                    <div className="flex justify-end gap-2 items-center">
+                        <div
+                            className="py-1 px-4 rounded-md cursor-pointer border-blue border-solid border shadow-sm hover:shadow-md"
+                            onClick={() => setUnsubbing(false)}
+                        >
+                            No
+                        </div>
+                        <div
+                            className="py-1 px-4 rounded-md cursor-pointer border-red border-solid border shadown-sm hover:shadow-md"
+                            onClick={unsubUser}
+                        >
+                            Yes
+                        </div>
+                    </div>
+                </Popup>
             )}
         </div>
     )
