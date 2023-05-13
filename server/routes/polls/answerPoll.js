@@ -39,10 +39,11 @@ const answerPoll = async (req, res) => {
         )
 
         //
-        // Invalidate Cache everytime someone casts vote 
+        // Invalidate Cache everytime someone casts vote
         //
-        redisClient.del('api/poll?id='+poll)
+        redisClient.del('api/poll?id=' + poll)
 
+        req.query = { ...req.query, id: poll }
         return getPoll(req, res)
     } catch (err) {
         console.error(err)
