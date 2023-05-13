@@ -77,6 +77,6 @@ export const deleteNews = createAsyncThunk(
                 console.error(err)
             })
         if (!response) return { success: false }
-        return { success: true, data: response }
+        return { success: true, data: response, id: id }
     }
 )

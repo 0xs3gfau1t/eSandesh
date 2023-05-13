@@ -40,11 +40,14 @@ const adminNavs = [
     { url: 'readers', name: 'Readers articles', icon: AiOutlinePullRequest },
     { url: 'critics', name: 'Manage Critics', icon: IoIosPeople },
     { url: 'polls', name: 'Manage Polls', icon: RiChatPollFill },
-    { url: 'ads', name: 'Manage Ads', icon: RiAdvertisementFill },
+    // { url: 'ads', name: 'Manage Ads', icon: RiAdvertisementFill },
     { url: 'archive', name: 'Manage Archive', icon: BiArchiveOut },
-    { url: 'stats', name: 'Stats', icon: BiStats },
 ]
-
+const adminOnly = [
+    { url: 'ads', name: 'Manage Ads', icon: RiAdvertisementFill },
+    { url: 'stats', name: 'Stats', icon: BiStats },
+    { url: 'mods', name: 'Manage Mods', icon: AiOutlineUsergroupAdd },
+]
 const SideNav = ({ role }) => {
     return (
         <ul className="min-h-screen dash-list flex flex-col gap-8 px-1 py-16 bg-darkblue w-1/7 text-white">
@@ -77,19 +80,23 @@ const SideNav = ({ role }) => {
                         </NavLink>
                     )
                 })}
-            {role?.isRoot && (
-                <NavLink
-                    to={'mods'}
-                    className={({ isActive }) =>
-                        isActive ? 'bg-sky-600 font-bold' : ''
-                    }
-                >
-                    <li>
-                        <AiOutlineUsergroupAdd className=" text-2xl" />
-                        Manage Mods
-                    </li>
-                </NavLink>
-            )}
+            {role?.isRoot &&
+                adminOnly.map(item => {
+                    return (
+                        <NavLink
+                            key={item.url}
+                            to={item.url}
+                            className={({ isActive }) =>
+                                isActive ? 'bg-sky-600 font-bold' : ''
+                            }
+                        >
+                            <li>
+                                <item.icon className=" text-2xl" />
+                                {item.name}
+                            </li>
+                        </NavLink>
+                    )
+                })}
         </ul>
     )
 }

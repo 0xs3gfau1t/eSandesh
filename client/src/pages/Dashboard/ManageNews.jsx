@@ -7,26 +7,16 @@ import { Link } from 'react-router-dom'
 
 import { listNews } from '../../redux/actions/dashNews'
 import { DashActions, FormSelect, FormText } from '../../components/common'
+import { getCatMap } from '../../utils/categoryMap'
 
-const categories = [
-    'All',
-    'POLITICS',
-    'BUSINESS',
-    'SPORTS',
-    'ENTERTAINMENT',
-    'STORY',
-    'FINANCE',
-    'GLOBAL',
-    'BUSINESS',
-    'HEALTH',
-    'TECHNOLOGY',
-]
 const initState = { page: 0, category: 'All', from: '', to: '' }
 
 const ManageNews = () => {
     const news = useSelector(state => state.news.newsList)
     const dispatch = useDispatch()
-    // let [page, setPage] = useState(0)
+    const categories = ['All'].concat(
+        Object.keys(getCatMap()).map(key => key.toUpperCase())
+    )
     let [values, setValues] = useState(initState)
 
     useEffect(() => {
