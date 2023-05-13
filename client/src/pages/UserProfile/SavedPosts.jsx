@@ -1,38 +1,44 @@
 import axios from 'axios'
 import { useEffect, useState } from 'react'
-import { AiOutlineDelete } from 'react-icons/ai'
+import { BsBookmarkDash } from 'react-icons/bs'
 import { Link } from 'react-router-dom'
-import { useDispatch } from 'react-redux'
+import { getRelativeTime } from '../../utils/relativeDuration'
+import { AiOutlineArrowRight } from 'react-icons/ai'
+import { useAxiosError } from '../../utils/useAxiosError'
 
-import { setAlert } from '../../redux/actions/misc'
 export default function SavedPosts() {
     const [posts, setPosts] = useState([])
-    const dispatch = useDispatch()
+    const [nextPage, setNextPage] = useState(0)
 
-    useEffect(() => {
-        axios
-            .get('/api/user/article')
-            .then(res => setPosts(res.data.articles))
-            .catch(err => {
-                console.log(err)
-                dispatch(setAlert('Something went wrong', 'danger'))
-            })
-    }, [])
+    const { onError } = useAxiosError()
 
-    const deletePost = id => {
+    const fetchSaved = () => {
+        if (nextPage != undefined)
+            axios
+                .get('/api/user/article', {
+                    params: { page: nextPage },
+                    withCredentials: true,
+                })
+                .then(res => {
+                    setNextPage(res.data.nextPage)
+                    setPosts(o => o.concat(res.data.articles))
+                })
+                .catch(onError)
+    }
+
+    useEffect(fetchSaved, [])
+
+    const unsavePost = id => {
         axios
             .delete('/api/user/article', { data: { id: id } })
             .then(res => {
                 if (res.status == 200) {
                     setPosts(o => o.filter(x => x.id != id))
-                    dispatch(setAlert('Removed from saved list.', 'success'))
                 }
             })
-            .catch(err => {
-                console.error(err)
-                dispatch(setAlert('Something went wrong', 'danger'))
-            })
+            .catch(onError)
     }
+
     return (
         <div>
             <h2 className="font-bold text-base leading-loose">Saved Posts</h2>
@@ -41,7 +47,7 @@ export default function SavedPosts() {
                     {posts.map(post => {
                         return (
                             <li
-                                key={post.id}
+                                key={post._id}
                                 className="w-48 flex flex-col my-4 shadow-md hover:shadow-lg duration-200 rounded-md bg-white p-4"
                             >
                                 <img
@@ -53,22 +59,58 @@ export default function SavedPosts() {
                                 />
                                 <Link
                                     to={`/news/${post.year}/${post.month}/${post.slug}`}
-                                    className="font-english font-bold leading-none my-4 truncate"
+                                    className="font-english font-bold leading-none my-1 truncate"
+                                    title={post.title}
                                 >
                                     {post.title}
                                 </Link>
-                                <p className="flex flex-col text-sm">
-                                    <span>-{post.author}</span>{' '}
-                                    <span>{post.updatedAt.slice(0, 10)}</span>
-                                </p>
-                                <AiOutlineDelete
-                                    className="ml-36 cursor-pointer hover:text-rose-700"
-                                    title="Unsave article"
-                                    onClick={() => deletePost(post.id)}
-                                />
+                                <div className="flex flex-col text-sm">
+                                    <span>{post.author.name}</span>
+                                    <span className="text-gray-600">
+                                        {'Created ' +
+                                            getRelativeTime(
+                                                new Date(post.createdAt)
+                                            )}
+                                    </span>
+                                    <div className="overflow-x-scroll flex flex-nowrap gap-2">
+                                        {(() => {
+                                            let cat = post.category.map(
+                                                c =>
+                                                    c.charAt(0).toUpperCase() +
+                                                    c.slice(1).toLowerCase()
+                                            )
+                                            cat = cat.join(', ')
+                                            return (
+                                                <span
+                                                    className="truncate"
+                                                    title={cat}
+                                                >
+                                                    {cat}
+                                                </span>
+                                            )
+                                        })()}
+                                    </div>
+                                </div>
+                                <hr className="my-1" />
+                                <div className="flex justify-end gap-1 py-1 px-2">
+                                    <BsBookmarkDash
+                                        className="w-5 h-5 cursor-pointer hover:text-red"
+                                        title="Unsave article"
+                                        onClick={() => unsavePost(post.id)}
+                                    />
+                                </div>
                             </li>
                         )
                     })}
+                    {nextPage !== undefined && (
+                        <li
+                            className="flex flex-col my-4 shadow-md hover:shadow-lg duration-200 rounded-md bg-white p-4 self-center"
+                            onClick={fetchSaved}
+                        >
+                            <span className="text-lg">Load More</span>
+                            <AiOutlineArrowRight className="align-middle w-full" />
+                        </li>
+                    )}
                 </ul>
             ) : (
                 <div className="text-center py-8 text-xl">

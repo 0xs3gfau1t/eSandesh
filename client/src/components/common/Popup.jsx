@@ -4,7 +4,7 @@ const Popup = ({ title, children, setShow, width }) => {
             <div
                 className="fixed inset-0 w-full h-full bg-black opacity-40"
                 onClick={() => setShow(false)}
-            ></div>
+            />
             <div
                 className={`flex items-center min-h-screen px-4 py-8  mx-auto ${
                     width ? width : ''

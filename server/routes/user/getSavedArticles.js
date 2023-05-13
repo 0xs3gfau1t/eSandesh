@@ -3,14 +3,15 @@ const express = require('express')
 const mongoose = require('mongoose')
 const { userModel } = require('../../model/user')
 
+const ITEMS_PER_PAGE = 7
+
 /**
  * @param {express.Request} req
  * @param {express.Response} res
  * @return {void}
  */
 module.exports = async (req, res) => {
-    var { page = 0, limit = 10 } = req.query
-    limit = Number(limit)
+    let { page = 0 } = req.query
     page = Number(page)
 
     const { user } = req.session
@@ -33,60 +34,49 @@ module.exports = async (req, res) => {
                     from: 'articles',
                     localField: 'saved',
                     foreignField: '_id',
-                    as: 'articles',
-                },
-            },
-            {
-                $project: {
-                    saved: false,
+                    pipeline: [
+                        {
+                            $project: {
+                                _id: true,
+                                title: true,
+                                createdBy: true,
+                                category: true,
+                                year: true,
+                                month: true,
+                                slug: true,
+                                createdAt: true,
+                                img: true,
+                            },
+                        },
+                        { $skip: page * ITEMS_PER_PAGE },
+                        { $limit: ITEMS_PER_PAGE },
+                    ],
+                    as: 'saved',
                 },
             },
             {
                 $unwind: {
-                    path: '$articles',
+                    path: '$saved',
                 },
             },
+            { $replaceRoot: { newRoot: '$saved' } },
             {
                 $lookup: {
                     from: 'users',
-                    localField: 'articles.createdBy',
+                    localField: 'createdBy',
                     foreignField: '_id',
+                    pipeline: [
+                        { $project: { name: true, _id: true, image: true } },
+                    ],
                     as: 'author',
                 },
             },
-            {
-                $addFields: {
-                    author: {
-                        $arrayElemAt: ['$author', 0],
-                    },
-                    articles: {
-                        $mergeObjects: [
-                            '$articles',
-                            {
-                                author: {
-                                    $arrayElemAt: ['$author.name', 0],
-                                },
-                            },
-                        ],
-                    },
-                },
-            },
-            {
-                $project: {
-                    id: '$articles._id',
-                    year: '$articles.year',
-                    month: '$articles.month',
-                    slug: '$articles.slug',
-                    title: '$articles.title',
-                    author: '$articles.author',
-                    updatedAt: '$articles.updatedAt',
-                    img: '$articles.img',
-                },
-            },
+            { $unwind: '$author' },
         ])
     try {
         const articles = await Cache(req.originalUrl, getSaved, { EX: 60 })
-        res.json({ message: 'success', articles })
+        const nextPage = articles.length < ITEMS_PER_PAGE ? undefined : page + 1
+        res.json({ message: 'success', articles, nextPage })
     } catch (err) {
         console.error(err)
         return res.status(500).json({ error: 'Something went wrong.' })
