@@ -33,7 +33,7 @@ export const addNews = createAsyncThunk(
                 dispatch(setAlert('Article saved.', 'success'))
                 setTimeout(() => {
                     dispatch(setEditing(false))
-                }, 3000)
+                }, 5000)
                 return res.data
             })
             .catch(err => {

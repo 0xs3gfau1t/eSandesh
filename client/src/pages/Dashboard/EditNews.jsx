@@ -10,6 +10,7 @@ import { FormText } from '../../components/common'
 import { addNews } from '../../redux/actions/dashNews'
 import { getSingleNews } from '../../redux/actions/publicNews'
 import { setEditing } from '../../redux/reducers/misc'
+import { setAlert } from '../../redux/actions/misc'
 
 const initState = {
     title: '',
@@ -57,7 +58,7 @@ const EditNews = ({ isEdit }) => {
 
     const onPublish = e => {
         if (!property.title || !content) {
-            console.log('Title and content required')
+            dispatch(setAlert('Title and content required', 'danger'))
             return
         }
         let tags = property.tags

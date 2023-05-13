@@ -33,6 +33,10 @@ export default function HeroSection({ cat, data }) {
             </div>
         )
     } else {
-        return <h1>{catMap[cat]} वर्गमा कुनै समाचार छैन.</h1>
+        return (
+            <h1 className="text-center py-2 text-2xl my-10">
+                {catMap[cat]} वर्गमा थप कुनै समाचार छैन।
+            </h1>
+        )
     }
 }
