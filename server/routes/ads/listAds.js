@@ -16,7 +16,9 @@ module.exports = (req, res) => {
         limit = 10,
         popup,
         filterExpiry = false,
+        audio,
     } = req.query
+    let { imageType } = req.query
 
     const filter = {}
 
@@ -24,15 +26,22 @@ module.exports = (req, res) => {
     if (filterExpiry) filter.expiry = { $gt: new Date() }
 
     if (category)
-        filter[category] = {
+        filter['category'] = {
             $all: category
                 .split(',')
                 .map(i => i.trim())
                 .filter(i => i !== ''),
         }
-    console.log(filter)
+    if (imageType) {
+        if (['rectX', 'rectY', 'square'].includes(imageType))
+            imageType = 'image.' + imageType
+        else imageType = 'image'
+        filter[imageType] = { $exists: true }
+    }
+    if (audio) filter.audio = { $exists: true }
+
     adsModel
-        .find(filter, {audio: 0, image: 0})
+        .find(filter, { audio: 0, image: 0 })
         .skip(page * limit)
         .limit(limit)
         .sort({ priority })

@@ -41,12 +41,19 @@ button {
 }
 .alert-danger {
     background: #842029;
+    color: white;
 }
 .alert-success {
     background: #03552f;
+    color: white;
 }
+.alert-wait {
+    background: yellow;
+    color: black;
+}
+
 .alert {
-    @apply flex fixed md:w-1/4 min-w-fit z-[100] rounded-md border px-4 py-2 text-center opacity-95 drop-shadow-lg text-white items-center;
+    @apply flex fixed md:w-1/4 min-w-fit z-[100] rounded-md border px-4 py-2 text-center opacity-95 drop-shadow-lg  items-center;
     bottom: 0.5rem;
     animation: alertSlide 0.2s forwards;
 }

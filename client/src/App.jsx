@@ -10,7 +10,6 @@ import {
     UserAuth,
     ForgotPassword,
     Category,
-    Archive,
     AdsMan,
     ViewSiteStats,
     SingleNews,
@@ -44,10 +43,14 @@ const LazyAdmins = [
     { url: 'readers', comp: LazyReadersArticles },
     { url: 'critics', comp: LazyManageCritics },
     { url: 'archive', comp: LazyManageArchive },
-    { url: 'ads', comp: LazyManageAds },
     { url: 'polls', comp: LazyManagePolls },
-    { url: 'stats', comp: LazyManageStats },
 ]
+const adminOnly = [
+    { url: 'ads', comp: LazyManageAds },
+    { url: 'stats', comp: LazyManageStats },
+    { url: 'mods', comp: LazyManageMods },
+]
+
 function App() {
     const misc = useSelector(state => state.misc)
     const session = useSession()
@@ -87,16 +90,20 @@ function App() {
                                 />
                             )
                         })}
-                    {session?.data?.user?.roles?.isRoot && (
-                        <Route
-                            path="mods"
-                            element={
-                                <Suspense>
-                                    <LazyManageMods />
-                                </Suspense>
-                            }
-                        />
-                    )}
+                    {session?.data?.user?.roles?.isRoot &&
+                        adminOnly.map(item => {
+                            return (
+                                <Route
+                                    key={item.url}
+                                    path={item.url}
+                                    element={
+                                        <Suspense>
+                                            <item.comp />
+                                        </Suspense>
+                                    }
+                                />
+                            )
+                        })}
                     <Route
                         path="/admin/dashboard"
                         element={

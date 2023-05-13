@@ -8,6 +8,7 @@ const articleModel = require('../../model/article')
  */
 const listArticle = async (req, res) => {
     const {
+        title,
         category = undefined,
         page = 0,
         items = 10,
@@ -15,6 +16,7 @@ const listArticle = async (req, res) => {
         from,
         to = new Date(),
     } = req.query
+    let { author, authorMatch = {} } = req.query
     const [year, month] = req.url.replace(/\?.*/, '').split('/').slice(2)
 
     const sortParameters = { publishedAt: -1 }
@@ -39,11 +41,36 @@ const listArticle = async (req, res) => {
     }
     if (year) filter.year = year
     if (month) filter.month = month
-    if (from) filter.createdAt = { $gte: new Date(from), $lt: new Date(to) }
-
+    if (from)
+        filter.createdAt = {
+            $gte: new Date(new Date(from).setHours(0, 0, 0, 0)),
+            $lte: new Date(new Date(to).setHours(23, 59, 59, 0)),
+        }
+    if (!from)
+        filter.createdAt = {
+            $lte: new Date(new Date(to).setHours(23, 59, 59, 0)),
+        }
+    if (author && author !== '')
+        authorMatch = {
+            name: author,
+        }
+    if (title && title !== '') filter.title = { $regex: title }
     try {
         const articles = await articleModel.aggregate([
             { $match: filter },
+            {
+                $lookup: {
+                    from: 'users',
+                    localField: 'createdBy',
+                    foreignField: '_id',
+                    as: 'author',
+                    pipeline: [
+                        { $match: authorMatch },
+                        { $project: { name: true, _id: false } },
+                    ],
+                },
+            },
+            { $unwind: { path: '$author' } },
             { $project: { audio: 0, content: 0 } },
             { $sort: sortParameters },
             { $skip: page * items },

@@ -6,20 +6,12 @@ import { LikeSaveShare, SeeAllBtn } from '../../components/common'
 import SideNewsList from './SideNewsList'
 import SideScrollNewsSection from './SideScrollNewsSection'
 import { listNewsCat } from '../../redux/actions/publicNews'
+import { getCatMap } from '../../utils/categoryMap'
 
 export default function EachCategoryPreview({ category }) {
     const khabar = useSelector(state => state.news[category])
     const dispatch = useDispatch()
-    const cats = {
-        politics: 'राजनीति',
-        global: 'विश्व',
-        business: 'विजनेस',
-        sports: 'खेलकुद',
-        entertainment: 'मनोरञ्जन',
-        technology: 'प्रविधि',
-        health: 'स्वास्थ्य',
-        story: 'विचार/रचना ',
-    }
+    const cats = getCatMap()
     useEffect(() => {
         dispatch(listNewsCat({ page: 0, cat: category.toUpperCase() }))
     }, [])

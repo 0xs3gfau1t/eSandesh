@@ -1,10 +1,11 @@
 import React from 'react'
-// import { SideNavBar } from "../../components";
-import { SqAds } from '../../components/common'
+import { useSelector } from 'react-redux'
+import { RectYAd } from '../../components/common'
 import RecentNews from '../Home/RecentNews'
 import Content from './Content'
 
 export default function Category() {
+    const adsY = useSelector(state => state.ads.rectY)
     return (
         <div className="flex justify-between">
             {/* left-side that contains news */}
@@ -14,8 +15,10 @@ export default function Category() {
             {/* right side */}
             <div className="hidden w-1/3 sm:flex flex-col items-center px-4">
                 {/* ads go here */}
-                <SqAds />
-                <SqAds />
+                <RectYAd
+                    ad={adsY ? (adsY[1] ? adsY[1] : false) : false}
+                    type={'y'}
+                />
             </div>
         </div>
     )

@@ -18,15 +18,8 @@ function RectXAd({ ad }) {
             ) : (
                 <div className="flex items-center justify-center bg-amber-500 h-20">
                     <p className="lg:text-xl text-sm font-secondary text-justify">
-                        <a
-                            href={
-                                'https://media.tenor.com/IRcIGzwz7IQAAAAC/money-wallet.gif'
-                            }
-                            target="_blank"
-                        >
-                            Place your ads here, contact us at
-                            advertise@esandesh.com
-                        </a>
+                        Place your ads here, contact us at
+                        advertise@esandesh.com
                     </p>
                 </div>
             )}
@@ -51,22 +44,15 @@ function RectYAd({ ad }) {
                 </div>
             ) : (
                 <div className="flex items-center justify-center bg-amber-500 h-screen">
-                    <p className="lg:text-xl text-sm font-secondary text-justify">
-                        <a
-                            href={
-                                'https://media.tenor.com/IRcIGzwz7IQAAAAC/money-wallet.gif'
-                            }
-                            target="_blank"
-                        >
-                            <div className="flex flex-col px-4 justify-center">
-                                <span>Place</span> <span>your</span>
-                                <span>ads</span>
-                                <span>here.</span>
-                                <span>Contact</span>
-                                <span>Us</span>
-                            </div>
-                        </a>
-                    </p>
+                    <div className="lg:text-xl text-sm font-secondary text-justify">
+                        <div className="flex flex-col px-4 justify-center">
+                            <span>Place</span> <span>your</span>
+                            <span>ads</span>
+                            <span>here.</span>
+                            <span>Contact</span>
+                            <span>Us</span>
+                        </div>
+                    </div>
                 </div>
             )}
         </div>

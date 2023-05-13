@@ -3,6 +3,7 @@ import { createSlice } from '@reduxjs/toolkit'
 const initialState = {
     focus: false,
     isLoading: false,
+    isEditing: false,
     showAlert: false,
     alertMsg: '',
     alertType: '',
@@ -32,6 +33,9 @@ const miscSlice = createSlice({
         setLoading: (state, { payload }) => {
             state.isLoading = payload
         },
+        setEditing: (state, { payload }) => {
+            state.isEditing = payload
+        },
     },
 })
 
@@ -40,6 +44,7 @@ export const {
     displayAlert,
     clearAlert,
     setLoading,
+    setEditing,
     updateForexData,
 } = miscSlice.actions
 export default miscSlice.reducer

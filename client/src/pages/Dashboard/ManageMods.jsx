@@ -28,7 +28,6 @@ const ManageMods = () => {
         await axios
             .get('/api/user/admin/list')
             .then(res => {
-                // console.log(res.data)
                 setMods(res.data.data)
             })
             .catch(err => {
@@ -48,10 +47,8 @@ const ManageMods = () => {
     }
     const handleEdit = e => {
         if (edit[e.target.name]) {
-            console.log('There')
             setEdit({ ...edit, [e.target.name]: !edit[e.target.name] })
         } else {
-            console.log('here')
             setEdit({ ...edit, [e.target.name]: true })
         }
     }
@@ -63,7 +60,6 @@ const ManageMods = () => {
         await axios
             .post('/api/user/admin/', values)
             .then(res => {
-                console.log('Res', res)
                 dispatch(setAlert('New mod account created', 'success'))
                 setValues(initState)
                 getModList()
@@ -86,7 +82,6 @@ const ManageMods = () => {
     }
 
     async function saveEdit() {
-        console.log('Edit saving..')
         let data = edit
         Object.keys(data).forEach(el => {
             data[el] = '' + data[el]

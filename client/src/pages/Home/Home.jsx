@@ -13,6 +13,7 @@ export default function Home({ session }) {
     useEffect(() => {
         dispatch(getRelAds({ limit: 5, type: 'rectX' }))
         dispatch(getRelAds({ limit: 4, type: 'square' }))
+        dispatch(getRelAds({ limit: 2, type: 'rectY' }))
     }, [])
 
     return (

@@ -33,25 +33,28 @@ export const editAd = async data => {
         })
 }
 
-export const listAds = createAsyncThunk('ads/listAd', async filters => {
-    const response = await axios
-        .get(
-            `/api/ads/list`,
-            { params: filters },
-            {
-                withCredentials: true,
-            }
-        )
-        .then(res => {
-            return res.data
-        })
-        .catch(err => {
-            console.error(err)
-        })
-    if (!response) return { success: false }
+export const listAds = createAsyncThunk(
+    'ads/listAd',
+    async (filters, { dispatch }) => {
+        const response = await axios
+            .get(
+                `/api/ads/list`,
+                { params: filters },
+                {
+                    withCredentials: true,
+                }
+            )
+            .then(res => {
+                return res.data
+            })
+            .catch(err => {
+                console.error(err)
+            })
+        if (!response) return { success: false }
 
-    return { success: true, data: response.ad }
-})
+        return { success: true, data: response.ad }
+    }
+)
 
 export const getAd = async id => {
     const res = await axios

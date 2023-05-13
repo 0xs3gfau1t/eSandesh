@@ -11,7 +11,7 @@ import SocialShare from './SocialShare'
 import DashActions from './DashActions'
 import SeeAllBtn from './SeeAllBtn'
 import Alert from './Alert'
-
+import PaginationComponent from './PaginationComponent'
 export {
     SiteLogo,
     FormText,
@@ -29,4 +29,5 @@ export {
     DashActions,
     SeeAllBtn,
     Alert,
+    PaginationComponent
 }

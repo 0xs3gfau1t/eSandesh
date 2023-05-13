@@ -33,7 +33,7 @@ const SearchPage = () => {
 
     return (
         <div className="p-4">
-            <h1 className="text-2xl font-bold">Search Results: </h1>
+            <h1 className="text-2xl font-bold">खोज परिणामहरू </h1>
             {searchResult.length > 0 ? (
                 searchResult.map(s => (
                     <Link
