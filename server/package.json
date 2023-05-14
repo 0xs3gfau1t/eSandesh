@@ -7,16 +7,14 @@
         "test": "echo \"Error: no test specified\" && exit 1",
         "dev": "nodemon index.js",
         "dev-temp": "// This is for directory imports // node --experimental-specifier-resolution=node index.js",
-        "start": "pm2-runtime start index.js exec_mode cluster instances max",
+        "start": "NODE_ENV='production' pm2-runtime start index.js exec_mode cluster instances max",
         "format": "prettier --write ."
     },
     "repository": {
         "type": "git",
         "url": "git+https://github.com/0xs3gfau1t/news.git"
     },
-    "keywords": [
-        "news"
-    ],
+    "keywords": ["news"],
     "author": "SegFault",
     "license": "ISC",
     "bugs": {
