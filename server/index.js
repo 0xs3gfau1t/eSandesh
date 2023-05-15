@@ -2,14 +2,18 @@ require('module-alias/register')
 const path = require('path')
 require('dotenv').config({ path: path.resolve(__dirname, '.env') })
 
-const { redisClient } = require('@/config/redis')
-
 // Connect to the database
 require('@/config/db')()
-redisClient
-    .connect()
-    .then(() => console.log('Connected to redis server'))
-    .catch(console.error)
+
+if (process.env.__DISABLE_CACHE !== 'true') {
+    const { redisClient } = require('@/config/redis')
+    redisClient
+        .connect()
+        .then(() => console.log('Connected to redis server'))
+        .catch(console.error)
+} else {
+    console.debug('[*] CACHE IS DISABLED')
+}
 
 const { app, server } = require('./config/app')
 
