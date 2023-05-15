@@ -131,19 +131,20 @@ h6 {
 
 .poll-button {
     background: linear-gradient(-45deg, #d31818e7, #d31818e7, #1d3557, #1d3557);
-    background-size: 900% 900%;
+    background-size: 500% 500%;
     animation: jhilimili 0.8s infinite;
 }
 
 @keyframes jhilimili {
     0% {
-        background-position: 0% 50%;
+        background-color: #49e819;
+        box-shadow: 0 0 15px 0px #d31818e7;
     }
     50% {
-        background-position: 100% 50%;
+        box-shadow: 0 0 15px 10px #d31818e7;
     }
     100% {
-        background-position: 0% 50%;
+        box-shadow: 0 0 15px 0px #d31818e7;
     }
 }
 

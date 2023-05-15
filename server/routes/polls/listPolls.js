@@ -9,14 +9,17 @@ const {
  * @param {express.Response} res
  */
 module.exports = async (req, res) => {
-    let { limit = 10, page = 0, expired = false } = req.query
+    let { limit = 10, page = 0, active = true } = req.query
     limit = Number(limit)
     page = Number(page)
 
     const userId = req.session?.user?.id
     const roles = req.session?.user?.roles
 
-    const filter = expired ? {} : { expiry: { $gt: new Date() } }
+    const filter =
+        active == 'true'
+            ? { expiry: { $gt: new Date() } }
+            : { expiry: { $lt: new Date() } }
 
     try {
         const polls = await pollsModel.aggregate([
@@ -68,7 +71,8 @@ module.exports = async (req, res) => {
             // If the poll has not been voted
             // then remove the vote count
             // but only if user is not root
-            if (roles?.isPublisher || roles?.isRoot) continue
+            if (roles?.isPublisher || roles?.isRoot || polls[i].expired)
+                continue
             for (let j = 0; j < polls[i].options.length; j++)
                 delete polls[i].options[j].votes
         }
