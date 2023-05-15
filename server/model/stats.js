@@ -12,7 +12,7 @@ const conn = mongoose.createConnection(process.env.MONGO_URI, {
 })
 
 const user = new Schema({
-    _id: ObjectId,
+    id: ObjectId,
     snapId: { type: ObjectId, ref: 'stat' },
     publishedAds: Number,
     createdArticles: Number,
@@ -26,26 +26,26 @@ const user = new Schema({
 })
 
 const ads = new Schema({
-    _id: ObjectId,
+    id: ObjectId,
     snapId: { type: ObjectId, ref: 'stat' },
     hits: Number,
 })
 
 const article = new Schema({
-    _id: ObjectId,
+    id: ObjectId,
     snapId: { type: ObjectId, ref: 'stat' },
     hits: Number,
     saves: Number,
 })
 
 const comment = new Schema({
-    _id: ObjectId,
+    id: ObjectId,
     snapId: { type: ObjectId, ref: 'stat' },
     likes: Number,
 })
 
 const poll = new Schema({
-    _id: ObjectId,
+    id: ObjectId,
     snapId: { type: ObjectId, ref: 'stat' },
     votes: Number,
 })
