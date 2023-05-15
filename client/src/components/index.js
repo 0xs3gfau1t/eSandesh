@@ -2,7 +2,7 @@ import Header from './Header/Header'
 import Footer from './Footer/Footer'
 import LeftSideBar from './LeftSideBar/LeftSideBar'
 import RightSideBar from './RightSideBar/RightSideBar'
-import { TopNav, SideNav, UserSideNav } from './DashNavs'
+import { TopNav, SideNav } from './DashNavs'
 
 export {
     Header,
@@ -11,5 +11,4 @@ export {
     RightSideBar,
     TopNav,
     SideNav,
-    UserSideNav,
 }

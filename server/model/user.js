@@ -30,6 +30,7 @@ const userSchema = new mongoose.Schema({
     saved: {
         type: [mongoose.Schema.Types.ObjectId],
     },
+    rashifal: { type: String },
 })
 
 const accountSchema = new mongoose.Schema({

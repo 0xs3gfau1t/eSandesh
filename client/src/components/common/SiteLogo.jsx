@@ -4,7 +4,7 @@ import siteLogoLight from '../../assets/icons/eSandesh-logo--white.png'
 
 const SiteLogo = ({ theme }) => {
     return (
-        <Link to="/">
+        <Link to="/" className='text-center'>
             <img
                 src={theme === 'light' ? siteLogoLight : siteLogoDark}
                 className="w-40"

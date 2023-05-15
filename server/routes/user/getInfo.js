@@ -14,8 +14,19 @@ const getInfo = async (req, res) => {
         let userInfo
         if (id == req.session?.user?.id) {
             userInfo = await userModel.aggregate([
-                { $match: { _id: mongoose.Types.ObjectId(id) } },
-                { $project: { name: 1, image: 1, email: 1, roles: 1 } },
+                {
+                    $match: {
+                        _id: mongoose.Types.ObjectId(id),
+                    },
+                },
+                {
+                    $project: {
+                        name: true,
+                        image: true,
+                        email: true,
+                        roles: { $ifNull: ['$roles', []] },
+                    },
+                },
                 {
                     $lookup: {
                         from: 'accounts',
@@ -33,7 +44,9 @@ const getInfo = async (req, res) => {
             ])
         }
 
-        return res.status(200).json({ message: 'success', userInfo })
+        return res
+            .status(200)
+            .json({ message: 'success', userInfo: userInfo[0] })
     } catch (err) {
         console.error(err)
         return res.status(500).json({

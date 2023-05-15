@@ -22,13 +22,6 @@ import {
     SearchPage,
     NotFound,
 } from './pages'
-import {
-    UserInfo,
-    UserPreference,
-    UserPosts,
-    SavedPosts,
-    Subscription,
-} from './pages/UserProfile'
 
 import { PrivateRoute, Alert } from './components/common'
 
@@ -139,14 +132,7 @@ function App() {
                 <Route
                     path="/profile"
                     element={<UserProfile session={session} />}
-                >
-                    <Route path="/profile/" element={<UserInfo />} />
-                    <Route path="saved" element={<SavedPosts />} />
-                    <Route path="preference" element={<UserPreference />} />
-                    <Route path="subscription" element={<Subscription />} />
-                    <Route path="myposts" element={<UserPosts />} />
-                </Route>
-                <Route path="/saved" element={<SavedPosts />} />
+                />
 
                 <Route path="/" element={<Home session={session} />}>
                     <Route path="/archive" element={<ArchiveNews />} />

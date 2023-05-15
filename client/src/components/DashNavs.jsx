@@ -101,36 +101,4 @@ const SideNav = ({ role }) => {
     )
 }
 
-const userNavs = [
-    { url: '/profile/', name: 'Account', icon: AiFillSetting },
-    { url: 'saved', name: 'Saved Articles', icon: AiFillSave },
-    { url: 'subscription', name: 'Subsriptions', icon: RiMailFill },
-    { url: 'myposts', name: 'My Posts', icon: RiArticleFill },
-]
-
-const UserSideNav = () => {
-    return (
-        <ul className="dash-list flex flex-col gap-6 px-1 py-24 border-r-2 border-r-black">
-            {userNavs.map(item => {
-                return (
-                    <NavLink
-                        key={item.url}
-                        to={item.url}
-                        className={({ isActive }) =>
-                            isActive
-                                ? 'bg-orange-700 rounded-md text-white'
-                                : ''
-                        }
-                    >
-                        <li>
-                            <item.icon className=" text-2xl" />
-                            {item.name}
-                        </li>
-                    </NavLink>
-                )
-            })}
-        </ul>
-    )
-}
-
-export { TopNav, SideNav, UserSideNav }
+export { TopNav, SideNav }

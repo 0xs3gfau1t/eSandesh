@@ -18,6 +18,7 @@ const editArticle = async (req, res) => {
         title,
         category = undefined,
         tags = undefined,
+        img,
     } = req.body
     const { user } = req.session
     const filter = { _id: id }
@@ -42,6 +43,7 @@ const editArticle = async (req, res) => {
              content: contentOnly,
          })
      )
+    if (img) article.img = img
 
     var key
     try {

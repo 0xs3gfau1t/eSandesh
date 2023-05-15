@@ -13,9 +13,10 @@ const {
     requestPasswordReset,
     processPasswordReset,
 } = require('@/routes/user/forgotPassword')
-const { getImage, postImage } = require('@/routes/user/image')
+const { getImage, postImage, deleteImage } = require('@/routes/user/image')
 const updateInfo = require('./updateInfo')
 const getInfo = require('./getInfo')
+const { getRashifal, setRashifal } = require('./rashifal')
 
 router.post('/', withAuth, updateInfo)
 router.get('/', getInfo)
@@ -28,7 +29,11 @@ router.get('/topuser', withAuth, topUser)
 router.get('/forgotpassword', requestPasswordReset)
 router.post('/forgotpassword', processPasswordReset)
 
+router.get('/rashifal', withAuth, getRashifal)
+router.post('/rashifal', withAuth, setRashifal)
+
 router.get('/image', getImage)
 router.post('/image', withAuth, postImage)
+router.delete('/image', withAuth, deleteImage)
 
 module.exports = router
