@@ -16,7 +16,6 @@ const initQueryParams = {
     limit: 10,
     page: 0,
     category: '',
-    page: 0,
 }
 
 export default function Archive() {

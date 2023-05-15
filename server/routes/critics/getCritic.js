@@ -8,6 +8,10 @@ const { ObjectId } = require('mongodb')
  * @return {void}
  */
 
+//
+// This route is not used
+//
+
 module.exports = async (req, res) => {
     const { criticId } = req.query
 

@@ -1,5 +1,6 @@
 const express = require('express')
 const pollsModel = require('../../model/polls')
+const {redisClient} = require('@/config/redis')
 
 /**
  * @param {express.Request} req
@@ -16,7 +17,9 @@ const addPoll = async (req, res) => {
             options: options.map(option => ({ text: option })),
         })
         await poll.save()
-        return res.status(200).json({ success: true, poll })
+        res.status(200).json({ success: true, poll })
+
+        redisClient.del('/api/poll/list')
     } catch (err) {
         console.error(err)
         return res.status(500).json({ error: 'Something went wrong.' })

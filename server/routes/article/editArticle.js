@@ -37,13 +37,13 @@ const editArticle = async (req, res) => {
     if (category) article.category = category
     if (tags) article.tags = tags
     if (img) article.img = img
-    // article.summarizedContent = await generateSummary(contentOnly)
-    // article.audio = await rawConverter(
-    //     await reciter({
-    //         title,
-    //         content: contentOnly,
-    //     })
-    // )
+    article.summarizedContent = await generateSummary(contentOnly)
+    article.audio = await rawConverter(
+         await reciter({
+             title,
+             content: contentOnly,
+         })
+     )
 
     var key
     try {
