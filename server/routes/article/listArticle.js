@@ -55,9 +55,17 @@ const listArticle = async (req, res) => {
             name: author,
         }
     if (title && title !== '') filter.title = { $regex: title }
+
     try {
         const articles = await articleModel.aggregate([
             { $match: filter },
+            //
+            // I can't understand this
+            // Removing this projection will cause memory issue
+            { $project: { audio: false } },
+            // But projecting content: 0 with it also causes
+            // What is this jumbalalala
+            //
             {
                 $lookup: {
                     from: 'users',
