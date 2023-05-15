@@ -1,23 +1,36 @@
 const express = require('express')
 const pollsModel = require('../../model/polls')
-const {redisClient} = require('@/config/redis')
+const { redisClient } = require('@/config/redis')
 
 /**
  * @param {express.Request} req
  * @param {express.Response} res
  */
 const addPoll = async (req, res) => {
-    const { question, options } = req.body
-    if (!question || !options)
-        return res.status(400).json({ error: 'Empty question or options.' })
+    const { question, options, expiry } = req.body
+    if (!question || !options || !expiry)
+        return res.status(400).json({ error: 'Missing field' })
 
     try {
         const poll = new pollsModel({
             question,
             options: options.map(option => ({ text: option })),
+            expiry: new Date(Date.now() + Number(expiry) * 24 * 60 * 60 * 1000),
         })
         await poll.save()
-        res.status(200).json({ success: true, poll })
+        res.status(200).json({
+            success: true,
+            poll: {
+                _id: poll._id,
+                question: poll.question,
+                options: poll.options.map(opt => ({
+                    _id: opt._id,
+                    text: opt.text,
+                    votes: opt.users.length,
+                })),
+                voted: -1,
+            },
+        })
 
         redisClient.del('/api/poll/list')
     } catch (err) {

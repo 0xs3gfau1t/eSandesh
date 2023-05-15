@@ -7,8 +7,9 @@ import { Popup } from '../../components/common'
 import { listPolls, createPoll } from '../../redux/actions/polls'
 
 const initState = {
-    question: 'Alphabet',
-    options: ['A', 'B', 'C'],
+    question: '',
+    options: [],
+    expiry: 1,
 }
 
 export default function PollsMan() {
@@ -24,14 +25,14 @@ export default function PollsMan() {
     const addOption = e => {
         e.preventDefault()
         setProp(oldProp => ({
-            question: oldProp.question,
+            ...oldProp,
             options: [...oldProp.options, ''],
         }))
     }
 
     const changeOption = (idx, val) => {
         setProp(oldProp => ({
-            question: oldProp.question,
+            ...oldProp,
             options: oldProp.options.map((option, i) =>
                 i == idx ? val : option
             ),
@@ -40,7 +41,7 @@ export default function PollsMan() {
 
     const deleteOption = idx => {
         setProp(oldProp => ({
-            question: oldProp.question,
+            ...oldProp,
             options: oldProp.options.filter((_, i) => i != idx),
         }))
     }
@@ -53,6 +54,9 @@ export default function PollsMan() {
             setShow(false)
         }, 3000)
     }
+
+    const handleChange = e =>
+        setProp(o => ({ ...o, [e.target.name]: e.target.value }))
 
     return (
         <div className="mx-8">
@@ -67,9 +71,14 @@ export default function PollsMan() {
                         name="question"
                         value={prop.question}
                         labelText="Question"
-                        handleChange={e =>
-                            setProp({ ...prop, question: e.target.value })
-                        }
+                        handleChange={handleChange}
+                    />
+                    <FormText
+                        type="text"
+                        name="expiry"
+                        value={prop.expiry}
+                        labelText="Expires In"
+                        handleChange={handleChange}
                     />
                     {prop.options.map((option, idx) => (
                         <div className="relative" key={idx}>
@@ -83,12 +92,12 @@ export default function PollsMan() {
                             />
                             <ImCancelCircle
                                 className="absolute left-full top-full -translate-x-[150%] -translate-y-[200%] cursor-pointer h-1/2 aspect-square rounded-full"
-                                onClick={e => deleteOption(idx)}
+                                onClick={() => deleteOption(idx)}
                             />
                         </div>
                     ))}
                     <button
-                        className="bg-darkblue text-white"
+                        className="bg-darkblue text-white mr-2"
                         onClick={addOption}
                     >
                         Add Option
@@ -106,13 +115,12 @@ export default function PollsMan() {
                 <div className="overflow-x-auto">
                     <div className="py-2 inline-block min-w-full sm:px-6 lg:px-8">
                         <div className="overflow-hidden">
-                            <table className="newsListTable min-w-full table-fixed w-screen">
-                                <thead className="border-b w-full">
+                            <table className="newsListTable min-w-full table-auto">
+                                <thead className="border-b">
                                     <tr>
-                                        <th>#</th>
-                                        <th>Question</th>
-                                        <th>Responses</th>
-                                        <th>Actions</th>
+                                        <th scope="col">#</th>
+                                        <th scope="col">Question</th>
+                                        <th scope="col">Responses</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -121,14 +129,18 @@ export default function PollsMan() {
                                             return (
                                                 <tr
                                                     key={index}
-                                                    className="border-b w-full"
+                                                    className="border-b"
                                                 >
                                                     <td>{`${index + 1}`}</td>
                                                     <td>{poll.question}</td>
                                                     <td>
                                                         {poll.options.map(
                                                             option => (
-                                                                <div>
+                                                                <div
+                                                                    key={
+                                                                        option._id
+                                                                    }
+                                                                >
                                                                     <span className="font-semibold">
                                                                         {
                                                                             option.text
@@ -137,14 +149,13 @@ export default function PollsMan() {
                                                                     :
                                                                     <span className="ml-2">
                                                                         {
-                                                                            option.users
+                                                                            option.votes
                                                                         }
                                                                     </span>
                                                                 </div>
                                                             )
                                                         )}
                                                     </td>
-                                                    <td></td>
                                                 </tr>
                                             )
                                         })}
