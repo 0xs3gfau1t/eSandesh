@@ -1,4 +1,5 @@
 const express = require('express')
+const Cache = require('@/controllers/Cache')
 
 const adsModel = require('../../model/ads')
 
@@ -8,7 +9,7 @@ const adsModel = require('../../model/ads')
  * @return {void}
  */
 
-module.exports = (req, res) => {
+module.exports = async (req, res) => {
     const {
         category,
         priority = 1,
@@ -40,14 +41,20 @@ module.exports = (req, res) => {
     }
     if (audio) filter.audio = { $exists: true }
 
-    adsModel
-        .find(filter, { audio: 0, image: 0 })
-        .skip(page * limit)
-        .limit(limit)
-        .sort({ priority })
-        .exec((e, d) => {
-            if (e)
-                return res.status(500).json({ error: 'Something went wrong.' })
-            res.json({ message: 'success', ad: d })
-        })
+    try {
+        const ad = await Cache(
+            req.originalUrl,
+            async () =>
+                await adsModel
+                    .find(filter, { audio: 0, image: 0 })
+                    .skip(page * limit)
+                    .limit(limit)
+                    .sort({ priority }),
+            { EX: 60 * 15 }
+        )
+
+        res.json({ message: 'success', ad })
+    } catch (e) {
+        return res.status(500).json({ error: 'Something went wrong.' })
+    }
 }

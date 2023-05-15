@@ -1,5 +1,6 @@
 const express = require('express')
 const criticModel = require('../../model/critics')
+const Cache = require('@/controllers/Cache')
 
 /**
  * @param {express.Request} req
@@ -14,7 +15,7 @@ const criticModel = require('../../model/critics')
 module.exports = async (req, res) => {
     const { page = 0, limit = 10, timeRange = 1 } = req.query
 
-    const d = await criticModel.aggregate([
+    const d = async () => await criticModel.aggregate([
         {
             $match: {
                 publishedAt: {
@@ -22,6 +23,12 @@ module.exports = async (req, res) => {
                     $gt: new Date(Date.now() - 60000 * 60 * 24 * timeRange),
                 },
             },
+        },
+        {
+            $skip: Number(page) * Number(limit)
+        },
+        {
+            $limit: Number(limit)
         },
         {
             $lookup: {
@@ -108,5 +115,12 @@ module.exports = async (req, res) => {
         },
     ])
 
-    res.json({ message: 'success', critics: d })
+    try{
+        const critics = await Cache(req.originalUrl, d, {EX: 60*15})
+        res.json({ message: 'success', critics })
+    }catch(e){
+        console.error(e)
+        res.status(500)
+    }
+
 }

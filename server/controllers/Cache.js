@@ -15,7 +15,12 @@ const Cache = async (key, callback, opts) => {
     }
 
     try {
-        const value = await redisClient.get(key)
+        const value = await Promise.race([
+            redisClient.get(key),
+            new Promise((resolve, reject) =>
+                setTimeout(() => reject('Timeout'), 2000)
+            ),
+        ])
         if (value) {
             console.debug('[+] CacheHit for key:', key)
             return JSON.parse(value)

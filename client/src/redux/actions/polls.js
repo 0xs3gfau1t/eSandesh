@@ -26,7 +26,7 @@ export const listPolls = createAsyncThunk(
     'polls/listPolls',
     async (page, { dispatch }) => {
         const response = await axios
-            .get(`/api/poll/list`, {
+            .get(`/api/poll`, {
                 withCredentials: true,
             })
             .then(res => {
@@ -45,7 +45,7 @@ export const votePoll = createAsyncThunk(
     'polls/votePoll',
     async (data, { dispatch }) => {
         const response = await axios
-            .post(`/api/poll/answer`, data, {
+            .post(`/api/poll/`, data, {
                 withCredentials: true,
             })
             .then(res => {

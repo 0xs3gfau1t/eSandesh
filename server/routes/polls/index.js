@@ -1,12 +1,10 @@
-const express = require('express')
-const router = express.Router()
+const router = require('express').Router()
 
-const withAuth = require('../../middlewares/withAuth')
+const withPublisher = require('@/middlewares/withPublisher')
+const withAuth = require('@/middlewares/withAuth')
 
-const addPoll = require('./addPoll')
-
-router.post('/add', addPoll)
-router.get('/list', require('./listPoll'))
-router.post('/answer', withAuth, require('./answerPoll'))
+router.get('/', require('./listPolls'))
+router.post('/', withAuth, require('./answerPoll'))
+router.post('/add', withPublisher, require('./addPoll'))
 
 module.exports = router
