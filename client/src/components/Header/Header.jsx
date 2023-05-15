@@ -24,7 +24,7 @@ export default function Header({ session }) {
     }
 
     return (
-        <div className="header">
+        <div className="header h-28">
             <div className="flex justify-between items-center container p-3">
                 <div className="flex flex-col items-center sm:items-start cursor-pointer">
                     <SiteLogo />

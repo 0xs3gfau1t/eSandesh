@@ -1,6 +1,5 @@
 const express = require('express')
 const articleModel = require('../../model/article')
-const { JSDOM } = require('jsdom')
 
 /**
  * @param {express.Request} req
@@ -9,11 +8,15 @@ const { JSDOM } = require('jsdom')
  */
 const listArticle = async (req, res) => {
     const {
+        title,
         category = undefined,
         page = 0,
         items = 10,
         priority = false,
+        from,
+        to = new Date(),
     } = req.query
+    let { author, authorMatch = {} } = req.query
     const [year, month] = req.url.replace(/\?.*/, '').split('/').slice(2)
 
     const sortParameters = { publishedAt: -1 }
@@ -38,11 +41,37 @@ const listArticle = async (req, res) => {
     }
     if (year) filter.year = year
     if (month) filter.month = month
-
+    if (from)
+        filter.createdAt = {
+            $gte: new Date(new Date(from).setHours(0, 0, 0, 0)),
+            $lte: new Date(new Date(to).setHours(23, 59, 59, 0)),
+        }
+    if (!from)
+        filter.createdAt = {
+            $lte: new Date(new Date(to).setHours(23, 59, 59, 0)),
+        }
+    if (author && author !== '')
+        authorMatch = {
+            name: author,
+        }
+    if (title && title !== '') filter.title = { $regex: title }
     try {
         const articles = await articleModel.aggregate([
             { $match: filter },
-            { $project: { audio: 0 } },
+            {
+                $lookup: {
+                    from: 'users',
+                    localField: 'createdBy',
+                    foreignField: '_id',
+                    as: 'author',
+                    pipeline: [
+                        { $match: authorMatch },
+                        { $project: { name: true, _id: false } },
+                    ],
+                },
+            },
+            { $unwind: { path: '$author' } },
+            { $project: { audio: 0, content: 0 } },
             { $sort: sortParameters },
             { $skip: page * items },
             { $limit: parseInt(items) },
@@ -78,15 +107,7 @@ const listArticle = async (req, res) => {
             return 0
         })
 
-        const new_articles = articles.map(article => {
-            const dom = new JSDOM(article.content)
-            const img = dom.window.document.querySelector('img')
-            if (img) article.img = img.src
-            delete article.content
-            return article
-        })
-
-        return res.status(200).json(new_articles)
+        return res.status(200).json(articles)
     } catch (err) {
         console.error(err)
         return res.status(500).json({ error: 'Something went wrong.' })

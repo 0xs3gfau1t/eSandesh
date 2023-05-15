@@ -1,6 +1,6 @@
 import Home from './Home/Home'
 import SingleNews from './Home/SingleNews'
-import UserProfile from './UserProfile/Layout'
+import UserProfile from './UserProfile'
 import Polls from './Home/Polls'
 import ArchiveNews from './Home/ArchiveNews'
 import Category from './Category/Category'
@@ -43,5 +43,5 @@ export {
     UserProfile,
     ArchiveNews,
     Polls,
-    SearchPage
+    SearchPage,
 }

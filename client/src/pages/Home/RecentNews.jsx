@@ -11,7 +11,10 @@ export default function RecentNews({ data }) {
                         <span className="w-4 h-6 mr-2 font-medium py-1">
                             <FaAngleDoubleRight />
                         </span>
-                        <span className="text-xl hover:pl-4 hover:text-rose-700 transition-all duration-300">
+                        <span
+                            title={hot.title}
+                            className="text-xl hover:pl-4 hover:text-rose-700 transition-all duration-300"
+                        >
                             <Link
                                 to={`/news/${hot.year}/${hot.month}/${hot.slug}`}
                             >

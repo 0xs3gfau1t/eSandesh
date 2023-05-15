@@ -10,7 +10,6 @@ import {
     UserAuth,
     ForgotPassword,
     Category,
-    Archive,
     AdsMan,
     ViewSiteStats,
     SingleNews,
@@ -23,13 +22,6 @@ import {
     SearchPage,
     NotFound,
 } from './pages'
-import {
-    UserInfo,
-    UserPreference,
-    UserPosts,
-    SavedPosts,
-    Subscription,
-} from './pages/UserProfile'
 
 import { PrivateRoute, Alert } from './components/common'
 
@@ -51,10 +43,14 @@ const LazyAdmins = [
     { url: 'readers', comp: LazyReadersArticles },
     { url: 'critics', comp: LazyManageCritics },
     { url: 'archive', comp: LazyManageArchive },
-    { url: 'ads', comp: LazyManageAds },
     { url: 'polls', comp: LazyManagePolls },
-    { url: 'stats', comp: LazyManageStats },
 ]
+const adminOnly = [
+    { url: 'ads', comp: LazyManageAds },
+    { url: 'stats', comp: LazyManageStats },
+    { url: 'mods', comp: LazyManageMods },
+]
+
 function App() {
     const misc = useSelector(state => state.misc)
     const session = useSession()
@@ -94,16 +90,20 @@ function App() {
                                 />
                             )
                         })}
-                    {session?.data?.user?.roles?.isRoot && (
-                        <Route
-                            path="mods"
-                            element={
-                                <Suspense>
-                                    <LazyManageMods />
-                                </Suspense>
-                            }
-                        />
-                    )}
+                    {session?.data?.user?.roles?.isRoot &&
+                        adminOnly.map(item => {
+                            return (
+                                <Route
+                                    key={item.url}
+                                    path={item.url}
+                                    element={
+                                        <Suspense>
+                                            <item.comp />
+                                        </Suspense>
+                                    }
+                                />
+                            )
+                        })}
                     <Route
                         path="/admin/dashboard"
                         element={
@@ -132,14 +132,7 @@ function App() {
                 <Route
                     path="/profile"
                     element={<UserProfile session={session} />}
-                >
-                    <Route path="/profile/" element={<UserInfo />} />
-                    <Route path="saved" element={<SavedPosts />} />
-                    <Route path="preference" element={<UserPreference />} />
-                    <Route path="subscription" element={<Subscription />} />
-                    <Route path="myposts" element={<UserPosts />} />
-                </Route>
-                <Route path="/saved" element={<SavedPosts />} />
+                />
 
                 <Route path="/" element={<Home session={session} />}>
                     <Route path="/archive" element={<ArchiveNews />} />

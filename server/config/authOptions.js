@@ -1,4 +1,4 @@
-const MongooseAdapter = require('../controllers/adapter')
+const { MongooseAdapter, sanitize } = require('../controllers/adapter')
 const { userModel } = require('../model/user')
 const { hashSync, compareSync } = require('bcryptjs')
 
@@ -40,8 +40,9 @@ const authOptions = {
                         email: creds.email,
                         password: hashedPassword,
                     })
+                    if (!user) return null
                     await user.save()
-                    return user ? user.toObject() : null
+                    return sanitize(user)
                 } catch (err) {
                     console.error(err)
                     return null
@@ -74,7 +75,7 @@ const authOptions = {
                         !compareSync(creds.password, user?.password)
                     )
                         return null
-                    return user.toObject()
+                    return sanitize(user)
                 } catch (err) {
                     console.error(err)
                     return null
@@ -98,7 +99,6 @@ const authOptions = {
             },
             async authorize(creds, _req) {
                 try {
-                    console.log(creds)
                     const user = await userModel.findOne({
                         email: creds.email,
                         $or: [
@@ -113,7 +113,7 @@ const authOptions = {
                         !compareSync(creds.password, user?.password)
                     )
                         return null
-                    return user.toObject()
+                    return sanitize(user)
                 } catch (err) {
                     console.error(err)
                     return null
@@ -129,7 +129,7 @@ const authOptions = {
                         ? 'user'
                         : account.provider
             if (user) {
-                token.id = user._id
+                token.id = user.id
                 token.roles = user.roles
             }
             return token

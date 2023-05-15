@@ -18,6 +18,7 @@ const editArticle = async (req, res) => {
         title,
         category = undefined,
         tags = undefined,
+        img,
     } = req.body
     const { user } = req.session
     const filter = { _id: id }
@@ -35,13 +36,14 @@ const editArticle = async (req, res) => {
     if (content) article.content = content
     if (category) article.category = category
     if (tags) article.tags = tags
-    article.summary = await generateSummary(contentOnly)
-    article.audio = await rawConverter(
-        await reciter({
-            title,
-            content: contentOnly,
-        })
-    )
+    if (img) article.img = img
+    // article.summarizedContent = await generateSummary(contentOnly)
+    // article.audio = await rawConverter(
+    //     await reciter({
+    //         title,
+    //         content: contentOnly,
+    //     })
+    // )
 
     var key
     try {

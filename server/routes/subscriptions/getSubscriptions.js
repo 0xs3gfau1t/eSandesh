@@ -3,16 +3,16 @@ const mongoose = require('mongoose')
 const { userModel } = require('@/model/user')
 const Cache = require('@/controllers/Cache')
 
+const ITEMS_PER_PAGE = 7
+
 /**
  * @param {express.Request} req
  * @param {express.Response} res
  */
-
 module.exports = async (req, res) => {
     const { id } = req.session.user
 
-    var { limit = 10, page = 0 } = req.query
-    limit = Number(limit)
+    var { page = 0 } = req.query
     page = Number(page)
 
     const getUserSubs = async () =>
@@ -20,9 +20,8 @@ module.exports = async (req, res) => {
             { $match: { _id: mongoose.Types.ObjectId(id) } },
             {
                 $project: {
-                    subscriptions: {
-                        $slice: ['$subscriptions', limit * page, limit],
-                    },
+                    _id: false,
+                    subscriptions: true,
                 },
             },
             { $unwind: '$subscriptions' },
@@ -32,29 +31,23 @@ module.exports = async (req, res) => {
                     let: { id: '$subscriptions' },
                     pipeline: [
                         { $match: { $expr: { $eq: ['$_id', '$$id'] } } },
-                        { $project: { name: true } },
+                        { $project: { name: true, image: true } },
                     ],
                     as: 'subscriptions',
                 },
             },
             { $unwind: '$subscriptions' },
-            {
-                $group: {
-                    _id: '$_id',
-                    subs: {
-                        $push: {
-                            id: '$subscriptions._id',
-                            name: '$subscriptions.name',
-                        },
-                    },
-                },
-            },
+            { $skip: page * ITEMS_PER_PAGE },
+            { $limit: ITEMS_PER_PAGE },
+            { $replaceRoot: { newRoot: '$subscriptions' } },
         ])
     try {
         const userSubs = await Cache(req.originalUrl, getUserSubs, {
-            'EX': 60,
+            EX: 60,
         })
-        return res.json({ subs: userSubs.at(0)?.subs || [] })
+        console.log({ page, ITEMS_PER_PAGE, userSubs })
+        const nextPage = userSubs.length < ITEMS_PER_PAGE ? undefined : page + 1
+        return res.json({ subs: userSubs, nextPage })
     } catch (e) {
         console.error(e)
         res.status(500).json({ message: 'Something went wrong' })

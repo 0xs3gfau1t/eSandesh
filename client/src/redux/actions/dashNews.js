@@ -1,10 +1,15 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
 import axios from 'axios'
+import { setAlert } from './misc'
+import { setEditing } from '../reducers/misc'
 
 export const addNews = createAsyncThunk(
     'dash/addNews',
     async ({ data, isEdit, id }, { dispatch }) => {
-        // console.log("data: ", data)
+        dispatch(
+            setAlert(`${isEdit ? 'Updating' : 'Adding'} news.`, 'wait', true)
+        )
+
         let payload = JSON.parse(JSON.stringify(data))
         if (isEdit) {
             payload.id = id
@@ -21,9 +26,18 @@ export const addNews = createAsyncThunk(
                 },
             })
             .then(res => {
+                dispatch(setEditing('done'))
+                dispatch(
+                    setAlert(`News ${isEdit ? 'edited.' : 'added.'}`, 'success')
+                )
+                dispatch(setAlert('Article saved.', 'success'))
+                setTimeout(() => {
+                    dispatch(setEditing(false))
+                }, 5000)
                 return res.data
             })
             .catch(err => {
+                dispatch(setAlert(`Something went wrong!`, 'danger'))
                 console.error(err)
             })
 
@@ -35,11 +49,9 @@ export const addNews = createAsyncThunk(
 
 export const listNews = createAsyncThunk(
     'common/listNews',
-    async (page, { dispatch }) => {
+    async (filters, { dispatch }) => {
         const response = await axios
-            .get(`/api/article/list?page=${page}`, {
-                withCredentials: true,
-            })
+            .get('/api/article/list', { params: filters })
             .then(res => {
                 return res.data
             })
@@ -47,7 +59,7 @@ export const listNews = createAsyncThunk(
                 console.error(err)
             })
         if (!response) return { success: false }
-        return { success: true, data: response, page: page }
+        return { success: true, data: response, page: filters.page }
     }
 )
 
@@ -65,6 +77,6 @@ export const deleteNews = createAsyncThunk(
                 console.error(err)
             })
         if (!response) return { success: false }
-        return { success: true, data: response }
+        return { success: true, data: response, id: id }
     }
 )

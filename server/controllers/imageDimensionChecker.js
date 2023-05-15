@@ -34,6 +34,6 @@ module.exports = image => {
             i += 2
         }
     }
-    console.log('Width: ', width, 'Height: ', height)
+    // console.log('Width: ', width, 'Height: ', height)
     return { width, height, type }
 }

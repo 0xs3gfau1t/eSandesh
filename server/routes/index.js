@@ -11,7 +11,7 @@ router.use('/subscriptions', require('./subscriptions'))
 router.use('/user', require('./user'))
 
 router.get('*', (_req, res) => {
-    res.json({ message: 'yamete kudasai!' })
+    res.status(404).json({ message: 'yamete kudasai!' })
 })
 
 module.exports = router

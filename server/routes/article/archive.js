@@ -1,57 +1,94 @@
 const express = require('express')
 const articleModel = require('@/model/article')
-const { ObjectId } = require('mongodb')
 
 /**
  * @param {express.Request} req
  * @param {express.Response} res
  */
 
-const defaultDayRange = 90 // 1 Month
+const defaultDayRange = 1000 // 6 Month
 
 module.exports = async (req, res) => {
     const {
         dateFrom,
         dateTo,
-        limit = 10,
+        limit = 0,
         page = 0,
-        createdBy,
-        categories,
+        category,
+        title,
     } = req.query
+    let { author, authorMatch = {} } = req.query
 
-    let categoryArray = String(categories)
-        ?.split(',')
-        ?.map(i => String(i)?.trim()?.toUpperCase())
+    let categoryArray = category
+        ? String(category)
+              ?.split(',')
+              ?.map(i => String(i)?.trim()?.toUpperCase())
+        : []
 
     //
     // Prepare filter queried
     //
     filter = {
-        publishedAt: {},
+        publishedAt: {
+            $gte: new Date(Date.now() - defaultDayRange * 24 * 60 * 60000),
+            $lte: new Date(),
+        },
         archived: { $exists: true },
     }
-    if (createdBy) filter.createdBy = ObjectId(String(createdBy))
-    if (dateFrom)
-        filter.publishedAt['$gte'] =
-            dateFrom || new Date(Date.now() - defaultDayRange * 24 * 60 * 60000)
-    if (dateTo) filter.publishedAt['$lte'] = dateTo || new Date()
+    if (author && author !== '')
+        authorMatch = {
+            name: author,
+        }
+    if (title) filter.title = { $regex: title }
+    if (dateFrom) filter.publishedAt['$gte'] = new Date(dateFrom)
+    if (dateTo) filter.publishedAt['$lte'] = new Date(dateTo)
     if (categoryArray.length) filter.category = { $all: categoryArray }
 
     try {
-        articleModel
-            .find(filter)
-            .skip(limit * page)
-            .limit(limit)
-            .exec((e, docs) => {
-                if (e)
-                    return res
-                        .status(500)
-                        .json({ message: 'Something went wrong' })
-                if (!docs)
-                    return res.status(404).json({ message: 'No any matched' })
-
-                res.json({ message: 'success', docs })
-            })
+        const archives = await articleModel.aggregate([
+            {
+                $match: filter,
+            },
+            {
+                $skip: limit * page,
+            },
+            {
+                $limit: Number(limit),
+            },
+            {
+                $lookup: {
+                    from: 'users',
+                    localField: 'createdBy',
+                    foreignField: '_id',
+                    as: 'author',
+                    pipeline: [
+                        {
+                            $match: authorMatch,
+                        },
+                        {
+                            $project: {
+                                name: true,
+                            },
+                        },
+                    ],
+                },
+            },
+            {
+                $unwind: { path: '$author' },
+            },
+            {
+                $project: {
+                    title: true,
+                    publishedAt: true,
+                    category: true,
+                    year: true,
+                    month: true,
+                    slug: true,
+                    'author.name': true,
+                },
+            },
+        ])
+        res.json({ message: 'success', archives })
     } catch (e) {
         console.error(e)
         res.status(500).json({ message: 'Something went wrong' })
