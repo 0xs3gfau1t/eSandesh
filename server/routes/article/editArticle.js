@@ -44,6 +44,7 @@ const editArticle = async (req, res) => {
              content: contentOnly,
          })
      )
+    if (img) article.img = img
 
     var key
     try {

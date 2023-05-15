@@ -53,7 +53,7 @@ const addArticle = async (req, res) => {
     // Donot publish article on save
     // POST to /publish to publish it
     // If you want to publish, create {publishedAt: new Date()}
-    if (user.roles.isRoot) {
+    if (user?.roles?.isRoot || user?.roles?.canPublish) {
         data.priority = priority
     }
 
