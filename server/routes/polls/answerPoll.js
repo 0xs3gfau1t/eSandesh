@@ -13,6 +13,25 @@ const answerPoll = async (req, res) => {
         return res.status(400).json({ error: 'Missing poll id or option id.' })
 
     try {
+        const expiredOrVoted = await pollsModel.exists({
+            _id: mongoose.Types.ObjectId(poll),
+            $or: [
+                {
+                    options: {
+                        $elemMatch: {
+                            users: mongoose.Types.ObjectId(req.session.user.id),
+                        },
+                    },
+                },
+                { expiry: { $lt: new Date() } },
+            ],
+        })
+
+        if (expiredOrVoted)
+            return res
+                .status(400)
+                .json({ error: 'Already voted or poll expired.' })
+
         await pollsModel.updateOne(
             {
                 _id: mongoose.Types.ObjectId(poll),
