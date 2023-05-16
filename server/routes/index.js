@@ -9,7 +9,7 @@ router.use('/poll', require('./polls'))
 router.use('/critics', require('./critics'))
 router.use('/subscriptions', require('./subscriptions'))
 router.use('/user', require('./user'))
-router.use('/stat', require('./stats'))
+router.use('/stats', require('./stats'))
 
 router.get('*', (_req, res) => {
     res.status(404).json({ message: 'yamete kudasai!' })

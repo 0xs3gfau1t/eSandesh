@@ -2,6 +2,9 @@ const router = require('express').Router()
 
 const generateStats = require('./generate')
 
-router.get('/', generateStats)
+const list = require('./list')
+
+router.post('/generate', generateStats)
+router.get('/list', list)
 
 module.exports = router

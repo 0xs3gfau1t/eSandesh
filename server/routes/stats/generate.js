@@ -8,18 +8,17 @@ const {
     articleStatModel,
     commentStatModel,
     pollStatModel,
-    userStatModel,
 } = require('@/model/stats')
 const { userModel } = require('@/model/user')
 const express = require('express')
 
 /**
- * @param {express.Request} req
+ * @param {express.Request} _req
  * @param {express.Response} res
  */
-const generateStats = async (req, res) => {
+const generateStats = async (_req, res) => {
     const meta = new metaModel({})
-    const userStats = await userModel.aggregate([
+    await userModel.aggregate([
         {
             $project: {
                 id: '$_id',
@@ -130,7 +129,7 @@ const generateStats = async (req, res) => {
         { $merge: { into: { db: 'reporting', coll: 'users' } } },
     ])
 
-    const adsStats = await adsModel.aggregate([
+    await adsModel.aggregate([
         {
             $project: {
                 id: '$_id',
@@ -142,7 +141,7 @@ const generateStats = async (req, res) => {
         { $merge: { into: { db: 'reporting', coll: 'ads' } } },
     ])
 
-    const articleStats = await articleModel.aggregate([
+    await articleModel.aggregate([
         {
             $project: {
                 id: '$_id',
@@ -164,7 +163,7 @@ const generateStats = async (req, res) => {
         { $merge: { into: { db: 'reporting', coll: 'articles' } } },
     ])
 
-    const commentStats = await commentModel.aggregate([
+    await commentModel.aggregate([
         {
             $project: {
                 id: '$_id',
@@ -176,7 +175,7 @@ const generateStats = async (req, res) => {
         { $merge: { into: { db: 'reporting', coll: 'comments' } } },
     ])
 
-    const pollStats = await pollsModel.aggregate([
+    await pollsModel.aggregate([
         {
             $project: {
                 id: '$id',
@@ -225,6 +224,7 @@ const generateStats = async (req, res) => {
         },
         { $project: { _id: false } },
     ])
+
     const articleMetaData = await articleStatModel.aggregate([
         { $match: { metaId: meta._id } },
         {
@@ -236,6 +236,7 @@ const generateStats = async (req, res) => {
         },
         { $project: { _id: false } },
     ])
+
     const commentsMetaData = await commentStatModel.aggregate([
         { $match: { metaId: meta._id } },
         {
@@ -247,6 +248,7 @@ const generateStats = async (req, res) => {
         },
         { $project: { _id: false } },
     ])
+
     const pollsMetaData = await pollStatModel.aggregate([
         { $match: { metaId: meta._id } },
         {
@@ -267,7 +269,7 @@ const generateStats = async (req, res) => {
 
     await meta.save()
 
-    return res.send('OK')
+    return res.json(meta)
 }
 
 module.exports = generateStats
