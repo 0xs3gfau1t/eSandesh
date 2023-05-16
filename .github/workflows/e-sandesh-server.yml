@@ -60,5 +60,5 @@ jobs:
         with:
           app-name: 'e-sandesh'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_881473992F764FE689139859448388AE }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_BACKEND }}
           package: release.zip
