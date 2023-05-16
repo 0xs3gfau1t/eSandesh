@@ -7,7 +7,7 @@ app = Flask(__name__)
 embedding = load_vector()
 
 
-@app.route("/api/summary", methods=['POST'])
+@app.route("/summary", methods=['POST'])
 def summarize():
     """Return summarized text"""
     try:

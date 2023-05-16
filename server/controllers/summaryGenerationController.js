@@ -1,6 +1,5 @@
 module.exports = async function generateSummary(content) {
-    const url =
-        process.env.SUMM_HOST + ':' + process.env.SUMM_PORT + '/api/summary'
+    const url = process.env.SUMM_URL
     console.log(url)
     let body = new FormData()
     body.append('text', content)
