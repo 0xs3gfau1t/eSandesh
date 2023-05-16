@@ -1,4 +1,5 @@
 const express = require('express')
+const { default: mongoose } = require('mongoose')
 const typeToModelMap = require('./_type_to_model')
 
 /**
@@ -14,6 +15,8 @@ const list = async (req, res) => {
         sortKey = 'createdAt',
         sortOrder = 'desc',
         type,
+        id,
+        metaId,
     } = req.query
 
     const model = typeToModelMap[type]
@@ -28,6 +31,8 @@ const list = async (req, res) => {
     const filter = {}
     if (dateFrom)
         filter.createdAt = { $gte: new Date(dateFrom), $lte: new Date(dateTo) }
+    if (id) filter.id = mongoose.Types.ObjectId(id)
+    if (metaId) filter.metaId = mongoose.Types.ObjectId(metaId)
 
     try {
         const objList = await model

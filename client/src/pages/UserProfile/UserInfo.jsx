@@ -7,6 +7,7 @@ import { RxReset } from 'react-icons/rx'
 import { AiOutlineEdit, AiOutlineSave } from 'react-icons/ai'
 import { setAlert } from '../../redux/actions/misc'
 import { useAxiosError } from '../../utils/useAxiosError'
+import { formatString } from '../../utils/formatString'
 
 const PASSWORD_INIT_VALUES = {
     current: '',
@@ -251,12 +252,7 @@ export default function UserInfo() {
                                     className="text-sm text-gray-600 mt-2"
                                 >
                                     <span className="font-bold">
-                                        {account.provider
-                                            .charAt(0)
-                                            .toUpperCase() +
-                                            account.provider
-                                                .slice(1)
-                                                .toLowerCase()}
+                                        {formatString(account.provider)}
                                     </span>
                                 </li>
                             ))}
