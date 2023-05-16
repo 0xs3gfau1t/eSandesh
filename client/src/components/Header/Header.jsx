@@ -24,18 +24,18 @@ export default function Header({ session }) {
     }
 
     return (
-        <div className="header h-28">
-            <div className="flex justify-between items-center container p-3">
-                <div className="flex flex-col items-center sm:items-start cursor-pointer">
+        <div className="header h-24">
+            <div className="flex justify-between items-center container py-2">
+                <div className="sm:items-start cursor-pointer w-56">
                     <SiteLogo />
                 </div>
-                <div className="relative flex justify-between items-center gap-6">
-                    <div className="flex justify-end invisible md:visible text-xs lg:text-sm gap-4">
+                <div className="relative flex justify-between items-center lg:gap-6">
+                    <div className="flex justify-end invisible md:visible text-xs lg:text-sm gap-8">
                         <Forex />
                         <GoldSilver />
                     </div>
-                    <div className="flex gap-1">
-                        <IoMdPerson className="text-4xl cursor-pointer" />
+                    <div className="flex gap-1 place-items-center min-w-fit">
+                        <IoMdPerson className="text-3xl cursor-pointer" />
                         {session?.status == 'authenticated' && (
                             <h2 className="text-sm">
                                 {session?.data?.user?.name}
@@ -44,7 +44,7 @@ export default function Header({ session }) {
                         <IoMdArrowDropdown
                             className={`${
                                 show ? 'rotate-180' : ''
-                            } text-4xl cursor-pointer transition-all duration-200`}
+                            } text-3xl cursor-pointer transition-all duration-200`}
                             onClick={e => setShow(!show)}
                         />
                     </div>
@@ -55,10 +55,7 @@ export default function Header({ session }) {
                                 className="fixed inset-0 w-full h-full bg-black opacity-10"
                                 onClick={() => setShow(false)}
                             ></div>
-                            <ul
-                                ref={ref}
-                                className="header-drop absolute z-99 right-0 mt-32 p-2 w-36 text-center border-blue border-2 rounded-md font-bold text-xl"
-                            >
+                            <ul className="header-drop absolute z-99 right-0 mt-32 p-2 w-36 text-center border-blue border-2 rounded-md font-bold text-xl">
                                 <hr className="w-11/12 border-neutral-300" />
                                 <Link to="/profile/">
                                     <li onClick={e => setShow(false)}>

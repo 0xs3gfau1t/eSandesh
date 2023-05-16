@@ -21,7 +21,7 @@ button {
 }
 
 .header {
-    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    border-bottom: 2px solid rgba(0, 0, 0, 0.1);
 }
 
 .container {
@@ -132,19 +132,19 @@ h6 {
 .poll-button {
     background: linear-gradient(-45deg, #d31818e7, #d31818e7, #1d3557, #1d3557);
     background-size: 500% 500%;
-    animation: jhilimili 0.8s infinite;
+    animation: jhilimili 0.9s infinite;
 }
 
 @keyframes jhilimili {
     0% {
-        background-color: #49e819;
-        box-shadow: 0 0 15px 0px #d31818e7;
+        background-color: #e66c08;
+        box-shadow: 0 0 15px 0px #c76102e7;
     }
     50% {
-        box-shadow: 0 0 15px 10px #d31818e7;
+        box-shadow: 0 0 15px 5px #b6022fe7;
     }
     100% {
-        box-shadow: 0 0 15px 0px #d31818e7;
+        box-shadow: 0 0 15px 0px #e04c08e7;
     }
 }
 
