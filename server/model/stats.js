@@ -2,18 +2,24 @@ const mongoose = require('mongoose')
 const ObjectId = mongoose.Types.ObjectId
 const Schema = mongoose.Schema
 
-const conn = mongoose.createConnection(process.env.MONGO_URI, {
-    authSource: process.env.DB_AUTH_SOURCE,
-    user: process.env.MONGO_USER,
-    pass: process.env.MONGO_PASS,
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-    dbName: process.env.REPORTING_DB_NAME || 'reporting',
-})
+const conn = mongoose.createConnection(
+    process.env.MONGO_URI,
+    {
+        authSource: process.env.DB_AUTH_SOURCE,
+        user: process.env.MONGO_USER,
+        pass: process.env.MONGO_PASS,
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+        dbName: process.env.REPORTING_DB_NAME || 'reporting',
+    },
+    () => {
+        console.log('Connected to reporting db')
+    }
+)
 
 const user = new Schema({
     id: ObjectId,
-    snapId: { type: ObjectId, ref: 'stat' },
+    metaId: { type: ObjectId, ref: 'meta' },
     publishedAds: Number,
     createdArticles: Number,
     comments: Number,
@@ -27,32 +33,32 @@ const user = new Schema({
 
 const ads = new Schema({
     id: ObjectId,
-    snapId: { type: ObjectId, ref: 'stat' },
+    metaId: { type: ObjectId, ref: 'meta' },
     hits: Number,
 })
 
 const article = new Schema({
     id: ObjectId,
-    snapId: { type: ObjectId, ref: 'stat' },
+    metaId: { type: ObjectId, ref: 'meta' },
     hits: Number,
     saves: Number,
 })
 
 const comment = new Schema({
     id: ObjectId,
-    snapId: { type: ObjectId, ref: 'stat' },
+    metaId: { type: ObjectId, ref: 'meta' },
     likes: Number,
 })
 
 const poll = new Schema({
     id: ObjectId,
-    snapId: { type: ObjectId, ref: 'stat' },
+    metaId: { type: ObjectId, ref: 'meta' },
     votes: Number,
 })
 
 const category = new Schema({
     text: String,
-    snapId: { type: ObjectId, ref: 'stat' },
+    metaId: { type: ObjectId, ref: 'meta' },
     articles: Number,
     ads: Number,
 })
@@ -95,7 +101,7 @@ const articleStatModel = conn.model('article', article)
 const commentStatModel = conn.model('comment', comment)
 const pollStatModel = conn.model('poll', poll)
 const categoryStatModel = conn.model('category', category)
-const statModel = conn.model('stat', metadata)
+const metaModel = conn.model('meta', metadata)
 
 module.exports = {
     userStatModel,
@@ -104,5 +110,5 @@ module.exports = {
     commentStatModel,
     pollStatModel,
     categoryStatModel,
-    statModel,
+    metaModel,
 }
