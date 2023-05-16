@@ -1,7 +1,7 @@
-const { statModel } = require('@/model/stats')
-
 const router = require('express').Router()
 
-router.get('/', async (_req, res) => {})
+const generateStats = require('./generate')
+
+router.get('/', generateStats)
 
 module.exports = router
