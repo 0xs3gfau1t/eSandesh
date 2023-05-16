@@ -50,7 +50,7 @@ const adminOnly = [
 ]
 const SideNav = ({ role }) => {
     return (
-        <ul className="min-h-screen dash-list flex flex-col gap-8 px-1 py-16 bg-darkblue w-1/7 text-white">
+        <ul className="h-full dash-list flex flex-col gap-8 px-1 py-16 bg-darkblue basis-[14%] flex-grow-0 text-white overflow-y-scroll justify-center">
             <NavLink
                 to={'/admin/dashboard/'}
                 className={({ isActive }) =>
