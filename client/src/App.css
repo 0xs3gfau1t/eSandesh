@@ -162,7 +162,7 @@ h6 {
     animation: bistarai 0.3s;
 }
 .header-drop li {
-    @apply cursor-pointer my-1 hover:bg-blue rounded-sm py-2 duration-200 hover:text-white;
+    @apply cursor-pointer my-1 hover:bg-darkblue rounded-sm py-2 duration-200 hover:text-white;
 }
 @keyframes bistarai {
     0% {

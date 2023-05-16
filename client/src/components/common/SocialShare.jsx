@@ -72,7 +72,7 @@ const SocialShare = ({ title, id }) => {
             />
             <FaSave
                 className="my-auto w-6 h-6 cursor-pointer hover:text-blue duration-200"
-                title="Copy Link"
+                title="Save this article"
                 onClick={saveNews}
             />
         </div>
