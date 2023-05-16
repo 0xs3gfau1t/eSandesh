@@ -70,7 +70,7 @@ const addArticle = async (req, res) => {
                     content: contentOnly,
                 })
             )
-            article.save()
+            await article.save()
         } catch (e) {
             console.error(e)
         }
