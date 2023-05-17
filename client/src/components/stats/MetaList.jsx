@@ -13,11 +13,14 @@ import { getRelativeTime } from '../../utils/relativeDuration'
  * @param {Object} obj
  * @param {{_id: string, createdAt: string}[]} obj.data
  */
-const MetaList = ({ data }) => {
+const MetaList = () => {
     const dispatch = useDispatch()
-    const loadMore = () => dispatch(loadMoreStats())
-    const reload = () => dispatch(reloadStats())
+
+    const loadMore = () => dispatch(loadMoreStats('meta'))
+    const reload = () => dispatch(reloadStats('meta'))
+
     const activeMeta = useSelector(state => state.stats.activeMetaIdx)
+    const data = useSelector(state => state.stats.meta.data)
 
     return (
         <div className="border-solid border-black border flex flex-col items-center rounded-lg bg-slate-200">

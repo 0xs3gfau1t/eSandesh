@@ -12,10 +12,10 @@ const { default: mongoose } = require('mongoose')
 const typeToModelMap = {
     meta: metaModel,
     ads: adsStatModel,
-    article: articleStatModel,
-    comment: commentStatModel,
-    poll: pollStatModel,
-    user: userStatModel,
+    articles: articleStatModel,
+    comments: commentStatModel,
+    polls: pollStatModel,
+    users: userStatModel,
 }
 
 module.exports = typeToModelMap

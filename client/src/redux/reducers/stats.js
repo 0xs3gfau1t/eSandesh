@@ -18,13 +18,58 @@ const initialState = {
             skip: 0,
             type: 'meta',
         },
+        chart: true,
     },
-    ads: { data: [], filter: {} },
-    articles: { data: [], filter: {} },
-    comment: { data: [], filter: {} },
-    poll: { data: [], filter: {} },
-    user: { data: [], filter: {} },
-    active: 'meta',
+    ads: {
+        data: [],
+        filter: {
+            dateTo: today.toISOString().substring(0, 10),
+            dateFrom: monthAgo.toISOString().substring(0, 10),
+            skip: 0,
+            type: 'ads',
+        },
+        chart: true,
+    },
+    articles: {
+        data: [],
+        filter: {
+            dateTo: today.toISOString().substring(0, 10),
+            dateFrom: monthAgo.toISOString().substring(0, 10),
+            skip: 0,
+            type: 'articles',
+        },
+        chart: true,
+    },
+    comments: {
+        data: [],
+        filter: {
+            dateTo: today.toISOString().substring(0, 10),
+            dateFrom: monthAgo.toISOString().substring(0, 10),
+            skip: 0,
+            type: 'comments',
+        },
+        chart: true,
+    },
+    polls: {
+        data: [],
+        filter: {
+            dateTo: today.toISOString().substring(0, 10),
+            dateFrom: monthAgo.toISOString().substring(0, 10),
+            skip: 0,
+            type: 'polls',
+        },
+        chart: true,
+    },
+    users: {
+        data: [],
+        filter: {
+            dateTo: today.toISOString().substring(0, 10),
+            dateFrom: monthAgo.toISOString().substring(0, 10),
+            skip: 0,
+            type: 'users',
+        },
+        chart: true,
+    },
     activeMetaIdx: 0,
 }
 
@@ -41,23 +86,24 @@ const statsSlice = createSlice({
         setActiveMeta: (state, action) => {
             state.activeMetaIdx = action.payload
         },
+        toggleChart: (state, action) => {
+            state[action.payload].chart = !state[action.payload].chart
+        },
     },
 
     extraReducers: builder => {
         builder.addCase(loadMoreStats.fulfilled, (state, { payload }) => {
             if (payload.success && payload.data) {
-                const act = state.active
-                state[act].data.unshift(...payload.data.data.reverse())
-                state[act].filter.skip = payload.data.nextCursor
-                if (act == 'meta')
+                state[payload.type].data.unshift(...payload.data.data.reverse())
+                state[payload.type].filter.skip = payload.data.nextCursor
+                if (payload.type == 'meta')
                     state.activeMetaIdx = state.meta.data.length - 1
             }
         })
         builder.addCase(reloadStats.fulfilled, (state, { payload }) => {
             if (payload.success && payload.data) {
-                const act = state.active
-                state[act].data = payload.data.data.reverse()
-                state[act].filter.skip = payload.data.nextCursor
+                state[payload.type].data = payload.data.data.reverse()
+                state[payload.type].filter.skip = payload.data.nextCursor
             }
         })
     },
