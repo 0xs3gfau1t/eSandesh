@@ -61,10 +61,12 @@ const getArticle = async (req, res) => {
         //
         // Not caching popup ads
         //
-
         if (
             article?.at(0)?.publishedAt <
-            new Date(Date.now() - STALE_ARTICLE_THRESHOLD * 24 * 60 * 60000)
+                new Date(
+                    Date.now() - STALE_ARTICLE_THRESHOLD * 24 * 60 * 60000
+                ) ||
+            article?.at(0)?.category?.includes('STORY')
         ) {
             req.query.limit = 1
             req.query.imageType = 'square'
