@@ -1,4 +1,9 @@
 import { useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+
+import { loadMoreStats, reloadStats } from '../../redux/actions/stats'
+import { statActions } from '../../redux/reducers/stats'
+
 import {
     Bar,
     Bubble,
@@ -9,11 +14,6 @@ import {
     Radar,
     Scatter,
 } from 'react-chartjs-2'
-import { useDispatch, useSelector } from 'react-redux'
-import { loadMoreStats, reloadStats } from '../../redux/actions/stats'
-import { statActions } from '../../redux/reducers/stats'
-import { formatString } from '../../utils/formatString'
-import UserListTable from './UsersList'
 
 import {
     AiOutlineDownload,
@@ -29,8 +29,20 @@ import { BiDoughnutChart } from 'react-icons/bi'
 import { VscGraphScatter } from 'react-icons/vsc'
 import { MdOutlineBubbleChart } from 'react-icons/md'
 
+import UserListTable from './UsersList'
+import ArticleListTable from './ArticleList'
+import AdsListTable from './AdsListTable'
+import CommentsListTable from './CommentsListTable'
+import PollsListTable from './PollsListTable'
+
+import { formatString } from '../../utils/formatString'
+
 const objTableMap = {
     users: UserListTable,
+    articles: ArticleListTable,
+    ads: AdsListTable,
+    comments: CommentsListTable,
+    polls: PollsListTable,
 }
 
 const chartTypes = [
