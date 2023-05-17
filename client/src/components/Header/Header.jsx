@@ -7,7 +7,7 @@ import { signOut } from 'next-auth/react'
 import { setAlert } from '../../redux/actions/misc'
 import { SiteLogo } from '../common'
 import Forex from './Forex'
-import GoldSilver from './GoldSilver'
+import DateTime from './DateTime'
 
 export default function Header({ session }) {
     const [show, setShow] = useState(false)
@@ -32,7 +32,7 @@ export default function Header({ session }) {
                 <div className="relative flex justify-between items-center lg:gap-6">
                     <div className="flex justify-end invisible md:visible text-xs lg:text-sm gap-8">
                         <Forex />
-                        <GoldSilver />
+                        <DateTime />
                     </div>
                     <div className="flex gap-1 place-items-center min-w-fit">
                         <IoMdPerson className="text-3xl cursor-pointer" />
