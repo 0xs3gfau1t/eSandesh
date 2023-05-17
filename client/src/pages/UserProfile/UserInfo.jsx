@@ -134,13 +134,13 @@ export default function UserInfo() {
     if (!user) return <></>
 
     return (
-        <div className="flex flex-col items-center justify-center w-full bg-transparent py-4 min-h-full">
-            <div className="bg-white shadow-lg rounded-lg overflow-hidden w-96">
-                <label htmlFor="img">
+        <div className="flex flex-col items-center justify-center w-full bg-transparent py-4">
+            <div className="bg-white shadow-lg rounded-lg  w-96">
+                <label htmlFor="img" className="block w-full aspect-video">
                     {user.image || newImage.buffer ? (
                         <div
                             htmlFor="image"
-                            className="h-64 w-full rounded-t-lg relative block"
+                            className="h-full w-full rounded-t-lg relative"
                         >
                             <img
                                 className="w-full h-full object-cover"
@@ -194,76 +194,86 @@ export default function UserInfo() {
                     className="hidden"
                     onChange={loadImage}
                 />
-                <div className="p-6 w-full">
-                    <h1 className="text-xl font-bold text-gray-900 relative">
-                        {name === -1 ? (
-                            <>
-                                <span className="h-8">{user.name}</span>
-                                <AiOutlineEdit
-                                    title="Edit name"
-                                    className="absolute top-0 right-0 w-6 aspect-square cursor-pointer hover:text-blue"
-                                    onClick={startEditingName}
-                                />
-                            </>
+                <div className="p-6 w-full flex flex-col gap-4">
+                    <div>
+                        <h1 className="text-xl font-bold text-gray-900 relative">
+                            {name === -1 ? (
+                                <>
+                                    <span className="h-8">{user.name}</span>
+                                    <AiOutlineEdit
+                                        title="Edit name"
+                                        className="absolute top-0 right-0 w-6 aspect-square cursor-pointer hover:text-blue"
+                                        onClick={startEditingName}
+                                    />
+                                </>
+                            ) : (
+                                <form onSubmit={saveName}>
+                                    <input
+                                        className="border-b border-solid border-black h-8 focus:outline-none mb-2"
+                                        onChange={e => setName(e.target.value)}
+                                        value={name}
+                                    />
+                                    <AiOutlineSave
+                                        className="absolute top-0 right-0 w-6 aspect-square"
+                                        onClick={saveName}
+                                    />
+                                </form>
+                            )}
+                        </h1>
+                        <p className="text-sm text-gray-600">{user.email}</p>
+                    </div>
+
+                    <hr className="" />
+
+                    <div>
+                        <p className="font-bold text-gray-700">Roles:</p>
+                        {Object.keys(user.roles)?.length > 0 ? (
+                            <ul className="list-disc list-inside">
+                                {Object.keys(user.roles)?.map((role, idx) => (
+                                    <li
+                                        key={idx}
+                                        className="text-sm text-gray-600 mt-2"
+                                    >
+                                        <span className="font-bold">
+                                            {role}
+                                        </span>
+                                    </li>
+                                ))}
+                            </ul>
                         ) : (
-                            <form onSubmit={saveName}>
-                                <input
-                                    className="border-b border-solid border-black h-8 focus:outline-none mb-2"
-                                    onChange={e => setName(e.target.value)}
-                                    value={name}
-                                />
-                                <AiOutlineSave
-                                    className="absolute top-0 right-0 w-6 aspect-square"
-                                    onClick={saveName}
-                                />
-                            </form>
+                            <span className="text-center block w-full">
+                                No roles assigned
+                            </span>
                         )}
-                    </h1>
-                    <p className="text-sm text-gray-600">{user.email}</p>
+                    </div>
 
-                    <hr className="my-4" />
+                    <hr className="" />
 
-                    <p className="font-bold text-gray-700">Roles:</p>
-                    {Object.keys(user.roles)?.length > 0 ? (
-                        <ul className="list-disc list-inside">
-                            {Object.keys(user.roles)?.map((role, idx) => (
-                                <li
-                                    key={idx}
-                                    className="text-sm text-gray-600 mt-2"
-                                >
-                                    <span className="font-bold">{role}</span>
-                                </li>
-                            ))}
-                        </ul>
-                    ) : (
-                        <span className="text-center block w-full">
-                            No roles assigned
-                        </span>
-                    )}
+                    <div>
+                        <p className="font-bold text-gray-700">
+                            Linked Accounts
+                        </p>
+                        {user.accounts?.length > 0 ? (
+                            <ul className="list-disc list-inside">
+                                {user.accounts.map(account => (
+                                    <li
+                                        key={account._id}
+                                        className="text-sm text-gray-600 mt-2"
+                                    >
+                                        <span className="font-bold">
+                                            {formatString(account.provider)}
+                                        </span>
+                                    </li>
+                                ))}
+                            </ul>
+                        ) : (
+                            <span className="text-center block w-full">
+                                No accounts linked
+                            </span>
+                        )}
+                    </div>
 
-                    <hr className="my-4" />
-
-                    <p className="font-bold text-gray-700">Linked Accounts</p>
-                    {user.accounts?.length > 0 ? (
-                        <ul className="list-disc list-inside">
-                            {user.accounts.map(account => (
-                                <li
-                                    key={account._id}
-                                    className="text-sm text-gray-600 mt-2"
-                                >
-                                    <span className="font-bold">
-                                        {formatString(account.provider)}
-                                    </span>
-                                </li>
-                            ))}
-                        </ul>
-                    ) : (
-                        <span className="text-center block w-full">
-                            No accounts linked
-                        </span>
-                    )}
-
-                    <hr className="my-4" />
+                    <hr className="" />
 
                     {password.editing ? (
                         <form

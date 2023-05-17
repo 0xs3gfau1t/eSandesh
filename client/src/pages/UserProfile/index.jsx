@@ -74,9 +74,7 @@ const UserProfile = ({ session }) => {
                             key={idx}
                             ref={s.ref}
                             onMouseEnter={() => setCurrentSection(idx)}
-                            className={`border-b border-solid border-black ${
-                                idx == 0 ? 'min-h-full' : ''
-                            }`}
+                            className="border-b border-solid border-black"
                         >
                             <s.element />
                         </div>
