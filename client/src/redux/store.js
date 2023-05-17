@@ -7,7 +7,7 @@ import ads from './reducers/ads'
 import comments from './reducers/comments'
 import polls from './reducers/polls'
 import archive from './reducers/archive'
-import stats from './reducers/stats'
+import { statReducer } from './reducers/stats'
 
 export const store = configureStore({
     reducer: {
@@ -18,6 +18,6 @@ export const store = configureStore({
         comments,
         polls,
         archive,
-        stats,
+        stats: statReducer,
     },
 })

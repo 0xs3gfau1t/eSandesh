@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import axios from 'axios'
 
 import { AiOutlineUser, AiOutlineComment } from 'react-icons/ai'
 import { GrArticle } from 'react-icons/gr'
@@ -15,34 +14,34 @@ import ChartBox from '../../components/stats/chartBox'
 import MetaList from '../../components/stats/MetaList'
 import { useDispatch, useSelector } from 'react-redux'
 import { loadMoreStats } from '../../redux/actions/stats'
+import StatFilters from '../../components/stats/Filters'
 
 export default function ViewSiteStats() {
-    const statState = useSelector(state => state.stats)
     const data = useSelector(state => state.stats[state.stats.active].data)
+    const activeMeta = useSelector(state => state.stats.activeMetaIdx)
 
     const dispatch = useDispatch()
 
     useEffect(() => {
-        console.log('Inside use effect', { statState, data })
-        if (data.length == 0) {
-            console.log('No data. Fetching more')
-            dispatch(loadMoreStats())
-        }
+        if (data.length == 0) dispatch(loadMoreStats())
     }, [])
 
     if (data.length == 0) return <div>Loading</div>
 
     return (
         <div className="w-full h-full p-2 flex flex-col max-h-full bg-slate-100">
-            <div className="h-8">
-                <span className="text-2xl font-mono">Stats</span>
+            <div className="h-8 relative">
+                <h2 className="text-2xl font-mono font-bold">Stats</h2>
+                <StatFilters />
             </div>
             <div className="flex flex-row gap-2 justify-around col-span-full h-36 py-4">
                 <CountBox
                     title="Users"
-                    count={data[0].users.count}
+                    count={data[activeMeta].users.count}
                     Icon={AiOutlineUser}
-                    info={`Users count ${getRelativeTime(data[0].createdAt)}`}
+                    info={`Users count ${getRelativeTime(
+                        data[activeMeta].createdAt
+                    )}`}
                     style={{
                         background:
                             'linear-gradient(200deg, rgba(77,77,191,1) 0%, rgba(54,53,223,1) 69%)',
@@ -50,10 +49,10 @@ export default function ViewSiteStats() {
                 />
                 <CountBox
                     title="Ads"
-                    count={data[0].ads.count}
+                    count={data[activeMeta].ads.count}
                     Icon={RiAdvertisementLine}
                     info={`Advertisement count ${getRelativeTime(
-                        data[0].createdAt
+                        data[activeMeta].createdAt
                     )}`}
                     style={{
                         background:
@@ -62,10 +61,10 @@ export default function ViewSiteStats() {
                 />
                 <CountBox
                     title="Articles"
-                    count={data[0].articles.count}
+                    count={data[activeMeta].articles.count}
                     Icon={GrArticle}
                     info={`Articles count ${getRelativeTime(
-                        data[0].createdAt
+                        data[activeMeta].createdAt
                     )}`}
                     style={{
                         background:
@@ -74,10 +73,10 @@ export default function ViewSiteStats() {
                 />
                 <CountBox
                     title="Comments"
-                    count={data[0].comments.count}
+                    count={data[activeMeta].comments.count}
                     Icon={AiOutlineComment}
                     info={`Comments count ${getRelativeTime(
-                        data[0].createdAt
+                        data[activeMeta].createdAt
                     )}`}
                     style={{
                         background:
@@ -86,9 +85,11 @@ export default function ViewSiteStats() {
                 />
                 <CountBox
                     title="Polls"
-                    count={data[0].polls.count}
+                    count={data[activeMeta].polls.count}
                     Icon={BiPoll}
-                    info={`Polls count ${getRelativeTime(data[0].createdAt)}`}
+                    info={`Polls count ${getRelativeTime(
+                        data[activeMeta].createdAt
+                    )}`}
                     style={{
                         background:
                             'linear-gradient(200deg, rgba(147,86,250,1) 0%, rgba(127,68,226,1) 69%)',
@@ -104,6 +105,7 @@ export default function ViewSiteStats() {
                 />
                 <ChartBox
                     title="Users"
+                    type={0}
                     data={{
                         datasets: [
                             {
@@ -124,7 +126,7 @@ export default function ViewSiteStats() {
                 />
                 <ChartBox
                     title="Articles"
-                    type={1}
+                    type={3}
                     data={{
                         datasets: [
                             {
@@ -137,6 +139,7 @@ export default function ViewSiteStats() {
                 />
                 <ChartBox
                     title="Ads"
+                    type={0}
                     data={{
                         datasets: [
                             {
@@ -149,6 +152,7 @@ export default function ViewSiteStats() {
                 />
                 <ChartBox
                     title="Comments"
+                    type={1}
                     data={{
                         datasets: [
                             {
@@ -161,6 +165,7 @@ export default function ViewSiteStats() {
                 />
                 <ChartBox
                     title="Polls"
+                    type={2}
                     data={{
                         datasets: [
                             {

@@ -2,11 +2,11 @@ import {
     AiOutlineCheck,
     AiOutlineDelete,
     AiOutlineDownload,
-    AiOutlinePlayCircle,
     AiOutlineReload,
 } from 'react-icons/ai'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { loadMoreStats, reloadStats } from '../../redux/actions/stats'
+import { statActions } from '../../redux/reducers/stats'
 import { getRelativeTime } from '../../utils/relativeDuration'
 
 /**
@@ -17,6 +17,7 @@ const MetaList = ({ data }) => {
     const dispatch = useDispatch()
     const loadMore = () => dispatch(loadMoreStats())
     const reload = () => dispatch(reloadStats())
+    const activeMeta = useSelector(state => state.stats.activeMetaIdx)
 
     return (
         <div className="border-solid border-black border flex flex-col items-center rounded-lg bg-slate-200">
@@ -57,7 +58,7 @@ const MetaList = ({ data }) => {
                         </tr>
                     </thead>
                     <tbody className="bg-slate-200">
-                        {data.map(d => (
+                        {data.map((d, idx) => (
                             <tr
                                 key={d._id}
                                 className="border-b border-solid border-gray-300 border-opacity-100"
@@ -74,8 +75,18 @@ const MetaList = ({ data }) => {
                                 <td className="border-x border-solid border-gray-300 flex">
                                     <div className="px-2 bottom-4 flex w-full gap-2 items-center justify-around p-1">
                                         <AiOutlineCheck
-                                            className="h-4 w-4 cursor-pointer"
+                                            className={`h-4 w-4 cursor-pointer ${idx == activeMeta
+                                                    ? 'text-green-500'
+                                                    : ''
+                                                }`}
                                             title="Load"
+                                            onClick={() =>
+                                                dispatch(
+                                                    statActions.setActiveMeta(
+                                                        idx
+                                                    )
+                                                )
+                                            }
                                         />
                                         <AiOutlineDelete className="h-4 w-4 cursor-pointer" />
                                     </div>
