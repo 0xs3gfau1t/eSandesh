@@ -3,6 +3,7 @@ const router = express.Router()
 
 const withAuth = require('../../middlewares/withAuth')
 const withRoot = require('@/middlewares/withRoot')
+const withHistory = require('@/middlewares/fetchHistory')
 
 const adminRouter = require('./admin')
 const getSavedArticles = require('./getSavedArticles')
@@ -17,6 +18,7 @@ const { getImage, postImage, deleteImage } = require('@/routes/user/image')
 const updateInfo = require('./updateInfo')
 const getInfo = require('./getInfo')
 const { getRashifal, setRashifal } = require('./rashifal')
+const getRelevantCategories = require('./relevantCategories')
 
 router.post('/', withAuth, updateInfo)
 router.get('/', getInfo)
@@ -28,6 +30,7 @@ router.delete('/article', withAuth, removeArticle)
 router.get('/topuser', withAuth, topUser)
 router.get('/forgotpassword', requestPasswordReset)
 router.post('/forgotpassword', processPasswordReset)
+router.get('/relevantCategories', withHistory, getRelevantCategories)
 
 router.get('/rashifal', withAuth, getRashifal)
 router.post('/rashifal', withAuth, setRashifal)
