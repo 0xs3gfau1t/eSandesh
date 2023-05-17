@@ -18,13 +18,13 @@ const MongooseAdapter = () => {
     return {
         async createUser(data) {
             const user = await userModel.create(data)
-            return sanitize(user)
+            return sanitize(user._doc)
         },
         async getUser(id) {
             try {
                 const user = await userModel.findById(id).lean()
                 if (!user) return null
-                return sanitize(user)
+                return sanitize(user._doc)
             } catch (err) {
                 return null
             }
@@ -32,14 +32,14 @@ const MongooseAdapter = () => {
         async getUserByEmail(email) {
             const user = await userModel.findOne({ email: email }).lean()
             if (!user) return null
-            return sanitize(user)
+            return sanitize(user._doc)
         },
         async getUserByAccount(data) {
             const account = await accountModel.findOne(data)
             if (!account) return null
             const user = await userModel.findById(account.userId).lean()
             if (!user) return null
-            return sanitize(user)
+            return sanitize(user._doc)
         },
         async updateUser(data) {
             const user = await userModel
@@ -51,7 +51,7 @@ const MongooseAdapter = () => {
                     emailVerified: null,
                 }
             }
-            return sanitize(user)
+            return sanitize(user._doc)
         },
         async deleteUser(id) {
             await Promise.all([
@@ -61,14 +61,14 @@ const MongooseAdapter = () => {
         },
         async linkAccount(data) {
             const account = await accountModel.create(data)
-            return sanitize(account)
+            return sanitize(account._doc)
         },
         async unlinkAccount(data) {
             const account = await accountModel.findOneAndDelete(data)
             if (account === null) {
                 return
             }
-            return sanitize(account)
+            return sanitize(account._doc)
         },
         // Chaiye ma implement garamla
         async getSessionAndUser(_sessionToken) {
