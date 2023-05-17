@@ -9,20 +9,21 @@ const {
  * @param {express.Response} res
  */
 module.exports = async (req, res) => {
-    let { limit = 10, page = 0 } = req.query
+    let { limit = 10, page = 0, active = true } = req.query
     limit = Number(limit)
     page = Number(page)
 
     const userId = req.session?.user?.id
     const roles = req.session?.user?.roles
 
+    const filter =
+        active == 'true'
+            ? { expiry: { $gt: new Date() } }
+            : { expiry: { $lt: new Date() } }
+
     try {
         const polls = await pollsModel.aggregate([
-            {
-                $match: {
-                    expiry: { $gt: new Date() },
-                },
-            },
+            { $match: filter },
             { $sort: { createdAt: -1 } },
             { $skip: page * limit },
             { $limit: limit },
@@ -46,14 +47,17 @@ module.exports = async (req, res) => {
                             },
                         },
                     },
+                    expiry: true,
                 },
             },
         ])
 
+        const now = new Date()
         // For each poll, voted property is added
         // polls.voted = -1 if not voted
         // other polls.voted = index of the option voted
         for (let i = 0; i < polls.length; i++) {
+            polls[i].expired = polls[i].expiry < now
             let voted = -1
 
             for (let j = 0; j < polls[i].options.length; j++) {
@@ -67,7 +71,8 @@ module.exports = async (req, res) => {
             // If the poll has not been voted
             // then remove the vote count
             // but only if user is not root
-            if (roles?.isPublisher || roles?.isRoot) continue
+            if (roles?.isPublisher || roles?.isRoot || polls[i].expired)
+                continue
             for (let j = 0; j < polls[i].options.length; j++)
                 delete polls[i].options[j].votes
         }

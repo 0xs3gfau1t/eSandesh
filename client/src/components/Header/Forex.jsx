@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
+
 import { updateForexData } from '../../redux/reducers/misc'
 
 export default function Forex() {
@@ -11,15 +12,17 @@ export default function Forex() {
             const response = await fetch(
                 'https://www.nrb.org.np/api/forex/v1/rate'
             )
-            const response_data = await response.json()
-            const data = response_data.data.payload.rates
-            dispatch(updateForexData(data))
+                .then(res => res.json())
+                .then(res => dispatch(updateForexData(res.data.payload.rates)))
+            // const response_data = await response.json()
+            // const data = response_data.data.payload.rates
+            // dispatch(updateForexData(data))
         }
         fetchData()
     }, [dispatch])
 
     return (
-        <div className="grid table-fixed w-8/12">
+        <div className="grid table-fixed w-1/3">
             <div className="overflow-x-scroll no-scrollbar">
                 <table className="">
                     <thead>

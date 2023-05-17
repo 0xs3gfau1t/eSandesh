@@ -31,8 +31,6 @@ const addPoll = async (req, res) => {
                 voted: -1,
             },
         })
-
-        redisClient.del('/api/poll/list')
     } catch (err) {
         console.error(err)
         return res.status(500).json({ error: 'Something went wrong.' })

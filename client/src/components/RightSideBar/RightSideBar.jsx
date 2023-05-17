@@ -7,13 +7,10 @@ import { SeeAllBtn, SqAds } from '../common'
 function RightSideBar({ ads }) {
     return (
         <>
-            <div className="flex justify-between items-baseline my-2">
-                <h3 className="text-xl font-primary font-semibold">
-                    ताजा परिणामहरु
-                </h3>
-                <SeeAllBtn url={'/category/sports'} />
-            </div>
-            <QuickUpdates />
+            <iframe
+                src="https://www.ashesh.com.np/rashifal/widget.php?header_title=Nepali Rashifal&header_color=f0b03f&api=671155n037"
+                className="w-60 rounded-md h-80 !outline-gray-800 !outline-0"
+            ></iframe>
 
             {/* end of a section */}
             <div className="flex justify-between items-end mt-8 mb-2">
