@@ -4,6 +4,7 @@ const { hashSync, compareSync } = require('bcryptjs')
 
 const CredentialsProvider = require('next-auth/providers/credentials').default
 const FacebookProvider = require('next-auth/providers/facebook').default
+const GoogleProvider = require('next-auth/providers/google').default
 
 const getAuthOptions = res => {
     return {
@@ -124,14 +125,12 @@ const getAuthOptions = res => {
         ],
         callbacks: {
             jwt: async ({ token, user, account, profile, isNewUser }) => {
-                console.log('JWT CALLBACK')
                 if (account)
                     token.provider =
                         account.provider == 'register-user'
                             ? 'user'
                             : account.provider
                 if (user) {
-                    console.log('Setting user cookie', user)
                     res.cookie('user', JSON.stringify(user.history), {
                         httpOnly: true,
                         sameSite: 'lax',
@@ -147,6 +146,12 @@ const getAuthOptions = res => {
                 session.user.id = token.id
                 session.user.roles = token.roles
                 return session
+            },
+            redirect: async ({ url, baseUrl }) => {
+                // Allows relative callback URLs
+                if (url.startsWith('/')) return `${baseUrl}${url}`
+                // Allows callback URLs on all other origin
+                return url
             },
         },
         session: {

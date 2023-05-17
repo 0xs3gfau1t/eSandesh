@@ -147,7 +147,13 @@ function UserAuth({ session }) {
                     </span>
                 )}
 
-                <button onClick={() => signIn('facebook', { redirect: false })}>
+                <button
+                    onClick={() =>
+                        signIn('facebook', {
+                            callbackUrl: window.location.origin,
+                        })
+                    }
+                >
                     {isLogin ? 'Login' : 'Register'} with Facebook.
                 </button>
             </form>
