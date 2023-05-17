@@ -10,38 +10,27 @@ const UserListTable = ({ loadMore }) => {
 
     return (
         <table className="w-full border-collapse rounded-sm">
-            <thead className="">
+            <thead className="sticky top-0 border-x border-solid border-gray-300 bg-slate-300">
                 <tr className="text-black border-solid">
-                    <th
-                        className="sticky top-0 bg-slate-300 rounded-tl-md"
-                        rowSpan={2}
-                    >
+                    <th className="rounded-tl-md" rowSpan={2}>
                         Id
                     </th>
-                    <th className="sticky top-0 bg-slate-300" colSpan={3}>
-                        Comments
-                    </th>
-                    <th className="sticky top-0 bg-slate-300" colSpan={2}>
-                        Articles
-                    </th>
-                    <th className="sticky top-0 bg-slate-300" rowSpan={2}>
-                        Published Ads
-                    </th>
-                    <th className="sticky top-0 bg-slate-300" colSpan={2}>
-                        Subscription
-                    </th>
-                    <th className="sticky top-0 bg-slate-300" rowSpan={2}>
+                    <th colSpan={3}>Comments</th>
+                    <th colSpan={2}>Articles</th>
+                    <th rowSpan={2}>Published Ads</th>
+                    <th colSpan={2}>Subscription</th>
+                    <th className="rounded-tr-md" rowSpan={2}>
                         Voted Polls
                     </th>
                 </tr>
                 <tr>
-                    <th className="sticky top-0 bg-slate-300">Written</th>
-                    <th className="sticky top-0 bg-slate-300">Liked</th>
-                    <th className="sticky top-0 bg-slate-300">Received</th>
-                    <th className="sticky top-0 bg-slate-300">Written</th>
-                    <th className="sticky top-0 bg-slate-300">Saved</th>
-                    <th className="sticky top-0 bg-slate-300">Outgoing</th>
-                    <th className="sticky top-0 bg-slate-300">Incoming</th>
+                    <th>Written</th>
+                    <th>Liked</th>
+                    <th>Received</th>
+                    <th>Written</th>
+                    <th>Saved</th>
+                    <th>Outgoing</th>
+                    <th>Incoming</th>
                 </tr>
             </thead>
             <tbody className="bg-slate-200">
