@@ -1,5 +1,10 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { generateStats, loadMoreStats, reloadStats } from '../actions/stats'
+import {
+    generateStats,
+    deleteStats,
+    loadMoreStats,
+    reloadStats,
+} from '../actions/stats'
 
 // filter type
 // {dateFrom, dateTo, skip, sortKey, sortOrder, type, id, metaId}
@@ -72,6 +77,7 @@ const initialState = {
     },
     activeMetaIdx: 0,
     generate: 'hidden',
+    deletion: 'hidden',
 }
 
 const statsSlice = createSlice({
@@ -92,6 +98,9 @@ const statsSlice = createSlice({
         },
         setGenerate: (state, action) => {
             state.generate = action.payload
+        },
+        setDeletion: (state, action) => {
+            state.deletion = action.payload
         },
     },
 
@@ -119,6 +128,11 @@ const statsSlice = createSlice({
         builder.addCase(generateStats.fulfilled, (state, { payload }) => {
             state.generate = 'hidden'
             state.meta.data.push(payload)
+        })
+        builder.addCase(deleteStats.fulfilled, (state, { payload }) => {
+            state.deletion = 'hidden'
+            state.meta.data = state.meta.data.filter(d => d._id != payload)
+            state.activeMetaIdx = state.meta.data.length - 1
         })
     },
 })

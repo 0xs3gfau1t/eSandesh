@@ -12,7 +12,11 @@ import CountBox from '../../components/stats/countBox'
 import { getRelativeTime } from '../../utils/relativeDuration'
 import MetaList from '../../components/stats/MetaList'
 import { useDispatch, useSelector } from 'react-redux'
-import { generateStats, loadMoreStats } from '../../redux/actions/stats'
+import {
+    deleteStats,
+    generateStats,
+    loadMoreStats,
+} from '../../redux/actions/stats'
 import StatFilters from '../../components/stats/Filters'
 import {
     AdsChart,
@@ -25,16 +29,16 @@ import Popup from '../../components/common/Popup'
 import { statActions } from '../../redux/reducers/stats'
 
 export default function ViewSiteStats() {
-    const { showMeta, metadata, activeMetaIdx, showGenerate } = useSelector(
-        state => {
+    const { showMeta, metadata, activeMetaIdx, showGenerate, showDelete } =
+        useSelector(state => {
             return {
                 metadata: state.stats.meta.data,
                 activeMetaIdx: state.stats.activeMetaIdx,
                 showMeta: state.stats.users.chart,
                 showGenerate: state.stats.generate,
+                showDelete: state.stats.deletion,
             }
-        }
-    )
+        })
 
     const dispatch = useDispatch()
 
@@ -45,7 +49,9 @@ export default function ViewSiteStats() {
     }, [])
 
     const generate = () => dispatch(generateStats())
+    const deletion = () => dispatch(deleteStats())
     const closeGenerate = () => dispatch(statActions.setGenerate('hidden'))
+    const closeDelete = () => dispatch(statActions.setDeletion('hidden'))
 
     return (
         <div className="w-full h-full p-2 flex flex-col max-h-full bg-slate-100">
@@ -118,7 +124,7 @@ export default function ViewSiteStats() {
                     <h1>Are you sure you want to generate new report?</h1>
                     <h2 className="text-sm font-thin mb-4">
                         This is a heavy task and can take some time depending on
-                        the size of the database.
+                        the size of the data.
                     </h2>
                     <div className="flex justify-end gap-2 items-center">
                         <div
@@ -130,6 +136,29 @@ export default function ViewSiteStats() {
                         <div
                             className="py-1 px-4 rounded-md cursor-pointer border-red border-solid border shadown-sm hover:shadow-md"
                             onClick={generate}
+                        >
+                            Yes
+                        </div>
+                    </div>
+                </Popup>
+            )}
+            {showDelete != 'hidden' && (
+                <Popup title="Delete Report" setShow={closeDelete}>
+                    <h1>Are you sure you want to delete this report?</h1>
+                    <h2 className="text-sm font-thin mb-4">
+                        This is a heavy task and can take some time depending on
+                        the size of the data.
+                    </h2>
+                    <div className="flex justify-end gap-2 items-center">
+                        <div
+                            className="py-1 px-4 rounded-md cursor-pointer border-blue border-solid border shadow-sm hover:shadow-md"
+                            onClick={closeDelete}
+                        >
+                            No
+                        </div>
+                        <div
+                            className="py-1 px-4 rounded-md cursor-pointer border-red border-solid border shadown-sm hover:shadow-md"
+                            onClick={deletion}
                         >
                             Yes
                         </div>

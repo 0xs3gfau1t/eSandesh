@@ -10,7 +10,7 @@ export const loadMoreStats = createAsyncThunk(
         if (statState[type].filter.skip < 0) return { success: false }
 
         const response = await axios
-            .get('/api/stats/list', {
+            .get('/api/stats', {
                 params: {
                     ...statState[type].filter,
                     metaId:
@@ -33,7 +33,7 @@ export const reloadStats = createAsyncThunk(
         const statState = getState().stats
 
         const response = await axios
-            .get('/api/stats/list', {
+            .get('/api/stats', {
                 params: {
                     ...statState[type].filter,
                     skip: 0,
@@ -52,7 +52,7 @@ export const generateStats = createAsyncThunk(
     'stats/generate',
     async (_data, { dispatch }) => {
         const response = await axios
-            .post('/api/stats/generate')
+            .post('/api/stats')
             .then(res => {
                 if (res.status == 200)
                     dispatch(setAlert('Report generation complete.', 'success'))
@@ -65,5 +65,26 @@ export const generateStats = createAsyncThunk(
             })
         if (!response) throw Error('Report generation failed')
         return response
+    }
+)
+
+export const deleteStats = createAsyncThunk(
+    'stats/delete',
+    async (_data, { dispatch, getState }) => {
+        const metaId = getState().stats.deletion
+        const response = await axios
+            .delete('/api/stats', { data: { metaId: metaId } })
+            .then(res => {
+                if (res.status == 200)
+                    dispatch(setAlert('Report deletion complete.', 'success'))
+                return true
+            })
+            .catch(err => {
+                console.error(err)
+                dispatch(setAlert('Report deletion failed', 'danger'))
+                return false
+            })
+        if (!response) throw Error('Report deletion failed')
+        return metaId
     }
 )

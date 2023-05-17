@@ -102,7 +102,17 @@ const MetaList = () => {
                                                 )
                                             }
                                         />
-                                        <AiOutlineDelete className="h-4 w-4 cursor-pointer" />
+                                        <AiOutlineDelete
+                                            className="h-4 w-4 cursor-pointer"
+                                            title="Delete"
+                                            onClick={() =>
+                                                dispatch(
+                                                    statActions.setDeletion(
+                                                        d._id
+                                                    )
+                                                )
+                                            }
+                                        />
                                     </div>
                                 </td>
                             </tr>
