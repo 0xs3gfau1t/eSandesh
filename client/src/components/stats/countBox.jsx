@@ -10,7 +10,9 @@ const CountBox = ({ Icon, count, title, info, ...rest }) => {
                 <Icon className="w-full h-full p-1 text-black" />
             </div>
             <div>
-                <span className="block text-white font-semibold">{count}</span>
+                <span className="block text-white font-semibold">
+                    {count || 0}
+                </span>
                 <span className="text-gray-200 font-mono">{title}</span>
             </div>
             <AiOutlineInfoCircle

@@ -29,8 +29,13 @@ const list = async (req, res) => {
         })
 
     const filter = {}
-    if (dateFrom)
-        filter.createdAt = { $gte: new Date(dateFrom), $lte: new Date(dateTo) }
+    if (dateFrom) {
+        const from = new Date(dateFrom)
+        from.setHours(0, 0, 0, 0)
+        const to = new Date(dateTo)
+        to.setHours(23, 59, 59, 999)
+        filter.createdAt = { $gte: from, $lte: to }
+    }
     if (id) filter.id = mongoose.Types.ObjectId(id)
     if (metaId) filter.metaId = mongoose.Types.ObjectId(metaId)
 

@@ -4,6 +4,7 @@ import {
     AiOutlineDownload,
     AiOutlineReload,
 } from 'react-icons/ai'
+import { TbReport } from 'react-icons/tb'
 import { useDispatch, useSelector } from 'react-redux'
 import { loadMoreStats, reloadStats } from '../../redux/actions/stats'
 import { statActions } from '../../redux/reducers/stats'
@@ -18,6 +19,7 @@ const MetaList = () => {
 
     const loadMore = () => dispatch(loadMoreStats('meta'))
     const reload = () => dispatch(reloadStats('meta'))
+    const openGenerate = () => dispatch(statActions.setGenerate('show'))
 
     const activeMeta = useSelector(state => state.stats.activeMetaIdx)
     const data = useSelector(state => state.stats.meta.data)
@@ -27,6 +29,15 @@ const MetaList = () => {
             <div className="h-16 w-full relative flex justify-center items-center">
                 <h2 className="font-bold">Meta List</h2>
                 <div className="px-2 absolute right-2 top-4 bottom-4 flex gap-2 items-center justify-center">
+                    <div
+                        className="flex flex-col items-center rounded-md hover:shadow-sm cursor-pointer"
+                        onClick={openGenerate}
+                    >
+                        <TbReport className="h-6 w-6 p-1 cursor-pointer" />
+                        <span className="text-sm font-extralight">
+                            Generate
+                        </span>
+                    </div>
                     <div
                         className="flex flex-col items-center rounded-md hover:shadow-sm cursor-pointer"
                         onClick={loadMore}

@@ -178,7 +178,7 @@ const generateStats = async (_req, res) => {
     await pollsModel.aggregate([
         {
             $project: {
-                id: '$id',
+                id: '$_id',
                 _id: false,
                 metaId: meta._id,
                 votes: {
@@ -206,8 +206,8 @@ const generateStats = async (_req, res) => {
                 _id: null,
                 count: { $sum: 1 },
                 rootUsers: { $sum: '$root' },
-                publisher: { $sum: '$publisher' },
-                reporter: { $sum: '$reporter' },
+                publishers: { $sum: '$publisher' },
+                reporters: { $sum: '$reporter' },
             },
         },
         { $project: { _id: false } },

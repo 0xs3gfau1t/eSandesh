@@ -1,5 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
 import axios from 'axios'
+import { setAlert } from './misc'
 
 export const loadMoreStats = createAsyncThunk(
     'stats/loadMore',
@@ -44,5 +45,25 @@ export const reloadStats = createAsyncThunk(
 
         if (!response) return { success: false }
         return { success: true, data: response, type }
+    }
+)
+
+export const generateStats = createAsyncThunk(
+    'stats/generate',
+    async (_data, { dispatch }) => {
+        const response = await axios
+            .post('/api/stats/generate')
+            .then(res => {
+                if (res.status == 200)
+                    dispatch(setAlert('Report generation complete.', 'success'))
+                return res.data
+            })
+            .catch(err => {
+                console.error(err)
+                dispatch(setAlert('Report generation failed', 'danger'))
+                return false
+            })
+        if (!response) throw Error('Report generation failed')
+        return response
     }
 )

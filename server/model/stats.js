@@ -69,7 +69,7 @@ const metadata = new Schema(
             type: new Schema(
                 {
                     rootUsers: Number,
-                    publisher: Number,
+                    publishers: Number,
                     reporters: Number,
                     count: Number,
                 },

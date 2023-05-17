@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { loadMoreStats, reloadStats } from '../actions/stats'
+import { generateStats, loadMoreStats, reloadStats } from '../actions/stats'
 
 // filter type
 // {dateFrom, dateTo, skip, sortKey, sortOrder, type, id, metaId}
@@ -71,6 +71,7 @@ const initialState = {
         chart: true,
     },
     activeMetaIdx: 0,
+    generate: 'hidden',
 }
 
 const statsSlice = createSlice({
@@ -89,6 +90,9 @@ const statsSlice = createSlice({
         toggleChart: (state, action) => {
             state[action.payload].chart = !state[action.payload].chart
         },
+        setGenerate: (state, action) => {
+            state.generate = action.payload
+        },
     },
 
     extraReducers: builder => {
@@ -105,6 +109,16 @@ const statsSlice = createSlice({
                 state[payload.type].data = payload.data.data.reverse()
                 state[payload.type].filter.skip = payload.data.nextCursor
             }
+        })
+        builder.addCase(generateStats.pending, state => {
+            state.generate = 'pending'
+        })
+        builder.addCase(generateStats.rejected, state => {
+            state.generate = 'failed'
+        })
+        builder.addCase(generateStats.fulfilled, (state, { payload }) => {
+            state.generate = 'hidden'
+            state.meta.data.push(payload)
         })
     },
 })
