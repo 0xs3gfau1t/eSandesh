@@ -5,6 +5,8 @@ import {
     AiOutlinePlayCircle,
     AiOutlineReload,
 } from 'react-icons/ai'
+import { useDispatch } from 'react-redux'
+import { loadMoreStats, reloadStats } from '../../redux/actions/stats'
 import { getRelativeTime } from '../../utils/relativeDuration'
 
 /**
@@ -12,18 +14,28 @@ import { getRelativeTime } from '../../utils/relativeDuration'
  * @param {{_id: string, createdAt: string}[]} obj.data
  */
 const MetaList = ({ data }) => {
+    const dispatch = useDispatch()
+    const loadMore = () => dispatch(loadMoreStats())
+    const reload = () => dispatch(reloadStats())
+
     return (
         <div className="border-solid border-black border flex flex-col items-center rounded-lg bg-slate-200">
             <div className="h-16 w-full relative flex justify-center items-center">
                 <h2 className="font-bold">Meta List</h2>
                 <div className="px-2 absolute right-2 top-4 bottom-4 flex gap-2 items-center justify-center">
-                    <div className="flex flex-col items-center rounded-md hover:shadow-sm cursor-pointer">
-                        <AiOutlineDownload className="h-6 w-6 p-1 cursor-pointer rotate-hover" />
+                    <div
+                        className="flex flex-col items-center rounded-md hover:shadow-sm cursor-pointer"
+                        onClick={loadMore}
+                    >
+                        <AiOutlineDownload className="h-6 w-6 p-1 cursor-pointer" />
                         <span className="text-sm font-extralight">
                             Load More
                         </span>
                     </div>
-                    <div className="flex flex-col items-center rounded-md hover:shadow-sm cursor-pointer">
+                    <div
+                        className="flex flex-col items-center rounded-md hover:shadow-sm cursor-pointer"
+                        onClick={reload}
+                    >
                         <AiOutlineReload className="h-6 w-6 p-1 cursor-pointer rotate-hover" />
                         <span className="text-sm font-extralight">Reload</span>
                     </div>

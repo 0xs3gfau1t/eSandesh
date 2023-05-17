@@ -40,7 +40,14 @@ const list = async (req, res) => {
             .sort({ [sortKey]: sortOrder == 'desc' ? -1 : 1 })
             .skip(Number(skip))
             .limit(Number(limit))
-        return res.json(objList)
+
+        return res.json({
+            data: objList,
+            nextCursor:
+                objList.length < Number(limit)
+                    ? -1
+                    : Number(skip) + objList.length,
+        })
     } catch (err) {
         console.error(err)
         return res.status(500).json({ error: 'Something went wrong' })

@@ -13,69 +13,24 @@ import CountBox from '../../components/stats/countBox'
 import { getRelativeTime } from '../../utils/relativeDuration'
 import ChartBox from '../../components/stats/chartBox'
 import MetaList from '../../components/stats/MetaList'
-
-const sample = [
-    {
-        _id: '64634fcc40e8d92bd192b2cf',
-        users: {
-            rootUsers: 2,
-            publisher: 21,
-            reporters: 98,
-            count: 21092,
-        },
-        ads: {
-            count: 21,
-            hits: 2001,
-        },
-        articles: {
-            count: 680,
-            hits: 73601,
-        },
-        comments: {
-            count: 291,
-            likes: 29021,
-        },
-        polls: {
-            count: 25,
-            votes: 269,
-        },
-        createdAt: '2023-05-16T09:41:32.076Z',
-    },
-    {
-        _id: '64634bba55e4a6e64ea2adb9',
-        users: {
-            rootUsers: 1,
-            publisher: 5,
-            reporters: 68,
-            count: 14981,
-        },
-        ads: {
-            count: 10,
-            hits: 1287,
-        },
-        articles: {
-            count: 492,
-            hits: 26879,
-        },
-        comments: {
-            count: 124,
-            likes: 15068,
-        },
-        polls: {
-            count: 12,
-            votes: 108,
-        },
-        createdAt: '2023-04-16T09:24:10.557Z',
-    },
-]
-
-const mapped = sample.map(d => ({ _id: d._id, createdAt: d.createdAt }))
-mapped.push(...mapped)
-mapped.push(...mapped)
-mapped.push(...mapped)
+import { useDispatch, useSelector } from 'react-redux'
+import { loadMoreStats } from '../../redux/actions/stats'
 
 export default function ViewSiteStats() {
-    const [data, setData] = useState(sample)
+    const statState = useSelector(state => state.stats)
+    const data = useSelector(state => state.stats[state.stats.active].data)
+
+    const dispatch = useDispatch()
+
+    useEffect(() => {
+        console.log('Inside use effect', { statState, data })
+        if (data.length == 0) {
+            console.log('No data. Fetching more')
+            dispatch(loadMoreStats())
+        }
+    }, [])
+
+    if (data.length == 0) return <div>Loading</div>
 
     return (
         <div className="w-full h-full p-2 flex flex-col max-h-full bg-slate-100">
@@ -141,7 +96,12 @@ export default function ViewSiteStats() {
                 />
             </div>
             <div className="flex-grow max-h-full grid grid-cols-3 grid-rows-2 gap-x-2 gap-y-4 h-[calc(100%-12rem)] p-4">
-                <MetaList data={mapped} />
+                <MetaList
+                    data={data.map(d => ({
+                        _id: d._id,
+                        createdAt: d.createdAt,
+                    }))}
+                />
                 <ChartBox
                     title="Users"
                     data={{
