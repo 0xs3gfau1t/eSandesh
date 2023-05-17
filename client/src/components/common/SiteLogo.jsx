@@ -4,10 +4,10 @@ import siteLogoLight from '../../assets/icons/eSandesh-logo--white.png'
 
 const SiteLogo = ({ theme }) => {
     return (
-        <Link to="/" className='text-center'>
+        <Link to="/" className="text-center">
             <img
                 src={theme === 'light' ? siteLogoLight : siteLogoDark}
-                className="w-40"
+                className="w-44"
                 alt="eSandesh | Khabar Naya Yug ko"
                 title="eSandesh | Khabar Naya Yug ko"
             />

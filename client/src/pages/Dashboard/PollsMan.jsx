@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { BsFillPlusSquareFill } from 'react-icons/bs'
 import { ImCancelCircle } from 'react-icons/im'
 import { FormText } from '../../components/common'
-import { Popup } from '../../components/common'
+import { Popup, FormSelect } from '../../components/common'
 import { listPolls, createPoll } from '../../redux/actions/polls'
 
 const initState = {
@@ -16,11 +16,13 @@ export default function PollsMan() {
     const polls = useSelector(state => state.polls.pollsList)
     const [prop, setProp] = useState(initState)
     const [show, setShow] = useState(false)
+    const [status, setStatus] = useState('Active')
+
     const dispatch = useDispatch()
 
     useEffect(() => {
-        dispatch(listPolls())
-    }, [])
+        dispatch(listPolls({ active: status == 'Active' }))
+    }, [status])
 
     const addOption = e => {
         e.preventDefault()
@@ -77,7 +79,7 @@ export default function PollsMan() {
                         type="text"
                         name="expiry"
                         value={prop.expiry}
-                        labelText="Expires In"
+                        labelText="Expires In (days)"
                         handleChange={handleChange}
                     />
                     {prop.options.map((option, idx) => (
@@ -96,21 +98,29 @@ export default function PollsMan() {
                             />
                         </div>
                     ))}
-                    <button
-                        className="bg-darkblue text-white mr-2"
-                        onClick={addOption}
-                    >
-                        Add Option
-                    </button>
-                    <button
-                        className="bg-darkblue text-white"
-                        onClick={onSubmit}
-                    >
-                        Save
-                    </button>
+                    <div className="flex gap-8 text-base place-content-center">
+                        <button
+                            className="bg-darkblue text-white"
+                            onClick={addOption}
+                        >
+                            Add Option
+                        </button>
+                        <button
+                            className="bg-darkblue text-white "
+                            onClick={onSubmit}
+                        >
+                            Save
+                        </button>
+                    </div>
                 </Popup>
             )}
-
+            <div className="w-fit">
+                <FormSelect
+                    handleChange={e => setStatus(e.target.value)}
+                    options={['Active', 'Ended']}
+                    labelText="Choose status"
+                />
+            </div>
             <div className="flex flex-col">
                 <div className="overflow-x-auto">
                     <div className="py-2 inline-block min-w-full sm:px-6 lg:px-8">
