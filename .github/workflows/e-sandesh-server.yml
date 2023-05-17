@@ -1,0 +1,65 @@
+name: Build and deploy eSandesh to Azure Web App 
+
+on:
+  push:
+    branches:
+      - main
+      - deploy-server
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up Node.js version
+        uses: actions/setup-node@v1
+        with:
+          node-version: '18.x'
+
+      - name: Prepare files
+        env:
+          PORT: 80
+          NEXTAUTH_URL: e-sandesh.azurewebsites.net
+        run: |
+          npm install --prefix client
+          npm run prepare --prefix client
+          rm -r client/
+          mv server/* .
+          rm -r server
+          npm install
+
+      - name: Zip Everything
+        run: |
+          zip release.zip ./* -r
+      - name: Upload artifact for deployment job
+        uses: actions/upload-artifact@v2
+        with:
+          name: eSandeshZipped
+          path: release.zip
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    environment:
+      name: 'Production'
+      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
+
+    steps:
+      - name: Download artifact from build job
+        uses: actions/download-artifact@v2
+        with:
+          name: eSandeshZipped
+      - name: Unzip Artifact
+        run: unzip release.zip
+
+      - name: 'Deploy to Azure Web App'
+        id: deploy-to-webapp
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: 'e-sandesh'
+          slot-name: 'Production'
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_BACKEND }}
+          package: release.zip

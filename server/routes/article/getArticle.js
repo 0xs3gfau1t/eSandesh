@@ -4,6 +4,9 @@ const articleModel = require('@/model/article')
 const Cache = require('@/controllers/Cache')
 const getRelevantAudioAd = require('@/controllers/relevantAudioAd')
 const crypto = require('crypto')
+const relevantAds = require('../ads/relevantAds')
+
+const STALE_ARTICLE_THRESHOLD = 2 // In Days
 
 /**
  * @param {express.Request} req
@@ -55,7 +58,23 @@ const getArticle = async (req, res) => {
         const article = await Cache(req.originalUrl, getArticle, {
             EX: 24 * 60 * 60,
         })
-        // console.log(article)
+        //
+        // Not caching popup ads
+        //
+        if (
+            article?.at(0)?.publishedAt <
+                new Date(
+                    Date.now() - STALE_ARTICLE_THRESHOLD * 24 * 60 * 60000
+                ) ||
+            article?.at(0)?.category?.includes('STORY')
+        ) {
+            req.query.limit = 1
+            req.query.imageType = 'square'
+            req.blockResponse = true
+
+            const ad = await relevantAds(req, res)
+            article[0].popup = ad?.at(0)
+        }
 
         if (!article || article?.length == 0)
             return res.status(400).json({ message: 'Article not found.' })

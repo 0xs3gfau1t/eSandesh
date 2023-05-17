@@ -1,5 +1,5 @@
 module.exports = async function generateSummary(content) {
-    const url = process.env.SUMM_HOST + ':' + process.env.SUMM_PORT + '/summary'
+    const url = process.env.SUMM_URL
     console.log(url)
     let body = new FormData()
     body.append('text', content)
@@ -8,8 +8,8 @@ module.exports = async function generateSummary(content) {
         summary = await fetch(url, {
             method: 'POST',
             body: body,
-        })
-        summary = await summary.json()
+        }).then(r => r.text())
+        return summary
     } catch (e) {
         console.error(e)
     }
