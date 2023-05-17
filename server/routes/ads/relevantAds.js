@@ -248,7 +248,8 @@ async function relevantAds(req, res) {
         req.cookies.user.history = {}
         req.categoryStrength = categoryStrength
         relevantAds(req, res)
-    } else
+    } else if (req?.blockResponse === true) return finalCategoryAds
+    else
         res.json({
             message: 'success',
             ads: finalCategoryAds,
