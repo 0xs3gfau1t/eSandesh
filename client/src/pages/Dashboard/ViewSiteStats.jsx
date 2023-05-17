@@ -12,6 +12,7 @@ import { Chart as ChartJS } from 'chart.js/auto'
 import CountBox from '../../components/stats/countBox'
 import { getRelativeTime } from '../../utils/relativeDuration'
 import ChartBox from '../../components/stats/chartBox'
+import MetaList from '../../components/stats/MetaList'
 
 const sample = [
     {
@@ -19,6 +20,7 @@ const sample = [
         users: {
             rootUsers: 2,
             publisher: 21,
+            reporters: 98,
             count: 21092,
         },
         ads: {
@@ -44,6 +46,7 @@ const sample = [
         users: {
             rootUsers: 1,
             publisher: 5,
+            reporters: 68,
             count: 14981,
         },
         ads: {
@@ -66,6 +69,11 @@ const sample = [
     },
 ]
 
+const mapped = sample.map(d => ({ _id: d._id, createdAt: d.createdAt }))
+mapped.push(...mapped)
+mapped.push(...mapped)
+mapped.push(...mapped)
+
 export default function ViewSiteStats() {
     const [data, setData] = useState(sample)
 
@@ -82,7 +90,7 @@ export default function ViewSiteStats() {
                     info={`Users count ${getRelativeTime(data[0].createdAt)}`}
                     style={{
                         background:
-                            'linear-gradient(135deg, rgba(255,41,191,1) 0%, rgba(113,0,255,1) 100%)',
+                            'linear-gradient(200deg, rgba(77,77,191,1) 0%, rgba(54,53,223,1) 69%)',
                     }}
                 />
                 <CountBox
@@ -94,7 +102,7 @@ export default function ViewSiteStats() {
                     )}`}
                     style={{
                         background:
-                            'linear-gradient(135deg, rgba(0,243,255,1) 0%, rgba(0,37,255,1) 100%)',
+                            'linear-gradient(200deg, rgba(37,205,43,1) 0%, rgba(36,175,41,1) 69%)',
                     }}
                 />
                 <CountBox
@@ -106,7 +114,7 @@ export default function ViewSiteStats() {
                     )}`}
                     style={{
                         background:
-                            'linear-gradient(135deg, rgba(255,179,6,1) 30%, rgba(255,83,0,1) 100%)',
+                            'linear-gradient(200deg, rgba(237,167,145,1) 0%, rgba(245,128,90,1) 69%)',
                     }}
                 />
                 <CountBox
@@ -118,7 +126,7 @@ export default function ViewSiteStats() {
                     )}`}
                     style={{
                         background:
-                            'linear-gradient(135deg, rgba(172,255,6,1) 0%, rgba(0,187,36,1) 100%)',
+                            'linear-gradient(200deg, rgba(70,197,241,1) 0%, rgba(99,156,218,1) 69%)',
                     }}
                 />
                 <CountBox
@@ -128,11 +136,32 @@ export default function ViewSiteStats() {
                     info={`Polls count ${getRelativeTime(data[0].createdAt)}`}
                     style={{
                         background:
-                            'linear-gradient(135deg, rgba(208,6,255,1) 0%, rgba(0,20,254,1) 100%)',
+                            'linear-gradient(200deg, rgba(147,86,250,1) 0%, rgba(127,68,226,1) 69%)',
                     }}
                 />
             </div>
             <div className="flex-grow max-h-full grid grid-cols-3 grid-rows-2 gap-x-2 gap-y-4 h-[calc(100%-12rem)] p-4">
+                <MetaList data={mapped} />
+                <ChartBox
+                    title="Users"
+                    data={{
+                        datasets: [
+                            {
+                                data: data.map(d => d.users.rootUsers),
+                                label: 'Admins',
+                            },
+                            {
+                                data: data.map(d => d.users.publisher),
+                                label: 'Publishers',
+                            },
+                            {
+                                data: data.map(d => d.users.reporters),
+                                label: 'Reporters',
+                            },
+                        ],
+                        labels: data.map(d => getRelativeTime(d.createdAt)),
+                    }}
+                />
                 <ChartBox
                     title="Articles"
                     type={1}
