@@ -1,28 +1,23 @@
 import React from 'react'
+import { BsClock, BsCalendarDay } from 'react-icons/bs'
 
 export default function GoldSilver() {
     return (
-        <div className="grid grid-cols-3">
-            {/* categories */}
-            <div className="font-bold text-center flex items-center justify-center">
-                छापावाल सुन
+        <div className="flex place-items-center gap-1">
+            <div className="flex flex-col gap-2 text-xl text-black">
+                <BsClock />
+                <BsCalendarDay />
             </div>
-            <div className="font-bold text-center flex items-center justify-center">
-                तेजाबी सुन - तोला
-            </div>
-            <div className="font-bold text-center flex items-center justify-center">
-                चाँदी - तोला
-            </div>
-            {/* rates */}
-            <div className="text-center flex items-center justify-center">
-                रु. ९९,९०२.१६
-            </div>
-            <div className="text-center flex items-center justify-center">
-                रु. ९९,४००.६१
-            </div>
-            <div className="text-center flex items-center justify-center">
-                रु. १,३८५.१०
-            </div>
+            <iframe
+                frameborder="0"
+                marginwidth="0"
+                marginheight="0"
+                allowtransparency="true"
+                src="https://www.ashesh.com.np/linknepali-time.php?time_only=no&font_color=333333&aj_time=yes&font_size=16&line_brake=1&sec_time=no&nst=no&api=671159n225"
+                width="195"
+                height="75"
+                className="!outline-0"
+            ></iframe>
         </div>
     )
 }

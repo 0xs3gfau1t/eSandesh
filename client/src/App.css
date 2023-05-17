@@ -21,7 +21,7 @@ button {
 }
 
 .header {
-    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    border-bottom: 2px solid rgba(0, 0, 0, 0.1);
 }
 
 .container {
@@ -131,19 +131,20 @@ h6 {
 
 .poll-button {
     background: linear-gradient(-45deg, #d31818e7, #d31818e7, #1d3557, #1d3557);
-    background-size: 900% 900%;
-    animation: jhilimili 0.8s infinite;
+    background-size: 500% 500%;
+    animation: jhilimili 0.9s infinite;
 }
 
 @keyframes jhilimili {
     0% {
-        background-position: 0% 50%;
+        background-color: #e66c08;
+        box-shadow: 0 0 15px 0px #c76102e7;
     }
     50% {
-        background-position: 100% 50%;
+        box-shadow: 0 0 15px 5px #b6022fe7;
     }
     100% {
-        background-position: 0% 50%;
+        box-shadow: 0 0 15px 0px #e04c08e7;
     }
 }
 
@@ -161,7 +162,7 @@ h6 {
     animation: bistarai 0.3s;
 }
 .header-drop li {
-    @apply cursor-pointer my-1 hover:bg-blue rounded-sm py-2 duration-200 hover:text-white;
+    @apply cursor-pointer my-1 hover:bg-darkblue rounded-sm py-2 duration-200 hover:text-white;
 }
 @keyframes bistarai {
     0% {

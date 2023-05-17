@@ -1,6 +1,8 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
 import axios from 'axios'
 
+import { setAlert } from './misc'
+
 export const createPoll = createAsyncThunk(
     'polls/createPoll',
     async (data, { dispatch }) => {
@@ -24,9 +26,9 @@ export const createPoll = createAsyncThunk(
 
 export const listPolls = createAsyncThunk(
     'polls/listPolls',
-    async (page, { dispatch }) => {
+    async ({ page = 0, active }, { dispatch }) => {
         const response = await axios
-            .get(`/api/poll/list`, {
+            .get(`/api/poll?active=${active}`, {
                 withCredentials: true,
             })
             .then(res => {
@@ -45,10 +47,12 @@ export const votePoll = createAsyncThunk(
     'polls/votePoll',
     async (data, { dispatch }) => {
         const response = await axios
-            .post(`/api/poll/answer`, data, {
+            .post(`/api/poll/`, data, {
                 withCredentials: true,
             })
             .then(res => {
+                dispatch(listPolls({ active: true }))
+                dispatch(setAlert('मतदानको लागि धन्यवाद !', 'success'))
                 return res.data
             })
             .catch(err => {

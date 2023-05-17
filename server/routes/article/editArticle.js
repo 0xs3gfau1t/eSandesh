@@ -36,13 +36,8 @@ const editArticle = async (req, res) => {
     if (content) article.content = content
     if (category) article.category = category
     if (tags) article.tags = tags
+    if (img) article.img = img
     article.summarizedContent = await generateSummary(contentOnly)
-    article.audio = await rawConverter(
-         await reciter({
-             title,
-             content: contentOnly,
-         })
-     )
     if (img) article.img = img
 
     var key
@@ -50,6 +45,18 @@ const editArticle = async (req, res) => {
         await article.save()
         key = `/api/article/${article.year}/${article.month}/${article.slug}`
         res.status(200).json({ success: true })
+
+        try {
+            article.audio = await rawConverter(
+                await reciter({
+                    title,
+                    content: contentOnly,
+                })
+            )
+            article.save()
+        } catch (e) {
+            console.error(e)
+        }
     } catch (err) {
         console.error(err)
         return res.status(500).json({ error: 'Something went wrong.' })

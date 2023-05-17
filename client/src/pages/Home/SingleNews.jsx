@@ -29,7 +29,6 @@ const SingleNews = () => {
     const focus = useSelector(state => state.misc.focus)
     const adsX = useSelector(state => state.ads.rectX)
     const adsY = useSelector(state => state.ads.rectY)
-    console.log('Smii', similar, news?.category[0])
     const [showPopup, setPopup] = useState(true)
     const [showSummary, setSummary] = useState(false)
     const [summary, upSummary] = useState('Loading..')

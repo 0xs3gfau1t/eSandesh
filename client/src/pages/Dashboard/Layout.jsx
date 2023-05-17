@@ -3,7 +3,7 @@ import { TopNav, SideNav } from '../../components'
 const AdminDash = ({ session }) => {
     return (
         <div>
-            <TopNav title={'Admin Dashboard'} />
+            <TopNav title={'Admin Dashboard'} session={session} />
             <div className="flex h-full">
                 <SideNav role={session?.data?.user?.roles} />
                 <div className="w-3/4">

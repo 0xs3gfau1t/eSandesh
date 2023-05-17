@@ -1,34 +1,36 @@
-const { redisClient } = require('@/config/redis')
 const express = require('express')
 const { default: mongoose } = require('mongoose')
 const pollsModel = require('../../model/polls')
-const getPoll = require('./getPoll')
 
 /**
  * @param {express.Request} req
  * @param {express.Response} res
  */
 const answerPoll = async (req, res) => {
-    if (!req.session)
-        return res
-            .status(403)
-            .json({ message: 'Login to cast vote and see results' })
-
     const { poll, option } = req.body
+
     if (!poll || !option)
         return res.status(400).json({ error: 'Missing poll id or option id.' })
 
     try {
-        const voted = await pollsModel.exists({
+        const expiredOrVoted = await pollsModel.exists({
             _id: mongoose.Types.ObjectId(poll),
-            options: {
-                $elemMatch: {
-                    users: mongoose.Types.ObjectId(req.session.user.id),
+            $or: [
+                {
+                    options: {
+                        $elemMatch: {
+                            users: mongoose.Types.ObjectId(req.session.user.id),
+                        },
+                    },
                 },
-            },
+                { expiry: { $lt: new Date() } },
+            ],
         })
 
-        if (voted) return res.status(400).json({ error: 'Already voted.' })
+        if (expiredOrVoted)
+            return res
+                .status(400)
+                .json({ error: 'Already voted or poll expired.' })
 
         await pollsModel.updateOne(
             {
@@ -38,13 +40,28 @@ const answerPoll = async (req, res) => {
             { $addToSet: { 'options.$.users': req.session.user.id } }
         )
 
-        //
-        // Invalidate Cache everytime someone casts vote
-        //
-        redisClient.del('api/poll?id=' + poll)
+        const votes = await pollsModel.aggregate([
+            { $match: { _id: mongoose.Types.ObjectId(poll) } },
+            {
+                $project: {
+                    _id: false,
+                    options: {
+                        $map: {
+                            input: '$options',
+                            as: 'options',
+                            in: {
+                                _id: '$$options._id',
+                                votes: { $size: '$$options.users' },
+                            },
+                        },
+                    },
+                },
+            },
+            { $unwind: { path: '$options' } },
+            { $replaceRoot: { newRoot: '$options' } },
+        ])
 
-        req.query = { ...req.query, id: poll }
-        return getPoll(req, res)
+        res.json({ message: 'success', votes })
     } catch (err) {
         console.error(err)
         return res.status(500).json({ error: 'Something went wrong.' })
