@@ -1,5 +1,4 @@
 const express = require('express')
-const transporter = require('@/controllers/mailer')
 
 const { hashSync } = require('bcryptjs')
 const path = require('path')
@@ -14,6 +13,7 @@ const { userModel } = require('@/model/user')
  */
 
 module.exports = async (req, res) => {
+    const transporter = await require('@/controllers/mailer')()
     if (!req.session?.user?.roles?.isRoot)
         return res.status(403).json({
             message: "You don't have enough privilege to perform this task.",

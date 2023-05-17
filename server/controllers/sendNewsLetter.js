@@ -4,9 +4,8 @@ const path = require('path')
 const { JSDOM } = require('jsdom')
 const { ObjectId } = require('mongodb')
 
-const transporter = require('@/controllers/mailer')
-
 const sendNewsLetter = async articleId => {
+    const transporter = await require('@/controllers/mailer')()
     try {
         const subscribers = await articleModel.aggregate([
             {
