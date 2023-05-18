@@ -143,7 +143,7 @@ export default function UserInfo() {
                             className="h-full w-full rounded-t-lg relative"
                         >
                             <img
-                                className="w-full h-full object-cover"
+                                className="w-full h-full object-cover rounded-t-lg"
                                 src={
                                     newImage.file ? newImage.buffer : user.image
                                 }

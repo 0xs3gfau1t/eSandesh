@@ -3,16 +3,15 @@ const { userModel } = require('../model/user')
 const { hashSync, compareSync } = require('bcryptjs')
 
 const CredentialsProvider = require('next-auth/providers/credentials').default
-const FacebookProvider = require('next-auth/providers/facebook').default
 const GoogleProvider = require('next-auth/providers/google').default
 
 const getAuthOptions = res => {
     return {
         adapter: MongooseAdapter(),
         providers: [
-            FacebookProvider({
-                clientId: process.env.FACEBOOK_CLIENT_ID,
-                clientSecret: process.env.FACEBOOK_CLIENT_SECRET,
+            GoogleProvider({
+                clientId: process.env.GOOGLE_CLIENT_ID,
+                clientSecret: process.env.GOOGLE_CLIENT_SECRET,
             }),
             CredentialsProvider({
                 id: 'register-user',
