@@ -24,7 +24,7 @@ const SingleNews = () => {
     const params = useParams()
     const news = useSelector(state => state.news.singleNews)
     const similar = useSelector(
-        state => state.news[news?.category[0].toLowerCase()]
+        state => state.news[news?.category[0]?.toLowerCase()]
     )
     const focus = useSelector(state => state.misc.focus)
     const adsX = useSelector(state => state.ads.rectX)
@@ -170,7 +170,7 @@ const SingleNews = () => {
                 <h1 className="flex items-baseline justify-between font-semibold text-2xl">
                     अन्य समान वर्गका विषयहरू लेखहरू{' '}
                     <SeeAllBtn
-                        url={`/category/${news?.category[0].toLowerCase()}`}
+                        url={`/category/${news?.category[0]?.toLowerCase()}`}
                     />
                 </h1>
                 <SideScrollNewsSection

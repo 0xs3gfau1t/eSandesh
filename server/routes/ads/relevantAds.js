@@ -99,13 +99,15 @@ async function relevantAds(req, res) {
     // This is used to match filter categories available in history
     // and of ads
     //
-    const aggregationMatchQuery = req.categoryStrength
-        ? {}
-        : {
-              _id: {
-                  $in: Object.keys(categoryStrength),
-              },
-          }
+    let aggregationMatchQuery = {}
+    if (req.stopRecursion !== true) {
+        aggregationMatchQuery = {
+            _id: {
+                $in: Object.keys(categoryStrength),
+            },
+        }
+    }
+
     const categoryAds = await adsModel.aggregate([
         {
             $match: matchQuery,
@@ -241,20 +243,36 @@ async function relevantAds(req, res) {
     // clear history recursively call this function
     // and forward response from there
     //
-    if (
-        categoryAds.length <= 0 &&
-        Object.keys(req.cookies.user.history).length > 0
-    ) {
+    if (categoryAds.length <= 0 && req?.stopRecursion !== true) {
         req.cookies.user.history = {}
+        req.stopRecursion = true
         req.categoryStrength = categoryStrength
-        relevantAds(req, res)
-    } else if (req?.blockResponse === true) return finalCategoryAds
-    else
-        res.json({
-            message: 'success',
-            ads: finalCategoryAds,
-        })
+        return relevantAds(req, res)
+    }
+
+    //
+    //Update ads hit stat
+    //
+    adsModel.updateMany(
+        { _id: { $in: finalCategoryAds.map(i => i._id) } },
+        { $inc: { hits: 1 } }
+    )
+
+    if (req?.blockResponse === true) {
+        //
+        // This clause is used primarily by getArticle.js
+        // Just extract ads and not send respone
+        // Response is sent via getArticle.js
+        //
+        return finalCategoryAds
+    }
+
+    res.json({
+        message: 'success',
+        ads: finalCategoryAds,
+    })
 }
 
 module.exports = relevantAds
+module.exports.calculateCategoryStrength = calculateCategoryStrength
 module.exports.calculateCategoryStrength = calculateCategoryStrength

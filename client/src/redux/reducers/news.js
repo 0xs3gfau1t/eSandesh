@@ -33,7 +33,7 @@ const newsSlice = createSlice({
         builder.addCase(listNewsCat.fulfilled, (state, { payload }) => {
             if (payload.success && payload.data) {
                 // if (payload.cat == "preference") state.prefNews = payload.data
-                state[payload.cat.toLowerCase()] = payload.data
+                state[payload?.cat?.toLowerCase()] = payload.data
             }
         })
         builder.addCase(getRecentNews.fulfilled, (state, { payload }) => {

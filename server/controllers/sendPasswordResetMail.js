@@ -1,9 +1,8 @@
-const nodemailer = require('nodemailer')
 const fs = require('fs')
 const path = require('path')
-const transporter = require("@/controllers/mailer")
 
 const sendPasswordResetMail = async ({ email, url }) => {
+    const transporter = await require('@/controllers/mailer')()
     try {
         const htmlFilePath = path.resolve(
             __dirname,
