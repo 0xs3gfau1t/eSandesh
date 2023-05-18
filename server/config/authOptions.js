@@ -131,10 +131,14 @@ const getAuthOptions = res => {
                             ? 'user'
                             : account.provider
                 if (user) {
-                    res.cookie('user', JSON.stringify(user.history), {
-                        httpOnly: true,
-                        sameSite: 'lax',
-                    })
+                    res.cookie(
+                        'user',
+                        JSON.stringify({ history: user.history }),
+                        {
+                            httpOnly: true,
+                            sameSite: 'lax',
+                        }
+                    )
 
                     token.id = user.id
                     token.roles = user.roles
