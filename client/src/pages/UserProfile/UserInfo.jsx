@@ -186,7 +186,7 @@ export default function UserInfo() {
                     ) : (
                         <div
                             title="Add Image"
-                            className="rounded-t-lg h-64 w-full bg-slate-800 relative"
+                            className="rounded-t-lg h-full w-full bg-slate-800 relative"
                         >
                             <RiImageAddLine className="h-full text-slate-300 text-6xl aspect-square absolute left-1/2 -translate-x-1/2" />
                         </div>

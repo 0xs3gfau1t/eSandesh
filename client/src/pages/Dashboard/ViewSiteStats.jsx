@@ -40,7 +40,7 @@ export default function ViewSiteStats() {
         return {
             metadata: state.stats?.meta?.data || [],
             activeMetaIdx: state.stats?.activeMetaIdx || 0,
-            showMeta: state.stats.users?.chart || true,
+            showMeta: state.stats.users?.chart ?? true,
             showGenerate: state.stats?.generate || 'hidden',
             showDelete: state.stats?.deletion || 'hidden',
             initialized: state.stats.initialized,
