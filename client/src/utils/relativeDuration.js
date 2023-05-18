@@ -10,7 +10,7 @@ const units = {
 const rtf = new Intl.RelativeTimeFormat('en', { numeric: 'auto' })
 
 export const getRelativeTime = (d1, d2 = new Date()) => {
-    var elapsed = d1 - d2
+    var elapsed = new Date(d1) - new Date(d2)
 
     for (var u in units)
         if (Math.abs(elapsed) > units[u] || u == 'second')

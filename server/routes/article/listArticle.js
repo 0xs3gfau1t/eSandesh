@@ -91,11 +91,11 @@ const listArticle = async (req, res) => {
         articles.sort((a, b) => {
             if (preference) {
                 var scoreA = a.category.reduce((accum, value) => {
-                    return accum + user.history[value]?.hits || 0
+                    return accum + (user.history[value]?.hits || 0)
                 }, 0)
 
                 var scoreB = b.category.reduce((accum, value) => {
-                    return accum + user.history[value]?.hits || 0
+                    return accum + (user.history[value]?.hits || 0)
                 }, 0)
 
                 const diff = scoreB - scoreA

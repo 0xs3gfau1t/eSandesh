@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom'
 import { getRelativeTime } from '../../utils/relativeDuration'
 import { AiOutlineArrowRight } from 'react-icons/ai'
 import { useAxiosError } from '../../utils/useAxiosError'
+import { formatString } from '../../utils/formatString'
 
 export default function SavedPosts() {
     const [posts, setPosts] = useState([])
@@ -74,11 +75,8 @@ export default function SavedPosts() {
                                     </span>
                                     <div className="overflow-x-scroll flex flex-nowrap gap-2">
                                         {(() => {
-                                            let cat = post.category.map(
-                                                c =>
-                                                    c.charAt(0).toUpperCase() +
-                                                    c.slice(1).toLowerCase()
-                                            )
+                                            let cat =
+                                                post.category.map(formatString)
                                             cat = cat.join(', ')
                                             return (
                                                 <span
