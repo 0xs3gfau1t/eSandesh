@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react'
 import { AiOutlineCalendar, AiOutlineRead, AiOutlineUser } from 'react-icons/ai'
 import { Link, useSearchParams } from 'react-router-dom'
 import { getRelativeTime } from '../utils/relativeDuration'
+import { formatString } from '../utils/formatString'
 
 const SearchPage = () => {
     const [params, _setParams] = useSearchParams()
@@ -46,8 +47,7 @@ const SearchPage = () => {
                             {s.category.map(c => (
                                 <li className="px-2 py-1 shadow-sm hover:shadow-md border-b rounded-sm border-blue">
                                     <Link to={`/category/${c.toLowerCase()}`}>
-                                        {c.charAt(0).toUpperCase() +
-                                            c.slice(1).toLowerCase()}
+                                        {formatString(c)}
                                     </Link>
                                 </li>
                             ))}

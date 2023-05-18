@@ -81,7 +81,7 @@ module.exports = async (req, res) => {
     // If requesting for the first bytes
     // then create wav file headers
     // For reference check the following site
-    // https://sites.google.com/site/musicgapi/technical-documents/wav-file-format
+    // https://docs.fileformat.com/audio/wav/
     if (start == 0) {
         const wavHeader = Buffer.alloc(HEADER_SIZE)
 

@@ -88,7 +88,7 @@ const ManageNews = () => {
                         />
                     </div>
                 </div>
-                <div className="overflow-x-auto sm:-mx-6 lg:-mx-8">
+                <div className="overflow-x-auto sm:-px-6 lg:-px-8">
                     <div className="py-2 inline-block min-w-full sm:px-6 lg:px-8">
                         <div className="overflow-hidden">
                             <table className="newsListTable min-w-full table-auto">
@@ -141,8 +141,8 @@ const ManageNews = () => {
                                                         <td>
                                                             {khabar.category
                                                                 ? khabar.category.join(
-                                                                      ','
-                                                                  )
+                                                                    ','
+                                                                )
                                                                 : ''}
                                                         </td>
                                                         <td>
