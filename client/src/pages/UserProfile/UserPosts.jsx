@@ -12,6 +12,7 @@ import { FormTextArea, Popup } from '../../components/common'
 import { useAxiosError } from '../../utils/useAxiosError'
 import { FormText } from '../../components/common'
 import { setAlert } from '../../redux/actions/misc'
+import { formatString } from '../../utils/formatString'
 
 const INIT_POPUP = {
     active: false, // 'adding' | 'editing' | false
@@ -152,21 +153,18 @@ export default function UserPosts() {
                                     <span className="text-gray-600">
                                         {post.publishedAt
                                             ? 'Published ' +
-                                              getRelativeTime(
-                                                  new Date(post.publishedAt)
-                                              )
+                                            getRelativeTime(
+                                                new Date(post.publishedAt)
+                                            )
                                             : 'Created ' +
-                                              getRelativeTime(
-                                                  new Date(post.createdAt)
-                                              )}
+                                            getRelativeTime(
+                                                new Date(post.createdAt)
+                                            )}
                                     </span>
                                     <div className="overflow-x-scroll flex flex-nowrap gap-2">
                                         {(() => {
-                                            let cat = post.category.map(
-                                                c =>
-                                                    c.charAt(0).toUpperCase() +
-                                                    c.slice(1).toLowerCase()
-                                            )
+                                            let cat =
+                                                post.category.map(formatString)
                                             cat = cat.join(', ')
                                             return (
                                                 <span

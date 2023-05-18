@@ -174,3 +174,12 @@ h6 {
         top: -75px;
     }
 }
+
+@keyframes rotate {
+    to {
+        transform: rotate(360deg);
+    }
+}
+.rotate-hover:hover {
+    animation: rotate 400ms linear forwards;
+}
