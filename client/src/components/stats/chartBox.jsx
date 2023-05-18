@@ -72,8 +72,9 @@ const ChartBox = ({ obj, data, type = 0 }) => {
     const showChart = useSelector(state => state.stats[obj].chart)
     return (
         <div
-            className={`border-solid border-black border flex flex-col items-center rounded-lg bg-slate-200 ${obj == 'users' && !showChart ? 'col-span-2' : ''
-                }`}
+            className={`border-solid border-black border flex flex-col items-center rounded-lg bg-slate-200 ${
+                obj == 'users' && !showChart ? 'col-span-2' : ''
+            }`}
         >
             <div className="h-16 w-full relative flex justify-center items-center">
                 <h2 className="font-bold">{formatString(obj)}</h2>
@@ -131,8 +132,14 @@ const ChartBox = ({ obj, data, type = 0 }) => {
                 <div className="w-full max-h-[calc(100%-4rem)] flex justify-center justify-self-stretch">
                     <Chart
                         data={data}
-                        style={{ width: '100%', height: '100%', color: 'red' }}
-                        color="#ff0000"
+                        style={{ width: '100%', height: '100%' }}
+                        options={{
+                            plugins: {
+                                colors: {
+                                    forceOverride: true,
+                                },
+                            },
+                        }}
                     />
                 </div>
             ) : (
