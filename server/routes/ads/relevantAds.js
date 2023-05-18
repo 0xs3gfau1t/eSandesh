@@ -247,18 +247,32 @@ async function relevantAds(req, res) {
         req.cookies.user.history = {}
         req.stopRecursion = true
         req.categoryStrength = categoryStrength
-        relevantAds(req, res)
-    } else if (req?.blockResponse === true) {
+        return relevantAds(req, res)
+    }
+
+    //
+    //Update ads hit stat
+    //
+    adsModel.updateMany(
+        { _id: { $in: finalCategoryAds.map(i => i._id) } },
+        { $inc: { hits: 1 } }
+    )
+
+    if (req?.blockResponse === true) {
         //
         // This clause is used primarily by getArticle.js
-        // To just extract ads and not send respone
+        // Just extract ads and not send respone
+        // Response is sent via getArticle.js
+        //
         return finalCategoryAds
-    } else
-        res.json({
-            message: 'success',
-            ads: finalCategoryAds,
-        })
+    }
+
+    res.json({
+        message: 'success',
+        ads: finalCategoryAds,
+    })
 }
 
 module.exports = relevantAds
+module.exports.calculateCategoryStrength = calculateCategoryStrength
 module.exports.calculateCategoryStrength = calculateCategoryStrength
