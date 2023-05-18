@@ -46,9 +46,10 @@ export const getSingleNews = createAsyncThunk(
 
 export const getRecentNews = createAsyncThunk(
     'news/getRecentNews',
-    async ({}, { dispatch }) => {
+    async ({ page = 0, items = 6 }, { dispatch }) => {
+        console.log('Here')
         const response = await axios
-            .get(`/api/article/list?items=6`, {
+            .get(`/api/article/list?items=${items}&page=${page}`, {
                 withCredentials: true,
             })
             .then(res => {

@@ -2,7 +2,7 @@ const catMap = {
     politics: 'राजनीति',
     global: 'विश्व',
     finance: 'अर्थ / वाणिज्य',
-    business: 'विजनेस',
+    business: 'व्यापार',
     sports: 'खेलकुद',
     entertainment: 'मनोरञ्जन',
     technology: 'प्रविधि',

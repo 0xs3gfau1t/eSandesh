@@ -49,7 +49,7 @@ export default function EachCategoryPreview({ category }) {
                         </div>
                         <div className="p-4 w-2/5 bg-white shadow-sm rounded-xl">
                             <h2 className="text-2xl font-bold leading-loose">
-                                {cats[category]} मा शीर्ष लेखहरू
+                                {cats[category.toLowerCase()]} मा शीर्ष लेखहरू
                             </h2>
                             <SideNewsList
                                 category={category}

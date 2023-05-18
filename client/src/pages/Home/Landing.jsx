@@ -11,15 +11,15 @@ import { setFocus } from '../../redux/reducers/misc'
 
 const Landing = () => {
     const prefCats = useSelector(state => state.news.prefCats)
-    const recent = useSelector(state => state.news.recentNews)
+    const recent = useSelector(state => state.news.recent)
     const hot = useSelector(state => state.news.hot)
     const adsX = useSelector(state => state.ads.rectX)
 
     const dispatch = useDispatch()
 
     useEffect(() => {
-        dispatch(getRecentNews(0))
         dispatch(getPrefCats(0))
+        dispatch(getRecentNews(0))
         dispatch(setFocus(false))
     }, [])
 
@@ -45,19 +45,19 @@ const Landing = () => {
                     अन्य चर्चित विषयहरू <SeeAllBtn url={`/category/hot`} />
                 </h1>
                 <SideScrollNewsSection category={'hot'} data={hot} />
-                <hr className=" w-11/12 my-10 border-neutral-300" />
+                <hr className=" w-11/12 my-6 border-neutral-300" />
                 <RectXAd ad={adsX ? (adsX[1] ? adsX[1] : false) : false} />
 
-                <div className="mb-10 pb-4">
+                <div className="mb-6 pb-2">
                     {/* middle scrolling news under the hero section */}
                     <EachCategoryPreview
                         category={prefCats ? prefCats[0] : ''}
                     />
                     <RectXAd ad={adsX ? (adsX[2] ? adsX[2] : false) : false} />
                 </div>
-                <hr className=" w-11/12 my-10 border-neutral-300" />
+                <hr className=" w-11/12 my-6 border-neutral-300" />
 
-                <div className="mb-10 pb-4">
+                <div className="mb-10 pb-2">
                     {/* middle scrolling news under the hero section */}
                     <EachCategoryPreview
                         category={prefCats ? prefCats[1] : ''}

@@ -39,7 +39,7 @@ const newsSlice = createSlice({
         })
         builder.addCase(getRecentNews.fulfilled, (state, { payload }) => {
             if (payload.success && payload.data) {
-                state.recentNews = payload.data
+                state.recent = payload.data
             }
         })
         builder.addCase(getPrefCats.fulfilled, (state, { payload }) => {
