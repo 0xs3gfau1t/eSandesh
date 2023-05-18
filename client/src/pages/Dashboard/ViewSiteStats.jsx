@@ -29,29 +29,39 @@ import Popup from '../../components/common/Popup'
 import { statActions } from '../../redux/reducers/stats'
 
 export default function ViewSiteStats() {
-    const { showMeta, metadata, activeMetaIdx, showGenerate, showDelete } =
-        useSelector(state => {
-            return {
-                metadata: state.stats.meta.data,
-                activeMetaIdx: state.stats.activeMetaIdx,
-                showMeta: state.stats.users.chart,
-                showGenerate: state.stats.generate,
-                showDelete: state.stats.deletion,
-            }
-        })
+    const {
+        showMeta,
+        metadata,
+        activeMetaIdx,
+        showGenerate,
+        showDelete,
+        initialized,
+    } = useSelector(state => {
+        return {
+            metadata: state.stats?.meta?.data || [],
+            activeMetaIdx: state.stats?.activeMetaIdx || 0,
+            showMeta: state.stats.users?.chart || true,
+            showGenerate: state.stats?.generate || 'hidden',
+            showDelete: state.stats?.deletion || 'hidden',
+            initialized: state.stats.initialized,
+        }
+    })
 
     const dispatch = useDispatch()
 
     const infoTime = getRelativeTime(metadata[activeMetaIdx]?.createdAt || 0)
 
     useEffect(() => {
-        if (metadata.length == 0) dispatch(loadMoreStats('meta'))
-    }, [])
+        if (!initialized) dispatch(statActions.initData())
+        if (initialized && metadata.length == 0) dispatch(loadMoreStats('meta'))
+    }, [initialized])
 
     const generate = () => dispatch(generateStats())
     const deletion = () => dispatch(deleteStats())
     const closeGenerate = () => dispatch(statActions.setGenerate('hidden'))
     const closeDelete = () => dispatch(statActions.setDeletion('hidden'))
+
+    if (!initialized) return <div>Loading</div>
 
     return (
         <div className="w-full h-full p-2 flex flex-col max-h-full bg-slate-100">
