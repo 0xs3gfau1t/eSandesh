@@ -1,6 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { listNews } from '../actions/dashNews'
 import {
+    getPrefCats,
     getRecentNews,
     getSingleNews,
     listNewsCat,
@@ -39,6 +40,11 @@ const newsSlice = createSlice({
         builder.addCase(getRecentNews.fulfilled, (state, { payload }) => {
             if (payload.success && payload.data) {
                 state.recentNews = payload.data
+            }
+        })
+        builder.addCase(getPrefCats.fulfilled, (state, { payload }) => {
+            if (payload.success && payload.data) {
+                state.prefCats = payload.data
             }
         })
     },

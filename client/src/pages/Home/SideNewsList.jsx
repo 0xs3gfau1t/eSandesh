@@ -3,8 +3,10 @@ import { Link } from 'react-router-dom'
 
 import { FaAngleDoubleRight } from 'react-icons/fa'
 import { SeeAllBtn } from '../../components/common'
+import { getCatMap } from '../../utils/categoryMap'
 
 export default function SideNewsList({ category, data }) {
+    const cats = getCatMap()
     if (data.length > 0)
         return (
             <>
@@ -31,5 +33,8 @@ export default function SideNewsList({ category, data }) {
                 </div>
             </>
         )
-    else return <h1>No more news on {category}</h1>
+    else
+        return (
+            <h1>{cats[category.toLowerCase()]} वर्गमा थप कुनै समाचार छैन।</h1>
+        )
 }

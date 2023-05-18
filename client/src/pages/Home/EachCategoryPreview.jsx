@@ -9,18 +9,19 @@ import { listNewsCat } from '../../redux/actions/publicNews'
 import { getCatMap } from '../../utils/categoryMap'
 
 export default function EachCategoryPreview({ category }) {
-    const khabar = useSelector(state => state.news[category])
+    const khabar = useSelector(state => state.news[category.toLowerCase()])
     const dispatch = useDispatch()
     const cats = getCatMap()
     useEffect(() => {
-        dispatch(listNewsCat({ page: 0, cat: category.toUpperCase() }))
-    }, [])
+        if (category)
+            dispatch(listNewsCat({ page: 0, cat: category, items: 5 }))
+    }, [category])
     return (
         <>
             {khabar && khabar.length > 0 && (
                 <>
                     <h1 className="text-4xl font-bold leading-loose">
-                        {cats[category]} मा ट्रेन्डिङ
+                        {cats[category.toLowerCase()]} मा ट्रेन्डिङ
                     </h1>
                     <div className="flex mb-10 pb-4 gap-4 ">
                         <div className="w-3/5  bg-white shadow-sm p-6 rounded-xl">
@@ -44,16 +45,6 @@ export default function EachCategoryPreview({ category }) {
                                         {khabar[0].title}
                                     </Link>
                                 </h1>
-                                {/* <div className="flex items-center w-2/5"> */}
-                                {/* <span className="text-xs text-slate-400 w-1/2">
-										2020 March- 12
-									</span> */}
-                                <LikeSaveShare
-                                    // articleId={}
-                                    likes={'९११'}
-                                    className="w-1/5"
-                                />
-                                {/* </div> */}
                             </div>
                         </div>
                         <div className="p-4 w-2/5 bg-white shadow-sm rounded-xl">

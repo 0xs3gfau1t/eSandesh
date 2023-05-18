@@ -63,3 +63,22 @@ export const getRecentNews = createAsyncThunk(
         return { success: true, data: response }
     }
 )
+
+export const getPrefCats = createAsyncThunk(
+    'news/getPrefCats',
+    async ({}, { dispatch }) => {
+        const response = await axios
+            .get(`/api/user/relevantcategories`, {
+                withCredentials: true,
+            })
+            .then(res => {
+                return res.data
+            })
+            .catch(err => {
+                console.error(err)
+            })
+
+        if (!response) return { success: false }
+        return { success: true, data: response.categories }
+    }
+)
