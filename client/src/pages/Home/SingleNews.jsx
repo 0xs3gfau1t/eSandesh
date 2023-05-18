@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { useParams } from 'react-router-dom'
 import { BiBookReader } from 'react-icons/bi'
+import { RxCross2 } from 'react-icons/rx'
 import axios from 'axios'
 
 import {
@@ -56,17 +57,31 @@ const SingleNews = () => {
         if (news?.slug != params.slug) {
             dispatch(delSingleNews())
             dispatch(getSingleNews({ params: params, noAudio: false }))
+            setPopup(true)
         }
     }, [params])
     return (
         <div className="flex justify-between container gap-2">
-            {news && news.category.includes('STORY') && showPopup && (
-                <Popup setShow={setPopup} title={'Ad'}>
-                    <div className="flex flex-row w-full">
-                        <SqAds />
-                        <button onClick={e => setPopup(false)}>X</button>
+            {news && news.popup && showPopup && (
+                <div className="fixed inset-0 z-10">
+                    <div className="fixed inset-0 w-full h-full bg-black opacity-40" />
+                    <div
+                        className={`flex items-center min-h-screen px-4 py-8  mx-auto`}
+                    >
+                        <div className="flex px-4 mx-auto">
+                            <div className="relative mx-auto  rounded-md drop-shadow-3xl max-h-[95vh] overflow-auto">
+                                <div className="my-2 text-center sm:mx-4 sm:text-left">
+                                    <RxCross2
+                                        onClick={e => setPopup(false)}
+                                        className="cursor-pointer absolute stroke-[0.8px] text-red z-10 text-2xl font-extrabold"
+                                    />
+
+                                    <SqAds ad={news?.popup} />
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                </Popup>
+                </div>
             )}
             {showSummary && (
                 <Popup
@@ -155,7 +170,7 @@ const SingleNews = () => {
                     </span>
                 </div>
                 <div
-                    className={`text-${fontSize}xl mt-4`}
+                    className={`text-${fontSize}xl mt-4 content`}
                     dangerouslySetInnerHTML={{
                         __html: news
                             ? news.content

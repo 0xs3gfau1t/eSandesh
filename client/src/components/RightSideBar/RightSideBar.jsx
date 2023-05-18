@@ -1,7 +1,6 @@
 import React from 'react'
 
 import PreferredNews from './PreferredNews'
-import QuickUpdates from './QuickUpdates'
 import { SeeAllBtn, SqAds } from '../common'
 
 function RightSideBar({ ads }) {
@@ -9,7 +8,7 @@ function RightSideBar({ ads }) {
         <>
             <iframe
                 src="https://www.ashesh.com.np/rashifal/widget.php?header_title=Nepali Rashifal&header_color=f0b03f&api=671155n037"
-                className="w-60 rounded-md h-80 !outline-gray-800 !outline-0"
+                className="w-60 rounded-md h-80 !outline-0"
             ></iframe>
 
             {/* end of a section */}
