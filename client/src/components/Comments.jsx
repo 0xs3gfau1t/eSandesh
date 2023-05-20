@@ -17,6 +17,7 @@ import {
 } from 'react-icons/ai'
 import { BiComment, BiCommentAdd } from 'react-icons/bi'
 import { getRelativeTime } from '../utils/relativeDuration'
+import { setAlert } from '../redux/actions/misc'
 
 const formatter = new Intl.NumberFormat('en-US', { notation: 'compact' })
 
@@ -235,7 +236,7 @@ const CommentBox = ({
     )
 }
 
-function Comments({ articleId }) {
+function Comments({ articleId, session }) {
     const comments = useSelector(state => state.comments.comments)
     const dispatch = useDispatch()
     const [commenting, setCommenting] = useState({
@@ -258,8 +259,6 @@ function Comments({ articleId }) {
                 })
             )
     }, [articleId])
-
-    const session = useSession()
 
     return (
         <div>
@@ -292,9 +291,16 @@ function Comments({ articleId }) {
                 ) : (
                     <div
                         className="cursor-pointer"
-                        onClick={() =>
-                            setCommenting({ bool: true, commentStr: '' })
-                        }
+                        onClick={() => {
+                            if (session.status == 'unauthenticated')
+                                dispatch(
+                                    setAlert(
+                                        'You must login to comment!',
+                                        'danger'
+                                    )
+                                )
+                            else setCommenting({ bool: true, commentStr: '' })
+                        }}
                     >
                         <BiCommentAdd className="inline mr-2 " />
                         <span>Add Comment</span>

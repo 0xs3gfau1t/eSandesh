@@ -144,7 +144,7 @@ function App() {
                     <Route path="" element={<Landing />} />
                     <Route
                         path="/news/:year/:month/:slug"
-                        element={<SingleNews />}
+                        element={<SingleNews session={session} />}
                     />
                     <Route path="/category/:cat" element={<Category />} />
                     <Route path="/author/:author" element={<Author />} />
