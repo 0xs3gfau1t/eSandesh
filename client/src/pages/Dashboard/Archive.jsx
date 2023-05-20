@@ -54,7 +54,7 @@ export default function Archive() {
 
     return (
         <div
-            className="flex flex-col justify-items-center ml-32"
+            className="flex flex-col justify-items-center px-4"
             id="setting-container"
         >
             <div
@@ -122,7 +122,7 @@ export default function Archive() {
                     )}
                 </div>
             </div>
-            <div id="result-container" className='ml-6'>
+            <div id="result-container" className="ml-6">
                 <ul>
                     {state === archiveState.ARCHIVED
                         ? archives?.map(archive => (

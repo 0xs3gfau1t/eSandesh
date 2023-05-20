@@ -55,10 +55,54 @@ const getInfo = async (req, res) => {
                 },
                 { $set: { google: { $size: '$google' } } },
             ])
+            Object.keys(userInfo[0].roles).forEach(role => {
+                if (userInfo[0].roles[role] == false)
+                    delete userInfo[0].roles[role]
+            })
         } else {
             userInfo = await userModel.aggregate([
                 { $match: { _id: mongoose.Types.ObjectId(id) } },
-                { $project: { name: 1, image: 1 } },
+                {
+                    $lookup: {
+                        from: 'users',
+                        let: { id: '$_id' },
+                        pipeline: [
+                            {
+                                $match: {
+                                    _id: mongoose.Types.ObjectId(
+                                        req.session?.user?.id
+                                    ),
+                                },
+                            },
+                            {
+                                $project: {
+                                    _id: false,
+                                    subscribed: {
+                                        $cond: [
+                                            { $in: ['$$id', '$subscriptions'] },
+                                            true,
+                                            false,
+                                        ],
+                                    },
+                                },
+                            },
+                        ],
+                        as: 'subscribed',
+                    },
+                },
+                {
+                    $unwind: {
+                        path: '$subscribed',
+                        preserveNullAndEmptyArrays: true,
+                    },
+                },
+                {
+                    $project: {
+                        name: 1,
+                        image: 1,
+                        subscribed: '$subscribed.subscribed',
+                    },
+                },
             ])
         }
 

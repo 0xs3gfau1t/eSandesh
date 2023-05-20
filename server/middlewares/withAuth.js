@@ -7,7 +7,7 @@ const express = require('express')
 const withAuth = async (req, res, next) => {
     if (req.session) return next()
 
-    return res.status(401).json({ message: 'Unauthorized' })
+    return res.status(401).json({ error: 'Unauthorized' })
 }
 
 module.exports = withAuth
