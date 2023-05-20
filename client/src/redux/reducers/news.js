@@ -18,6 +18,11 @@ const newsSlice = createSlice({
         delSingleNews: (state, { payload }) => {
             if (state.singleNews) delete state.singleNews
         },
+        subscribeAuthor: (state, { payload }) => {
+            if (state.singleNews)
+                state.singleNews.author.subscribed =
+                    !state.singleNews.author.subscribed
+        },
     },
 
     extraReducers: builder => {
@@ -51,4 +56,4 @@ const newsSlice = createSlice({
 })
 
 export default newsSlice.reducer
-export const { delSingleNews } = newsSlice.actions
+export const { delSingleNews, subscribeAuthor } = newsSlice.actions
