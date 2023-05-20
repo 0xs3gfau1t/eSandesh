@@ -10,12 +10,9 @@ import {
     UserAuth,
     ForgotPassword,
     Category,
-    AdsMan,
-    ViewSiteStats,
+    Author,
     SingleNews,
     Landing,
-    PollsMan,
-    ManageCritics,
     UserProfile,
     Polls,
     ArchiveNews,
@@ -146,6 +143,7 @@ function App() {
                         element={<SingleNews />}
                     />
                     <Route path="/category/:cat" element={<Category />} />
+                    <Route path="/author/:author" element={<Author />} />
                     <Route path="search" element={<SearchPage />} />
                 </Route>
                 <Route path="*" element={<NotFound />} />

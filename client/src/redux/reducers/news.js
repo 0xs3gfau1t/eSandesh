@@ -5,6 +5,7 @@ import {
     getRecentNews,
     getSingleNews,
     listNewsCat,
+    listByAuthor,
 } from '../actions/publicNews'
 
 const initialState = {
@@ -50,6 +51,11 @@ const newsSlice = createSlice({
         builder.addCase(getPrefCats.fulfilled, (state, { payload }) => {
             if (payload.success && payload.data) {
                 state.prefCats = payload.data
+            }
+        })
+        builder.addCase(listByAuthor.fulfilled, (state, { payload }) => {
+            if (payload.success && payload.data) {
+                state.author = payload.data
             }
         })
     },

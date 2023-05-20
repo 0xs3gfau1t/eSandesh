@@ -1,7 +1,7 @@
 const catMap = {
     politics: 'राजनीति',
     global: 'विश्व',
-    finance: 'अर्थ / वाणिज्य',
+    finance: 'अर्थ/वाणिज्य',
     business: 'व्यापार',
     sports: 'खेलकुद',
     entertainment: 'मनोरञ्जन',
@@ -11,8 +11,9 @@ const catMap = {
     story: 'विचार/रचना ',
 }
 
-const getCatMap = () => {
-    return catMap
+const getCatMap = cat => {
+    if (!cat) return catMap
+    return catMap[cat?.toLowerCase()] ? catMap[cat.toLowerCase()] : 'अन्य'
 }
 
 export { getCatMap }

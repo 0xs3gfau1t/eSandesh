@@ -47,7 +47,6 @@ export const getSingleNews = createAsyncThunk(
 export const getRecentNews = createAsyncThunk(
     'news/getRecentNews',
     async ({ page = 0, items = 6 }, { dispatch }) => {
-        console.log('Here')
         const response = await axios
             .get(`/api/article/list?items=${items}&page=${page}`, {
                 withCredentials: true,
@@ -81,5 +80,27 @@ export const getPrefCats = createAsyncThunk(
 
         if (!response) return { success: false }
         return { success: true, data: response.categories }
+    }
+)
+
+export const listByAuthor = createAsyncThunk(
+    'news/listByAuthor',
+    async ({ id, page = 0, items = 6 }, { dispatch }) => {
+        const response = await axios
+            .get(
+                `/api/article/byuser?userId=${id}&items=${items}&page=${page}`,
+                {
+                    withCredentials: true,
+                }
+            )
+            .then(res => {
+                return res.data
+            })
+            .catch(err => {
+                console.error(err)
+            })
+
+        if (!response) return { success: false }
+        return { success: true, data: response.articles }
     }
 )

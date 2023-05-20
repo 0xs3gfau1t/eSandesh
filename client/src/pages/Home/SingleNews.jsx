@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { useParams } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { BiBookReader } from 'react-icons/bi'
 import { RxCross2 } from 'react-icons/rx'
 import { BsFillBellFill, BsFillBellSlashFill } from 'react-icons/bs'
@@ -166,7 +167,9 @@ const SingleNews = () => {
                                       dateOpt
                                   ) + ' | '
                                 : ''}
-                            {news ? news.author.name : ''}
+                            <Link to={`/author/${news?.author?._id}`}>
+                                {news ? news.author.name : ''}
+                            </Link>
                         </h2>
                         <div
                             onClick={subscribe}
