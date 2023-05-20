@@ -180,7 +180,7 @@ const SingleNews = ({ session }) => {
                                 news?.author?.subscribed
                                     ? 'text-gray-600'
                                     : 'text-rose-700'
-                            } text-2xl my-auto cursor-pointer hover:text-green-700 hover:animate-bounce`}
+                            } text-3xl my-auto cursor-pointer hover:text-green-700 hover:animate-bounce`}
                             title={
                                 news?.author?.subscribed
                                     ? 'Unsubscribe'
