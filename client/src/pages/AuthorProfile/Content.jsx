@@ -8,13 +8,20 @@ import HeroSection from './HeroSection'
 import { listByAuthor } from '../../redux/actions/publicNews'
 import { setFocus } from '../../redux/reducers/misc'
 import { getCatMap } from '../../utils/categoryMap'
+import { BsFillBellFill, BsFillBellSlashFill } from 'react-icons/bs'
+import { setAlert } from '../../redux/actions/misc'
+import { useAxiosError } from '../../utils/useAxiosError'
 
 export default function Content({ author }) {
     const [page, setPage] = useState(0)
     const list = useSelector(state => state.news.author)
-    const [name, setName] = useState('eSandesh')
-    const dispatch = useDispatch()
+    const [userInfo, setUserInfo] = useState({
+        name: '',
+        image: '',
+        subscribed: false,
+    })
     let [cats, setCats] = useState([])
+    const { dispatch, onError } = useAxiosError()
 
     useEffect(() => {
         dispatch(
@@ -31,7 +38,7 @@ export default function Content({ author }) {
         axios
             .get(`/api/user?id=${author}`)
             .then(res => {
-                setName(res.data.userInfo.name)
+                setUserInfo(res.data.userInfo)
             })
             .catch(err => console.log(err))
     }, [author])
@@ -48,19 +55,66 @@ export default function Content({ author }) {
         setCats(catUp)
     }, [list])
 
+    const subscribe = async () => {
+        let config = {
+            method: userInfo.subscribed ? 'delete' : 'post',
+            url: '/api/subscriptions',
+            data: { id: userInfo._id },
+        }
+
+        await axios(config)
+            .then(res => {
+                dispatch(
+                    setAlert(
+                        `Author ${config.method == 'post'
+                            ? 'Subscribed'
+                            : 'Unsubscribed'
+                        }!`,
+                        'success'
+                    )
+                )
+                setUserInfo(o => ({
+                    ...o,
+                    subscribed: config.method == 'post',
+                }))
+            })
+            .catch(onError)
+    }
+
     return (
         <div className="flex flex-col w-full mx-auto px-4 gap-2">
             <div className="flex gap-4 place-items-center">
                 <img
                     className="w-20 h-20 rounded-full"
-                    src={`/api/user/image?id=${author}`}
-                    onError={e => {
-                        e.target.src =
-                            'https://cdn-icons-png.flaticon.com/512/149/149071.png?w=740&t=st=1684569916~exp=1684570516~hmac=70daac1534536a3d34c807352aa38270b496f271c4c17c29aee83b007c0ac13b'
-                    }}
+                    src={
+                        userInfo.image ||
+                        'https://cdn-icons-png.flaticon.com/512/149/149071.png?w=740&t=st=1684569916~exp=1684570516~hmac=70daac1534536a3d34c807352aa38270b496f271c4c17c29aee83b007c0ac13b'
+                    }
                 />
                 <div className="flex flex-col gap-2">
-                    <span className="text-xl font-bold mt-4">{name}</span>
+                    <div>
+                        <span className="text-xl font-bold mt-4">
+                            {userInfo.name}
+                        </span>
+                        <div
+                            onClick={subscribe}
+                            className={`${userInfo.subscribed
+                                    ? 'text-gray-600'
+                                    : 'text-rose-700'
+                                } text-2xl my-auto cursor-pointer`}
+                            title={
+                                userInfo.subscribed
+                                    ? 'Unsubscribe'
+                                    : 'Subscribe'
+                            }
+                        >
+                            {userInfo.subscribed ? (
+                                <BsFillBellSlashFill />
+                            ) : (
+                                <BsFillBellFill />
+                            )}
+                        </div>
+                    </div>
                     लेखकका शिर्ष बर्गहरु
                     <div className="flex flex-wrap gap-2 max-w-lg">
                         {cats.map((cat, idx) => {
