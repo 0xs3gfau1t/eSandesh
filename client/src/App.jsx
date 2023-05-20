@@ -24,6 +24,7 @@ import {
 } from './pages'
 
 import { PrivateRoute, Alert } from './components/common'
+import AboutUs from './pages/AboutUs'
 
 const LazyAdmin = lazy(() => import('./pages/Dashboard/Layout'))
 const LazyManageNews = lazy(() => import('./pages/Dashboard/ManageNews'))
@@ -147,6 +148,7 @@ function App() {
                     />
                     <Route path="/category/:cat" element={<Category />} />
                     <Route path="search" element={<SearchPage />} />
+                    <Route path="about" element={<AboutUs/>} />
                 </Route>
                 <Route path="*" element={<NotFound />} />
             </Routes>
