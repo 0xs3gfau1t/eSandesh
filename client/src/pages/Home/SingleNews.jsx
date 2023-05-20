@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { useParams } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { BiBookReader } from 'react-icons/bi'
 import { RxCross2 } from 'react-icons/rx'
+import { BsFillBellFill, BsFillBellSlashFill } from 'react-icons/bs'
 import axios from 'axios'
 
 import {
@@ -18,8 +20,8 @@ import SideScrollNewsSection from './SideScrollNewsSection'
 import { getSingleNews } from '../../redux/actions/publicNews'
 import { setFocus } from '../../redux/reducers/misc'
 import Comments from '../../components/Comments'
-import { getRelAds } from '../../redux/actions/ads'
-import { delSingleNews } from '../../redux/reducers/news'
+import { delSingleNews, subscribeAuthor } from '../../redux/reducers/news'
+import { setAlert } from '../../redux/actions/misc'
 
 const SingleNews = () => {
     const params = useParams()
@@ -60,6 +62,34 @@ const SingleNews = () => {
             setPopup(true)
         }
     }, [params])
+
+    const subscribe = async () => {
+        let config = {
+            method: news?.author.subscribed ? 'delete' : 'post',
+            url: '/api/subscriptions',
+            data: { id: news?.author._id },
+        }
+
+        await axios(config)
+            .then(res => {
+                dispatch(
+                    setAlert(
+                        `Author ${
+                            config.method == 'post'
+                                ? 'Subscribed'
+                                : 'Unsubscribed'
+                        }!`,
+                        'success'
+                    )
+                )
+                dispatch(subscribeAuthor())
+            })
+            .catch(err => {
+                console.log(err)
+                dispatch(setAlert('Action failed!', 'danger'))
+            })
+    }
+
     return (
         <div className="flex justify-between container gap-2">
             {news && news.popup && showPopup && (
@@ -129,15 +159,41 @@ const SingleNews = () => {
                     <h1 className="text-xl mt-4 font-bold">
                         {news ? news.title : 'Loading....'}
                     </h1>
-                    <h2 className="ml-4">
-                        {news
-                            ? new Date(news.publishedAt).toLocaleDateString(
-                                  'en-US',
-                                  dateOpt
-                              ) + ' | '
-                            : ''}
-                        {news ? news.author.name : ''}
-                    </h2>
+                    <div className="flex gap-4">
+                        <h2 className="ml-4">
+                            {news
+                                ? new Date(news.publishedAt).toLocaleDateString(
+                                      'en-US',
+                                      dateOpt
+                                  ) + ' | '
+                                : ''}
+                            <Link
+                                to={`/author/${news?.author?._id}`}
+                                className="hover:text-rose-700 "
+                            >
+                                {news ? news.author.name : ''}
+                            </Link>
+                        </h2>
+                        <div
+                            onClick={subscribe}
+                            className={`${
+                                news?.author?.subscribed
+                                    ? 'text-gray-600'
+                                    : 'text-rose-700'
+                            } text-2xl my-auto cursor-pointer`}
+                            title={
+                                news?.author?.subscribed
+                                    ? 'Unsubscribe'
+                                    : 'Subscribe'
+                            }
+                        >
+                            {news?.author?.subscribed ? (
+                                <BsFillBellSlashFill />
+                            ) : (
+                                <BsFillBellFill />
+                            )}
+                        </div>
+                    </div>
                     <SocialShare
                         title={
                             news ? news.title : 'eSandesh, Khabar Naya Yug ko'

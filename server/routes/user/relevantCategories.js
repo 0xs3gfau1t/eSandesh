@@ -17,15 +17,17 @@ module.exports = (req, res) => {
             ).sort(([, value1], [, value2]) => value2 - value1)
         )
 
-        const finalCategories = Object.keys(sortedCategories)
+        const prevs = Object.keys(sortedCategories)
 
-        if (finalCategories.length < 4)
-            finalCategories.push(
-                ...DEFAULT_CATEGORIES.slice(
-                    0,
-                    DEFAULT_CATEGORIES.length - finalCategories.length
-                )
+        let finalCategories = [...prevs]
+        if (prevs.length < 4) {
+            const remainingElements = DEFAULT_CATEGORIES.filter(
+                element => !prevs.includes(element)
             )
+            finalCategories.push(
+                ...remainingElements.slice(0, 4 - prevs.length)
+            )
+        }
 
         res.json({
             message: 'success',

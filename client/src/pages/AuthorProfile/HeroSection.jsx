@@ -8,9 +8,7 @@ export default function HeroSection({ cat, data }) {
         return (
             <div className="w-full mb-10">
                 <h1 className="text-4xl font-primary font-bold my-2">
-                    {cat == 'recent'
-                        ? 'ताजा अपडेट '
-                        : catMap[cat] + 'मा जल्दो बल्दो के छ?'}
+                    यस लेखकका शिर्ष लेखहरु
                 </h1>
                 <p className="w-full">
                     <img
@@ -37,7 +35,7 @@ export default function HeroSection({ cat, data }) {
     } else {
         return (
             <h1 className="text-center py-2 text-2xl my-10">
-                {catMap[cat]} वर्गमा थप कुनै समाचार छैन।
+                यस लेखकका थप कुनै समाचार छैन।
             </h1>
         )
     }

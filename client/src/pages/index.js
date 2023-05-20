@@ -3,6 +3,7 @@ import SingleNews from './Home/SingleNews'
 import UserProfile from './UserProfile'
 import Polls from './Home/Polls'
 import ArchiveNews from './Home/ArchiveNews'
+import Author from './AuthorProfile/Author'
 import Category from './Category/Category'
 import Landing from './Home/Landing'
 import UserAuth from './UserAuth'
@@ -26,6 +27,7 @@ export {
     NotFound,
     Home,
     Category,
+    Author,
     Login,
     UserAuth,
     ForgotPassword,
