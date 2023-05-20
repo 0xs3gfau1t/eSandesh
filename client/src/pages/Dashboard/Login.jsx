@@ -21,7 +21,7 @@ const Login = ({ session }) => {
     useEffect(() => {
         if (
             session.status == 'authenticated' &&
-            (role?.isRoot || role?.canPublish || role?.isReporter)
+            (role?.isRoot || role?.canPublish)
         ) {
             navigate('/admin/dashboard/')
         }

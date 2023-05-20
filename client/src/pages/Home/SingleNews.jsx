@@ -167,7 +167,10 @@ const SingleNews = () => {
                                       dateOpt
                                   ) + ' | '
                                 : ''}
-                            <Link to={`/author/${news?.author?._id}`}>
+                            <Link
+                                to={`/author/${news?.author?._id}`}
+                                className="hover:text-rose-700 "
+                            >
                                 {news ? news.author.name : ''}
                             </Link>
                         </h2>
