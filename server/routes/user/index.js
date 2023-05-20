@@ -19,6 +19,7 @@ const updateInfo = require('./updateInfo')
 const getInfo = require('./getInfo')
 const { getRashifal, setRashifal } = require('./rashifal')
 const getRelevantCategories = require('./relevantCategories')
+const { startRegistration, verifyRegistration } = require('./register')
 
 router.post('/', withAuth, updateInfo)
 router.get('/', getInfo)
@@ -31,6 +32,9 @@ router.get('/topuser', withAuth, topUser)
 router.get('/forgotpassword', requestPasswordReset)
 router.post('/forgotpassword', processPasswordReset)
 router.get('/relevantCategories', withHistory, getRelevantCategories)
+
+router.get('/register', startRegistration)
+router.post('/register', verifyRegistration)
 
 router.get('/rashifal', withAuth, getRashifal)
 router.post('/rashifal', withAuth, setRashifal)
