@@ -5,7 +5,7 @@ import { AiOutlineCaretRight, AiOutlineCaretLeft } from 'react-icons/ai'
 
 import { ArticlePreviewMd, SqAds } from '../../components/common'
 import HeroSection from './HeroSection'
-import { listNewsCat } from '../../redux/actions/publicNews'
+import { listNewsCat, getRecentNews } from '../../redux/actions/publicNews'
 import { setFocus } from '../../redux/reducers/misc'
 
 export default function Content() {
@@ -15,17 +15,26 @@ export default function Content() {
     const dispatch = useDispatch()
 
     useEffect(() => {
-        dispatch(
-            listNewsCat({
-                page: page,
-                cat: cat == 'hot' ? 'hot' : cat.toUpperCase(),
-            })
-        )
+        if (cat == 'recent')
+            dispatch(
+                getRecentNews({
+                    page: page,
+                    items: 10,
+                })
+            )
+        else
+            dispatch(
+                listNewsCat({
+                    page: page,
+                    cat: cat == 'hot' ? 'hot' : cat.toUpperCase(),
+                })
+            )
     }, [page, cat])
 
     useEffect(() => {
+        setPage(0)
         dispatch(setFocus(false))
-    })
+    }, [cat])
 
     return (
         <div className="flex flex-col w-full mx-auto px-4">

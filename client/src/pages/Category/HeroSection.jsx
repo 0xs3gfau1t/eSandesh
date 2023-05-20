@@ -8,7 +8,9 @@ export default function HeroSection({ cat, data }) {
         return (
             <div className="w-full mb-10">
                 <h1 className="text-4xl font-primary font-bold my-2">
-                    {catMap[cat]} मा जल्दो बल्दो के छ?
+                    {cat == 'recent'
+                        ? 'ताजा अपडेट '
+                        : catMap[cat] + 'मा जल्दो बल्दो के छ?'}
                 </h1>
                 <p className="w-full">
                     <img

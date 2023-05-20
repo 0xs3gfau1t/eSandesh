@@ -5,6 +5,8 @@ const Cache = require('@/controllers/Cache')
 const getRelevantAudioAd = require('@/controllers/relevantAudioAd')
 const crypto = require('crypto')
 const relevantAds = require('../ads/relevantAds')
+const { default: mongoose } = require('mongoose')
+const { userModel } = require('@/model/user')
 
 const STALE_ARTICLE_THRESHOLD = 2 // In Days
 
@@ -46,7 +48,7 @@ const getArticle = async (req, res) => {
                                 $expr: { $eq: ['$_id', '$$id'] },
                             },
                         },
-                        { $project: { name: 1, _id: 0 } },
+                        { $project: { name: 1, _id: 1 } },
                     ],
                     as: 'author',
                 },
@@ -58,6 +60,14 @@ const getArticle = async (req, res) => {
         const article = await Cache(req.originalUrl, getArticle, {
             EX: 24 * 60 * 60,
         })
+        article[0].author.subscribed = req.session?.user.id
+            ? !!(await userModel.exists({
+                  _id: mongoose.Types.ObjectId(req.session.user.id),
+                  subscriptions: {
+                      $in: [mongoose.Types.ObjectId(article[0].author._id)],
+                  },
+              }))
+            : false
         //
         // Not caching popup ads
         //

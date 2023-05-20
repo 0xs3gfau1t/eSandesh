@@ -36,11 +36,10 @@ const UserProfile = ({ session }) => {
                         const active = idx == currentSection
                         return (
                             <div
-                                className={`flex-grow grid grid-rows-[1.5rem,auto] grid-cols-[1.5rem,auto] gap-x-2 hover:border-slate-700 hover:text-slate-700 ${
-                                    active
+                                className={`flex-grow grid grid-rows-[1.5rem,auto] grid-cols-[1.5rem,auto] gap-x-2 hover:border-slate-700 hover:text-slate-700 ${active
                                         ? 'text-slate-800 border-slate-800'
                                         : 'text-gray-400 border-gray-400'
-                                }`}
+                                    }`}
                                 key={idx}
                                 onClick={() => {
                                     s.ref.current.scrollIntoView({
@@ -51,9 +50,8 @@ const UserProfile = ({ session }) => {
                             >
                                 <div className="border-solid border-inherit border rounded-full w-6 h-6 p-1 cursor-pointer">
                                     <div
-                                        className={`w-full h-full rounded-full ${
-                                            active ? 'bg-slate-800' : ''
-                                        }`}
+                                        className={`w-full h-full rounded-full ${active ? 'bg-slate-800' : ''
+                                            }`}
                                     />
                                 </div>
                                 <li className="h-full flex items-center cursor-pointer text-inherit">

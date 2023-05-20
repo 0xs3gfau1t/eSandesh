@@ -17,9 +17,11 @@ def summarize():
         response.mimetype = 'text/plain'
         return response
     except Exception as exp:
-        response = make_response("सारांश उत्पन्न भएको छैन", 200)
+        response = make_response(
+            "यस लेखको लागि हामीलाई सारांश उपलब्ध छैन", 200)
         response.mimetype = 'text/plain'
         return response
+
 
 @app.route("/")
 def home():
@@ -28,4 +30,5 @@ def home():
 
 
 if __name__ == "__main__":
-    app.run(host=os.environ.get('HOST') or '127.0.0.1', port=os.environ.get('PORT') or 5000)
+    app.run(host=os.environ.get('HOST') or '127.0.0.1',
+            port=os.environ.get('PORT') or 5000)
