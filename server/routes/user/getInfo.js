@@ -24,6 +24,20 @@ const getInfo = async (req, res) => {
                         name: true,
                         image: true,
                         email: true,
+                        password: {
+                            $cond: {
+                                if: {
+                                    $eq: [
+                                        {
+                                            $ifNull: ['$password', ''],
+                                        },
+                                        '',
+                                    ],
+                                },
+                                then: 0,
+                                else: 1,
+                            },
+                        },
                         roles: { $ifNull: ['$roles', []] },
                     },
                 },
@@ -32,10 +46,14 @@ const getInfo = async (req, res) => {
                         from: 'accounts',
                         localField: '_id',
                         foreignField: 'userId',
-                        pipeline: [{ $project: { provider: true } }],
-                        as: 'accounts',
+                        pipeline: [
+                            { $match: { provider: 'google' } },
+                            { $project: { _id: true } },
+                        ],
+                        as: 'google',
                     },
                 },
+                { $set: { google: { $size: '$google' } } },
             ])
         } else {
             userInfo = await userModel.aggregate([

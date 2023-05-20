@@ -250,14 +250,6 @@ async function relevantAds(req, res) {
         return relevantAds(req, res)
     }
 
-    //
-    //Update ads hit stat
-    //
-    adsModel.updateMany(
-        { _id: { $in: finalCategoryAds.map(i => i._id) } },
-        { $inc: { hits: 1 } }
-    )
-
     if (req?.blockResponse === true) {
         //
         // This clause is used primarily by getArticle.js

@@ -290,15 +290,15 @@ function Comments({ articleId }) {
                         }
                     />
                 ) : (
-                    <>
-                        <BiCommentAdd
-                            className="inline mr-2"
-                            onClick={() =>
-                                setCommenting({ bool: true, commentStr: '' })
-                            }
-                        />
+                    <div
+                        className="cursor-pointer"
+                        onClick={() =>
+                            setCommenting({ bool: true, commentStr: '' })
+                        }
+                    >
+                        <BiCommentAdd className="inline mr-2 " />
                         <span>Add Comment</span>
-                    </>
+                    </div>
                 )}
             </div>
             {comments?.length > 0 && (

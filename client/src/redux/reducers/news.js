@@ -1,9 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { listNews } from '../actions/dashNews'
 import {
+    getPrefCats,
     getRecentNews,
     getSingleNews,
     listNewsCat,
+    listByAuthor,
 } from '../actions/publicNews'
 
 const initialState = {
@@ -16,6 +18,11 @@ const newsSlice = createSlice({
     reducers: {
         delSingleNews: (state, { payload }) => {
             if (state.singleNews) delete state.singleNews
+        },
+        subscribeAuthor: (state, { payload }) => {
+            if (state.singleNews)
+                state.singleNews.author.subscribed =
+                    !state.singleNews.author.subscribed
         },
     },
 
@@ -38,11 +45,21 @@ const newsSlice = createSlice({
         })
         builder.addCase(getRecentNews.fulfilled, (state, { payload }) => {
             if (payload.success && payload.data) {
-                state.recentNews = payload.data
+                state.recent = payload.data
+            }
+        })
+        builder.addCase(getPrefCats.fulfilled, (state, { payload }) => {
+            if (payload.success && payload.data) {
+                state.prefCats = payload.data
+            }
+        })
+        builder.addCase(listByAuthor.fulfilled, (state, { payload }) => {
+            if (payload.success && payload.data) {
+                state.author = payload.data
             }
         })
     },
 })
 
 export default newsSlice.reducer
-export const { delSingleNews } = newsSlice.actions
+export const { delSingleNews, subscribeAuthor } = newsSlice.actions

@@ -45,12 +45,11 @@ const MongooseAdapter = () => {
             const user = await userModel
                 .findByIdAndUpdate(data.id, { name: data.name }, { new: true })
                 .exec()
-            if (user === null) {
+            if (user === null)
                 return {
                     id: data.id,
                     emailVerified: null,
                 }
-            }
             return sanitize(user)
         },
         async deleteUser(id) {
@@ -65,28 +64,32 @@ const MongooseAdapter = () => {
         },
         async unlinkAccount(data) {
             const account = await accountModel.findOneAndDelete(data)
-            if (account === null) {
-                return
-            }
+            if (account === null) return
             return sanitize(account)
         },
         // Chaiye ma implement garamla
         async getSessionAndUser(_sessionToken) {
+            console.error('====> UNIMPLEMENTED GET_SESSION_AND_USER')
             return
         },
         async createSession(_data) {
+            console.error('====> UNIMPLEMENTED CREATE_SESSION')
             return
         },
         async updateSession(_data) {
+            console.error('====> UNIMPLEMENTED UPDATE_SESSION')
             return
         },
         async deleteSession(_sessionToken) {
+            console.error('====> UNIMPLEMENTED DELETE_SESSION')
             return
         },
         async createVerificationToken(_data) {
+            console.error('====> UNIMPLEMENTED CREATE_VERIFICATION_TOKEN')
             return
         },
         async useVerificationToken(_data) {
+            console.error('====> UNIMPLEMENTED USE_VERIFICATION_TOKEN')
             return
         },
     }

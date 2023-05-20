@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 
 function RectXAd({ ad }) {
     return (
-        <div className="my-4">
+        <div className="my-1">
             {ad ? (
                 <div className="float w-auto relative">
                     <span className="absolute bg-rose-500 px-1 text-sm right-4 text-white">
