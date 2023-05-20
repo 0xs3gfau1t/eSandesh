@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react'
+import { CgScrollV } from 'react-icons/cg'
 import axios from 'axios'
 
 import CriticCard from './CriticCard'
-
 export default function TopCritics() {
     const [critics, setCritics] = useState([])
 
@@ -27,7 +27,9 @@ export default function TopCritics() {
 
     return (
         <div className="mt-2 mb-4 w-full">
-            <h2 className="font-bold text-2xl leading-loose">शीर्ष आलोचकहरू</h2>
+            <h2 className="font-bold text-2xl leading-loose flex place-items-center gap-2">
+                शीर्ष आलोचकहरू <CgScrollV className="text-2xl" />
+            </h2>
             <div className="overflow-y-scroll h-[80vh]">
                 {/* list of critics */}
                 {critics &&

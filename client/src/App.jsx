@@ -25,6 +25,7 @@ import AboutUs from './pages/AboutUs'
 import PrivacyPolicy from './pages/PrivacyPolicy'
 import Advertisement from './pages/Advertisement'
 import Feedback from './pages/Feedback'
+import Register from './pages/Register'
 
 const LazyAdmin = lazy(() => import('./pages/Dashboard/Layout'))
 const LazyManageNews = lazy(() => import('./pages/Dashboard/ManageNews'))
@@ -64,6 +65,7 @@ function App() {
                     element={<UserAuth session={session} />}
                 />
                 <Route path="/forgotPassword" element={<ForgotPassword />} />
+                <Route path="/register" element={<Register />} />
                 <Route path="/admin" element={<Login session={session} />} />
                 <Route
                     path="/admin/dashboard"

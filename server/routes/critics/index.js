@@ -4,11 +4,11 @@ const router = express.Router()
 const withPublisher = require('@/middlewares/withPublisher')
 
 router.get('/list', require('./listCritic'))
-router.get('/toApprove', require('./listToBeApprovedCritics'))
 router.get('/', require('./getCritic'))
 router.post('/', withPublisher, require('./addCritic'))
 router.delete('/', withPublisher, require('./deleteCritic'))
 router.post('/approve', withPublisher, require('./approveCritic'))
+router.post('/reject', withPublisher, require('./approveCritic'))
 
 router.get('*', (_req, res) => {
     res.json({ message: 'yamete kudasai, critic san!' })

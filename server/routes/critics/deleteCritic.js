@@ -9,18 +9,13 @@ const criticModel = require('../../model/critics')
  */
 
 module.exports = (req, res) => {
-    const { ids } = req.body
+    const { criticId } = req.body
 
-    const arrayOfCriticIds = ids
-        .split(',')
-        .map(i => i.trim())
-        .filter(i => i !== '')
-
-    criticModel.deleteMany({ _id: { $in: arrayOfCriticIds } }, async (e, d) => {
+    criticModel.deleteOne({ _id: criticId }, async (e, d) => {
         if (e)
             return res
                 .status(400)
-                .json({ error: 'Invalid id/ids received. None deleted' })
+                .json({ error: 'Invalid id received. None deleted' })
 
         res.json({ message: 'success' })
 
