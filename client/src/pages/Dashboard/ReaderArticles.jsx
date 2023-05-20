@@ -1,6 +1,6 @@
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
-import { BsCalendar2Check } from 'react-icons/bs'
+import { BsCalendar2Check, BsTrashFill } from 'react-icons/bs'
 import { useDispatch } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { setAlert } from '../../redux/actions/misc'
@@ -42,7 +42,21 @@ export default function ReaderArticles() {
                 setData(oldData => oldData.filter(d => d._id != id))
                 dispatch(setAlert('Published', 'success'))
             })
-            .catch(e => {dispatch(setAlert('Cannot publish', 'danger'))})
+            .catch(e => {
+                dispatch(setAlert('Cannot publish', 'danger'))
+            })
+    }
+
+    const disapprove = id => {
+        axios
+            .delete('/api/article', { withCredentials: true, params: { id } })
+            .then(() => {
+                setData(oldData => oldData.filter(d => d._id != id))
+                dispatch(setAlert('Disapproved', 'success'))
+            })
+            .catch(e => {
+                dispatch(setAlert('Falied disapproval', 'danger'))
+            })
     }
 
     return (
@@ -110,12 +124,18 @@ export default function ReaderArticles() {
                                                     article.updatedAt
                                                 ).toLocaleString()}
                                             </td>
-                                            <td>
+                                            <td className="flex flex-row gap-x-3">
                                                 <BsCalendar2Check
                                                     onClick={() => {
                                                         approve(article._id)
                                                     }}
                                                     className="cursor-pointer hover:fill-green-500 text-2xl"
+                                                />
+                                                <BsTrashFill
+                                                    onClick={() => {
+                                                        disapprove(article._id)
+                                                    }}
+                                                    className="cursor-pointer hover:fill-rose-500 text-2xl"
                                                 />
                                             </td>
                                         </tr>
