@@ -10,8 +10,9 @@ module.exports = (req, res) => {
     const { criticId } = req.body
 
     critics
-        .updateOne({ _id: criticId }, { publishedAt: new Date().toISOString() })
+        .updateOne({ _id: criticId }, { publishedAt: new Date() })
         .then(r => {
+            console.log(r)
             res.json({ message: 'success' })
         })
         .catch(e => {

@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import axios from 'axios'
 
 import CriticCard from './CriticCard'
+import { Link } from 'react-router-dom'
 
 export default function TopCritics() {
     const [critics, setCritics] = useState([])
@@ -27,7 +28,12 @@ export default function TopCritics() {
 
     return (
         <div className="mt-2 mb-4 w-full">
-            <h2 className="font-bold text-2xl leading-loose">शीर्ष आलोचकहरू</h2>
+            <h2 className="font-bold text-2xl leading-loose">
+                शीर्ष आलोचकहरू
+                <Link to="/explore-critics" className="text-sm ml-3">
+                    {'अझ हेर्नुहोस् >>'}
+                </Link>
+            </h2>
             <div>
                 {/* list of critics */}
                 {critics &&
