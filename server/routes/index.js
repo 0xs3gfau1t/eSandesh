@@ -12,7 +12,7 @@ router.use('/user', require('./user'))
 router.use('/stats', require('./stats'))
 
 router.get('*', (_req, res) => {
-    res.status(404).json({ message: 'yamete kudasai!' })
+    res.status(404).json({ error: 'yamete kudasai!' })
 })
 
 module.exports = router

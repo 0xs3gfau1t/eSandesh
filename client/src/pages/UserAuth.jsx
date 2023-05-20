@@ -1,15 +1,15 @@
 import { useEffect, useState } from 'react'
 import { signIn } from 'next-auth/react'
 import { useNavigate } from 'react-router-dom'
-import { useDispatch } from 'react-redux'
+import axios from 'axios'
 
 import { SiteLogo, FormText } from '../components/common'
 import { setAlert } from '../redux/actions/misc'
+import { useAxiosError } from '../utils/useAxiosError'
 
 const initialState = {
     email: '',
     password: '',
-    password2: '',
     name: '',
 }
 
@@ -18,7 +18,7 @@ function UserAuth({ session }) {
     const [isLogin, setIsLogin] = useState(true)
 
     const navigate = useNavigate()
-    const dispatch = useDispatch()
+    const { dispatch, onError } = useAxiosError()
 
     useEffect(() => {
         if (session.status == 'authenticated') {
@@ -47,31 +47,20 @@ function UserAuth({ session }) {
                 })
             }
         } else {
-            if (!values.email || !values.password || !values.name) {
-                dispatch(setAlert('One or More Field Missing!', 'danger'))
-                return
-            }
-            if (values.password !== values.password2) {
-                dispatch(setAlert("Password didn't match.", 'danger'))
-                return
-            }
-            if (values.password.length < 6) {
-                dispatch(
-                    setAlert(
-                        'Password must be atleast 6 charater long.',
-                        'danger'
-                    )
-                )
-                return
-            }
-            signIn('register-user', { ...values, redirect: false }).then(
-                res => {
-                    console.log(res)
+            axios
+                .get('/api/user/register', {
+                    params: { name: values.name, email: values.email },
+                })
+                .then(res => {
                     if (res.status == 200)
-                        dispatch(setAlert('Account Register Sucess', 'success'))
-                    else dispatch(setAlert('Email already used.', 'danger'))
-                }
-            )
+                        dispatch(
+                            setAlert(
+                                'Check your email for verification process.',
+                                'success'
+                            )
+                        )
+                })
+                .catch(onError)
         }
     }
 
@@ -95,6 +84,7 @@ function UserAuth({ session }) {
                         labelText="Name"
                         value={values.name}
                         handleChange={handleChange}
+                        required
                     />
                 )}
 
@@ -104,16 +94,18 @@ function UserAuth({ session }) {
                     value={values.email}
                     labelText="Email"
                     handleChange={handleChange}
+                    required
                 />
 
-                <FormText
-                    name="password"
-                    type="password"
-                    labelText="Password"
-                    value={values.password}
-                    handleChange={handleChange}
-                >
-                    {isLogin && (
+                {isLogin && (
+                    <FormText
+                        name="password"
+                        type="password"
+                        labelText="Password"
+                        value={values.password}
+                        handleChange={handleChange}
+                        required
+                    >
                         <a
                             className="text-sm cursor-pointer"
                             title="Seriously?"
@@ -121,19 +113,10 @@ function UserAuth({ session }) {
                         >
                             Forgot Password?
                         </a>
-                    )}
-                </FormText>
-                {!isLogin && (
-                    <FormText
-                        name="password2"
-                        type="password"
-                        labelText="Confirm Password"
-                        value={values.password2}
-                        handleChange={handleChange}
-                    />
+                    </FormText>
                 )}
                 <button type="submit" className="bg-darkblue text-white py-2">
-                    {isLogin ? 'Login' : 'Register'}
+                    {isLogin ? 'Login' : 'Continue'}
                 </button>
                 {isLogin ? (
                     <span>

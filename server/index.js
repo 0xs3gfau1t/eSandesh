@@ -31,7 +31,7 @@ if (process.env.NODE_ENV === 'production')
 app.all('*', (_req, res) => {
     if (process.env.NODE_ENV === 'production')
         return res.sendFile(path.resolve(__dirname, './dist/index.html'))
-    return res.status(404).json({ response: 'What are you doing onii-chaan?' })
+    return res.status(404).json({ error: 'What are you doing onii-chaan?' })
 })
 
 // Start the server specied in PORT from .env
