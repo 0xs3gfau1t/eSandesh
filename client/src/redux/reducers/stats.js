@@ -82,7 +82,7 @@ const initialState = {
 
 const statsSlice = createSlice({
     name: 'stats',
-    initialState,
+    initialState: { initialized: false },
     reducers: {
         setFromDate: (state, action) => {
             state[state.active].filter.dateFrom = action.payload
@@ -101,6 +101,11 @@ const statsSlice = createSlice({
         },
         setDeletion: (state, action) => {
             state.deletion = action.payload
+        },
+        initData: state => {
+            for (let key of Object.keys(initialState))
+                state[key] = initialState[key]
+            state.initialized = true
         },
     },
 

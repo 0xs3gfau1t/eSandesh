@@ -18,7 +18,7 @@ const updateInfo = async (req, res) => {
             { _id: 0, password: 1 }
         )
 
-        if (!compareSync(currentPassword, hashedPassword))
+        if (hashedPassword && !compareSync(currentPassword, hashedPassword))
             return res
                 .status(400)
                 .json({ error: 'Incorrect current password.' })

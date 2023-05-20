@@ -7,7 +7,7 @@ const express = require('express')
  * @return {void}
  */
 const searchHandler = async (req, res) => {
-    const { q, sort, order, author } = req.query
+    const { q, sort, order, author, skip = 0, limit = 10 } = req.query
 
     const aggregationStage = []
 
@@ -24,6 +24,7 @@ const searchHandler = async (req, res) => {
                 slug: 1,
                 createdAt: 1,
                 hits: 1,
+                img: 1,
                 user: '$createdBy',
             },
         },
@@ -52,13 +53,18 @@ const searchHandler = async (req, res) => {
 
     if (sort) aggregationStage.push({ $sort: { [sort]: Number(order) || -1 } })
 
-    for (let i = 0; i < aggregationStage.length; i++) {
-        console.log(aggregationStage[i])
+    aggregationStage.push({ $skip: Number(skip) }, { $limit: Number(limit) })
+
+    try {
+        const articles = await articleModel.aggregate(aggregationStage)
+        return res.json({
+            data: articles,
+            nextCursor: articles.length < limit ? -1 : skip + articles.length,
+        })
+    } catch (err) {
+        console.error(err)
+        return res.status(500).json({ error: 'Something went wrong' })
     }
-
-    const articles = await articleModel.aggregate(aggregationStage)
-
-    return res.json(articles)
 }
 
 module.exports = searchHandler

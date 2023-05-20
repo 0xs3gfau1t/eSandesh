@@ -16,7 +16,7 @@ export const UserChart = () => {
                         label: 'Admins',
                     },
                     {
-                        data: metadata.map(d => d.users.publisher),
+                        data: metadata.map(d => d.users.publishers),
                         label: 'Publishers',
                     },
                     {

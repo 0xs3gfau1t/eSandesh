@@ -10,11 +10,18 @@ const imageDimensionChecker = require('@/controllers/imageDimensionChecker')
 
 module.exports = async (req, res) => {
     const { id, imageType } = req.query
-    adModel.findOne({ _id: id }, { image: 1 }, (err, data) => {
-        if (err) return res.status(404)
-        if (!data) return res.status(404)
-        const { type } = imageDimensionChecker(data.image[imageType])
-        res.setHeader('Content-Type', type)
-        res.send(data.image[imageType])
-    })
+    adModel.findOneAndUpdate(
+        { _id: id },
+        { $inc: { hits: 1 } },
+        { image: 1 },
+        (err, data) => {
+            if (err) return res.status(404)
+            if (!data) return res.status(404)
+
+            const { type } = imageDimensionChecker(data.image[imageType])
+
+            res.setHeader('Content-Type', type)
+            res.send(data.image[imageType])
+        }
+    )
 }
