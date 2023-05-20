@@ -46,7 +46,6 @@ export default function Content({ author }) {
         }
         catUp = [...new Set(catUp)]
         setCats(catUp)
-        console.log(catUp)
     }, [list])
 
     return (
@@ -63,10 +62,13 @@ export default function Content({ author }) {
                 <div className="flex flex-col gap-2">
                     <span className="text-xl font-bold mt-4">{name}</span>
                     लेखकका शिर्ष बर्गहरु
-                    <div className="flex gap-2">
-                        {cats.map(cat => {
+                    <div className="flex flex-wrap gap-2 max-w-lg">
+                        {cats.map((cat, idx) => {
                             return (
-                                <span className="text-white bg-green-700 px-2 py-1 rounded-md">
+                                <span
+                                    key={idx}
+                                    className="text-white bg-green-700 px-2 py-1 rounded-md"
+                                >
                                     {getCatMap(cat)}
                                 </span>
                             )

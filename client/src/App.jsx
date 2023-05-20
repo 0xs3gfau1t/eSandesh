@@ -10,12 +10,9 @@ import {
     UserAuth,
     ForgotPassword,
     Category,
-    AdsMan,
-    ViewSiteStats,
+    Author,
     SingleNews,
     Landing,
-    PollsMan,
-    ManageCritics,
     UserProfile,
     Polls,
     ArchiveNews,
@@ -150,11 +147,12 @@ function App() {
                         element={<SingleNews />}
                     />
                     <Route path="/category/:cat" element={<Category />} />
+                    <Route path="/author/:author" element={<Author />} />
                     <Route path="search" element={<SearchPage />} />
-                    <Route path="about" element={<AboutUs/>} />
-                    <Route path="privacy_policy" element ={<PrivacyPolicy/>} />
-                    <Route path="advertisement" element = {<Advertisement/>} />
-                    <Route path ='feedback' element = {<Feedback/>} />
+                    <Route path="about" element={<AboutUs />} />
+                    <Route path="privacy_policy" element={<PrivacyPolicy />} />
+                    <Route path="advertisement" element={<Advertisement />} />
+                    <Route path="feedback" element={<Feedback />} />
                 </Route>
                 <Route path="*" element={<NotFound />} />
             </Routes>
