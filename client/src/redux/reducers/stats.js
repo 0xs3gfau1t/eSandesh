@@ -12,7 +12,7 @@ import {
 
 const today = new Date()
 const monthAgo = new Date()
-monthAgo.setMonth(today.getMonth() - 1)
+monthAgo.setMonth(today.getMonth() - 3)
 
 const initialState = {
     meta: {
@@ -85,10 +85,10 @@ const statsSlice = createSlice({
     initialState: { initialized: false },
     reducers: {
         setFromDate: (state, action) => {
-            state[state.active].filter.dateFrom = action.payload
+            state[action.payload.type].filter.dateFrom = action.payload.value
         },
         setToDate: (state, action) => {
-            state[state.active].filter.dateTo = action.payload
+            state[action.payload.type].filter.dateTo = action.payload.value
         },
         setActiveMeta: (state, action) => {
             state.activeMetaIdx = action.payload
