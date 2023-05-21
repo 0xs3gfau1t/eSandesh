@@ -1,6 +1,6 @@
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
-import { BsCalendar2Check, BsTrashFill } from 'react-icons/bs'
+import { BsCalendar2Check, BsPencilSquare, BsTrashFill } from 'react-icons/bs'
 import { useDispatch } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { setAlert } from '../../redux/actions/misc'
@@ -131,6 +131,11 @@ export default function ReaderArticles() {
                                                     }}
                                                     className="cursor-pointer hover:fill-green-500 text-2xl"
                                                 />
+                                                <Link
+                                                    to={`../editNews/${article.year}/${article.month}/${article.slug}`}
+                                                >
+                                                    <BsPencilSquare className="cursor-pointer hover:fill-purple-500 text-2xl" />
+                                                </Link>
                                                 <BsTrashFill
                                                     onClick={() => {
                                                         disapprove(article._id)
