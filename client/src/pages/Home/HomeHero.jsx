@@ -1,7 +1,6 @@
 import React from 'react'
 
 import { Link } from 'react-router-dom'
-import { LikeSaveShare } from '../../components/common'
 
 export default function HomeHero({ data }) {
     return (

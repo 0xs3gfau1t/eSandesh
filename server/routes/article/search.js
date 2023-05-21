@@ -12,7 +12,13 @@ const searchHandler = async (req, res) => {
     const aggregationStage = []
 
     if (q?.length > 0)
-        aggregationStage.push({ $match: { $text: { $search: q } } })
+        aggregationStage.push({
+            $match: {
+                title: { $regex: q },
+                archived: { $exists: false },
+                publishedAt: { $exists: true },
+            },
+        })
 
     aggregationStage.push(
         {

@@ -6,7 +6,11 @@ import {
 } from 'react-icons/ai'
 import { TbReport } from 'react-icons/tb'
 import { useDispatch, useSelector } from 'react-redux'
-import { loadMoreStats, reloadStats } from '../../redux/actions/stats'
+import {
+    loadMoreStats,
+    reloadStats,
+    downloadStats,
+} from '../../redux/actions/stats'
 import { statActions } from '../../redux/reducers/stats'
 import { getRelativeTime } from '../../utils/relativeDuration'
 
@@ -89,10 +93,11 @@ const MetaList = () => {
                                 <td className="border-x border-solid border-gray-300 flex">
                                     <div className="px-2 bottom-4 flex w-full gap-2 items-center justify-around p-1">
                                         <AiOutlineCheck
-                                            className={`h-4 w-4 cursor-pointer ${idx == activeMeta
+                                            className={`h-4 w-4 cursor-pointer ${
+                                                idx == activeMeta
                                                     ? 'text-green-500'
                                                     : ''
-                                                }`}
+                                            }`}
                                             title="Load"
                                             onClick={() =>
                                                 dispatch(
@@ -112,6 +117,13 @@ const MetaList = () => {
                                                     )
                                                 )
                                             }
+                                        />
+                                        <AiOutlineDownload
+                                            className="h-4 w-4 cursor-pointer"
+                                            title="Download Full Report"
+                                            onClick={() => {
+                                                dispatch(downloadStats(d._id))
+                                            }}
                                         />
                                     </div>
                                 </td>

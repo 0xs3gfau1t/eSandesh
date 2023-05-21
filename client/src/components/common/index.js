@@ -29,5 +29,5 @@ export {
     DashActions,
     SeeAllBtn,
     Alert,
-    PaginationComponent
+    PaginationComponent,
 }
