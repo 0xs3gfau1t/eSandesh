@@ -26,7 +26,10 @@ export default function Content() {
             dispatch(
                 listNewsCat({
                     page: page,
-                    cat: cat == 'hot' ? 'hot' : cat.toUpperCase(),
+                    cat:
+                        cat == 'hot' || cat == 'preference'
+                            ? cat
+                            : cat.toUpperCase(),
                 })
             )
     }, [page, cat])

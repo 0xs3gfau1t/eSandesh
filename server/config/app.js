@@ -5,7 +5,7 @@ const fileUpload = require('express-fileupload')
 app.use(cors())
 // Logger
 app.use(function (req, _res, next) {
-    console.log(`-> ${req.url}\n`)
+    console.log(`-> ${req.method} ${req.url}\n`)
     next()
 })
 app.use(fileUpload())

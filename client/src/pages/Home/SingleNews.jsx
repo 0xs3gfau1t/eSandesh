@@ -13,7 +13,6 @@ import {
     RectXAd,
     RectYAd,
     Popup,
-    LikeSaveShare,
     SeeAllBtn,
 } from '../../components/common'
 import SideScrollNewsSection from './SideScrollNewsSection'
@@ -23,7 +22,7 @@ import Comments from '../../components/Comments'
 import { delSingleNews, subscribeAuthor } from '../../redux/reducers/news'
 import { setAlert } from '../../redux/actions/misc'
 
-const SingleNews = () => {
+const SingleNews = ({ session }) => {
     const params = useParams()
     const news = useSelector(state => state.news.singleNews)
     const similar = useSelector(
@@ -49,6 +48,8 @@ const SingleNews = () => {
         setSummary(true)
     }
     const dateOpt = {
+        hour: 'numeric',
+        minute: 'numeric',
         weekday: 'short',
         year: 'numeric',
         month: 'short',
@@ -163,7 +164,7 @@ const SingleNews = () => {
                         <h2 className="ml-4">
                             {news
                                 ? new Date(news.publishedAt).toLocaleDateString(
-                                      'en-US',
+                                      'ne-NP',
                                       dateOpt
                                   ) + ' | '
                                 : ''}
@@ -180,7 +181,7 @@ const SingleNews = () => {
                                 news?.author?.subscribed
                                     ? 'text-gray-600'
                                     : 'text-rose-700'
-                            } text-2xl my-auto cursor-pointer`}
+                            } text-3xl my-auto cursor-pointer hover:text-green-700 hover:animate-bounce`}
                             title={
                                 news?.author?.subscribed
                                     ? 'Unsubscribe'
@@ -235,9 +236,7 @@ const SingleNews = () => {
                 />
                 {/* {focus && <RectXAd />} */}
                 <RectXAd ad={adsX ? (adsX[3] ? adsX[3] : false) : false} />
-                <div className="w-full flex justify-end">
-                    <LikeSaveShare likes={'१.२'} id={news ? news._id : ''} />
-                </div>
+                <div className="w-full flex justify-end"></div>
                 <h1 className="flex items-baseline justify-between font-semibold text-2xl">
                     अन्य समान वर्गका विषयहरू लेखहरू{' '}
                     <SeeAllBtn
@@ -248,7 +247,7 @@ const SingleNews = () => {
                     category={news?.category[0]}
                     data={similar}
                 />
-                <Comments articleId={news?._id} />
+                <Comments articleId={news?._id} session={session} />
             </div>
             {/* right column */}
             {!focus && (

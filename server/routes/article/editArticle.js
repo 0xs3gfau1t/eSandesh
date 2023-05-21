@@ -53,7 +53,8 @@ const editArticle = async (req, res) => {
                     content: contentOnly,
                 })
             )
-            article.save()
+            await article.save()
+            await redisClient.del(key)
         } catch (e) {
             console.error(e)
         }
@@ -61,9 +62,6 @@ const editArticle = async (req, res) => {
         console.error(err)
         return res.status(500).json({ error: 'Something went wrong.' })
     }
-
-    // Invalidate cache
-    redisClient.del(key)
 }
 
 module.exports = editArticle
