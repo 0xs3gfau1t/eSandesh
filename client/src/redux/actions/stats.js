@@ -37,7 +37,6 @@ export const reloadStats = createAsyncThunk(
                 params: {
                     ...statState[type].filter,
                     skip: 0,
-                    limit: statState[active].data.length,
                 },
             })
             .then(res => res.data)

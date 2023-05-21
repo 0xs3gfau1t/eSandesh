@@ -15,7 +15,12 @@ const StatFilters = ({ type }) => {
                         type="date"
                         value={filters.dateFrom}
                         onChange={e =>
-                            dispatch(statActions.setFromDate(e.target.value))
+                            dispatch(
+                                statActions.setFromDate({
+                                    value: e.target.value,
+                                    type,
+                                })
+                            )
                         }
                     />
                 </div>
@@ -28,7 +33,12 @@ const StatFilters = ({ type }) => {
                         type="date"
                         value={filters.dateTo}
                         onChange={e =>
-                            dispatch(statActions.setToDate(e.target.value))
+                            dispatch(
+                                statActions.setToDate({
+                                    value: e.target.value,
+                                    type,
+                                })
+                            )
                         }
                     />
                 </div>

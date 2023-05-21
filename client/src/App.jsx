@@ -10,12 +10,9 @@ import {
     UserAuth,
     ForgotPassword,
     Category,
-    AdsMan,
-    ViewSiteStats,
+    Author,
     SingleNews,
     Landing,
-    PollsMan,
-    ManageCritics,
     UserProfile,
     Polls,
     ArchiveNews,
@@ -25,6 +22,10 @@ import {
 
 import { PrivateRoute, Alert } from './components/common'
 import Register from './pages/Register'
+import AboutUs from './pages/AboutUs'
+import PrivacyPolicy from './pages/PrivacyPolicy'
+import Advertisement from './pages/Advertisement'
+import Feedback from './pages/Feedback'
 
 const LazyAdmin = lazy(() => import('./pages/Dashboard/Layout'))
 const LazyManageNews = lazy(() => import('./pages/Dashboard/ManageNews'))
@@ -148,7 +149,12 @@ function App() {
                         element={<SingleNews />}
                     />
                     <Route path="/category/:cat" element={<Category />} />
+                    <Route path="/author/:author" element={<Author />} />
                     <Route path="search" element={<SearchPage />} />
+                    <Route path="about" element={<AboutUs />} />
+                    <Route path="privacy_policy" element={<PrivacyPolicy />} />
+                    <Route path="advertisement" element={<Advertisement />} />
+                    <Route path="feedback" element={<Feedback />} />
                 </Route>
                 <Route path="*" element={<NotFound />} />
             </Routes>

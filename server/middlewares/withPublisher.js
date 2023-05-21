@@ -13,8 +13,7 @@ module.exports = (req, res, next) => {
         throw Error('Not a valid user')
     } catch (e) {
         return res.status(403).json({
-            message:
-                'You must either be Publisher or Root to perform this action. Incident will be reported.',
+            error: 'You must either be Publisher or Root to perform this action. Incident will be reported.',
         })
     }
 }
