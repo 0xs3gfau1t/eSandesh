@@ -16,10 +16,10 @@ function LeftSideBar({ ads }) {
                     हजुरको मत
                 </Link>
                 <Link
-                    className="w-28 text-lg px-4 text-red py-2 rounded-md flex mt-4 items-center justify-center"
+                    className="w-fit text-lg px-4 text-red py-2 rounded-md flex mt-6 justify-start"
                     to={'/archive'}
                 >
-                    संग्रहित
+                    ई-संदेश अभिलेखालय
                 </Link>
             </div>
             <SearchBar />

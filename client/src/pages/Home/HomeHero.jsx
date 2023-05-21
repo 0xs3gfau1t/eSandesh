@@ -1,7 +1,6 @@
 import React from 'react'
 
 import { Link } from 'react-router-dom'
-import { LikeSaveShare } from '../../components/common'
 
 export default function HomeHero({ data }) {
     return (
@@ -38,16 +37,6 @@ export default function HomeHero({ data }) {
                         {data.title}
                     </Link>
                 </h1>
-                <div className="flex justify-between">
-                    <div>
-                        {/* short summary of article */}
-                        संक्षिप्त सारांश
-                    </div>
-                    <LikeSaveShare
-                        // articleId = {someArticleId}
-                        likes={'१०१'}
-                    />
-                </div>
             </div>
         </div>
     )

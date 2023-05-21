@@ -1,5 +1,6 @@
 const express = require('express')
 const articleModel = require('../../model/article')
+const { ObjectId } = require('mongodb')
 
 /**
  * @param {express.Request} req
@@ -11,16 +12,20 @@ const delArticle = async (req, res) => {
 
     const { user } = req.session
 
-    const filter = { _id: id }
+    const filter = { _id: ObjectId(id) }
 
     // If the user is not admin then
     // they can't delete others article
-    if (user.provider != 'admin') filter.createdBy = user.id
+    if (user.roles.isRoot !== true) filter.createdBy = user.id
 
     try {
-        const article = await articleModel.findOneAndDelete(filter)
+        articleModel.deleteOne(filter, (e,d)=>{
+            if(d.deletedCount === 0)
+                return res.status(401).json({message: "Cannot delete / Record Not found"})
 
-        return res.status(200).json(article)
+            return res.json({ message: 'success' })
+        })
+
     } catch (err) {
         console.error(err)
         return res.status(500).json({ error: 'Something went wrong.' })

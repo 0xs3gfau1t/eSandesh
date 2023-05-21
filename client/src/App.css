@@ -66,14 +66,25 @@ button {
         right: 0%;
     }
 }
-
+.dash-list {
+    width: 200px;
+}
 .dash-list li {
-    @apply px-7 flex gap-2 py-2;
+    @apply px-4 flex gap-2 py-2 min-w-full;
 }
 .dash-list li:hover {
     opacity: 0.7;
 }
 
+.dash-list::-webkit-scrollbar {
+    display: none;
+}
+
+/* For IE, Edge and Firefox */
+dash.dash-list {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+}
 .active {
     @apply bg-sky-500;
 }
@@ -113,7 +124,9 @@ h6 {
 .news-content img {
     @apply mb-5;
 }
-
+.news-content {
+    max-width: 40rem;
+}
 .addNew {
     @apply text-white flex gap-4 my-4 mx-auto w-2/4 text-2xl bg-green-700 py-2 px-4 rounded justify-center cursor-pointer;
 }

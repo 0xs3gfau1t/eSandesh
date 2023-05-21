@@ -7,7 +7,7 @@ import {
     editComments,
     likeComment,
 } from '../redux/actions/comments'
-import { useSession } from 'next-auth/react'
+
 import {
     AiOutlineEdit,
     AiOutlineLike,
@@ -16,40 +16,42 @@ import {
     AiOutlineDelete,
 } from 'react-icons/ai'
 import { BiComment, BiCommentAdd } from 'react-icons/bi'
+import { MdSend } from 'react-icons/md'
+
 import { getRelativeTime } from '../utils/relativeDuration'
+import { setAlert } from '../redux/actions/misc'
 
 const formatter = new Intl.NumberFormat('en-US', { notation: 'compact' })
 
 const AddCommentBox = ({ value, onChange, onSubmit, onCancel }) => {
     return (
         <form
-            className="bg-white border border-black rounded-md"
+            className="bg-white border border-gray-300 rounded-md "
             onSubmit={onSubmit}
         >
             <textarea
-                className="placeholder:text-slate-400 bg-transparent w-full rounded-md py-2 px-3 shadow-sm focus:outline-none text-sm"
+                className="bg-transparent w-full rounded-md pt-2 px-3 border border-gray-300 focus:outline-none text-sm text-black placeholder:gray-500 placeholder:text-xl"
                 onKeyDown={e => {
-                    if (e.key == 'Enter' && e.ctrlKey) onSubmit(e)
-                    else if (e.key == 'Escape') onCancel()
+                    if (e.key === 'Enter' && e.ctrlKey) onSubmit(e)
+                    else if (e.key === 'Escape') onCancel()
                 }}
-                rows={2}
+                rows={4}
                 required={true}
                 value={value}
                 onChange={onChange}
-                placeholder="What are your thoughts?"
+                placeholder="आफ्नो विचार लेख्नुहोस्"
             />
-            <div className="bg-slate-100 py-1 flex flex-row-reverse gap-2 border-t border-solid border-black rounded-b-md px-2">
-                <input
-                    type="submit"
-                    value="Submit"
-                    className="text-sm font-semibold text-slate-800 cursor-pointer"
-                />
-                <input
+            <div className="flex justify-end place-items-center">
+                <button
                     type="button"
-                    value="Cancel"
                     onClick={onCancel}
-                    className="text-sm font-semibold text-slate-800 cursor-pointer"
-                />
+                    className="ml-2 px-4 h-9 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400 focus:outline-none"
+                >
+                    Cancel
+                </button>
+                <button type="submit">
+                    <MdSend size={30} className="text-blue-800 text-4xl" />
+                </button>
             </div>
         </form>
     )
@@ -235,7 +237,7 @@ const CommentBox = ({
     )
 }
 
-function Comments({ articleId }) {
+function Comments({ articleId, session }) {
     const comments = useSelector(state => state.comments.comments)
     const dispatch = useDispatch()
     const [commenting, setCommenting] = useState({
@@ -258,8 +260,6 @@ function Comments({ articleId }) {
                 })
             )
     }, [articleId])
-
-    const session = useSession()
 
     return (
         <div>
@@ -290,15 +290,22 @@ function Comments({ articleId }) {
                         }
                     />
                 ) : (
-                    <>
-                        <BiCommentAdd
-                            className="inline mr-2"
-                            onClick={() =>
-                                setCommenting({ bool: true, commentStr: '' })
-                            }
-                        />
+                    <div
+                        className="cursor-pointer"
+                        onClick={() => {
+                            if (session.status == 'unauthenticated')
+                                dispatch(
+                                    setAlert(
+                                        'You must login to comment!',
+                                        'danger'
+                                    )
+                                )
+                            else setCommenting({ bool: true, commentStr: '' })
+                        }}
+                    >
+                        <BiCommentAdd className="inline mr-2 " />
                         <span>Add Comment</span>
-                    </>
+                    </div>
                 )}
             </div>
             {comments?.length > 0 && (

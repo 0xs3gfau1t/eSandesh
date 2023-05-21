@@ -1,7 +1,10 @@
 import { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { useParams } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { BiBookReader } from 'react-icons/bi'
+import { RxCross2 } from 'react-icons/rx'
+import { BsFillBellFill, BsFillBellSlashFill } from 'react-icons/bs'
 import axios from 'axios'
 
 import {
@@ -10,21 +13,20 @@ import {
     RectXAd,
     RectYAd,
     Popup,
-    LikeSaveShare,
     SeeAllBtn,
 } from '../../components/common'
 import SideScrollNewsSection from './SideScrollNewsSection'
 import { getSingleNews } from '../../redux/actions/publicNews'
 import { setFocus } from '../../redux/reducers/misc'
 import Comments from '../../components/Comments'
-import { getRelAds } from '../../redux/actions/ads'
-import { delSingleNews } from '../../redux/reducers/news'
+import { delSingleNews, subscribeAuthor } from '../../redux/reducers/news'
+import { setAlert } from '../../redux/actions/misc'
 
-const SingleNews = () => {
+const SingleNews = ({ session }) => {
     const params = useParams()
     const news = useSelector(state => state.news.singleNews)
     const similar = useSelector(
-        state => state.news[news?.category[0].toLowerCase()]
+        state => state.news[news?.category[0]?.toLowerCase()]
     )
     const focus = useSelector(state => state.misc.focus)
     const adsX = useSelector(state => state.ads.rectX)
@@ -46,6 +48,8 @@ const SingleNews = () => {
         setSummary(true)
     }
     const dateOpt = {
+        hour: 'numeric',
+        minute: 'numeric',
         weekday: 'short',
         year: 'numeric',
         month: 'short',
@@ -56,17 +60,59 @@ const SingleNews = () => {
         if (news?.slug != params.slug) {
             dispatch(delSingleNews())
             dispatch(getSingleNews({ params: params, noAudio: false }))
+            setPopup(true)
         }
     }, [params])
+
+    const subscribe = async () => {
+        let config = {
+            method: news?.author.subscribed ? 'delete' : 'post',
+            url: '/api/subscriptions',
+            data: { id: news?.author._id },
+        }
+
+        await axios(config)
+            .then(res => {
+                dispatch(
+                    setAlert(
+                        `Author ${
+                            config.method == 'post'
+                                ? 'Subscribed'
+                                : 'Unsubscribed'
+                        }!`,
+                        'success'
+                    )
+                )
+                dispatch(subscribeAuthor())
+            })
+            .catch(err => {
+                console.log(err)
+                dispatch(setAlert('Action failed!', 'danger'))
+            })
+    }
+
     return (
         <div className="flex justify-between container gap-2">
-            {news && news.category.includes('STORY') && showPopup && (
-                <Popup setShow={setPopup} title={'Ad'}>
-                    <div className="flex flex-row w-full">
-                        <SqAds />
-                        <button onClick={e => setPopup(false)}>X</button>
+            {news && news.popup && showPopup && (
+                <div className="fixed inset-0 z-10">
+                    <div className="fixed inset-0 w-full h-full bg-black opacity-40" />
+                    <div
+                        className={`flex items-center min-h-screen px-4 py-8  mx-auto`}
+                    >
+                        <div className="flex px-4 mx-auto">
+                            <div className="relative mx-auto  rounded-md drop-shadow-3xl max-h-[95vh] overflow-auto">
+                                <div className="my-2 text-center sm:mx-4 sm:text-left">
+                                    <RxCross2
+                                        onClick={e => setPopup(false)}
+                                        className="cursor-pointer absolute stroke-[0.8px] text-red z-10 text-2xl font-extrabold"
+                                    />
+
+                                    <SqAds ad={news?.popup} />
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                </Popup>
+                </div>
             )}
             {showSummary && (
                 <Popup
@@ -114,15 +160,41 @@ const SingleNews = () => {
                     <h1 className="text-xl mt-4 font-bold">
                         {news ? news.title : 'Loading....'}
                     </h1>
-                    <h2 className="ml-4">
-                        {news
-                            ? new Date(news.publishedAt).toLocaleDateString(
-                                  'en-US',
-                                  dateOpt
-                              ) + ' | '
-                            : ''}
-                        {news ? news.author.name : ''}
-                    </h2>
+                    <div className="flex gap-4">
+                        <h2 className="ml-4">
+                            {news
+                                ? new Date(news.publishedAt).toLocaleDateString(
+                                      'ne-NP',
+                                      dateOpt
+                                  ) + ' | '
+                                : ''}
+                            <Link
+                                to={`/author/${news?.author?._id}`}
+                                className="hover:text-rose-700 "
+                            >
+                                {news ? news.author.name : ''}
+                            </Link>
+                        </h2>
+                        <div
+                            onClick={subscribe}
+                            className={`${
+                                news?.author?.subscribed
+                                    ? 'text-gray-600'
+                                    : 'text-rose-700'
+                            } text-3xl my-auto cursor-pointer hover:text-green-700 hover:animate-bounce`}
+                            title={
+                                news?.author?.subscribed
+                                    ? 'Unsubscribe'
+                                    : 'Subscribe'
+                            }
+                        >
+                            {news?.author?.subscribed ? (
+                                <BsFillBellSlashFill />
+                            ) : (
+                                <BsFillBellFill />
+                            )}
+                        </div>
+                    </div>
                     <SocialShare
                         title={
                             news ? news.title : 'eSandesh, Khabar Naya Yug ko'
@@ -155,7 +227,7 @@ const SingleNews = () => {
                     </span>
                 </div>
                 <div
-                    className={`text-${fontSize}xl mt-4`}
+                    className={`text-${fontSize}xl mt-4 content`}
                     dangerouslySetInnerHTML={{
                         __html: news
                             ? news.content
@@ -164,20 +236,18 @@ const SingleNews = () => {
                 />
                 {/* {focus && <RectXAd />} */}
                 <RectXAd ad={adsX ? (adsX[3] ? adsX[3] : false) : false} />
-                <div className="w-full flex justify-end">
-                    <LikeSaveShare likes={'१.२'} id={news ? news._id : ''} />
-                </div>
+                <div className="w-full flex justify-end"></div>
                 <h1 className="flex items-baseline justify-between font-semibold text-2xl">
                     अन्य समान वर्गका विषयहरू लेखहरू{' '}
                     <SeeAllBtn
-                        url={`/category/${news?.category[0].toLowerCase()}`}
+                        url={`/category/${news?.category[0]?.toLowerCase()}`}
                     />
                 </h1>
                 <SideScrollNewsSection
                     category={news?.category[0]}
                     data={similar}
                 />
-                <Comments articleId={news?._id} />
+                <Comments articleId={news?._id} session={session} />
             </div>
             {/* right column */}
             {!focus && (

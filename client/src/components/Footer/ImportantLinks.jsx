@@ -17,7 +17,7 @@ export default function ImportantLinks() {
             </li>
 
             <li className="hover:text-rose-700">
-                <Link to="/contact">सम्पर्क गर्नुहोस्</Link>
+                <Link to="/privacy_policy">गोपनीयता नीति</Link>
             </li>
         </ul>
     )

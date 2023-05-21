@@ -45,7 +45,7 @@ export default function Archive() {
 
     return (
         <>
-            <h1 className="text-center text-3xl">अभिलेख</h1>
+            <h1 className="text-center text-3xl">अभिलेखालय</h1>
             <div
                 className="flex flex-col justify-items-center relative"
                 id="setting-container"

@@ -4,6 +4,11 @@ const articleModel = require('@/model/article')
 const Cache = require('@/controllers/Cache')
 const getRelevantAudioAd = require('@/controllers/relevantAudioAd')
 const crypto = require('crypto')
+const relevantAds = require('../ads/relevantAds')
+const { default: mongoose } = require('mongoose')
+const { userModel } = require('@/model/user')
+
+const STALE_ARTICLE_THRESHOLD = 2 // In Days
 
 /**
  * @param {express.Request} req
@@ -43,7 +48,7 @@ const getArticle = async (req, res) => {
                                 $expr: { $eq: ['$_id', '$$id'] },
                             },
                         },
-                        { $project: { name: 1, _id: 0 } },
+                        { $project: { name: 1, _id: 1 } },
                     ],
                     as: 'author',
                 },
@@ -55,7 +60,31 @@ const getArticle = async (req, res) => {
         const article = await Cache(req.originalUrl, getArticle, {
             EX: 24 * 60 * 60,
         })
-        // console.log(article)
+        article[0].author.subscribed = req.session?.user.id
+            ? !!(await userModel.exists({
+                  _id: mongoose.Types.ObjectId(req.session.user.id),
+                  subscriptions: {
+                      $in: [mongoose.Types.ObjectId(article[0].author._id)],
+                  },
+              }))
+            : false
+        //
+        // Not caching popup ads
+        //
+        if (
+            article?.at(0)?.publishedAt <
+                new Date(
+                    Date.now() - STALE_ARTICLE_THRESHOLD * 24 * 60 * 60000
+                ) ||
+            article?.at(0)?.category?.includes('STORY')
+        ) {
+            req.query.limit = 1
+            req.query.imageType = 'square'
+            req.blockResponse = true
+
+            const ad = await relevantAds(req, res)
+            article[0].popup = ad?.at(0)
+        }
 
         if (!article || article?.length == 0)
             return res.status(400).json({ message: 'Article not found.' })

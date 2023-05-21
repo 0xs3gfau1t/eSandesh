@@ -18,7 +18,6 @@ const editArticle = async (req, res) => {
         title,
         category = undefined,
         tags = undefined,
-        img,
     } = req.body
     const { user } = req.session
     const filter = { _id: id }
@@ -27,9 +26,10 @@ const editArticle = async (req, res) => {
     // they can't delete others article
     if (user.provider != 'admin') filter.createdBy = user.id
 
-    const contentOnly = new JSDOM(content).window.document.querySelector(
-        'body'
-    ).textContent
+    const dom = new JSDOM(content)
+    const contentOnly = dom.window.document.querySelector('body').textContent
+    const img =
+        req.body.img || dom.window.document.querySelector('img')?.src || ''
 
     const article = await articleModel.findOne({ _id: id })
     if (title) article.title = title
@@ -53,7 +53,8 @@ const editArticle = async (req, res) => {
                     content: contentOnly,
                 })
             )
-            article.save()
+            await article.save()
+            await redisClient.del(key)
         } catch (e) {
             console.error(e)
         }
@@ -61,9 +62,6 @@ const editArticle = async (req, res) => {
         console.error(err)
         return res.status(500).json({ error: 'Something went wrong.' })
     }
-
-    // Invalidate cache
-    redisClient.del(key)
 }
 
 module.exports = editArticle

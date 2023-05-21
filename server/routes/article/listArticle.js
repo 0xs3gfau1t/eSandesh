@@ -30,6 +30,7 @@ const listArticle = async (req, res) => {
     const filter = {
         category: { $nin: ['STORY'] },
         publishedAt: { $exists: true },
+        archived: { $exists: false },
     }
     if (category) {
         if (category == 'preference') preference = true

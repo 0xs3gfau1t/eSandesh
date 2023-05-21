@@ -2,9 +2,9 @@ const mongoose = require('mongoose')
 
 const adImageSchema = mongoose.Schema(
     {
-        rectX /* Link to image */: { type: Buffer},
-        rectY: { type: Buffer},
-        square: { type: Buffer},
+        rectX /* Link to image */: { type: Buffer },
+        rectY: { type: Buffer },
+        square: { type: Buffer },
     },
     { _id: false }
 )
@@ -12,7 +12,7 @@ const adImageSchema = mongoose.Schema(
 const adSchema = mongoose.Schema(
     {
         name: { type: String, required: true },
-        hits: { type: String, default: 0 },
+        hits: { type: Number, default: 0 },
         publisher: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
         image: adImageSchema,
         audio: { type: Buffer },

@@ -6,17 +6,19 @@ import RecentNews from './RecentNews'
 import SideScrollNewsSection from './SideScrollNewsSection'
 import { RectXAd, SeeAllBtn } from '../../components/common'
 import EachCategoryPreview from './EachCategoryPreview'
-import { getRecentNews } from '../../redux/actions/publicNews'
+import { getRecentNews, getPrefCats } from '../../redux/actions/publicNews'
 import { setFocus } from '../../redux/reducers/misc'
 
 const Landing = () => {
-    const recent = useSelector(state => state.news.recentNews)
+    const prefCats = useSelector(state => state.news.prefCats)
+    const recent = useSelector(state => state.news.recent)
     const hot = useSelector(state => state.news.hot)
     const adsX = useSelector(state => state.ads.rectX)
 
     const dispatch = useDispatch()
 
     useEffect(() => {
+        dispatch(getPrefCats(0))
         dispatch(getRecentNews(0))
         dispatch(setFocus(false))
     }, [])
@@ -43,22 +45,32 @@ const Landing = () => {
                     अन्य चर्चित विषयहरू <SeeAllBtn url={`/category/hot`} />
                 </h1>
                 <SideScrollNewsSection category={'hot'} data={hot} />
-                <hr className=" w-11/12 my-10 border-neutral-300" />
+                <hr className=" w-11/12 my-6 border-neutral-300" />
                 <RectXAd ad={adsX ? (adsX[1] ? adsX[1] : false) : false} />
 
-                <div className="mb-10 pb-4">
+                <div className="mb-6 pb-2">
                     {/* middle scrolling news under the hero section */}
-                    <EachCategoryPreview category="story" />
+                    <EachCategoryPreview
+                        category={prefCats ? prefCats[0] : ''}
+                    />
                     <RectXAd ad={adsX ? (adsX[2] ? adsX[2] : false) : false} />
                 </div>
-                <hr className=" w-11/12 my-10 border-neutral-300" />
+                <hr className=" w-11/12 my-6 border-neutral-300" />
 
-                <div className="mb-10 pb-4">
+                <div className="mb-10 pb-2">
                     {/* middle scrolling news under the hero section */}
-                    <EachCategoryPreview category="politics" />
+                    <EachCategoryPreview
+                        category={prefCats ? prefCats[1] : ''}
+                    />
                     <RectXAd ad={adsX ? (adsX[3] ? adsX[3] : false) : false} />
-                    <EachCategoryPreview category="sports" />
+                    <EachCategoryPreview
+                        category={prefCats ? prefCats[2] : ''}
+                    />
                     <RectXAd ad={adsX ? (adsX[4] ? adsX[4] : false) : false} />
+                    <EachCategoryPreview
+                        category={prefCats ? prefCats[3] : ''}
+                    />
+                    <RectXAd ad={adsX ? (adsX[5] ? adsX[5] : false) : false} />
                 </div>
                 {/* other category previews go here */}
                 {/* I think other category previews should be placed here ok */}

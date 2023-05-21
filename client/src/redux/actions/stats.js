@@ -37,7 +37,6 @@ export const reloadStats = createAsyncThunk(
                 params: {
                     ...statState[type].filter,
                     skip: 0,
-                    limit: statState[active].data.length,
                 },
             })
             .then(res => res.data)
@@ -86,5 +85,36 @@ export const deleteStats = createAsyncThunk(
             })
         if (!response) throw Error('Report deletion failed')
         return metaId
+    }
+)
+
+export const downloadStats = createAsyncThunk(
+    'stats/delete',
+    async (metaId, { dispatch, getState }) => {
+        await axios({
+            url: '/api/stats/download',
+            method: 'GET',
+            params: { metaId },
+            responseType: 'blob',
+        })
+            .then(res => {
+                if (res.status == 200) {
+                    const href = URL.createObjectURL(res.data)
+                    const link = document.createElement('a')
+                    link.href = href
+                    link.setAttribute('download', `report-${metaId}.json`)
+                    link.click()
+
+                    URL.revokeObjectURL(href)
+                }
+
+                dispatch(setAlert('Report downloaded.', 'success'))
+                return true
+            })
+            .catch(err => {
+                console.error(err)
+                dispatch(setAlert('Report failed to download.', 'danger'))
+                return false
+            })
     }
 )

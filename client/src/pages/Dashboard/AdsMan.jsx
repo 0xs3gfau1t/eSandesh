@@ -17,25 +17,14 @@ import {
     AiOutlineCaretRight,
     AiOutlineCaretLeft,
 } from 'react-icons/ai'
+import { getCatMap } from '../../utils/categoryMap'
 
 const POPUP_STATE = Object.freeze({
     ADD: 'Add new Ad',
     EDIT: 'Edit Ad',
     INACTIVE: false,
 })
-const categories = [
-    'All',
-    'POLITICS',
-    'BUSINESS',
-    'SPORTS',
-    'ENTERTAINMENT',
-    'STORY',
-    'FINANCE',
-    'GLOBAL',
-    'BUSINESS',
-    'HEALTH',
-    'TECHNOLOGY',
-]
+const categories = Object.keys(getCatMap()).map(cat => cat.toUpperCase())
 
 const initState = {
     name: '',
@@ -100,7 +89,7 @@ export default function AdsMan() {
                 await editAd(prop)
                 break
         }
-        dispatch(listAds({ page }))
+        dispatch(listAds(0))
         setProp(initState)
         setShow(POPUP_STATE.INACTIVE)
     }
@@ -117,7 +106,7 @@ export default function AdsMan() {
                 <h2>Add new ad</h2>
             </div>
             {show && (
-                <Popup title={show} setShow={setShow}>
+                <Popup title={show} setShow={setShow} width={'w-2/3'}>
                     <FormText
                         type="text"
                         name="name"
@@ -138,19 +127,21 @@ export default function AdsMan() {
                             labelText="Vertical Image (50x150px)"
                             handleChange={handleChange}
                         />
+                    </div>
+                    <div className="flex">
                         <FormText
                             type="file"
                             name="imageSq"
                             labelText="Square Image (100x100px)"
                             handleChange={handleChange}
                         />
+                        <FormText
+                            type="file"
+                            name="audio"
+                            labelText="Audio Ad (2MB, 5s)"
+                            handleChange={handleChange}
+                        />
                     </div>
-                    <FormText
-                        type="file"
-                        name="audio"
-                        labelText="Audio Ad (2MB, 5s)"
-                        handleChange={handleChange}
-                    />
                     <FormText
                         type="text"
                         name="redirectUrl"
@@ -165,7 +156,7 @@ export default function AdsMan() {
                         labelText="Category"
                         handleChange={handleChange}
                     />
-                    <div className="flex gap-4">
+                    <div className="flex gap-4 w-fit">
                         <FormText
                             type="number"
                             name="priority"
@@ -185,7 +176,7 @@ export default function AdsMan() {
                             name="popup"
                             labelText="Mark as Popup"
                             handleChange={handleChange}
-                            className="flex whitespace-nowrap place-items-center place-content-center gap-x-2 ml-8 text-xl"
+                            className="flex flex-col whitespace-nowrap  place-content-center text-xl"
                             checked={prop.popup}
                         />
                     </div>
