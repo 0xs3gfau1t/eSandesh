@@ -13,12 +13,16 @@ import { useAxiosError } from '../../utils/useAxiosError'
 import { FormText } from '../../components/common'
 import { setAlert } from '../../redux/actions/misc'
 import { formatString } from '../../utils/formatString'
+import { useSession } from 'next-auth/react'
+import EditorToolbar, { modules, formats } from '../Dashboard/EditorTools'
+import ReactQuill from 'react-quill'
 
 const INIT_POPUP = {
     active: false, // 'adding' | 'editing' | false
     title: '',
     content: '',
     img: '',
+    category: '',
     id: -1,
 }
 
@@ -28,6 +32,12 @@ export default function UserPosts() {
     const [deleting, setDeleting] = useState(false)
     const [popup, setPopup] = useState(INIT_POPUP)
     const { dispatch, onError } = useAxiosError()
+
+    const session = useSession()
+
+    const setNews = value => {
+        setPopup(o => ({ ...o, content: value }))
+    }
 
     const handleChange = e =>
         setPopup(o => ({ ...o, [e.target.name]: e.target.value }))
@@ -40,6 +50,12 @@ export default function UserPosts() {
                     title: popup.title,
                     content: popup.content,
                     img: popup.img,
+                    category: session.data.user?.roles?.isReporter
+                        ? popup.category
+                              .split(',')
+                              .map(category => category.trim())
+                              .map(cat => cat.toUpperCase())
+                        : undefined,
                 })
                 .then(res => {
                     if (res.status == 200) {
@@ -54,6 +70,12 @@ export default function UserPosts() {
                     id: popup.id,
                     content: popup.content,
                     title: popup.title,
+                    category: session.data.user?.roles?.isReporter
+                        ? popup.category
+                              .split(',')
+                              .map(category => category.trim())
+                              .map(cat => cat.toUpperCase())
+                        : undefined,
                     img: popup.img,
                 })
                 .then(res => {
@@ -70,7 +92,7 @@ export default function UserPosts() {
     }
 
     const startAdding = () => setPopup(o => ({ ...o, active: 'adding' }))
-    const startEditing = async ({ id, title, img }) => {
+    const startEditing = async ({ id, title, img, category }) => {
         axios.get('/api/article/content', { params: { id } }).then(res =>
             setPopup(o => ({
                 ...o,
@@ -78,6 +100,7 @@ export default function UserPosts() {
                 id,
                 title,
                 content: res.data,
+                category,
                 img,
             }))
         )
@@ -153,13 +176,13 @@ export default function UserPosts() {
                                     <span className="text-gray-600">
                                         {post.publishedAt
                                             ? 'Published ' +
-                                            getRelativeTime(
-                                                new Date(post.publishedAt)
-                                            )
+                                              getRelativeTime(
+                                                  new Date(post.publishedAt)
+                                              )
                                             : 'Created ' +
-                                            getRelativeTime(
-                                                new Date(post.createdAt)
-                                            )}
+                                              getRelativeTime(
+                                                  new Date(post.createdAt)
+                                              )}
                                     </span>
                                     <div className="overflow-x-scroll flex flex-nowrap gap-2">
                                         {(() => {
@@ -188,6 +211,10 @@ export default function UserPosts() {
                                                     id: post._id,
                                                     title: post.title,
                                                     img: post.img || '',
+                                                    category:
+                                                        post.category?.join(
+                                                            ', '
+                                                        ) || '',
                                                 })
                                             else
                                                 dispatch(
@@ -249,29 +276,59 @@ export default function UserPosts() {
                         onSubmit={submitAction}
                         onReset={closePopup}
                     >
-                        <FormText
-                            type="text"
-                            name="title"
-                            value={popup.title}
-                            handleChange={handleChange}
-                            labelText="Title"
-                            required
-                        />
-                        <FormTextArea
-                            name="content"
-                            value={popup.content}
-                            handleChange={handleChange}
-                            labelText="Content"
-                            rows={10}
-                            required
-                        />
-                        <FormText
-                            type="text"
-                            name="img"
-                            value={popup.img}
-                            handleChange={handleChange}
-                            labelText="Image source"
-                        />
+                        {session.data.user?.roles?.isReporter ? (
+                            <>
+                                <FormText
+                                    type="text"
+                                    name="title"
+                                    value={popup.title}
+                                    labelText="Title"
+                                    handleChange={handleChange}
+                                />
+                                <EditorToolbar />
+                                <ReactQuill
+                                    theme="snow"
+                                    value={popup.content}
+                                    onChange={setNews}
+                                    placeholder={"What's hot?..."}
+                                    modules={modules}
+                                    formats={formats}
+                                />
+                                <FormText
+                                    type="text"
+                                    name="category"
+                                    value={popup.category}
+                                    labelText="Categories"
+                                    handleChange={handleChange}
+                                />
+                            </>
+                        ) : (
+                            <>
+                                <FormText
+                                    type="text"
+                                    name="title"
+                                    value={popup.title}
+                                    handleChange={handleChange}
+                                    labelText="Title"
+                                    required
+                                />
+                                <FormTextArea
+                                    name="content"
+                                    value={popup.content}
+                                    handleChange={handleChange}
+                                    labelText="Content"
+                                    rows={10}
+                                    required
+                                />
+                                <FormText
+                                    type="text"
+                                    name="img"
+                                    value={popup.img}
+                                    handleChange={handleChange}
+                                    labelText="Image Url"
+                                />
+                            </>
+                        )}
                         <div className="flex justify-end gap-2 items-center">
                             <input
                                 type="reset"

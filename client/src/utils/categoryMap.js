@@ -9,6 +9,7 @@ const catMap = {
     health: 'स्वास्थ्य',
     agriculture: 'कृषि',
     story: 'विचार/रचना ',
+    preference: 'तपाईंको रोजाइ',
 }
 
 const getCatMap = cat => {

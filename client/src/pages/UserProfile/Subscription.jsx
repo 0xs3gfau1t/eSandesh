@@ -31,7 +31,7 @@ export default function Subscription() {
     const unsubUser = () => {
         axios
             .delete('/api/subscriptions/', {
-                data: { id },
+                data: { id: unsubbing },
                 withCredentials: true,
             })
             .then(res => {
