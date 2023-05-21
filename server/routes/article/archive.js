@@ -9,14 +9,7 @@ const articleModel = require('@/model/article')
 const defaultDayRange = 1000 // 6 Month
 
 module.exports = async (req, res) => {
-    const {
-        dateFrom,
-        dateTo,
-        limit = 0,
-        page = 0,
-        category,
-        title,
-    } = req.query
+    const { dateFrom, dateTo, limit = 0, page = 0, category, title } = req.query
     let { author, authorMatch = {} } = req.query
 
     let categoryArray = category
