@@ -31,7 +31,10 @@ const SearchPage = () => {
             .catch(onError)
     }
 
-    useEffect(fetchMore, [params])
+    useEffect(() => {
+        setSearchResult({ data: [], nextCursor: 0 })
+        fetchMore()
+    }, [params])
 
     return (
         <div className="p-4">
