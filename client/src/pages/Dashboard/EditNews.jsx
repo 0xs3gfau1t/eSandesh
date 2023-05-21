@@ -86,7 +86,7 @@ const EditNews = ({ isEdit }) => {
     }
     return (
         <div className="ml-4 flex gap-8">
-            <div className="">
+            <div className="max-w-3xl">
                 <FormText
                     type="text"
                     name="title"

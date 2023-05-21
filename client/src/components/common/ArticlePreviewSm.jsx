@@ -8,8 +8,8 @@ export default function ArticlePreviewSm({
     articleUrl,
 }) {
     return (
-        <div className="flex p-4 min-w-[35%] max-w-fit bg-white rounded-lg shadow-sm hover:shadow-xl border-b-2 duration-200 h-28 items-center justify-between my-2">
-            <div className="flex gap-2">
+        <div className="flex p-1 min-w-[35%] max-w-fit bg-white rounded-lg shadow-sm hover:shadow-xl border-b-2 duration-200 h-28 items-center justify-between my-2">
+            <div className="flex gap-1 place-items-center">
                 <Link to={articleUrl} className="w-1/3">
                     <img
                         src={imgUrl}
@@ -21,8 +21,6 @@ export default function ArticlePreviewSm({
                     {/* <h3 className="lg:text-md text-sm font-secondary font-medium hover:text-rose-600 duration-300"> */}
                     <Link to={articleUrl}>{title}</Link>
                 </h3>
-                {/* <div className="hidden lg:block text-xs">{summary}</div> */}
-                {/* </div> */}
             </div>
         </div>
     )

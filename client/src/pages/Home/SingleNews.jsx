@@ -23,7 +23,7 @@ import Comments from '../../components/Comments'
 import { delSingleNews, subscribeAuthor } from '../../redux/reducers/news'
 import { setAlert } from '../../redux/actions/misc'
 
-const SingleNews = () => {
+const SingleNews = ({ session }) => {
     const params = useParams()
     const news = useSelector(state => state.news.singleNews)
     const similar = useSelector(
@@ -180,7 +180,7 @@ const SingleNews = () => {
                                 news?.author?.subscribed
                                     ? 'text-gray-600'
                                     : 'text-rose-700'
-                            } text-2xl my-auto cursor-pointer`}
+                            } text-3xl my-auto cursor-pointer hover:text-green-700 hover:animate-bounce`}
                             title={
                                 news?.author?.subscribed
                                     ? 'Unsubscribe'
@@ -248,7 +248,7 @@ const SingleNews = () => {
                     category={news?.category[0]}
                     data={similar}
                 />
-                <Comments articleId={news?._id} />
+                <Comments articleId={news?._id} session={session} />
             </div>
             {/* right column */}
             {!focus && (
