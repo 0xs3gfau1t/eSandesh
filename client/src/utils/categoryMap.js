@@ -8,6 +8,7 @@ const catMap = {
     technology: 'प्रविधि',
     health: 'स्वास्थ्य',
     agriculture: 'कृषि',
+    lifestyle: 'जीवनशैली',
     story: 'विचार/रचना ',
     preference: 'तपाईंको रोजाइ',
 }
