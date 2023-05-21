@@ -17,25 +17,14 @@ import {
     AiOutlineCaretRight,
     AiOutlineCaretLeft,
 } from 'react-icons/ai'
+import { getCatMap } from '../../utils/categoryMap'
 
 const POPUP_STATE = Object.freeze({
     ADD: 'Add new Ad',
     EDIT: 'Edit Ad',
     INACTIVE: false,
 })
-const categories = [
-    'All',
-    'POLITICS',
-    'BUSINESS',
-    'SPORTS',
-    'ENTERTAINMENT',
-    'STORY',
-    'FINANCE',
-    'GLOBAL',
-    'BUSINESS',
-    'HEALTH',
-    'TECHNOLOGY',
-]
+const categories = Object.keys(getCatMap()).map(cat => cat.toUpperCase())
 
 const initState = {
     name: '',
@@ -100,7 +89,7 @@ export default function AdsMan() {
                 await editAd(prop)
                 break
         }
-        dispatch(listAds({ page }))
+        dispatch(listAds(0))
         setProp(initState)
         setShow(POPUP_STATE.INACTIVE)
     }

@@ -48,6 +48,8 @@ const SingleNews = ({ session }) => {
         setSummary(true)
     }
     const dateOpt = {
+        hour: 'numeric',
+        minute: 'numeric',
         weekday: 'short',
         year: 'numeric',
         month: 'short',
@@ -162,7 +164,7 @@ const SingleNews = ({ session }) => {
                         <h2 className="ml-4">
                             {news
                                 ? new Date(news.publishedAt).toLocaleDateString(
-                                      'en-US',
+                                      'ne-NP',
                                       dateOpt
                                   ) + ' | '
                                 : ''}
