@@ -5,7 +5,7 @@ const { Readable } = require('stream')
 const adsModel = require('@/model/ads')
 const articleModel = require('@/model/article')
 
-const CHUNK_SIZE = 1024 * 1024
+const CHUNK_SIZE = 1024 * 1024 * 5
 const HEADER_SIZE = 44
 
 // Helper function to convert hex

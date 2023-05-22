@@ -85,7 +85,7 @@ const addArticle = async (req, res) => {
             if (socialApis[social])
                 socialApis[social]({
                     title,
-                    summary: data.summary,
+                    summary: data.summarizedContent,
                     link:
                         process.env.ORIGIN +
                         '/news/' +

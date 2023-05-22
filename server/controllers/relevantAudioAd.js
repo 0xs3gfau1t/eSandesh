@@ -162,7 +162,7 @@ async function getRelevantAudioAd(history) {
         .flat()
     let freeSpace = AD_LIMIT - allocatedAds.length
 
-    while (freeSpace && !allocatedAds.length && selectedAd.length) {
+    while (freeSpace && selectedAd.length) {
         selectedAd.forEach(ad => {
             const lastElement = ad.final.pop()
             if (lastElement !== undefined && freeSpace) {
